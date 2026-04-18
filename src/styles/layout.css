@@ -1,0 +1,21 @@
+.layout {
+  display: flex;
+}
+
+/* MAIN CONTENT */
+.main-content {
+  margin-top: 60px; /* navbar height */
+  padding: 20px;
+  width: 100%;
+  transition: 0.3s;
+}
+
+/* SIDEBAR OPEN */
+.main-content.expanded {
+  margin-left: 240px;
+}
+
+/* SIDEBAR COLLAPSED */
+.main-content.collapsed {
+  margin-left: 70px;
+}

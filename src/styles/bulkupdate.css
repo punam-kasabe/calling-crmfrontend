@@ -1,0 +1,121 @@
+/* 🔥 LAYOUT */
+.layout {
+  display: flex;
+}
+
+/* MAIN CONTENT */
+.main-content {
+  margin-left: 240px;
+  margin-top: 60px;
+  width: calc(100% - 240px);
+  padding: 20px;
+  background: #f5f7fb;
+  min-height: 100vh;
+  transition: 0.3s ease;
+}
+
+/* ✅ SIDEBAR COLLAPSED FIX (NO OVERLAP) */
+.sidebar.collapsed ~ .main-content {
+  margin-left: 70px;
+  width: calc(100% - 70px);
+}
+
+/* 🔝 HEADER */
+.page-header {
+  margin-bottom: 20px;
+}
+
+.page-header h4 {
+  margin: 0;
+  font-weight: 600;
+}
+
+.page-header p {
+  color: #6b7280;
+  font-size: 13px;
+  margin-top: 5px;
+}
+
+/* 📦 CARD */
+.bulk-card {
+  background: #ffffff;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.bulk-card h5 {
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+/* 📤 UPLOAD ROW */
+.upload-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+/* FILE INPUT */
+.file-input {
+  flex: 1;
+  padding: 6px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+}
+
+/* 🔘 BUTTONS */
+.btn {
+  border: none;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+/* BROWSE */
+.btn.browse {
+  background: #e5e7eb;
+}
+
+/* UPLOAD */
+.btn.upload {
+  background: #facc15;
+  color: #000;
+}
+
+/* SAMPLE CSV */
+.sample-btn {
+  background: #6366f1;
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  margin-bottom: 15px;
+  cursor: pointer;
+}
+
+/* INFO */
+.info {
+  margin-top: 10px;
+}
+
+.info .label {
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+/* 🔥 RESPONSIVE */
+@media (max-width: 768px) {
+  .main-content {
+    margin-left: 70px;
+    width: calc(100% - 70px);
+  }
+
+  .upload-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

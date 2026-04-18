@@ -1,0 +1,100 @@
+/* ================= MAIN WRAPPER ================= */
+
+.upload-container {
+  margin-left: 240px;
+  margin-top: 60px; /* 🔥 FIX: navbar height */
+  padding: 30px;
+
+  width: calc(100% - 240px);
+  min-height: calc(100vh - 60px);
+
+  background: #f4f6f9;
+  transition: 0.3s;
+
+  display: flex;
+  justify-content: center;   /* center card horizontally */
+  align-items: flex-start;   /* top align */
+}
+
+/* COLLAPSED SIDEBAR */
+
+.upload-container.collapsed {
+  margin-left: 70px;
+  width: calc(100% - 70px);
+}
+
+/* ================= CARD ================= */
+
+.upload-card {
+  width: 100%;
+  max-width: 420px;
+
+  background: #ffffff;
+  padding: 25px;
+  border-radius: 12px;
+
+  box-shadow: 
+    0 8px 20px rgba(0,0,0,0.08),
+    0 3px 8px rgba(0,0,0,0.05);
+}
+
+/* ================= TITLE ================= */
+
+.upload-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #1e3a8a;
+  text-align: center;
+}
+
+/* ================= INPUT ================= */
+
+.upload-card select,
+.upload-card input {
+  width: 100%;
+  padding: 8px 10px;
+  margin-bottom: 12px;
+
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+
+  font-size: 14px;
+  transition: 0.2s;
+}
+
+.upload-card select:focus,
+.upload-card input:focus {
+  border-color: #3b82f6;
+  outline: none;
+}
+
+/* ================= BUTTON ================= */
+
+.upload-btn {
+  width: 100%;
+
+  background: #3b82f6;
+  color: #fff;
+
+  border: none;
+  border-radius: 6px;
+
+  padding: 7px 12px;  /* 🔥 smaller height */
+  font-size: 13px;
+
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.upload-btn:hover {
+  background: #2563eb;
+}
+
+/* ================= MESSAGE ================= */
+
+.upload-message {
+  font-size: 13px;
+  margin-bottom: 10px;
+  text-align: center;
+}

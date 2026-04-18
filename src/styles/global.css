@@ -1,0 +1,18 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: #f5f7fb;
+}
+
+a {
+  text-decoration: none;
+}
+
+.table {
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.card {
+  border-radius: 12px;
+}
