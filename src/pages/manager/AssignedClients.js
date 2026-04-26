@@ -31,7 +31,7 @@ export default function AssignedClients() {
 
       const res = await axios.get(
 
-        `http://localhost:5000/api/manager-clients?email=${user.email}`
+        `https://calling-crm-backend-1.onrender.com/api/manager-clients?email=${user.email}`
 
       );
 

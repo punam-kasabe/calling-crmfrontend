@@ -16,13 +16,13 @@ export default function MyLeads() {
  // eslint-disable-next-line
 useEffect(() => {
   fetchMyLeads();
-}, []);
+}, [fetchMyLeads]);
 
   const fetchMyLeads = async () => {
     try {
 
       const res = await axios.get(
-        `http://localhost:5000/api/leads/executive/${user._id}`
+        `https://calling-crm-backend-1.onrender.com/api/leads/executive/${user._id}`
       );
 
       setLeads(res.data);
@@ -38,7 +38,7 @@ useEffect(() => {
     try {
 
       await axios.put(
-        `http://localhost:5000/api/leads/${leadId}`,
+        `https://calling-crm-backend-1.onrender.com/api/leads/${leadId}`,
         { status }
       );
 

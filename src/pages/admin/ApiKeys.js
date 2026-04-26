@@ -20,7 +20,7 @@ export default function ApiKeys() {
   /* ================= FETCH DATA ================= */
   const fetchKeys = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/apikeys");
+      const res = await axios.get("https://calling-crm-backend-1.onrender.com/api/apikeys");
       setApiKeys(res.data);
     } catch (err) {
       console.error(err);
@@ -34,7 +34,7 @@ export default function ApiKeys() {
   /* ================= ADD KEY ================= */
   const handleAdd = async () => {
     try {
-      await axios.post("http://localhost:5000/api/apikeys", form);
+      await axios.post("https://calling-crm-backend-1.onrender.com/api/apikeys", form);
       setShowModal(false);
       setForm({ source: "", user: "", project: "" });
       fetchKeys();
@@ -48,7 +48,7 @@ export default function ApiKeys() {
     if (!window.confirm("Delete this API key?")) return;
 
     try {
-      await axios.delete(`http://localhost:5000/api/apikeys/${id}`);
+      await axios.delete(`https://calling-crm-backend-1.onrender.com/api/apikeys/${id}`);
       fetchKeys();
     } catch (err) {
       console.error(err);

@@ -28,7 +28,7 @@ export default function AssignManager() {
     try {
 
       const res = await axios.get(
-        "http://localhost:5000/api/visit-entries"
+        "https://calling-crm-backend-1.onrender.com/api/visit-entries"
       );
 
       setVisits(res.data);
@@ -46,7 +46,7 @@ export default function AssignManager() {
     try {
 
       const res = await axios.get(
-        "http://localhost:5000/api/managers"
+        "https://calling-crm-backend-1.onrender.com/api/managers"
       );
 
       setManagers(res.data);
@@ -65,7 +65,7 @@ export default function AssignManager() {
 
       await axios.put(
 
-        `http://localhost:5000/api/assign-manager/${visitId}`,
+        `https://calling-crm-backend-1.onrender.com/api/assign-manager/${visitId}`,
 
         {
           managerId: selectedManager[visitId]

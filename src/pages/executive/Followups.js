@@ -17,14 +17,13 @@ export default function Followups() {
   // eslint-disable-next-line
 useEffect(() => {
   fetchFollowups();
-}, []);
-
+}, [fetchFollowups]);
   const fetchFollowups = async () => {
 
     try {
 
       const res = await axios.get(
-        `http://localhost:5000/api/followups/${user._id}`
+        `https://calling-crm-backend-1.onrender.com/api/followups/${user._id}`
       );
 
       setFollowups(res.data);
@@ -48,7 +47,7 @@ useEffect(() => {
     try {
 
       await axios.put(
-        `http://localhost:5000/api/leads/${leadId}`,
+        `https://calling-crm-backend-1.onrender.com/api/leads/${leadId}`,
         { status }
       );
 

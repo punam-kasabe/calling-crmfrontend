@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API = "http://localhost:5000/api";
+const API = "https://calling-crm-backend-1.onrender.com/api";
 
 const instance = axios.create({
   baseURL: API,

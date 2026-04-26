@@ -42,7 +42,7 @@ export default function CreateVisit() {
     try {
 
       const res = await axios.get(
-        "http://localhost:5000/api/managers"
+        "https://calling-crm-backend-1.onrender.com/api/managers"
       );
 
       setManagers(res.data);
@@ -85,7 +85,7 @@ export default function CreateVisit() {
       // 🔥 create visit + auto assign lead to manager
       await axios.post(
 
-        "http://localhost:5000/api/create-visit",
+        "https://calling-crm-backend-1.onrender.com/api/create-visit",
 
         {
 

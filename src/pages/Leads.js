@@ -40,10 +40,10 @@ export default function Leads() {
 
     if (!user?.email || !user?.role) return;
 
-    axios.get(`http://localhost:5000/dashboard/${user.email}/${user.role}`)
+    axios.get(`https://calling-crm-backend-1.onrender.com/dashboard/${user.email}/${user.role}`)
       .then(res => setStats(res.data));
 
-    axios.post("http://localhost:5000/filter-leads", {
+    axios.post("https://calling-crm-backend-1.onrender.com/filter-leads", {
       email: user.email.trim().toLowerCase(),
       role: user.role,
     })
@@ -54,7 +54,7 @@ export default function Leads() {
   useEffect(() => { fetchData(); }, [fetchData]);
 
   useEffect(() => {
-    axios.get("http://localhost:5000/users")
+    axios.get("https://calling-crm-backend-1.onrender.com/users")
       .then(res => setUsers(res.data));
   }, []);
 
@@ -67,7 +67,7 @@ export default function Leads() {
     formData.append("assigned_to", selectedUser.trim().toLowerCase());
     formData.append("created_by", user.email);
 
-    await axios.post("http://localhost:5000/upload", formData);
+    await axios.post("https://calling-crm-backend-1.onrender.com/upload", formData);
 
     alert("Uploaded ✅");
     fetchData();

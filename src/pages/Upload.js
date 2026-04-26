@@ -3,7 +3,7 @@ import axios from "axios";
 import Sidebar from "../components/Sidebar";
 import "../styles/upload.css";
 
-const API = "http://localhost:5000/api";
+const API = "https://calling-crm-backend-1.onrender.com/api";
 
 export default function Upload() {
   const [file, setFile] = useState(null);

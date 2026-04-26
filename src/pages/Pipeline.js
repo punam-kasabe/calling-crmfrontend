@@ -6,7 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Swal from "sweetalert2";
 import "../styles/pipeline.css";
 
-const API = "http://localhost:5000/api";
+const API = "https://calling-crm-backend-1.onrender.com/api";
 
 export default function Pipeline() {
 

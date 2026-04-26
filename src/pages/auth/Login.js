@@ -3,7 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 /* 🔥 FIX */
-const API = "http://localhost:5000/api";
+const API = "https://calling-crm-backend-1.onrender.com/api";
 
 export default function Login() {
   const navigate = useNavigate();

@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 
 /* ✅ FIX */
-const API = "http://localhost:5000/api";
+const API = "https://calling-crm-backend-1.onrender.com/api";
 
 export default function ManageUsers() {
   const [isOpen, setIsOpen] = useState(true);
