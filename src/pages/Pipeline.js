@@ -87,7 +87,7 @@ export default function Pipeline() {
   /* ================= UPDATE ================= */
   const handleUpdate = async () => {
     try {
-      await axios.put(`${API}/update-lead/${selectedLead.id}`, selectedLead);
+      await axios.put(`${API}/update-lead/${selectedLead._id}`, selectedLead);
       toast.success("Updated Successfully ✅");
       setShowModal(false);
       fetchLeads();
@@ -136,6 +136,8 @@ export default function Pipeline() {
     };
   }, [leads]);
 
+ 
+
   return (
     <div className="d-flex">
 
@@ -160,7 +162,7 @@ export default function Pipeline() {
             { title: "Booked Leads", value: stats.booked, color: "#28a745" },
             { title: "Inactive Leads", value: stats.inactive, color: "#ffc107" },
           ].map((card, i) => (
-            <div className="col-xl-2 col-lg-3 col-md-4 col-sm-6 mb-3" key={i}>
+            <div className="col-xl-2 col-lg-3 col-md-4 col-sm-6 mb-3" key={card.title}>
               <div className="card text-white shadow-sm"
                 style={{ background: card.color, borderRadius: "10px", padding: "10px" }}>
                 <div className="text-center">
@@ -199,7 +201,7 @@ export default function Pipeline() {
                 }>
                 <option value="">Assigned</option>
                 {users.map(u => (
-                  <option key={u.id} value={u.email}>{u.name}</option>
+                  <option key={u._id} value={u.email}>{u.name}</option>
                 ))}
               </select>
             </div>
@@ -278,11 +280,25 @@ export default function Pipeline() {
         <div className="card p-3 shadow-sm">
           <h5>Leads List</h5>
 
+           {/* 🔥 HEADER WITH BUTTON */}
+  <div className="d-flex justify-content-between align-items-center mb-3">
+    <h5>Leads List</h5>
+
+    <button
+      className="btn btn-primary"
+      onClick={() => {
+        console.log("New Lead Clicked");
+      }}
+    >
+      + New Lead
+    </button>
+            </div>
           <table className="table table-hover">
             <thead className="table-dark">
               <tr>
                 <th>Name</th>
                 <th>Mobile</th>
+                <th>Call</th>
                 <th>Assigned</th>
                 <th>Status</th>
                 <th>Project</th>
@@ -294,10 +310,15 @@ export default function Pipeline() {
             <tbody>
               {filteredLeads.length > 0 ? (
                 filteredLeads.map((l) => (
-                  <tr key={l.id}>
+                    <tr key={l._id}>
                     <td>{l.name}</td>
                     <td>{l.phone}</td>
                     <td>{l.assigned_to}</td>
+                    <td>
+  <a href={`tel:${l.phone}`} className="btn btn-success btn-sm">
+    Call
+  </a>
+</td>
                     <td><span className="badge bg-info">{l.status}</span></td>
                     <td>{l.project || "-"}</td>
                     <td>{l.next_call_date || "-"}</td>
@@ -312,7 +333,7 @@ export default function Pipeline() {
                       </button>
 
                       <button className="btn btn-sm btn-danger"
-                        onClick={() => handleDelete(l.id)}>
+                        onClick={() => handleDelete(l._id)}>
                         Delete
                       </button>
                     </td>

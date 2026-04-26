@@ -1,19 +1,25 @@
-import Sidebar from "../components/Sidebar";
-import "../styles/dashboard.css";
+import Sidebar from "../../components/Sidebar";
+import "../../styles/dashboard.css";
 import { useEffect, useState, useMemo, useCallback } from "react";
 import axios from "axios";
 import { Pie, Line } from "react-chartjs-2";
 import CountUp from "react-countup";
 import "chart.js/auto";
 
-const API = "http://localhost:5000";
+const API = "http://localhost:5000/api";
 
 export default function Dashboard() {
+
   const [isOpen, setIsOpen] = useState(true);
   const toggleSidebar = () => setIsOpen(!isOpen);
 
+  /* ✅ USER SAFE LOAD */
   const user = useMemo(() => {
-    return JSON.parse(localStorage.getItem("user")) || {};
+    try {
+      return JSON.parse(localStorage.getItem("user")) || {};
+    } catch {
+      return {};
+    }
   }, []);
 
   const [loading, setLoading] = useState(true);
@@ -21,52 +27,63 @@ export default function Dashboard() {
   const [data, setData] = useState({
     total: 0,
     new: 0,
-    completed: 0,
-    pending: 0,
+    booked: 0,
     interested: 0,
     not_interested: 0,
-    status: [],
-    users: [],
+    pending: 0,
+    status: []
   });
 
   /* ================= FETCH ================= */
-  const fetchDashboard = useCallback(() => {
-    if (!user.email || !user.role) return;
+  const fetchDashboard = useCallback(async () => {
+    try {
+      if (!user?.email || !user?.role) {
+        setLoading(false);
+        return;
+      }
 
-    setLoading(true);
+      setLoading(true);
 
-    axios
-      .get(`${API}/dashboard`, {
+      const res = await axios.get(`${API}/dashboard`, {
         params: {
           email: user.email,
-          role: user.role,
-        },
-      })
-      .then((res) => {
-        setData({
-          total: res.data.total || 0,
-          new: res.data.new || 0,
-          completed: res.data.completed || 0,
-          pending: res.data.pending || 0,
-          interested: res.data.interested || 0,
-          not_interested: res.data.not_interested || 0,
-          status: res.data.status || [],
-          users: res.data.users || [],
-        });
-      })
-      .catch((err) => console.log(err))
-      .finally(() => setLoading(false));
+          role: user.role
+        }
+      });
+
+      const d = res.data || {};
+
+      setData({
+        total: d.total || 0,
+        new: d.new || 0,
+        booked: d.booked || 0,
+        interested: d.interested || 0,
+        not_interested: d.not_interested || 0,
+        pending:
+          (d.total || 0) -
+          (d.booked || 0) -
+          (d.not_interested || 0),
+        status: d.status || []
+      });
+
+    } catch (err) {
+      console.log("Dashboard Error ❌", err);
+    } finally {
+      setLoading(false);
+    }
   }, [user]);
 
   useEffect(() => {
-  fetchDashboard(); // only first load
-}, [fetchDashboard]);
-  /* ================= CHART DATA ================= */
+    fetchDashboard();
+  }, [fetchDashboard]);
+
+  /* ================= CHART ================= */
 
   const pieData = {
     labels: data.status.length
-      ? data.status.map((s) => s.status)
+      ? data.status.map((s) => s._id)
       : ["No Data"],
+
     datasets: [
       {
         data: data.status.length
@@ -75,7 +92,6 @@ export default function Dashboard() {
       },
     ],
   };
-
 
   const trendData = {
     labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
@@ -90,6 +106,7 @@ export default function Dashboard() {
 
   return (
     <div className="d-flex">
+
       <Sidebar isOpen={isOpen} toggleSidebar={toggleSidebar} />
 
       <div
@@ -103,10 +120,8 @@ export default function Dashboard() {
           minHeight: "100vh",
         }}
       >
-        {/* HEADER */}
-        <div className="dashboard-header mb-3">
-          <h4>Dashboard</h4>
-        </div>
+
+        <h4 className="mb-3">Dashboard</h4>
 
         {loading ? (
           <div className="text-center mt-5">
@@ -119,56 +134,58 @@ export default function Dashboard() {
               {[
                 { title: "Total Leads", value: data.total, cls: "card-blue" },
                 { title: "New Leads", value: data.new, cls: "card-blue" },
-                { title: "Completed", value: data.completed, cls: "card-green" },
+                { title: "Booked", value: data.booked, cls: "card-green" },
                 { title: "Pending", value: data.pending, cls: "card-yellow" },
                 { title: "Interested", value: data.interested, cls: "card-green" },
                 { title: "Not Interested", value: data.not_interested, cls: "card-red" },
-              ].map((item, i) => (
-                <div key={i} className="col-xl-2 col-md-4 col-sm-6 mb-3">
+              ].map((item) => (
+                <div key={item.title} className="col-xl-2 col-md-4 col-sm-6 mb-3">
                   <div className={`card compact-card ${item.cls}`}>
                     <h6>{item.title}</h6>
-                    <h3><CountUp end={item.value} /></h3>
+                    <h3>
+                      <CountUp end={item.value} duration={1} />
+                    </h3>
                   </div>
                 </div>
               ))}
             </div>
 
-            {/* 🔥 TOP ROW */}
+            {/* 🔥 CHARTS */}
             <div className="row mb-4">
               <div className="col-md-8">
                 <div className="chart-card">
-                  <h5>Trends Report</h5>
+                  <h5>Weekly Trends</h5>
                   <Line data={trendData} />
                 </div>
               </div>
 
               <div className="col-md-4">
                 <div className="chart-card">
-                  <h5>Marketing Campaign</h5>
+                  <h5>Status Distribution</h5>
                   <Pie data={pieData} />
                 </div>
               </div>
             </div>
 
-            {/* 🔥 SECOND ROW */}
+            {/* 🔥 EXTRA */}
             <div className="row">
               <div className="col-md-4">
                 <div className="chart-card">
-                  <h5>Leads Report</h5>
+                  <h5>Leads Overview</h5>
                   <Pie data={pieData} />
                 </div>
               </div>
 
               <div className="col-md-4">
                 <div className="chart-card">
-                  <h5>Source Report</h5>
+                  <h5>Source Analysis</h5>
                   <Pie data={pieData} />
                 </div>
               </div>
 
               <div className="col-md-4">
                 <div className="chart-card">
-                  <h5>Projects Report</h5>
+                  <h5>Projects Performance</h5>
                   <Pie data={pieData} />
                 </div>
               </div>

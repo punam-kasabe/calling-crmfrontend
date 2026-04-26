@@ -1,5 +1,6 @@
 import Sidebar from "../components/Sidebar";
 import { useState } from "react";
+import axios from "axios";
 import "../styles/bulkupdate.css";
 
 export default function BulkUpdate() {
@@ -7,19 +8,42 @@ export default function BulkUpdate() {
   const toggleSidebar = () => setIsOpen(!isOpen);
 
   const [file, setFile] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
   };
 
-  const handleUpload = () => {
+  const handleUpload = async () => {
     if (!file) {
-      alert("Please select file");
+      alert("Please select file ❌");
       return;
     }
 
-    console.log("Uploading:", file);
-    // 👉 API call here
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      setLoading(true);
+
+      const res = await axios.post(
+        "http://localhost:5000/api/bulk-update",
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
+
+      setMessage(res.data.message || "Updated Successfully ✅");
+
+    } catch (err) {
+  console.error("BULK UPDATE ERROR:", err);
+  setMessage(err.response?.data || "Update failed ❌");
+}
+    finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -29,39 +53,36 @@ export default function BulkUpdate() {
 
       <div className={`main-content ${isOpen ? "shifted" : ""}`}>
 
-        {/* HEADER */}
         <div className="page-header">
           <h4>Leads</h4>
           <p>Home / Prepare Bulk Update</p>
         </div>
 
-        {/* CARD */}
         <div className="bulk-card">
 
           <h5>Update Leads</h5>
 
-          {/* FILE INPUT */}
           <div className="upload-row">
             <input
               type="file"
               onChange={handleFileChange}
               className="file-input"
+              accept=".csv"
             />
 
-            <button className="btn browse">Browse</button>
-
             <button className="btn upload" onClick={handleUpload}>
-              ⬆ Upload
+              {loading ? "Uploading..." : "⬆ Upload"}
             </button>
           </div>
 
-          {/* SAMPLE CSV */}
+          {/* MESSAGE */}
+          {message && <p className="msg">{message}</p>}
+
           <button className="sample-btn">Sample CSV</button>
 
-          {/* INFO */}
           <div className="info">
-            <p className="label">MagicFields To Update:</p>
-            <p>TelecallerName, Department</p>
+            <p className="label">Fields To Update:</p>
+            <p>phone (required), status, assigned_to, source</p>
           </div>
 
         </div>

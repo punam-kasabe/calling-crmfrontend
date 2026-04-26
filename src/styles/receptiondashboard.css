@@ -1,0 +1,157 @@
+/* ============================= */
+/* MAIN CONTENT */
+/* ============================= */
+
+.main-content {
+  min-height: 100vh;
+  background: #f4f7fc;
+  transition: all 0.3s ease;
+  padding-top: 75px;
+}
+
+.main-content.shifted {
+  margin-left: 240px;
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+.main-content.full {
+  margin-left: 85px;
+  padding-left: 25px;
+  padding-right: 25px;
+}
+
+/* ============================= */
+/* PAGE */
+/* ============================= */
+
+.reception-page {
+  width: 100%;
+  padding-top: 10px;
+  padding-bottom: 40px;
+}
+
+/* ============================= */
+/* HEADER */
+/* ============================= */
+
+.reception-header {
+  margin-bottom: 35px;
+  margin-top: -15px;
+}
+
+.reception-header h1 {
+  font-size: 38px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+  letter-spacing: -0.5px;
+}
+
+.reception-subtitle {
+  margin-top: 8px;
+  font-size: 16px;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+/* ============================= */
+/* CARDS GRID */
+/* ============================= */
+
+.reception-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 25px;
+  width: 100%;
+}
+
+/* ============================= */
+/* CARD */
+/* ============================= */
+
+.reception-card {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 28px;
+  position: relative;
+
+  border-top: 5px solid #6d28d9;
+
+  box-shadow:
+    0 4px 10px rgba(0, 0, 0, 0.04),
+    0 10px 30px rgba(0, 0, 0, 0.06);
+
+  transition: all 0.3s ease;
+}
+
+.reception-card:hover {
+  transform: translateY(-6px);
+
+  box-shadow:
+    0 10px 20px rgba(0, 0, 0, 0.08),
+    0 18px 40px rgba(0, 0, 0, 0.10);
+}
+
+/* ============================= */
+/* CARD TOP */
+/* ============================= */
+
+.card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.reception-card h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #6b7280;
+  margin: 0;
+}
+
+/* ============================= */
+/* CARD NUMBER */
+/* ============================= */
+
+.reception-card p {
+  font-size: 46px;
+  font-weight: 700;
+  color: #6d28d9;
+
+  margin-top: 22px;
+  margin-bottom: 0;
+}
+
+/* ============================= */
+/* RESPONSIVE */
+/* ============================= */
+
+@media (max-width: 768px) {
+
+  .main-content.shifted,
+  .main-content.full {
+    margin-left: 0;
+    padding: 85px 15px 20px;
+  }
+
+  .reception-header h1 {
+    font-size: 28px;
+  }
+
+  .reception-subtitle {
+    font-size: 14px;
+  }
+
+  .reception-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .reception-card {
+    padding: 22px;
+  }
+
+  .reception-card p {
+    font-size: 36px;
+  }
+}

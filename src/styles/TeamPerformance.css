@@ -1,0 +1,51 @@
+.container {
+  padding: 20px;
+  background: #f5f7fa;
+}
+
+h2 {
+  margin-bottom: 20px;
+}
+
+/* Buttons */
+.filters {
+  margin-bottom: 15px;
+}
+
+.filters button {
+  margin-right: 10px;
+  padding: 8px 15px;
+  border: none;
+  background: #e0e0e0;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.filters button.active {
+  background: #4e73df;
+  color: white;
+}
+
+/* Table */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+}
+
+th, td {
+  padding: 10px;
+  border: 1px solid #ddd;
+  text-align: center;
+}
+
+th {
+  background: #4e73df;
+  color: white;
+}
+
+/* Chart */
+.chart {
+  width: 400px;
+  margin: 30px auto;
+}

@@ -1,0 +1,185 @@
+/* FILE: src/styles/createvisit.css */
+
+.create-visit-page {
+
+  min-height: 100vh;
+
+  padding: 40px;
+
+  background: #f4f7fc;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: flex-start;
+
+}
+
+.create-visit-card {
+
+  width: 100%;
+
+  max-width: 700px;
+
+  background: #ffffff;
+
+  border-radius: 20px;
+
+  padding: 35px;
+
+  box-shadow:
+    0 10px 30px rgba(0,0,0,0.08);
+
+}
+
+.visit-header {
+
+  margin-bottom: 30px;
+
+}
+
+.visit-header h1 {
+
+  font-size: 32px;
+
+  font-weight: 700;
+
+  color: #111827;
+
+  margin-bottom: 8px;
+
+}
+
+.visit-header p {
+
+  color: #6b7280;
+
+  font-size: 15px;
+
+}
+
+.create-visit-form {
+
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 22px;
+
+}
+
+.form-group {
+
+  display: flex;
+
+  flex-direction: column;
+
+}
+
+.form-group label {
+
+  margin-bottom: 8px;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  color: #374151;
+
+}
+
+.form-group input,
+.form-group select {
+
+  height: 52px;
+
+  border: 1px solid #d1d5db;
+
+  border-radius: 12px;
+
+  padding: 0 16px;
+
+  font-size: 15px;
+
+  background: #fff;
+
+  transition: 0.3s;
+
+}
+
+.form-group input:focus,
+.form-group select:focus {
+
+  outline: none;
+
+  border-color: #2563eb;
+
+  box-shadow:
+    0 0 0 4px rgba(37,99,235,0.12);
+
+}
+
+.save-btn {
+
+  grid-column: span 2;
+
+  height: 55px;
+
+  border: none;
+
+  border-radius: 14px;
+
+  background: linear-gradient(
+    135deg,
+    #2563eb,
+    #1d4ed8
+  );
+
+  color: white;
+
+  font-size: 16px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: 0.3s;
+
+}
+
+.save-btn:hover {
+
+  transform: translateY(-2px);
+
+}
+
+.save-btn:disabled {
+
+  opacity: 0.7;
+
+  cursor: not-allowed;
+
+}
+
+@media (max-width: 768px) {
+
+  .create-visit-form {
+
+    grid-template-columns: 1fr;
+
+  }
+
+  .save-btn {
+
+    grid-column: span 1;
+
+  }
+
+  .create-visit-page {
+
+    padding: 20px;
+
+  }
+
+}

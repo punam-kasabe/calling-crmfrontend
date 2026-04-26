@@ -1,0 +1,186 @@
+/* 🔥 LAYOUT */
+
+.layout {
+  display: flex;
+  min-height: 100vh;
+  background: #f5f7fb;
+}
+
+/* 🔥 MAIN CONTENT */
+
+.main-content {
+  flex: 1;
+  padding: 90px 20px 20px;
+  transition: all 0.3s ease;
+}
+
+.main-content.shifted {
+  margin-left: 240px;
+}
+
+.main-content.full {
+  margin-left: 80px;
+}
+
+/* 🔥 PAGE HEADER */
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.page-header h2 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #222;
+}
+
+.page-header p {
+  font-size: 15px;
+  color: #666;
+}
+
+/* 🔥 TABLE WRAPPER */
+
+.table-wrapper {
+  background: #fff;
+  border-radius: 16px;
+  padding: 20px;
+  overflow-x: auto;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+}
+
+/* 🔥 TABLE */
+
+.leads-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.leads-table thead {
+  background: #f3f4f6;
+}
+
+.leads-table th {
+  padding: 16px;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 700;
+  color: #333;
+}
+
+.leads-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid #eee;
+  font-size: 14px;
+  color: #444;
+}
+
+.leads-table tr:hover {
+  background: #fafafa;
+}
+
+/* 🔥 STATUS BADGES */
+
+.status-badge {
+  padding: 6px 12px;
+  border-radius: 30px;
+  font-size: 12px;
+  font-weight: 700;
+  display: inline-block;
+  text-transform: uppercase;
+}
+
+/* NEW */
+
+.status-badge.new {
+  background: #e5e7eb;
+  color: #333;
+}
+
+/* INTERESTED */
+
+.status-badge.interested {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+/* FOLLOWUP */
+
+.status-badge.followup {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+/* VISIT */
+
+.status-badge.visit_scheduled {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+/* NOT INTERESTED */
+
+.status-badge.not_interested {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+/* BOOKED */
+
+.status-badge.booked {
+  background: #ede9fe;
+  color: #6d28d9;
+}
+
+/* 🔥 SELECT */
+
+select {
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  outline: none;
+  cursor: pointer;
+  font-size: 13px;
+  background: white;
+}
+
+select:focus {
+  border-color: #2563eb;
+}
+
+/* 🔥 LOADER */
+
+.loader,
+.empty-state {
+  background: white;
+  padding: 40px;
+  border-radius: 16px;
+  text-align: center;
+  font-size: 16px;
+  color: #666;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+}
+
+/* 🔥 MOBILE */
+
+@media (max-width: 768px) {
+
+  .main-content.shifted,
+  .main-content.full {
+    margin-left: 0;
+  }
+
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .leads-table {
+    min-width: 900px;
+  }
+
+}

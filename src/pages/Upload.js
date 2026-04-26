@@ -1,27 +1,41 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import axios from "axios";
 import Sidebar from "../components/Sidebar";
-import "../styles/upload.css"; // 🔥 ADD THIS
+import "../styles/upload.css";
+
+const API = "http://localhost:5000/api";
 
 export default function Upload() {
   const [file, setFile] = useState(null);
   const [users, setUsers] = useState([]);
   const [assigned, setAssigned] = useState("");
   const [message, setMessage] = useState("");
-
   const [isOpen, setIsOpen] = useState(true);
 
-  const user = JSON.parse(localStorage.getItem("user")) || {};
+  /* ✅ FIX: useMemo to stop warning */
+  const user = useMemo(() => {
+    return JSON.parse(localStorage.getItem("user")) || {};
+  }, []);
 
+  /* ✅ FETCH USERS */
   useEffect(() => {
-    if (user.role === "admin" || user.role === "superadmin") {
+    if (!user.role) return;
+
+    // 🔥 normalize role
+    const role = user.role.toLowerCase();
+
+    if (role === "admin" || role === "super administrator") {
       axios
-        .get("http://localhost:5000/users")
-        .then((res) => setUsers(res.data))
+        .get(`${API}/all-users`) // ✅ FIXED API
+        .then((res) => {
+          console.log("Users:", res.data); // debug
+          setUsers(res.data);
+        })
         .catch((err) => console.log(err));
     }
-  }, [user.role]);
+  }, [user]);
 
+  /* ✅ UPLOAD */
   const uploadFile = async () => {
     if (!file || !assigned) {
       setMessage("Select file & user ❌");
@@ -34,29 +48,30 @@ export default function Upload() {
     formData.append("created_by", user.email);
 
     try {
-      await axios.post("http://localhost:5000/upload", formData);
-      setMessage("File uploaded successfully ✅");
+await axios.post(`${API}/bulk-update`, formData, {
+  headers: {
+    "Content-Type": "multipart/form-data"
+  }
+});      setMessage("File uploaded successfully ✅");
 
-      // 🔥 reset after upload
       setFile(null);
       setAssigned("");
-    } catch {
+    } catch (err) {
+      console.log(err);
       setMessage("Upload failed ❌");
     }
   };
 
   return (
     <div style={{ display: "flex" }}>
-      
-      {/* 🔥 SIDEBAR */}
+      {/* SIDEBAR */}
       <Sidebar
         isOpen={isOpen}
         toggleSidebar={() => setIsOpen(!isOpen)}
       />
 
-      {/* 🔥 MAIN CONTENT */}
+      {/* MAIN */}
       <div className={`upload-container ${isOpen ? "" : "collapsed"}`}>
-        
         <div className="upload-card">
 
           <h3 className="upload-title">Upload CSV</h3>
@@ -65,20 +80,25 @@ export default function Upload() {
             <p className="upload-message">{message}</p>
           )}
 
-          {/* USER SELECT */}
+          {/* ✅ USER SELECT */}
           <select
             value={assigned}
             onChange={(e) => setAssigned(e.target.value)}
           >
             <option value="">Select User</option>
-            {users.map((u, i) => (
-              <option key={i} value={u.email}>
-                {u.email}
-              </option>
-            ))}
+
+            {users.length === 0 ? (
+              <option disabled>No users found</option>
+            ) : (
+              users.map((u) => (
+                <option key={u._id} value={u.email}>
+                  {u.name} ({u.email})
+                </option>
+              ))
+            )}
           </select>
 
-          {/* FILE INPUT */}
+          {/* FILE */}
           <input
             type="file"
             onChange={(e) => setFile(e.target.files[0])}
