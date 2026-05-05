@@ -16,19 +16,23 @@ export default function AssignManager() {
   const [selectedManager, setSelectedManager] = useState({});
 
   useEffect(() => {
+  fetchVisits();
+  fetchManagers();
 
-    fetchVisits();
+  const interval = setInterval(() => {
+    fetchVisits(); // 🔥 auto अपडेट
+  }, 5000); // every 5 sec
 
-    fetchManagers();
+  return () => clearInterval(interval);
 
-  }, []);
+}, []);
 
   const fetchVisits = async () => {
 
     try {
 
       const res = await axios.get(
-        "https://calling-crm-backend-1.onrender.com/api/visit-entries"
+        "http://localhost:5000/api/visit-entries"
       );
 
       setVisits(res.data);
@@ -46,7 +50,7 @@ export default function AssignManager() {
     try {
 
       const res = await axios.get(
-        "https://calling-crm-backend-1.onrender.com/api/managers"
+        "http://localhost:5000/api/managers"
       );
 
       setManagers(res.data);
@@ -65,7 +69,7 @@ export default function AssignManager() {
 
       await axios.put(
 
-        `https://calling-crm-backend-1.onrender.com/api/assign-manager/${visitId}`,
+        `http://localhost:5000/api/assign-manager/${visitId}`,
 
         {
           managerId: selectedManager[visitId]
@@ -141,10 +145,7 @@ export default function AssignManager() {
                   <td>
 
                     <select
-
-                      value={
-                        selectedManager[v._id] || ""
-                      }
+               value={selectedManager[v._id] || v.managerId || ""}
 
                       onChange={(e) =>
 
@@ -186,17 +187,12 @@ export default function AssignManager() {
                   <td>
 
                     <button
-
-                      className="assign-btn"
-
-                      onClick={() =>
-                        assignManager(v._id)
-                      }
-                    >
-
-                      Assign
-
-                    </button>
+                 className="assign-btn"
+                 disabled={!selectedManager[v._id]} // 🔥 important
+                 onClick={() => assignManager(v._id)}
+                   >
+                   Assign
+                 </button>
 
                   </td>
 

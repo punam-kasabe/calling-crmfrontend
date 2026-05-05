@@ -3,7 +3,7 @@
   display: flex;
 }
 
-/* 🔥 SIDEBAR (assumed fixed) */
+/* 🔥 SIDEBAR */
 .sidebar {
   width: 240px;
   position: fixed;
@@ -15,7 +15,7 @@
   transition: all 0.3s ease;
 }
 
-/* COLLAPSED SIDEBAR */
+/* 🔥 COLLAPSED SIDEBAR */
 .sidebar.collapsed {
   width: 70px;
 }
@@ -23,36 +23,46 @@
 /* 🔥 MAIN CONTENT */
 .main {
   flex: 1;
-  margin-left: 240px; /* 👈 sidebar width */
-  padding: 20px;
+  margin-left: 240px;
+  margin-top: 70px;
+  width: calc(100% - 240px);
+  padding: 20px 20px 20px 35px; /* 👈 left padding increase */
   background: #f4f6fb;
   min-height: 100vh;
   transition: all 0.3s ease;
+  overflow-x: auto;
+  box-sizing: border-box;
 }
 
-/* WHEN SIDEBAR COLLAPSED */
+/* 🔥 WHEN SIDEBAR COLLAPSED */
 .main.shifted {
   margin-left: 70px;
+  width: calc(100% - 70px);
+  padding-left: 25px;
 }
 
 /* 🔝 HEADER */
 .header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 15px;
+  align-items: flex-start;
+  margin-bottom: 20px;
+  gap: 20px;
+  flex-wrap: wrap;
 }
 
 .header h2 {
-  font-size: 22px;
+  font-size: 24px;
   font-weight: 600;
   color: #333;
+  margin: 0;
 }
 
 /* 📊 CARDS */
 .cards {
   display: flex;
   gap: 15px;
+  flex-wrap: wrap;
 }
 
 .card {
@@ -78,13 +88,16 @@
 .card h3 {
   margin-top: 5px;
   color: #5a67d8;
+  font-size: 24px;
 }
 
 /* 🔘 ACTION BUTTONS */
 .actions {
   display: flex;
-  justify-content: space-between;
-  margin: 15px 0;
+  justify-content: flex-end;
+  gap: 10px;
+  margin: 20px 0;
+  flex-wrap: wrap;
 }
 
 .export-btn,
@@ -92,11 +105,12 @@
   background: linear-gradient(to right, #5a67d8, #6b46c1);
   color: white;
   border: none;
-  padding: 8px 16px;
+  padding: 10px 18px;
   border-radius: 6px;
   cursor: pointer;
   font-size: 13px;
   transition: 0.2s;
+  font-weight: 600;
 }
 
 .export-btn:hover,
@@ -104,60 +118,99 @@
   opacity: 0.9;
 }
 
-/* 📊 TABLE */
+/* 📊 TABLE CONTAINER */
 .table-container {
+  width: 100%;
   background: #fff;
   border-radius: 10px;
   overflow-x: auto;
   box-shadow: 0 3px 10px rgba(0,0,0,0.08);
 }
 
-/* TABLE BASE */
+/* 📊 TABLE */
 table {
   width: 100%;
+  min-width: 1700px;
   border-collapse: collapse;
-  min-width: 1200px; /* 👈 horizontal scroll */
 }
 
-/* HEADER */
+/* 🔥 TABLE HEADER */
 thead {
   background: linear-gradient(to right, #5a67d8, #6b46c1);
   color: white;
 }
 
 th {
-  padding: 12px;
+  padding: 14px 12px;
   font-size: 12px;
   text-align: left;
   white-space: nowrap;
 }
 
-/* BODY */
+/* 🔥 TABLE BODY */
 td {
-  padding: 10px;
+  padding: 12px;
   font-size: 12px;
   border-bottom: 1px solid #eee;
   white-space: nowrap;
+  color: #444;
 }
 
-/* ROW HOVER */
+/* 🔥 ROW HOVER */
 tbody tr:hover {
   background: #f9f9ff;
 }
 
-/* NO DATA */
+/* ❌ NO DATA */
 .no-data {
   text-align: center;
-  padding: 25px;
+  padding: 30px;
   color: #999;
+  font-size: 14px;
+  font-weight: 500;
 }
 
-/* SCROLLBAR (optional clean look) */
+/* 🔥 SCROLLBAR */
 .table-container::-webkit-scrollbar {
-  height: 6px;
+  height: 8px;
 }
 
 .table-container::-webkit-scrollbar-thumb {
-  background: #ccc;
+  background: #c5c5c5;
   border-radius: 10px;
+}
+
+/* 📱 MOBILE RESPONSIVE */
+@media (max-width: 768px) {
+
+  .main,
+  .main.shifted {
+    margin-left: 0;
+    width: 100%;
+    padding: 15px;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .cards {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .card {
+    width: 100%;
+  }
+
+  .actions {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .export-btn,
+  .search-btn {
+    width: 100%;
+  }
 }

@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 
 /* ✅ FIX */
-const API = "https://calling-crm-backend-1.onrender.com/api";
+const API = "http://localhost:5000/api";
 
 export default function ManageUsers() {
   const [isOpen, setIsOpen] = useState(true);
@@ -95,8 +95,9 @@ export default function ManageUsers() {
                 </tr>
               )}
 
-              {users.map((u) => (
-                <tr key={u.id}>
+              {
+             users.map((u) => (
+               <tr key={u._id}>
                   <td>{u.name}</td>
                   <td>{u.email}</td>
                   <td>{u.role}</td>

@@ -28,7 +28,7 @@ export default function BulkUpdate() {
       setLoading(true);
 
       const res = await axios.post(
-        "https://calling-crm-backend-1.onrender.com/api/bulk-update",
+        "http://localhost:5000/api/bulk-update",
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },

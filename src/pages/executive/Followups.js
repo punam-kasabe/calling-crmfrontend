@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import axios from "axios";
 
 import Sidebar from "../../components/Sidebar";
@@ -12,32 +12,48 @@ export default function Followups() {
   const [followups, setFollowups] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const user = JSON.parse(localStorage.getItem("user"));
+  // ✅ FIXED ESLINT WARNING
+  const user = useMemo(() => {
+    return JSON.parse(localStorage.getItem("user")) || {};
+  }, []);
 
-  // eslint-disable-next-line
-useEffect(() => {
-  fetchFollowups();
-}, [fetchFollowups]);
-  const fetchFollowups = async () => {
+  /* ================= FETCH FOLLOWUPS ================= */
+
+  const fetchFollowups = useCallback(async () => {
 
     try {
 
+      if (!user?._id) {
+        setLoading(false);
+        return;
+      }
+
       const res = await axios.get(
-        `https://calling-crm-backend-1.onrender.com/api/followups/${user._id}`
+        `http://localhost:5000/api/followups/${user._id}`
       );
 
       setFollowups(res.data);
 
     } catch (err) {
 
-      console.error("Error fetching followups", err);
+      console.error(
+        "Error fetching followups",
+        err
+      );
 
     } finally {
 
       setLoading(false);
 
     }
-  };
+
+  }, [user]);
+
+  useEffect(() => {
+    fetchFollowups();
+  }, [fetchFollowups]);
+
+  /* ================= UPDATE STATUS ================= */
 
   const updateFollowupStatus = async (
     leadId,
@@ -47,7 +63,7 @@ useEffect(() => {
     try {
 
       await axios.put(
-        `https://calling-crm-backend-1.onrender.com/api/leads/${leadId}`,
+        `http://localhost:5000/api/leads/${leadId}`,
         { status }
       );
 
@@ -67,18 +83,18 @@ useEffect(() => {
       );
 
     }
+
   };
 
   return (
+
     <div className="layout">
 
-      {/* SIDEBAR */}
       <Sidebar
         isOpen={isOpen}
         toggleSidebar={toggleSidebar}
       />
 
-      {/* MAIN */}
       <div
         className={`main-content ${
           isOpen ? "shifted" : "full"
@@ -122,17 +138,11 @@ useEffect(() => {
                 <tr>
 
                   <th>#</th>
-
                   <th>Client Name</th>
-
                   <th>Mobile</th>
-
                   <th>Project</th>
-
                   <th>Next Followup</th>
-
                   <th>Status</th>
-
                   <th>Update</th>
 
                 </tr>
@@ -146,21 +156,13 @@ useEffect(() => {
 
                     <tr key={lead._id}>
 
-                      <td>
-                        {index + 1}
-                      </td>
+                      <td>{index + 1}</td>
 
-                      <td>
-                        {lead.name}
-                      </td>
+                      <td>{lead.name}</td>
 
-                      <td>
-                        {lead.mobile}
-                      </td>
+                      <td>{lead.mobile}</td>
 
-                      <td>
-                        {lead.project}
-                      </td>
+                      <td>{lead.project}</td>
 
                       <td>
 
@@ -236,5 +238,7 @@ useEffect(() => {
       </div>
 
     </div>
+
   );
+
 }

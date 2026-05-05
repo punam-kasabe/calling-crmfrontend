@@ -1,6 +1,7 @@
 import Sidebar from "../components/Sidebar";
 import "../styles/leads.css";
 import { useState, useEffect, useMemo, useCallback } from "react";
+import { getProjects } from "../api/projectApi";
 import axios from "axios";
 
 export default function Leads() {
@@ -15,6 +16,7 @@ export default function Leads() {
   const [file, setFile] = useState(null);
   const [selectedUser, setSelectedUser] = useState("");
   const [users, setUsers] = useState([]);
+  const [projects, setProjects] = useState([]);
   const [leads, setLeads] = useState([]);
   const [stats, setStats] = useState({});
   const [search, setSearch] = useState("");
@@ -40,10 +42,10 @@ export default function Leads() {
 
     if (!user?.email || !user?.role) return;
 
-    axios.get(`https://calling-crm-backend-1.onrender.com/dashboard/${user.email}/${user.role}`)
+    axios.get(`http://localhost:5000/api/dashboard/${user.email}/${user.role}`)
       .then(res => setStats(res.data));
 
-    axios.post("https://calling-crm-backend-1.onrender.com/filter-leads", {
+    axios.post("http://localhost:5000/api/filter-leads", {
       email: user.email.trim().toLowerCase(),
       role: user.role,
     })
@@ -54,10 +56,16 @@ export default function Leads() {
   useEffect(() => { fetchData(); }, [fetchData]);
 
   useEffect(() => {
-    axios.get("https://calling-crm-backend-1.onrender.com/users")
+    axios.get("http://localhost:5000/api/users")
       .then(res => setUsers(res.data));
   }, []);
-
+       
+  useEffect(() => {
+  getProjects()
+    .then(res => setProjects(res))
+    .catch(err => console.log(err));
+}, []);
+   
   /* ================= CSV ================= */
   const handleUpload = async () => {
     if (!file || !selectedUser) return alert("Select file & user");
@@ -67,7 +75,7 @@ export default function Leads() {
     formData.append("assigned_to", selectedUser.trim().toLowerCase());
     formData.append("created_by", user.email);
 
-    await axios.post("https://calling-crm-backend-1.onrender.com/upload", formData);
+    await axios.post("http://localhost:5000/api/upload", formData);
 
     alert("Uploaded ✅");
     fetchData();
@@ -76,7 +84,7 @@ export default function Leads() {
   /* ================= ADD ================= */
   const handleAddLead = async () => {
     try {
-      await axios.post("http://localhost:5000/leads", {
+      await axios.post("http://localhost:5000/api/leads", {
         ...newLead,
         assigned_to: newLead.assigned_to.trim().toLowerCase(),
         created_by: user.email
@@ -94,7 +102,7 @@ export default function Leads() {
   /* ================= UPDATE ================= */
   const handleUpdate = async () => {
     try {
-      await axios.put(`http://localhost:5000/leads/${selectedLead.id}`, selectedLead);
+      await axios.put(`http://localhost:5000/api/leads/${selectedLead.id}`, selectedLead);
 
       alert("Updated ✅");
       setShowModal(false);
@@ -107,7 +115,7 @@ export default function Leads() {
 
   /* ================= STATUS ================= */
   const updateStatus = (id, status) => {
-    axios.put(`http://localhost:5000/leads/status/${id}`, { status })
+    axios.put(`http://localhost:5000/api/leads/status/${id}`, { status })
       .then(fetchData);
   };
 
@@ -312,6 +320,22 @@ export default function Leads() {
                   <option key={u.email}>{u.email}</option>
                 ))}
               </select>
+               
+              <select
+           className="form-select mt-2"
+           onChange={(e) =>
+          setNewLead({ ...newLead, project: e.target.value })
+           }
+       >
+  <option>Select Project</option>
+
+  {projects.map((p) => (
+    <option key={p._id} value={p.name}>
+      {p.name}
+    </option>
+  ))}
+</select>
+
 
               <button className="btn btn-success mt-3"
                 onClick={handleAddLead}>

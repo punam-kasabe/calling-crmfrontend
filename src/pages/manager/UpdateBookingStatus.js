@@ -34,7 +34,7 @@ export default function UpdateBookingStatus() {
 
       const res = await axios.get(
 
-        `https://calling-crm-backend-1.onrender.com/api/manager-clients?email=${user.email}`
+        `http://localhost:5000/api/manager-clients?email=${user.email}`
 
       );
 
@@ -75,7 +75,7 @@ export default function UpdateBookingStatus() {
 
       await axios.put(
 
-        `https://calling-crm-backend-1.onrender.com/api/update-status/${id}`,
+        `http://localhost:5000/api/update-status/${id}`,
 
         {
           status

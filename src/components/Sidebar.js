@@ -19,7 +19,7 @@ import {
   LogOut,
   UserCheck,
   ClipboardList,
-  Search,
+
 } from "lucide-react";
 
 export default function Sidebar({ isOpen, toggleSidebar }) {
@@ -42,7 +42,7 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
   const isManager = role === "manager";
 
   const isReception = role === "reception";
-
+   const isExecutive = role === "executive";
   const handleLogout = () => {
     localStorage.removeItem("user");
     navigate("/");
@@ -141,22 +141,7 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
                 </Link>
               </li>
 
-              <li>
-                <Link
-                  to="/search-client"
-                  className={
-                    location.pathname ===
-                    "/search-client"
-                      ? "active"
-                      : ""
-                  }
-                >
-                  <Search size={18} />
-                  <span className="text">
-                    Search Client
-                  </span>
-                </Link>
-              </li>
+              
 
               <li>
                 <Link
@@ -266,6 +251,84 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
               </li>
             </>
           )}
+{/* ================= EXECUTIVE ================= */}
+{isExecutive && (
+  <>
+
+    <li>
+      <Link
+        to="/executive-dashboard"
+        className={
+          location.pathname ===
+          "/executive-dashboard"
+            ? "active"
+            : ""
+        }
+      >
+        <LayoutDashboard size={18} />
+
+        <span className="text">
+          Dashboard
+        </span>
+      </Link>
+    </li>
+
+    <li>
+      <Link
+        to="/my-leads"
+        className={
+          location.pathname ===
+          "/my-leads"
+            ? "active"
+            : ""
+        }
+      >
+        <Users size={18} />
+
+        <span className="text">
+          My Leads
+        </span>
+      </Link>
+    </li>
+
+    <li>
+      <Link
+        to="/followups"
+        className={
+          location.pathname ===
+          "/followups"
+            ? "active"
+            : ""
+        }
+      >
+        <ClipboardList size={18} />
+
+        <span className="text">
+          Followups
+        </span>
+      </Link>
+    </li>
+
+    <li>
+      <Link
+        to="/call-logs"
+        className={
+          location.pathname ===
+          "/call-logs"
+            ? "active"
+            : ""
+        }
+      >
+        <PhoneCall size={18} />
+
+        <span className="text">
+          Call Logs
+        </span>
+      </Link>
+    </li>
+
+  </>
+)}
 
           {/* ================= ADMIN ================= */}
           {isAdmin && (

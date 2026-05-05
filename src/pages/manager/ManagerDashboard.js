@@ -37,7 +37,7 @@ export default function ManagerDashboard() {
 
       const res = await axios.get(
 
-        `https://calling-crm-backend-1.onrender.com/api/dashboard?email=${user.email}&role=manager`
+        `http://localhost:5000/api/dashboard?email=${user.email}&role=manager`
 
       );
 

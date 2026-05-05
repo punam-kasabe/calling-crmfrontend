@@ -129,9 +129,10 @@ export default function Dashboard() {
           </div>
         ) : (
           <>
+
+          
             {/* 🔥 STATS */}
-            <div className="row mb-4">
-              {[
+        <div className="row g-3 mb-4">              {[
                 { title: "Total Leads", value: data.total, cls: "card-blue" },
                 { title: "New Leads", value: data.new, cls: "card-blue" },
                 { title: "Booked", value: data.booked, cls: "card-green" },

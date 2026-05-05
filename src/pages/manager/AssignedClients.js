@@ -18,8 +18,26 @@ export default function AssignedClients() {
 
   const [clients, setClients] = useState([]);
 
+  const [filteredClients,
+    setFilteredClients] =
+    useState([]);
+
+  const [search,
+    setSearch] =
+    useState("");
+
+  const [editingId,
+    setEditingId] =
+    useState(null);
+
+  const [selectedStatus,
+    setSelectedStatus] =
+    useState("");
+
   const user =
-    JSON.parse(localStorage.getItem("user"));
+    JSON.parse(
+      localStorage.getItem("user")
+    );
 
   /* =========================================
      FETCH CLIENTS
@@ -31,11 +49,13 @@ export default function AssignedClients() {
 
       const res = await axios.get(
 
-        `https://calling-crm-backend-1.onrender.com/api/manager-clients?email=${user.email}`
+        `http://localhost:5000/api/manager-clients?email=${user.email}`
 
       );
 
       setClients(res.data);
+
+      setFilteredClients(res.data);
 
     }
 
@@ -56,6 +76,138 @@ export default function AssignedClients() {
     fetchClients();
 
   }, [fetchClients]);
+
+  /* =========================================
+     SEARCH FILTER
+  ========================================= */
+
+  useEffect(() => {
+
+    const filtered =
+      clients.filter((client) => {
+
+        const searchText =
+          search.toLowerCase();
+
+        return (
+
+          client.name
+            ?.toLowerCase()
+            .includes(searchText)
+
+          ||
+
+          client.phone
+            ?.toLowerCase()
+            .includes(searchText)
+
+          ||
+
+          client.project
+            ?.toLowerCase()
+            .includes(searchText)
+
+          ||
+
+          client.status
+            ?.toLowerCase()
+            .includes(searchText)
+
+        );
+
+      });
+
+    setFilteredClients(filtered);
+
+  }, [search, clients]);
+
+  /* =========================================
+     START EDIT
+  ========================================= */
+
+  const handleEdit = (
+    id,
+    currentStatus
+  ) => {
+
+    setEditingId(id);
+
+    setSelectedStatus(
+      currentStatus
+    );
+
+  };
+
+  /* =========================================
+     CANCEL EDIT
+  ========================================= */
+
+  const handleCancel = () => {
+
+    setEditingId(null);
+
+    setSelectedStatus("");
+
+  };
+
+  /* =========================================
+     SAVE STATUS
+  ========================================= */
+
+  const handleSave = async (id) => {
+
+    try {
+
+      await axios.put(
+
+        `http://localhost:5000/api/update-status/${id}`,
+
+        {
+
+          status:
+            selectedStatus
+
+        }
+
+      );
+
+      alert(
+        "Status Updated ✅"
+      );
+
+      setClients((prev) =>
+
+        prev.map((client) =>
+
+          client._id === id
+
+            ? {
+                ...client,
+                status:
+                  selectedStatus
+              }
+
+            : client
+
+        )
+
+      );
+
+      setEditingId(null);
+
+    }
+
+    catch (err) {
+
+      console.log(err);
+
+      alert(
+        "Update Failed ❌"
+      );
+
+    }
+
+  };
 
   return (
 
@@ -79,6 +231,24 @@ export default function AssignedClients() {
           <h1 className="page-title">
             Assigned Clients
           </h1>
+
+          {/* SEARCH BAR */}
+
+          <div className="search-box">
+
+            <input
+              type="text"
+              placeholder="Search by name, phone, project or status..."
+              value={search}
+              onChange={(e) =>
+                setSearch(
+                  e.target.value
+                )
+              }
+              className="search-input"
+            />
+
+          </div>
 
           <div className="table-wrapper">
 
@@ -104,15 +274,19 @@ export default function AssignedClients() {
                     Status
                   </th>
 
+                  <th>
+                    Action
+                  </th>
+
                 </tr>
 
               </thead>
 
               <tbody>
 
-                {clients.length > 0 ? (
+                {filteredClients.length > 0 ? (
 
-                  clients.map((c) => (
+                  filteredClients.map((c) => (
 
                     <tr key={c._id}>
 
@@ -129,11 +303,107 @@ export default function AssignedClients() {
                       </td>
 
                       <td>
-                        <span className="status-badge">
 
-                          {c.status}
+                        {editingId === c._id ? (
 
-                        </span>
+                          <select
+
+                            value={
+                              selectedStatus
+                            }
+
+                            onChange={(e) =>
+                              setSelectedStatus(
+                                e.target.value
+                              )
+                            }
+
+                            className="status-select"
+
+                          >
+
+                            <option value="New">
+                              New
+                            </option>
+
+                            <option value="Interested">
+                              Interested
+                            </option>
+
+                            <option value="Not Interested">
+                              Not Interested
+                            </option>
+
+                            <option value="Followup">
+                              Followup
+                            </option>
+
+                            <option value="Booked">
+                              Booked
+                            </option>
+
+                          </select>
+
+                        ) : (
+
+                          <span className="status-badge">
+
+                            {c.status}
+
+                          </span>
+
+                        )}
+
+                      </td>
+
+                      <td>
+
+                        {editingId === c._id ? (
+
+                          <div className="action-buttons">
+
+                            <button
+                              className="save-btn"
+                              onClick={() =>
+                                handleSave(c._id)
+                              }
+                            >
+
+                              Save
+
+                            </button>
+
+                            <button
+                              className="cancel-btn"
+                              onClick={
+                                handleCancel
+                              }
+                            >
+
+                              Cancel
+
+                            </button>
+
+                          </div>
+
+                        ) : (
+
+                          <button
+                            className="edit-btn"
+                            onClick={() =>
+                              handleEdit(
+                                c._id,
+                                c.status
+                              )
+                            }
+                          >
+
+                            Edit
+
+                          </button>
+
+                        )}
+
                       </td>
 
                     </tr>
@@ -145,11 +415,11 @@ export default function AssignedClients() {
                   <tr>
 
                     <td
-                      colSpan="4"
+                      colSpan="5"
                       className="no-data"
                     >
 
-                      No assigned clients found
+                      No clients found
 
                     </td>
 

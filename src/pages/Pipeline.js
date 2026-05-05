@@ -6,21 +6,17 @@ import "react-toastify/dist/ReactToastify.css";
 import Swal from "sweetalert2";
 import "../styles/pipeline.css";
 
-const API = "https://calling-crm-backend-1.onrender.com/api";
+const API = "http://localhost:5000/api";
 
 export default function Pipeline() {
 
   const [isOpen, setIsOpen] = useState(true);
   const toggleSidebar = () => setIsOpen(!isOpen);
-
   const [leads, setLeads] = useState([]);
   const [users, setUsers] = useState([]);
-
   const [search, setSearch] = useState("");
-
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-
   const [showModal, setShowModal] = useState(false);
   const [selectedLead, setSelectedLead] = useState(null);
 
@@ -207,13 +203,89 @@ export default function Pipeline() {
             </div>
 
             <div className="col-md-2">
-              <input className="form-control"
-                placeholder="Project"
-                value={filters.project}
-                onChange={(e) =>
-                  setFilters({ ...filters, project: e.target.value })
-                } />
-            </div>
+
+  <select
+    className="form-select"
+    value={filters.project}
+    onChange={(e) =>
+      setFilters({
+        ...filters,
+        project: e.target.value
+      })
+    }
+  >
+
+    <option value="">
+      All Projects
+    </option>
+
+    <option value="99villa">
+      99villa
+    </option>
+
+    <option value="99 villa plot">
+      99 villa plot
+    </option>
+
+    <option value="Affordable life">
+      Affordable life
+    </option>
+
+    <option value="Alibaug Plot">
+      Alibaug Plot
+    </option>
+
+    <option value="ANJALI ZAMIN">
+      ANJALI ZAMIN
+    </option>
+
+    <option value="Gudipadwa plot in 5 Lacs">
+      Gudipadwa plot in 5 Lacs
+    </option>
+
+    <option value="Khopoli-pali Road plots">
+      Khopoli-pali Road plots
+    </option>
+
+    <option value="Maha-Mumbaai">
+      Maha-Mumbaai
+    </option>
+
+    <option value="MAHAMUMBAI">
+      MAHAMUMBAI
+    </option>
+
+    <option value="Maha-Mumbaii">
+      Maha-Mumbaii
+    </option>
+
+    <option value="Mahamumbai Phase 2">
+      Mahamumbai Phase 2
+    </option>
+
+    <option value="Mmahamumbai">
+      Mmahamumbai
+    </option>
+
+    <option value="Panvel (99Villa)">
+      Panvel (99Villa)
+    </option>
+
+    <option value="Sheetal Campaign">
+      Sheetal Campaign
+    </option>
+
+    <option value="Thane (Nitesh)">
+      Thane (Nitesh)
+    </option>
+
+    <option value="Thane (Virendra)">
+      Thane (Virendra)
+    </option>
+
+  </select>
+
+</div>
 
             <div className="col-md-2">
               <select className="form-select"
@@ -313,16 +385,22 @@ export default function Pipeline() {
                     <tr key={l._id}>
                     <td>{l.name}</td>
                     <td>{l.phone}</td>
-                    <td>{l.assigned_to}</td>
                     <td>
   <a href={`tel:${l.phone}`} className="btn btn-success btn-sm">
     Call
   </a>
 </td>
+
+<td>{l.assigned_to || "-"}</td>
                     <td><span className="badge bg-info">{l.status}</span></td>
                     <td>{l.project || "-"}</td>
-                    <td>{l.next_call_date || "-"}</td>
-
+<td>
+  {l.next_call_date
+    ? new Date(l.next_call_date)
+        .toISOString()
+        .split("T")[0]
+    : "-"}
+</td>
                     <td>
                       <button className="btn btn-sm btn-warning me-2"
                         onClick={() => {
@@ -401,8 +479,13 @@ export default function Pipeline() {
               </select>
 
               <input type="date" className="form-control mb-3"
-                value={selectedLead.next_call_date || ""}
-                onChange={(e) =>
+value={
+  selectedLead.next_call_date
+    ? new Date(selectedLead.next_call_date)
+        .toISOString()
+        .split("T")[0]
+    : ""
+}                onChange={(e) =>
                   setSelectedLead({ ...selectedLead, next_call_date: e.target.value })
                 } />
 

@@ -15,7 +15,48 @@ body {
   font-weight: 600;
   color: #111827;
 }
+/* 🔥 CARD BASE */
+.compact-card {
+  border-radius: 12px;
+  padding: 15px;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  transition: 0.3s;
+  text-align: center;
+}
 
+/* hover effect */
+.compact-card:hover {
+  transform: translateY(-4px);
+}
+
+/* COLORS */
+.card-blue {
+  background: linear-gradient(135deg, #4e73df, #224abe);
+}
+
+.card-green {
+  background: linear-gradient(135deg, #1cc88a, #13855c);
+}
+
+.card-yellow {
+  background: linear-gradient(135deg, #f6c23e, #dda20a);
+}
+
+.card-red {
+  background: linear-gradient(135deg, #e74a3b, #c0392b);
+}
+
+/* TEXT */
+.compact-card h6 {
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.compact-card h3 {
+  margin-top: 5px;
+  font-weight: bold;
+}
 /* ===== CARD BASE ===== */
 .card {
   border: none;
