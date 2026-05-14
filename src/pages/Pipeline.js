@@ -4,6 +4,7 @@ import Sidebar from "../components/Sidebar";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Swal from "sweetalert2";
+import * as XLSX from "xlsx";
 import "../styles/pipeline.css";
 
 const API = "http://localhost:5000/api";
@@ -101,6 +102,61 @@ export default function Pipeline() {
     );
   }, [search, leads]);
 
+
+    /* ================= EXPORT EXCEL ================= */
+
+  const handleExport = () => {
+
+    if (filteredLeads.length === 0) {
+
+      toast.error("No Leads To Export ❌");
+
+      return;
+
+    }
+
+    const exportData = filteredLeads.map((l) => ({
+
+      Name: l.name,
+
+      Mobile: l.phone,
+
+      Status: l.status,
+
+      Project: l.project,
+
+      Assigned: l.assigned_to,
+      "Closing Officer": l.assigned_manager || "-",
+
+      "Next Call": l.next_call_date
+        ? new Date(l.next_call_date)
+            .toISOString()
+            .split("T")[0]
+        : "-"
+
+    }));
+
+    const worksheet =
+      XLSX.utils.json_to_sheet(exportData);
+
+    const workbook =
+      XLSX.utils.book_new();
+
+    XLSX.utils.book_append_sheet(
+      workbook,
+      worksheet,
+      "Pipeline"
+    );
+
+    XLSX.writeFile(
+      workbook,
+      "Pipeline_Leads.xlsx"
+    );
+
+    toast.success("Excel Exported ✅");
+
+  };
+
   /* ================= CARDS ================= */
   const stats = useMemo(() => {
     let todayFollowups = 0;
@@ -132,24 +188,37 @@ export default function Pipeline() {
     };
   }, [leads]);
 
- 
-
   return (
     <div className="d-flex">
 
       <Sidebar isOpen={isOpen} toggleSidebar={toggleSidebar} />
 
-      <div style={{
-        marginLeft: isOpen ? "240px" : "70px",
-        marginTop: "60px",
-        width: "100%",
-        padding: "20px"
-      }}>
+      <div
+  style={{
+    marginLeft: isOpen ? "240px" : "70px",
+    marginTop: "60px",
+    width: "100%",
+    padding: "20px",
+
+    /* 🔥 SCROLL FIX */
+    height: "calc(100vh - 60px)",
+    overflowY: "auto",
+    overflowX: "hidden",
+  }}
+>
 
         <h4>Pipeline</h4>
 
         {/* 🔥 CARDS */}
-        <div className="row mb-4">
+       <div
+  className="mb-4"
+  style={{
+    display: "flex",
+    gap: "15px",
+    flexWrap: "nowrap",
+    overflowX: "auto",
+  }}
+>
           {[
             { title: "Today's Follow-ups", value: stats.todayFollowups, color: "#007bff" },
             { title: "Backlogs", value: stats.backlog, color: "#6c757d" },
@@ -158,8 +227,14 @@ export default function Pipeline() {
             { title: "Booked Leads", value: stats.booked, color: "#28a745" },
             { title: "Inactive Leads", value: stats.inactive, color: "#ffc107" },
           ].map((card, i) => (
-            <div className="col-xl-2 col-lg-3 col-md-4 col-sm-6 mb-3" key={card.title}>
-              <div className="card text-white shadow-sm"
+<div
+  className="mb-3"
+  key={card.title}
+  style={{
+    flex: "1",
+    minWidth: "170px",
+  }}
+>              <div className="card text-white shadow-sm"
                 style={{ background: card.color, borderRadius: "10px", padding: "10px" }}>
                 <div className="text-center">
                   <h6 style={{ fontSize: "13px" }}>{card.title}</h6>
@@ -350,20 +425,29 @@ export default function Pipeline() {
 
         {/* TABLE */}
         <div className="card p-3 shadow-sm">
-          <h5>Leads List</h5>
+         
 
            {/* 🔥 HEADER WITH BUTTON */}
   <div className="d-flex justify-content-between align-items-center mb-3">
     <h5>Leads List</h5>
 
     <button
-      className="btn btn-primary"
-      onClick={() => {
-        console.log("New Lead Clicked");
-      }}
-    >
-      + New Lead
-    </button>
+    className="btn btn-primary"
+    onClick={() => {
+      console.log("New Lead Clicked");
+    }}
+  >
+    + New Lead
+  </button>
+
+  <button
+    className="btn btn-success ms-2"
+    onClick={handleExport}
+  >
+    Export Excel
+  </button>
+
+
             </div>
           <table className="table table-hover">
             <thead className="table-dark">
@@ -372,6 +456,8 @@ export default function Pipeline() {
                 <th>Mobile</th>
                 <th>Call</th>
                 <th>Assigned</th>
+                <th>Closing Officer</th>
+
                 <th>Status</th>
                 <th>Project</th>
                 <th>Next Call</th>
@@ -386,21 +472,33 @@ export default function Pipeline() {
                     <td>{l.name}</td>
                     <td>{l.phone}</td>
                     <td>
-  <a href={`tel:${l.phone}`} className="btn btn-success btn-sm">
+   <a href={`tel:${l.phone}`} className="btn btn-success btn-sm">
     Call
-  </a>
+   </a>
+   </td>
+    
+     <td>{l.assigned_to || "-"}</td>
+
+<td>
+  <span className="badge bg-dark">
+    {l.assigned_manager || "-"}
+  </span>
 </td>
 
-<td>{l.assigned_to || "-"}</td>
-                    <td><span className="badge bg-info">{l.status}</span></td>
-                    <td>{l.project || "-"}</td>
 <td>
+  <span className="badge bg-info">
+    {l.status}
+  </span>
+</td>
+
+     <td>{l.project || "-"}</td>
+    <td>
   {l.next_call_date
     ? new Date(l.next_call_date)
         .toISOString()
         .split("T")[0]
     : "-"}
-</td>
+  </td>
                     <td>
                       <button className="btn btn-sm btn-warning me-2"
                         onClick={() => {

@@ -1,9 +1,18 @@
 import Sidebar from "../../components/Sidebar";
 import "../../styles/dashboard.css";
+
 import { useEffect, useState, useMemo, useCallback } from "react";
 import axios from "axios";
-import { Pie, Line } from "react-chartjs-2";
+
+import {
+  Pie,
+  Line,
+  Bar,
+  Doughnut
+} from "react-chartjs-2";
+
 import CountUp from "react-countup";
+
 import "chart.js/auto";
 
 const API = "http://localhost:5000/api";
@@ -11,9 +20,15 @@ const API = "http://localhost:5000/api";
 export default function Dashboard() {
 
   const [isOpen, setIsOpen] = useState(true);
-  const toggleSidebar = () => setIsOpen(!isOpen);
 
-  /* ✅ USER SAFE LOAD */
+  const toggleSidebar = () => {
+    setIsOpen(!isOpen);
+  };
+
+  /* =========================================
+     USER
+  ========================================= */
+
   const user = useMemo(() => {
     try {
       return JSON.parse(localStorage.getItem("user")) || {};
@@ -22,21 +37,41 @@ export default function Dashboard() {
     }
   }, []);
 
+  /* =========================================
+     STATES
+  ========================================= */
+
   const [loading, setLoading] = useState(true);
 
-  const [data, setData] = useState({
+  const [dashboard, setDashboard] = useState({
     total: 0,
     new: 0,
-    booked: 0,
     interested: 0,
+    booked: 0,
     not_interested: 0,
     pending: 0,
-    status: []
+
+    statusData: [],
+    executives: [],
+    assignments: [],
+    leaderboard: [],
+    followups: [],
+    missedFollowups: [],
+    projects: [],
+    sources: [],
+    revenue: [],
+    activities: [],
+    weekly: []
   });
 
-  /* ================= FETCH ================= */
+  /* =========================================
+     FETCH DASHBOARD
+  ========================================= */
+
   const fetchDashboard = useCallback(async () => {
+
     try {
+
       if (!user?.email || !user?.role) {
         setLoading(false);
         return;
@@ -44,156 +79,617 @@ export default function Dashboard() {
 
       setLoading(true);
 
-      const res = await axios.get(`${API}/dashboard`, {
-        params: {
-          email: user.email,
-          role: user.role
+      const res = await axios.get(
+        `${API}/dashboard-full`,
+        {
+          params: {
+            email: user.email,
+            role: user.role
+          }
         }
-      });
+      );
 
-      const d = res.data || {};
-
-      setData({
-        total: d.total || 0,
-        new: d.new || 0,
-        booked: d.booked || 0,
-        interested: d.interested || 0,
-        not_interested: d.not_interested || 0,
-        pending:
-          (d.total || 0) -
-          (d.booked || 0) -
-          (d.not_interested || 0),
-        status: d.status || []
-      });
+      setDashboard(res.data || {});
 
     } catch (err) {
+
       console.log("Dashboard Error ❌", err);
+
     } finally {
+
       setLoading(false);
+
     }
+
   }, [user]);
 
   useEffect(() => {
     fetchDashboard();
   }, [fetchDashboard]);
 
-  /* ================= CHART ================= */
+  /* =========================================
+     CHARTS
+  ========================================= */
 
-  const pieData = {
-    labels: data.status.length
-      ? data.status.map((s) => s._id)
-      : ["No Data"],
+  const statusChart = {
+    labels:
+      dashboard.statusData?.length > 0
+        ? dashboard.statusData.map(i => i._id)
+        : ["No Data"],
 
     datasets: [
       {
-        data: data.status.length
-          ? data.status.map((s) => s.count)
-          : [1],
-      },
-    ],
+        data:
+          dashboard.statusData?.length > 0
+            ? dashboard.statusData.map(i => i.count)
+            : [1]
+      }
+    ]
   };
 
-  const trendData = {
-    labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+  const weeklyChart = {
+    labels:
+      dashboard.weekly?.length > 0
+        ? dashboard.weekly.map(i => i.day)
+        : [],
+
     datasets: [
       {
         label: "Leads",
-        data: [12, 19, 8, 15, 22, 18, 25],
-        fill: true,
-      },
-    ],
+        data:
+          dashboard.weekly?.length > 0
+            ? dashboard.weekly.map(i => i.count)
+            : [],
+        fill: true
+      }
+    ]
   };
 
-  return (
-    <div className="d-flex">
+  const projectChart = {
+    labels:
+      dashboard.projects?.length > 0
+        ? dashboard.projects.map(i => i._id)
+        : [],
 
-      <Sidebar isOpen={isOpen} toggleSidebar={toggleSidebar} />
+    datasets: [
+      {
+        label: "Projects",
+        data:
+          dashboard.projects?.length > 0
+            ? dashboard.projects.map(i => i.count)
+            : []
+      }
+    ]
+  };
+
+  const sourceChart = {
+    labels:
+      dashboard.sources?.length > 0
+        ? dashboard.sources.map(i => i._id)
+        : [],
+
+    datasets: [
+      {
+        label: "Sources",
+        data:
+          dashboard.sources?.length > 0
+            ? dashboard.sources.map(i => i.count)
+            : []
+      }
+    ]
+  };
+
+  const revenueChart = {
+    labels:
+      dashboard.revenue?.length > 0
+        ? dashboard.revenue.map(i => i.month)
+        : [],
+
+    datasets: [
+      {
+        label: "Revenue",
+        data:
+          dashboard.revenue?.length > 0
+            ? dashboard.revenue.map(i => i.amount)
+            : [],
+        fill: true
+      }
+    ]
+  };
+
+  /* =========================================
+     UI
+  ========================================= */
+
+  return (
+
+    <div className="dashboard-page">
+
+      {/* =========================================
+         SIDEBAR
+      ========================================= */}
+
+      <Sidebar
+        isOpen={isOpen}
+        toggleSidebar={toggleSidebar}
+      />
+
+      {/* =========================================
+         MAIN CONTAINER
+      ========================================= */}
 
       <div
         className="dashboard-container"
         style={{
-          marginLeft: isOpen ? "240px" : "70px",
-          marginTop: "60px",
-          padding: "20px",
-          width: `calc(100% - ${isOpen ? "240px" : "70px"})`,
-          background: "#f4f6f9",
-          minHeight: "100vh",
+          marginLeft: isOpen ? "240px" : "70px"
         }}
       >
 
-        <h4 className="mb-3">Dashboard</h4>
+        {/* =========================================
+           TITLE
+        ========================================= */}
+
+        <h2 className="dashboard-title">
+          CRM Dashboard
+        </h2>
+
+        {/* =========================================
+           LOADING
+        ========================================= */}
 
         {loading ? (
-          <div className="text-center mt-5">
+
+          <div className="loading-box">
             <h5>Loading Dashboard...</h5>
           </div>
+
         ) : (
+
           <>
 
-          
-            {/* 🔥 STATS */}
-        <div className="row g-3 mb-4">              {[
-                { title: "Total Leads", value: data.total, cls: "card-blue" },
-                { title: "New Leads", value: data.new, cls: "card-blue" },
-                { title: "Booked", value: data.booked, cls: "card-green" },
-                { title: "Pending", value: data.pending, cls: "card-yellow" },
-                { title: "Interested", value: data.interested, cls: "card-green" },
-                { title: "Not Interested", value: data.not_interested, cls: "card-red" },
+            {/* =========================================
+               ROW 1 — SUMMARY CARDS
+            ========================================= */}
+
+            <div className="cards-grid">
+
+              {[
+                {
+                  title: "Total Leads",
+                  value: dashboard.total,
+                  cls: "card-blue"
+                },
+
+                {
+                  title: "New Leads",
+                  value: dashboard.new,
+                  cls: "card-blue"
+                },
+
+                {
+                  title: "Interested",
+                  value: dashboard.interested,
+                  cls: "card-green"
+                },
+
+                {
+                  title: "Booked",
+                  value: dashboard.booked,
+                  cls: "card-green"
+                },
+
+                {
+                  title: "Pending",
+                  value: dashboard.pending,
+                  cls: "card-yellow"
+                },
+
+                {
+                  title: "Not Interested",
+                  value: dashboard.not_interested,
+                  cls: "card-red"
+                }
+
               ].map((item) => (
-                <div key={item.title} className="col-xl-2 col-md-4 col-sm-6 mb-3">
-                  <div className={`card compact-card ${item.cls}`}>
-                    <h6>{item.title}</h6>
-                    <h3>
-                      <CountUp end={item.value} duration={1} />
-                    </h3>
-                  </div>
+
+                <div
+                  key={item.title}
+                  className={`compact-card ${item.cls}`}
+                >
+
+                  <h6>{item.title}</h6>
+
+                  <h3>
+                    <CountUp
+                      end={item.value || 0}
+                      duration={1}
+                    />
+                  </h3>
+
                 </div>
+
               ))}
+
             </div>
 
-            {/* 🔥 CHARTS */}
-            <div className="row mb-4">
-              <div className="col-md-8">
+            {/* =========================================
+               ROW 2 — WEEKLY + STATUS
+            ========================================= */}
+
+            <div className="dashboard-row">
+
+              {/* LEFT */}
+
+              <div className="chart-large">
+
                 <div className="chart-card">
+
                   <h5>Weekly Trends</h5>
-                  <Line data={trendData} />
+
+                  <Line data={weeklyChart} />
+
                 </div>
+
               </div>
 
-              <div className="col-md-4">
+              {/* RIGHT */}
+
+              <div className="chart-small">
+
                 <div className="chart-card">
+
                   <h5>Status Distribution</h5>
-                  <Pie data={pieData} />
+
+                  <Pie data={statusChart} />
+
                 </div>
+
               </div>
+
             </div>
 
-            {/* 🔥 EXTRA */}
-            <div className="row">
-              <div className="col-md-4">
-                <div className="chart-card">
-                  <h5>Leads Overview</h5>
-                  <Pie data={pieData} />
-                </div>
+            {/* =========================================
+               ROW 3 — EXECUTIVE PERFORMANCE
+            ========================================= */}
+
+            <div className="chart-card mt-4">
+
+              <h5>Executive Performance</h5>
+
+              <div className="table-responsive">
+
+                <table className="table table-bordered">
+
+                  <thead>
+
+                    <tr>
+
+                      <th>Name</th>
+
+                      <th>Total Leads</th>
+
+                      <th>Interested</th>
+
+                      <th>Booked</th>
+
+                      <th>Pending</th>
+
+                    </tr>
+
+                  </thead>
+
+                  <tbody>
+
+                    {dashboard.executives?.length > 0 ? (
+
+                      dashboard.executives.map((e, i) => (
+
+                        <tr key={i}>
+
+                          <td>{e.name}</td>
+
+                          <td>{e.total}</td>
+
+                          <td>{e.interested}</td>
+
+                          <td>{e.booked}</td>
+
+                          <td>{e.pending}</td>
+
+                        </tr>
+
+                      ))
+
+                    ) : (
+
+                      <tr>
+                        <td colSpan="5" align="center">
+                          No Executive Data
+                        </td>
+                      </tr>
+
+                    )}
+
+                  </tbody>
+
+                </table>
+
               </div>
 
-              <div className="col-md-4">
+            </div>
+
+            {/* =========================================
+               ROW 4
+            ========================================= */}
+
+            <div className="dashboard-row mt-4">
+
+              {/* ASSIGNMENT */}
+
+              <div className="chart-half">
+
                 <div className="chart-card">
+
+                  <h5>Lead Assignment Summary</h5>
+
+                  <Doughnut
+                    data={{
+                      labels:
+                        dashboard.assignments?.map(i => i.name),
+
+                      datasets: [
+                        {
+                          data:
+                            dashboard.assignments?.map(i => i.count)
+                        }
+                      ]
+                    }}
+                  />
+
+                </div>
+
+              </div>
+
+              {/* LEADERBOARD */}
+
+              <div className="chart-half">
+
+                <div className="chart-card">
+
+                  <h5>Team Leaderboard</h5>
+
+                  <div className="leaderboard-list">
+
+                    {dashboard.leaderboard?.length > 0 ? (
+
+                      dashboard.leaderboard.map((l, index) => (
+
+                        <div
+                          className="leader-item"
+                          key={index}
+                        >
+
+                          <span>
+                           {index + 1} {
+
+  l.name?.includes("@")
+    ? l.name.split("@")[0]
+    : l.name
+
+}
+                          </span>
+
+                          <strong>
+                            {l.count}
+                          </strong>
+
+                        </div>
+
+                      ))
+
+                    ) : (
+
+                      <p>No Leaderboard Data</p>
+
+                    )}
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+            {/* =========================================
+               ROW 5
+            ========================================= */}
+
+            <div className="dashboard-row mt-4">
+
+              {/* FOLLOWUPS */}
+
+              <div className="chart-half">
+
+                <div className="chart-card">
+
+                  <h5>Today's Followups</h5>
+
+                  <div className="activity-list">
+
+                    {dashboard.followups?.length > 0 ? (
+
+                      dashboard.followups.map((f, i) => (
+
+                        <div
+                          className="activity-item"
+                          key={i}
+                        >
+
+                          <strong>
+                            {f.name}
+                          </strong>
+
+                          <span>
+                            {f.phone}
+                          </span>
+
+                        </div>
+
+                      ))
+
+                    ) : (
+
+                      <p>No Followups</p>
+
+                    )}
+
+                  </div>
+
+                </div>
+
+              </div>
+
+              {/* MISSED */}
+
+              <div className="chart-half">
+
+                <div className="chart-card">
+
+                  <h5>Missed Followups</h5>
+
+                  <div className="activity-list">
+
+                    {dashboard.missedFollowups?.length > 0 ? (
+
+                      dashboard.missedFollowups.map((f, i) => (
+
+                        <div
+                          className="activity-item"
+                          key={i}
+                        >
+
+                          <strong>
+                            {f.name}
+                          </strong>
+
+                          <span>
+                            {f.phone}
+                          </span>
+
+                        </div>
+
+                      ))
+
+                    ) : (
+
+                      <p>No Missed Followups</p>
+
+                    )}
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+            {/* =========================================
+               ROW 6
+            ========================================= */}
+
+            <div className="dashboard-row mt-4">
+
+              {/* PROJECT */}
+
+              <div className="chart-half">
+
+                <div className="chart-card">
+
+                  <h5>Project Performance</h5>
+
+                  <Bar data={projectChart} />
+
+                </div>
+
+              </div>
+
+              {/* SOURCE */}
+
+              <div className="chart-half">
+
+                <div className="chart-card">
+
                   <h5>Source Analysis</h5>
-                  <Pie data={pieData} />
+
+                  <Pie data={sourceChart} />
+
                 </div>
+
               </div>
 
-              <div className="col-md-4">
-                <div className="chart-card">
-                  <h5>Projects Performance</h5>
-                  <Pie data={pieData} />
-                </div>
-              </div>
             </div>
+
+            {/* =========================================
+               ROW 7 — REVENUE
+            ========================================= */}
+
+            <div className="chart-card mt-4">
+
+              <h5>Revenue Chart</h5>
+
+              <Line data={revenueChart} />
+
+            </div>
+
+            {/* =========================================
+               ROW 8 — RECENT ACTIVITIES
+            ========================================= */}
+
+            <div className="chart-card mt-4">
+
+              <h5>Recent Activities</h5>
+
+              <div className="activity-list">
+
+                {dashboard.activities?.length > 0 ? (
+
+                  dashboard.activities.map((a, i) => (
+
+                    <div
+                      className="activity-item"
+                      key={i}
+                    >
+
+                      <strong>
+                        {a.user}
+                      </strong>
+
+                      <span>
+                        {a.message}
+                      </span>
+
+                    </div>
+
+                  ))
+
+                ) : (
+
+                  <p>No Activities Found</p>
+
+                )}
+
+              </div>
+
+            </div>
+
           </>
+
         )}
+
       </div>
+
     </div>
   );
 }

@@ -1,0 +1,64 @@
+.today-popup-overlay {
+
+  position: fixed;
+
+  inset: 0;
+
+  background:
+  rgba(0,0,0,0.5);
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  z-index: 9999;
+}
+
+.today-popup {
+
+  width: 600px;
+
+  max-height: 90vh;
+
+  overflow-y: auto;
+
+  background: white;
+
+  border-radius: 20px;
+
+  padding: 20px;
+}
+
+.popup-header {
+
+  display: flex;
+
+  justify-content:
+  space-between;
+
+  align-items: center;
+
+  margin-bottom: 20px;
+}
+
+.popup-section {
+
+  margin-bottom: 25px;
+}
+
+.popup-item {
+
+  background: #f1f5f9;
+
+  padding: 12px;
+
+  border-radius: 10px;
+
+  margin-bottom: 10px;
+
+  display: flex;
+
+  flex-direction: column;
+}

@@ -1,5 +1,3 @@
-// FILE: src/pages/executive/ExecutiveDashboard.js
-
 import {
   useEffect,
   useState,
@@ -19,6 +17,8 @@ import {
   Flame,
   Clock3,
   Search,
+  Bell,
+  MapPinned,
 } from "lucide-react";
 
 import { useNavigate } from "react-router-dom";
@@ -39,6 +39,23 @@ export default function ExecutiveDashboard() {
 
   const [search, setSearch] =
     useState("");
+
+  /* ===================================== */
+  /* POPUP STATE */
+  /* ===================================== */
+
+  const [showPopup, setShowPopup] =
+    useState(false);
+
+  const [popupData, setPopupData] =
+    useState({
+      todayFollowupsList: [],
+      todaySiteVisits: [],
+    });
+
+  /* ===================================== */
+  /* STATS */
+  /* ===================================== */
 
   const [stats, setStats] =
     useState({
@@ -68,18 +85,12 @@ export default function ExecutiveDashboard() {
 
       try {
 
-        if (!user?.email) return;
+    if (!user?.id) return;
 
         const res =
-          await axios.get(
-            `${API}/executive/dashboard`,
-            {
-              params: {
-                email: user.email,
-              },
-            }
-          );
-
+  await axios.get(
+    `${API}/executive/dashboard/${user.id}`
+  );
         setStats({
 
           totalLeads:
@@ -109,6 +120,36 @@ export default function ExecutiveDashboard() {
           res.data.recentLeads || []
         );
 
+        /* ===================================== */
+        /* POPUP DATA */
+        /* ===================================== */
+
+        setPopupData({
+
+          todayFollowupsList:
+            res.data.todayFollowupsList || [],
+
+          todaySiteVisits:
+            res.data.todaySiteVisits || [],
+
+        });
+
+        /* ===================================== */
+        /* AUTO OPEN POPUP */
+        /* ===================================== */
+
+        if (
+          (res.data.todayFollowupsList
+            ?.length > 0) ||
+
+          (res.data.todaySiteVisits
+            ?.length > 0)
+        ) {
+
+          setShowPopup(true);
+
+        }
+
       } catch (err) {
 
         console.log(
@@ -118,7 +159,7 @@ export default function ExecutiveDashboard() {
 
       }
 
-}, [user.email]);
+}, [user?.id]);
 
   /* ===================================== */
   /* USE EFFECT */
@@ -186,14 +227,155 @@ export default function ExecutiveDashboard() {
 
     <div className="executive-layout">
 
+      {/* ===================================== */}
       {/* SIDEBAR */}
+      {/* ===================================== */}
 
       <Sidebar
         isOpen={isOpen}
         toggleSidebar={toggleSidebar}
       />
 
+      {/* ===================================== */}
+      {/* POPUP */}
+      {/* ===================================== */}
+
+      {showPopup && (
+
+        <div className="work-popup-overlay">
+
+          <div className="work-popup">
+
+            <div className="popup-header">
+
+              <h2>
+
+                <Bell size={22} />
+
+                Today's Work
+
+              </h2>
+
+              <button
+                className="close-btn"
+                onClick={() =>
+                  setShowPopup(false)
+                }
+              >
+                ✕
+              </button>
+
+            </div>
+
+            {/* FOLLOWUPS */}
+
+            <div className="popup-section">
+
+              <h3>
+                📞 Today's Followups
+              </h3>
+
+              {popupData
+                .todayFollowupsList
+                ?.length > 0 ? (
+
+                popupData
+                  .todayFollowupsList
+                  .map((lead, index) => (
+
+                    <div
+                      className="popup-item"
+                      key={index}
+                    >
+
+                      <strong>
+                        {lead.name}
+                      </strong>
+
+                      <span>
+                        {lead.phone}
+                      </span>
+
+                      <small>
+                        {lead.project}
+                      </small>
+
+                    </div>
+
+                  ))
+
+              ) : (
+
+                <p>
+                  No Followups Today
+                </p>
+
+              )}
+
+            </div>
+
+            {/* SITE VISITS */}
+
+            <div className="popup-section">
+
+              <h3>
+
+                <MapPinned
+                  size={18}
+                />
+
+                Today's Site Visits
+
+              </h3>
+
+              {popupData
+                .todaySiteVisits
+                ?.length > 0 ? (
+
+                popupData
+                  .todaySiteVisits
+                  .map((visit, index) => (
+
+                    <div
+                      className="popup-item"
+                      key={index}
+                    >
+
+                      <strong>
+                        {visit.name}
+                      </strong>
+
+                      <span>
+                        {visit.phone}
+                      </span>
+
+                      <small>
+                        {visit.project}
+                      </small>
+
+                    </div>
+
+                  ))
+
+              ) : (
+
+                <p>
+                  No Site Visits Today
+                </p>
+
+              )}
+
+            </div>
+
+          </div>
+
+        </div>
+
+      )}
+
+      {/* ===================================== */}
       {/* MAIN */}
+      {/* ===================================== */}
 
       <div
         className={`executive-main ${
