@@ -54,7 +54,10 @@ export default function MyLeads() {
 
     const [executiveFilter, setExecutiveFilter] =
     useState("");
+const [currentPage, setCurrentPage] =
+  useState(1);
 
+const leadsPerPage = 10;
 
      /* ================= NEW LEAD MODAL ================= */
 
@@ -182,9 +185,15 @@ const deadReasonOptions = [
 
   useEffect(() => {
 
-    fetchMyLeads();
+  setCurrentPage(1);
 
-  }, [fetchMyLeads]);
+}, [
+  search,
+  statusFilter,
+  projectFilter,
+  sourceFilter,
+  executiveFilter
+]);
 
   /* ================= UPDATE STATUS ================= */
 
@@ -414,7 +423,25 @@ return (
   sourceFilter,
   executiveFilter
 ]);
+/* ================= PAGINATION ================= */
 
+const indexOfLastLead =
+  currentPage * leadsPerPage;
+
+const indexOfFirstLead =
+  indexOfLastLead - leadsPerPage;
+
+const currentLeads =
+  filteredLeads.slice(
+    indexOfFirstLead,
+    indexOfLastLead
+  );
+
+const totalPages =
+  Math.ceil(
+    filteredLeads.length /
+    leadsPerPage
+  );
   /* ================= STATS ================= */
 
   const stats = useMemo(() => {
@@ -540,65 +567,37 @@ return (
 
         {/* ================= FILTERS ================= */}
 
-        <div className="filter-bar">
+<div className="filter-bar">
 
-          <input
-            type="text"
+  <input
+    type="text"
+    placeholder="Search Lead..."
+    value={search}
+    onChange={(e) =>
+      setSearch(e.target.value)
+    }
+  />
 
-            placeholder="Search Lead..."
+  <select
+    value={statusFilter}
+    onChange={(e) =>
+      setStatusFilter(e.target.value)
+    }
+  >
 
-            value={search}
+    <option value="">
+      All Status
+    </option>
 
-            onChange={(e) =>
-              setSearch(
-                e.target.value
-              )
-            }
-          />
+    {statusOptions.map((status, i) => (
+      <option key={i} value={status}>
+        {status}
+      </option>
+    ))}
 
-         <option value="">
-  All Status
-</option>
+  </select>
 
-{statusOptions.map((status, i) => (
-  <option key={i} value={status}>
-    {status}
-  </option>
-))}
-
-            onChange={(e) =>
-              setStatusFilter(
-                e.target.value
-              )
-            }
-          
-
-            <option value="">
-              All Status
-            </option>
-
-            <option value="New">
-              New
-            </option>
-
-            <option value="Interested">
-              Interested
-            </option>
-
-            <option value="Followup">
-              Followup
-            </option>
-
-            <option value="Booked">
-              Booked
-            </option>
-
-            <option value="Not Interested">
-              Not Interested
-            </option>
-
-
-        </div>
+</div>
 
 {/* ================= ACTION BUTTONS ================= */}
 
@@ -844,7 +843,9 @@ return (
 
               <tbody>
 
-                {filteredLeads.map(
+                {
+                
+                currentLeads.map(
 
                   (
                     lead,
@@ -857,9 +858,9 @@ return (
                       }
                     >
 
-                      <td>
-                        {index + 1}
-                      </td>
+                     <td>
+  {indexOfFirstLead + index + 1}
+</td>
 
                       <td>
                         {lead.name || "-"}
@@ -870,7 +871,7 @@ return (
                       </td>
 
                       <td>
-                        {lead.assignedTo || "-"}
+                        {lead.assigned_To || "-"}
                       </td>
 
                       <td>
@@ -989,7 +990,7 @@ return (
                           </a>
 
                           <a
-href={`https://wa.me/91${String(lead.phone).replace(/\D/g, "")}`}
+               href={`https://wa.me/91${String(lead.phone).replace(/\D/g, "")}`}
                             target="_blank"
 
                             rel="noreferrer"
@@ -1038,7 +1039,33 @@ href={`https://wa.me/91${String(lead.phone).replace(/\D/g, "")}`}
               </tbody>
 
             </table>
+         <div className="pagination">
 
+  <button
+    disabled={currentPage === 1}
+    onClick={() =>
+      setCurrentPage((prev) => prev - 1)
+    }
+  >
+    Prev
+  </button>
+
+  <span>
+    Page {currentPage} of {totalPages}
+  </span>
+
+  <button
+    disabled={
+      currentPage === totalPages
+    }
+    onClick={() =>
+      setCurrentPage((prev) => prev + 1)
+    }
+  >
+    Next
+  </button>
+
+</div>
           </div>
 
         )}
