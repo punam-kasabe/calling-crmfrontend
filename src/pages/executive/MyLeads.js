@@ -105,12 +105,15 @@ const statusOptions = [
   "New",
   "Interested",
   "Not Interested",
-  "Call Back",
-  "Call cut",
-  "Ringing",
-  "Switch Off",
-  "Site Visit",
+  "Followup",
   "Booked",
+  "Call Cut",
+  "Call Back",
+  "Ringing",
+  "Busy",
+  "Switch Off",
+  "Out of Service",
+  "Wrong Number"
 ];
 
 const deadReasonOptions = [
@@ -363,9 +366,7 @@ const handleAddNewLead = async () => {
     console.error(err);
 
     alert("Failed To Add Lead ❌");
-
   }
-
 };
   /* ================= FILTER ================= */
 
@@ -685,7 +686,7 @@ return (
 
           lead.name || "",
           lead.phone || "",
-          lead.assignedTo || "",
+          lead.assigned_To || "",
           lead.closingExecutive || "",
           lead.status || "",
           lead.project || "",
@@ -1060,19 +1061,7 @@ return (
 
                           </button>
 
-                          <button
-                            className="delete-btn"
-
-                            onClick={() =>
-                              handleDelete(
-                                lead._id
-                              )
-                            }
-                          >
-
-                            Delete
-
-                          </button>
+                          
 
                         </div>
 
