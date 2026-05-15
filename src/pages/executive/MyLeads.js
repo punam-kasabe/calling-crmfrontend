@@ -20,7 +20,7 @@ export default function MyLeads() {
     useState(true);
 
   const toggleSidebar = () =>
-  setIsOpen((prev) => !prev);
+    setIsOpen(!isOpen);
 
   const [leads, setLeads] =
     useState([]);
@@ -66,7 +66,7 @@ const [newLead, setNewLead] = useState({
   phone: "",
   email: "",
   project: "",
-status: "New",
+  status: "",
   source: "",
   subSource: "",
   city: "",
@@ -311,7 +311,7 @@ const handleAddNewLead = async () => {
       phone: "",
       email: "",
       project: "",
-      status: "New",
+      status: "",
       source: "",
       subSource: "",
       city: "",
@@ -668,6 +668,7 @@ return (
           lead.next_call_date || "",
           lead.subSource || "",
           lead.createdAt || ""
+
         ];
 
         csvRows.push(row.join(","));
@@ -930,12 +931,8 @@ return (
                         {lead.createdAt
 
                           ? new Date(
-  lead.createdAt
-).toLocaleDateString("en-IN", {
-  day: "2-digit",
-  month: "short",
-  year: "numeric",
-})
+                              lead.createdAt
+                            ).toLocaleString()
 
                           : "-"}
 
@@ -989,7 +986,8 @@ return (
                           </a>
 
                           <a
-href={`https://wa.me/91${String(lead.phone).replace(/\D/g, "")}`}
+                            href={`https://wa.me/91${lead.phone}`}
+
                             target="_blank"
 
                             rel="noreferrer"
