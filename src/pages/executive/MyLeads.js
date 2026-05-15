@@ -289,12 +289,6 @@ const deadReasonOptions = [
 
 const handleAddNewLead = async () => {
 
-  if (newLead.phone.length !== 10) {
-
-  alert("Mobile number must be 10 digits");
-
-  return;
-}
   try {
 
     await axios.post(
@@ -344,21 +338,18 @@ const handleAddNewLead = async () => {
       return leads.filter(
         (lead) => {
 
-         const matchesSearch =
+          const matchesSearch =
 
-  `${lead.name}
-   ${lead.phone}
-   ${lead.project}
-   ${lead.source}
-   ${lead.email}
-   ${lead.city}
-   ${lead.closingExecutive}`
+           `${lead.name || ""}
+            ${lead.phone || ""}
+            ${lead.project || ""}
+            ${lead.source || ""}`
 
-    .toLowerCase()
+              .toLowerCase()
 
-    .includes(
-      search.toLowerCase()
-    );
+              .includes(
+                search.toLowerCase()
+              );
 
          const matchesStatus =
 
@@ -540,66 +531,40 @@ return (
 
         {/* ================= FILTERS ================= */}
 
-        <div className="filter-bar">
+      <div className="filter-bar">
 
-          <input
-            type="text"
+  <input
+    type="text"
+    placeholder="Search Lead..."
+    value={search}
+    onChange={(e) =>
+      setSearch(e.target.value)
+    }
+  />
 
-            placeholder="Search Lead..."
+  <select
+    value={statusFilter}
+    onChange={(e) =>
+      setStatusFilter(e.target.value)
+    }
+  >
 
-            value={search}
+    <option value="">
+      All Status
+    </option>
 
-            onChange={(e) =>
-              setSearch(
-                e.target.value
-              )
-            }
-          />
+    {statusOptions.map((status, i) => (
+      <option
+        key={i}
+        value={status}
+      >
+        {status}
+      </option>
+    ))}
 
-         <option value="">
-  All Status
-</option>
+  </select>
 
-{statusOptions.map((status, i) => (
-  <option key={i} value={status}>
-    {status}
-  </option>
-))}
-
-            onChange={(e) =>
-              setStatusFilter(
-                e.target.value
-              )
-            }
-          
-
-            <option value="">
-              All Status
-            </option>
-
-            <option value="New">
-              New
-            </option>
-
-            <option value="Interested">
-              Interested
-            </option>
-
-            <option value="Followup">
-              Followup
-            </option>
-
-            <option value="Booked">
-              Booked
-            </option>
-
-            <option value="Not Interested">
-              Not Interested
-            </option>
-
-
-        </div>
-
+</div>
 {/* ================= ACTION BUTTONS ================= */}
 
 <div className="top-actions">
@@ -728,37 +693,24 @@ return (
     
 
     <select
-      value={statusFilter}
-      onChange={(e) =>
-        setStatusFilter(e.target.value)
-      }
+  value={statusFilter}
+  onChange={(e) =>
+    setStatusFilter(e.target.value)
+  }
+>
+  <option value="">
+    All Status
+  </option>
+
+  {statusOptions.map((status, i) => (
+    <option
+      key={i}
+      value={status}
     >
-
-      <option value="">
-        All Status
-      </option>
-
-      <option value="New">
-        New
-      </option>
-
-      <option value="Interested">
-        Interested
-      </option>
-
-      <option value="Followup">
-        Followup
-      </option>
-
-      <option value="Booked">
-        Booked
-      </option>
-
-      <option value="Not Interested">
-        Not Interested
-      </option>
-
-    </select>
+      {status}
+    </option>
+  ))}
+</select>
 
     <input
   type="text"
@@ -908,11 +860,7 @@ return (
 
                         {lead.next_call_date
 
-                          ? new Date(
-                              lead.next_call_date
-                            )
-
-                              .toISOString()
+                          ? selectedLead.next_call_date?.split("T")[0]
 
                               .split(
                                 "T"
