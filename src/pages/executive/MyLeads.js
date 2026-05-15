@@ -20,7 +20,7 @@ export default function MyLeads() {
     useState(true);
 
   const toggleSidebar = () =>
-    setIsOpen(!isOpen);
+  setIsOpen((prev) => !prev);
 
   const [leads, setLeads] =
     useState([]);
@@ -66,7 +66,7 @@ const [newLead, setNewLead] = useState({
   phone: "",
   email: "",
   project: "",
-  status: "",
+status: "New",
   source: "",
   subSource: "",
   city: "",
@@ -289,6 +289,12 @@ const deadReasonOptions = [
 
 const handleAddNewLead = async () => {
 
+  if (newLead.phone.length !== 10) {
+
+  alert("Mobile number must be 10 digits");
+
+  return;
+}
   try {
 
     await axios.post(
@@ -305,7 +311,7 @@ const handleAddNewLead = async () => {
       phone: "",
       email: "",
       project: "",
-      status: "",
+      status: "New",
       source: "",
       subSource: "",
       city: "",
@@ -338,18 +344,21 @@ const handleAddNewLead = async () => {
       return leads.filter(
         (lead) => {
 
-          const matchesSearch =
+         const matchesSearch =
 
-            `${lead.name}
-             ${lead.phone}
-             ${lead.project}
-             ${lead.source}`
+  `${lead.name}
+   ${lead.phone}
+   ${lead.project}
+   ${lead.source}
+   ${lead.email}
+   ${lead.city}
+   ${lead.closingExecutive}`
 
-              .toLowerCase()
+    .toLowerCase()
 
-              .includes(
-                search.toLowerCase()
-              );
+    .includes(
+      search.toLowerCase()
+    );
 
          const matchesStatus =
 
@@ -527,7 +536,6 @@ return (
             <h5>Not Interested</h5>
             <p>{stats.notInterested}</p>
           </div>
-
         </div>
 
         {/* ================= FILTERS ================= */}
@@ -548,17 +556,22 @@ return (
             }
           />
 
-          <select
-            value={
-              statusFilter
-            }
+         <option value="">
+  All Status
+</option>
+
+{statusOptions.map((status, i) => (
+  <option key={i} value={status}>
+    {status}
+  </option>
+))}
 
             onChange={(e) =>
               setStatusFilter(
                 e.target.value
               )
             }
-          >
+          
 
             <option value="">
               All Status
@@ -584,7 +597,6 @@ return (
               Not Interested
             </option>
 
-          </select>
 
         </div>
 
@@ -656,7 +668,6 @@ return (
           lead.next_call_date || "",
           lead.subSource || "",
           lead.createdAt || ""
-
         ];
 
         csvRows.push(row.join(","));
@@ -919,8 +930,12 @@ return (
                         {lead.createdAt
 
                           ? new Date(
-                              lead.createdAt
-                            ).toLocaleString()
+  lead.createdAt
+).toLocaleDateString("en-IN", {
+  day: "2-digit",
+  month: "short",
+  year: "numeric",
+})
 
                           : "-"}
 
@@ -947,25 +962,11 @@ return (
                           }
                         >
 
-                          <option value="New">
-                            New
-                          </option>
-
-                          <option value="Interested">
-                            Interested
-                          </option>
-
-                          <option value="Followup">
-                            Followup
-                          </option>
-
-                          <option value="Booked">
-                            Booked
-                          </option>
-
-                          <option value="Not Interested">
-                            Not Interested
-                          </option>
+                          {statusOptions.map((status, i) => (
+                       <option key={i} value={status}>
+                        {status}
+                    </option>
+                          ))}
 
                         </select>
 
@@ -988,8 +989,7 @@ return (
                           </a>
 
                           <a
-                            href={`https://wa.me/91${lead.phone}`}
-
+href={`https://wa.me/91${String(lead.phone).replace(/\D/g, "")}`}
                             target="_blank"
 
                             rel="noreferrer"
@@ -1435,25 +1435,11 @@ return (
                 }
               >
 
-                <option value="New">
-                  New
-                </option>
-
-                <option value="Interested">
-                  Interested
-                </option>
-
-                <option value="Followup">
-                  Followup
-                </option>
-
-                <option value="Booked">
-                  Booked
-                </option>
-
-                <option value="Not Interested">
-                  Not Interested
-                </option>
+                {statusOptions.map((status, i) => (
+  <option key={i} value={status}>
+    {status}
+  </option>
+))}
 
               </select>
 

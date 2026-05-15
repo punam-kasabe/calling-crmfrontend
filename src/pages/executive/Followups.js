@@ -63,7 +63,7 @@ export default function Followups() {
     try {
 
       await axios.put(
-        `http://localhost:5000/api/leads/${leadId}`,
+        `https://calling-crm-backend-7w52.onrender.com/api/leads/${leadId}`,
         { status }
       );
 
