@@ -43,21 +43,55 @@ export default function MyLeads() {
     setShowModal] =
     useState(false);
 
-    const [showAdvancedSearch, setShowAdvancedSearch] =
+  const [showAdvancedSearch,
+    setShowAdvancedSearch] =
     useState(false);
 
-    const [projectFilter, setProjectFilter] =
+  const [projectFilter,
+    setProjectFilter] =
     useState("");
 
-    const [sourceFilter, setSourceFilter] =
+  const [sourceFilter,
+    setSourceFilter] =
     useState("");
 
-    const [executiveFilter, setExecutiveFilter] =
+  const [executiveFilter,
+    setExecutiveFilter] =
     useState("");
+
+  /* ================= NEW LEAD MODAL ================= */
+
+  const [showNewLeadModal,
+    setShowNewLeadModal] =
+    useState(false);
+
+  const [newLead,
+    setNewLead] =
+    useState({
+
+      name: "",
+      phone: "",
+      email: "",
+      project: "",
+      status: "",
+      source: "",
+      subSource: "",
+      city: "",
+      assignedTo: "",
+      closingExecutive: "",
+      telecallerName: "",
+      department: "",
+      next_call_date: "",
+      comment: "",
+      deadReason: "",
+      deadSubReason: "",
+      bookingDate: ""
+
+    });
 
   /* ================= USER ================= */
 
-   const user = useMemo(() => {
+  const user = useMemo(() => {
 
     return JSON.parse(
       localStorage.getItem("user")
@@ -119,6 +153,58 @@ export default function MyLeads() {
     fetchMyLeads();
 
   }, [fetchMyLeads]);
+
+  /* ================= CREATE LEAD ================= */
+
+  const handleCreateLead =
+    async () => {
+
+      try {
+
+        await axios.post(
+          `${API}/add-lead`,
+          newLead
+        );
+
+        alert("Lead Added ✅");
+
+        setShowNewLeadModal(false);
+
+        setNewLead({
+
+          name: "",
+          phone: "",
+          email: "",
+          project: "",
+          status: "",
+          source: "",
+          subSource: "",
+          city: "",
+          assignedTo: "",
+          closingExecutive: "",
+          telecallerName: "",
+          department: "",
+          next_call_date: "",
+          comment: "",
+          deadReason: "",
+          deadSubReason: "",
+          bookingDate: ""
+
+        });
+
+        fetchMyLeads();
+
+      }
+
+      catch (err) {
+
+        console.error(err);
+
+        alert("Failed To Add Lead ❌");
+
+      }
+
+    };
 
   /* ================= UPDATE STATUS ================= */
 
@@ -279,60 +365,60 @@ export default function MyLeads() {
                 search.toLowerCase()
               );
 
-         const matchesStatus =
+          const matchesStatus =
 
-  statusFilter
-    ? lead.status ===
-      statusFilter
-    : true;
+            statusFilter
+              ? lead.status ===
+                statusFilter
+              : true;
 
-const matchesProject =
+          const matchesProject =
 
-  projectFilter
-    ? lead.project
-        ?.toLowerCase()
-        .includes(
-          projectFilter.toLowerCase()
-        )
-    : true;
+            projectFilter
+              ? lead.project
+                  ?.toLowerCase()
+                  .includes(
+                    projectFilter.toLowerCase()
+                  )
+              : true;
 
-const matchesSource =
+          const matchesSource =
 
-  sourceFilter
-    ? lead.source
-        ?.toLowerCase()
-        .includes(
-          sourceFilter.toLowerCase()
-        )
-    : true;
+            sourceFilter
+              ? lead.source
+                  ?.toLowerCase()
+                  .includes(
+                    sourceFilter.toLowerCase()
+                  )
+              : true;
 
-const matchesExecutive =
-  executiveFilter
-    ? lead.closingExecutive
-        ?.toLowerCase()
-        .includes(
-          executiveFilter.toLowerCase()
-        )
-    : true;
+          const matchesExecutive =
+            executiveFilter
+              ? lead.closingExecutive
+                  ?.toLowerCase()
+                  .includes(
+                    executiveFilter.toLowerCase()
+                  )
+              : true;
 
-return (
-  matchesSearch &&
-  matchesStatus &&
-  matchesProject &&
-  matchesSource &&
-  matchesExecutive
-);
+          return (
+            matchesSearch &&
+            matchesStatus &&
+            matchesProject &&
+            matchesSource &&
+            matchesExecutive
+          );
         }
       );
 
     }, [
-  leads,
-  search,
-  statusFilter,
-  projectFilter,
-  sourceFilter,
-  executiveFilter
-]);
+      leads,
+      search,
+      statusFilter,
+      projectFilter,
+      sourceFilter,
+      executiveFilter
+    ]);
 
   /* ================= STATS ================= */
 
@@ -422,6 +508,27 @@ return (
 
         </div>
 
+        {/* ================= NEW LEAD BUTTON ================= */}
+
+        <div
+          style={{
+            display: "flex",
+            gap: "10px",
+            marginBottom: "20px"
+          }}
+        >
+
+          <button
+            className="save-btn"
+            onClick={() =>
+              setShowNewLeadModal(true)
+            }
+          >
+            + New Lead
+          </button>
+
+        </div>
+
         {/* ================= SMALL STATS ================= */}
 
         <div className="stats-grid">
@@ -464,11 +571,8 @@ return (
 
           <input
             type="text"
-
             placeholder="Search Lead..."
-
             value={search}
-
             onChange={(e) =>
               setSearch(
                 e.target.value
@@ -480,7 +584,6 @@ return (
             value={
               statusFilter
             }
-
             onChange={(e) =>
               setStatusFilter(
                 e.target.value
@@ -515,563 +618,287 @@ return (
           </select>
 
         </div>
-        {/* ================= ACTION BUTTONS ================= */}
 
-{/* ================= ACTION BUTTONS ================= */}
+        {/* ================= TABLE ================= */}
 
-<div className="top-actions">
+        <div className="table-wrapper">
 
-  <button
-    className="advanced-btn"
+          <table className="leads-table">
 
-    onClick={() =>
-      setShowAdvancedSearch(
-        !showAdvancedSearch
-      )
-    }
-  >
+            <thead>
 
-    Advanced Search
+              <tr>
 
-  </button>
+                <th>#</th>
 
-  <button
-    className="export-btn"
+                <th>Name</th>
 
-    onClick={() => {
+                <th>Call / Mobile</th>
 
-      const csvRows = [];
+                <th>Assigned To</th>
 
-      const headers = [
+                <th>Closing Executive</th>
 
-        "Name",
-        "Mobile",
-        "Assigned To",
-        "Closing Executive",
-        "Status",
-        "Project",
-        "Description",
-        "Next Call Date",
-        "Sub Source",
-        "Created At"
+                <th>Status</th>
 
-      ];
+                <th>Project</th>
 
-      csvRows.push(headers.join(","));
+                <th>Action</th>
 
-      filteredLeads.forEach((lead) => {
+              </tr>
 
-        const row = [
+            </thead>
 
-          lead.name || "",
-          lead.phone || "",
-          lead.assignedTo || "",
-          lead.closingExecutive || "",
-          lead.status || "",
-          lead.project || "",
-          lead.description || "",
-          lead.next_call_date || "",
-          lead.subSource || "",
-          lead.createdAt || ""
+            <tbody>
 
-        ];
+              {filteredLeads.map(
 
-        csvRows.push(row.join(","));
+                (
+                  lead,
+                  index
+                ) => (
 
-      });
+                  <tr
+                    key={
+                      lead._id
+                    }
+                  >
 
-      const blob = new Blob(
-        [csvRows.join("\n")],
-        { type: "text/csv" }
-      );
+                    <td>
+                      {index + 1}
+                    </td>
 
-      const url =
-        window.URL.createObjectURL(blob);
+                    <td>
+                      {lead.name || "-"}
+                    </td>
 
-      const a =
-        document.createElement("a");
+                    <td>
+                      {lead.phone || "-"}
+                    </td>
 
-      a.href = url;
+                    <td>
+                      {lead.assignedTo || "-"}
+                    </td>
 
-      a.download =
-        "my-leads.csv";
+                    <td>
+                      {lead.closingExecutive || "-"}
+                    </td>
 
-      a.click();
+                    <td>
 
-    }}
-  >
+                      <span
+                        className={`status-badge ${lead.status
+                          ?.toLowerCase()
+                          .replace(
+                            " ",
+                            "-"
+                          )}`}
+                      >
 
-    Export CSV
+                        {lead.status ||
+                          "New"}
 
-  </button>
+                      </span>
 
-       </div>
-       {/* ================= ADVANCED SEARCH ================= */}
+                    </td>
 
-{showAdvancedSearch && (
+                    <td>
+                      {lead.project || "-"}
+                    </td>
 
-  <div className="advanced-search-box">
+                    <td>
 
-    <input
-      type="text"
-      placeholder="Search Project..."
-      value={projectFilter}
-      onChange={(e) =>
-        setProjectFilter(e.target.value)
-      }
-    />
+                      <div className="action-buttons">
 
-    <input
-      type="text"
-      placeholder="Search Source..."
-      value={sourceFilter}
-      onChange={(e) =>
-        setSourceFilter(e.target.value)
-      }
-    />
+                        <button
+                          className="edit-btn"
+                          onClick={() => {
 
-    
+                            setSelectedLead(
+                              {
+                                ...lead
+                              }
+                            );
 
-    <select
-      value={statusFilter}
-      onChange={(e) =>
-        setStatusFilter(e.target.value)
-      }
-    >
+                            setShowModal(
+                              true
+                            );
 
-      <option value="">
-        All Status
-      </option>
-
-      <option value="New">
-        New
-      </option>
-
-      <option value="Interested">
-        Interested
-      </option>
-
-      <option value="Followup">
-        Followup
-      </option>
-
-      <option value="Booked">
-        Booked
-      </option>
-
-      <option value="Not Interested">
-        Not Interested
-      </option>
-
-    </select>
-
-    <input
-  type="text"
-  placeholder="Search Executive..."
-  value={executiveFilter}
-  onChange={(e) =>
-    setExecutiveFilter(e.target.value)
-  }
-/>
-
-    <button
-      className="clear-filter-btn"
-      onClick={() => {
-
-        setProjectFilter("");
-        setSourceFilter("");
-        setStatusFilter("");
-        setSearch("");
-        setExecutiveFilter("");
-      }}
-    >
-      Clear Filters
-    </button>
-  </div>
-)}
-        {/* ================= CONTENT ================= */}
-
-        {loading ? (
-
-          <div className="loader">
-
-            Loading leads...
-
-          </div>
-
-        ) : filteredLeads.length ===
-          0 ? (
-
-          <div className="empty-state">
-
-            No leads found.
-
-          </div>
-
-        ) : (
-
-          <div className="table-wrapper">
-
-            <table className="leads-table">
-
-              <thead>
-
-                <tr>
-
-                  <th>#</th>
-
-                  <th>Name</th>
-
-                  <th>Call / Mobile</th>
-
-                  <th>Assigned To</th>
-
-                  <th>Closing Executive</th>
-
-                  <th>Status</th>
-
-                  <th>Project</th>
-
-                  <th>Description</th>
-
-                  <th>Next Call Date</th>
-
-                  <th>Sub Source</th>
-
-                  <th>Created At</th>
-
-                  <th>Update Status</th>
-
-                  <th>Action</th>
-
-                </tr>
-
-              </thead>
-
-              <tbody>
-
-                {filteredLeads.map(
-
-                  (
-                    lead,
-                    index
-                  ) => (
-
-                    <tr
-                      key={
-                        lead._id
-                      }
-                    >
-
-                      <td>
-                        {index + 1}
-                      </td>
-
-                      <td>
-                        {lead.name || "-"}
-                      </td>
-
-                      <td>
-                        {lead.phone || "-"}
-                      </td>
-
-                      <td>
-                        {lead.assignedTo || "-"}
-                      </td>
-
-                      <td>
-                        {lead.closingExecutive || "-"}
-                      </td>
-
-                      <td>
-
-                        <span
-                          className={`status-badge ${lead.status
-                            ?.toLowerCase()
-                            .replace(
-                              " ",
-                              "-"
-                            )}`}
+                          }}
                         >
 
-                          {lead.status ||
-                            "New"}
+                          Edit
 
-                        </span>
+                        </button>
 
-                      </td>
-
-                      <td>
-                        {lead.project || "-"}
-                      </td>
-
-                      <td className="description-cell">
-                        {lead.description || "-"}
-                      </td>
-
-                      <td>
-
-                        {lead.next_call_date
-
-                          ? new Date(
-                              lead.next_call_date
-                            )
-
-                              .toISOString()
-
-                              .split(
-                                "T"
-                              )[0]
-
-                          : "-"}
-
-                      </td>
-
-                      <td>
-                        {lead.subSource || "-"}
-                      </td>
-
-                      <td>
-
-                        {lead.createdAt
-
-                          ? new Date(
-                              lead.createdAt
-                            ).toLocaleString()
-
-                          : "-"}
-
-                      </td>
-
-                      {/* STATUS UPDATE */}
-
-                      <td>
-
-                        <select
-                          className="status-select"
-
-                          value={
-                            lead.status ||
-                            "New"
-                          }
-
-                          onChange={(e) =>
-                            updateStatus(
-                              lead._id,
-                              e.target
-                                .value
+                        <button
+                          className="delete-btn"
+                          onClick={() =>
+                            handleDelete(
+                              lead._id
                             )
                           }
                         >
 
-                          <option value="New">
-                            New
-                          </option>
+                          Delete
 
-                          <option value="Interested">
-                            Interested
-                          </option>
+                        </button>
 
-                          <option value="Followup">
-                            Followup
-                          </option>
+                      </div>
 
-                          <option value="Booked">
-                            Booked
-                          </option>
+                    </td>
 
-                          <option value="Not Interested">
-                            Not Interested
-                          </option>
+                  </tr>
 
-                        </select>
+                )
 
-                      </td>
+              )}
 
-                      {/* ACTIONS */}
+            </tbody>
 
-                      <td>
+          </table>
 
-                        <div className="action-buttons">
-
-                          <a
-                            href={`tel:${lead.phone}`}
-
-                            className="call-btn"
-                          >
-
-                            Call
-
-                          </a>
-
-                          <a
-                            href={`https://wa.me/91${lead.phone}`}
-
-                            target="_blank"
-
-                            rel="noreferrer"
-
-                            className="whatsapp-btn"
-                          >
-
-                            WhatsApp
-
-                          </a>
-
-                          <button
-                            className="edit-btn"
-
-                            onClick={() => {
-
-                              setSelectedLead(
-                                {
-                                  ...lead
-                                }
-                              );
-
-                              setShowModal(
-                                true
-                              );
-
-                            }}
-                          >
-
-                            Edit
-
-                          </button>
-
-                          <button
-                            className="delete-btn"
-
-                            onClick={() =>
-                              handleDelete(
-                                lead._id
-                              )
-                            }
-                          >
-
-                            Delete
-
-                          </button>
-
-                        </div>
-
-                      </td>
-
-                    </tr>
-
-                  )
-
-                )}
-
-              </tbody>
-
-            </table>
-
-          </div>
-
-        )}
+        </div>
 
       </div>
 
-      {/* ================= EDIT MODAL ================= */}
+      {/* ================= NEW LEAD MODAL ================= */}
 
-      {showModal &&
-        selectedLead && (
+      {showNewLeadModal && (
 
-          <div className="modal-overlay">
+        <div className="modal-overlay">
 
-            <div className="modal-box">
+          <div
+            className="modal-box"
+            style={{
+              width: "95%",
+              maxWidth: "1200px"
+            }}
+          >
 
-              <h3>
-                Edit Lead
-              </h3>
+            <h2
+              style={{
+                marginBottom: "20px"
+              }}
+            >
+              Add New Lead
+            </h2>
+
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns:
+                  "repeat(4, 1fr)",
+                gap: "15px"
+              }}
+            >
 
               <input
                 type="text"
-
-                value={
-                  selectedLead.name
-                }
-
+                placeholder="Name"
+                value={newLead.name}
                 onChange={(e) =>
-
-                  setSelectedLead({
-
-                    ...selectedLead,
-
+                  setNewLead({
+                    ...newLead,
                     name:
-                      e.target
-                        .value
-
+                      e.target.value
                   })
-
                 }
               />
 
               <input
                 type="text"
-
-                value={
-                  selectedLead.phone
-                }
-
+                placeholder="Mobile"
+                value={newLead.phone}
                 onChange={(e) =>
-
-                  setSelectedLead({
-
-                    ...selectedLead,
-
+                  setNewLead({
+                    ...newLead,
                     phone:
-                      e.target
-                        .value
-
+                      e.target.value
                   })
-
                 }
               />
 
               <input
-                type="text"
-
-                value={
-                  selectedLead.project
-                }
-
+                type="email"
+                placeholder="Primary Email"
+                value={newLead.email}
                 onChange={(e) =>
-
-                  setSelectedLead({
-
-                    ...selectedLead,
-
-                    project:
-                      e.target
-                        .value
-
+                  setNewLead({
+                    ...newLead,
+                    email:
+                      e.target.value
                   })
-
                 }
               />
+
+              {/* PROJECT */}
 
               <select
-                value={
-                  selectedLead.status
-                }
-
+                value={newLead.project}
                 onChange={(e) =>
-
-                  setSelectedLead({
-
-                    ...selectedLead,
-
-                    status:
-                      e.target
-                        .value
-
+                  setNewLead({
+                    ...newLead,
+                    project:
+                      e.target.value
                   })
-
                 }
               >
+
+                <option value="">
+                  Please select
+                </option>
+
+                <option>
+                  99villa.
+                </option>
+
+                <option>
+                  99 villa plot.
+                </option>
+
+                <option>
+                  Affordable life
+                </option>
+
+                <option>
+                  Alibaug Plot.
+                </option>
+
+                <option>
+                  ANJALI ZAMIN.
+                </option>
+
+                <option>
+                  Maha-Mumbaai
+                </option>
+
+                <option>
+                  Mahamumbai Phase 2
+                </option>
+
+                <option>
+                  Panvel (99Villa)
+                </option>
+
+              </select>
+
+              {/* STATUS */}
+
+              <select
+                value={newLead.status}
+                onChange={(e) =>
+                  setNewLead({
+                    ...newLead,
+                    status:
+                      e.target.value
+                  })
+                }
+              >
+
+                <option value="">
+                  Lead Status
+                </option>
 
                 <option value="New">
                   New
@@ -1081,91 +908,305 @@ return (
                   Interested
                 </option>
 
-                <option value="Followup">
-                  Followup
+                <option value="Not Interested">
+                  Not Interested
+                </option>
+
+                <option value="Call Back">
+                  Call Back
+                </option>
+
+                <option value="Call cut">
+                  Call cut
+                </option>
+
+                <option value="Ringing">
+                  Ringing
+                </option>
+
+                <option value="Switch Off">
+                  Switch Off
+                </option>
+
+                <option value="Site Visit">
+                  Site Visit
                 </option>
 
                 <option value="Booked">
                   Booked
                 </option>
 
-                <option value="Not Interested">
-                  Not Interested
-                </option>
-
               </select>
 
               <input
                 type="date"
-
-                value={
-                  selectedLead.next_call_date
-
-                    ? new Date(
-                        selectedLead.next_call_date
-                      )
-
-                        .toISOString()
-
-                        .split("T")[0]
-
-                    : ""
-                }
-
+                value={newLead.next_call_date}
                 onChange={(e) =>
-
-                  setSelectedLead({
-
-                    ...selectedLead,
-
+                  setNewLead({
+                    ...newLead,
                     next_call_date:
-                      e.target
-                        .value
-
+                      e.target.value
                   })
-
                 }
               />
 
-              <div className="modal-actions">
+              <input
+                type="text"
+                placeholder="Assign To"
+                value={newLead.assignedTo}
+                onChange={(e) =>
+                  setNewLead({
+                    ...newLead,
+                    assignedTo:
+                      e.target.value
+                  })
+                }
+              />
 
-                <button
-                  className="cancel-btn"
+              <input
+                type="text"
+                placeholder="Closing Executive"
+                value={newLead.closingExecutive}
+                onChange={(e) =>
+                  setNewLead({
+                    ...newLead,
+                    closingExecutive:
+                      e.target.value
+                  })
+                }
+              />
 
-                  onClick={() =>
-                    setShowModal(
-                      false
-                    )
+              <input
+                type="text"
+                placeholder="Source"
+                value={newLead.source}
+                onChange={(e) =>
+                  setNewLead({
+                    ...newLead,
+                    source:
+                      e.target.value
+                  })
+                }
+              />
+
+              <input
+                type="text"
+                placeholder="Sub Source"
+                value={newLead.subSource}
+                onChange={(e) =>
+                  setNewLead({
+                    ...newLead,
+                    subSource:
+                      e.target.value
+                  })
+                }
+              />
+
+              <input
+                type="text"
+                placeholder="City"
+                value={newLead.city}
+                onChange={(e) =>
+                  setNewLead({
+                    ...newLead,
+                    city:
+                      e.target.value
+                  })
+                }
+              />
+
+              <input
+                type="text"
+                placeholder="Telecaller Name"
+                value={newLead.telecallerName}
+                onChange={(e) =>
+                  setNewLead({
+                    ...newLead,
+                    telecallerName:
+                      e.target.value
+                  })
+                }
+              />
+
+              <input
+                type="text"
+                placeholder="Department"
+                value={newLead.department}
+                onChange={(e) =>
+                  setNewLead({
+                    ...newLead,
+                    department:
+                      e.target.value
+                  })
+                }
+              />
+
+            </div>
+
+            {/* BOOKING FIELDS */}
+
+            {newLead.status ===
+              "Booked" && (
+
+              <div
+                style={{
+                  marginTop: "20px",
+                  display: "grid",
+                  gridTemplateColumns:
+                    "1fr 1fr",
+                  gap: "15px"
+                }}
+              >
+
+                <input
+                  type="date"
+                  value={
+                    newLead.bookingDate
                   }
-                >
-
-                  Cancel
-
-                </button>
-
-                <button
-                  className="save-btn"
-
-                  onClick={
-                    handleUpdateLead
+                  onChange={(e) =>
+                    setNewLead({
+                      ...newLead,
+                      bookingDate:
+                        e.target.value
+                    })
                   }
-                >
+                />
 
-                  Save
-
-                </button>
+                <input
+                  type="file"
+                />
 
               </div>
+
+            )}
+
+            {/* DEAD REASON */}
+
+            {newLead.status ===
+              "Not Interested" && (
+
+              <div
+                style={{
+                  marginTop: "20px",
+                  display: "grid",
+                  gridTemplateColumns:
+                    "1fr 1fr",
+                  gap: "15px"
+                }}
+              >
+
+                <select
+                  value={
+                    newLead.deadReason
+                  }
+                  onChange={(e) =>
+                    setNewLead({
+                      ...newLead,
+                      deadReason:
+                        e.target.value
+                    })
+                  }
+                >
+
+                  <option value="">
+                    Dead Reason
+                  </option>
+
+                  <option value="Budget Issue">
+                    Budget Issue
+                  </option>
+
+                  <option value="Location Issue">
+                    Location Issue
+                  </option>
+
+                  <option value="Other">
+                    Other
+                  </option>
+
+                </select>
+
+                <input
+                  type="text"
+                  placeholder="Dead Sub Reason"
+                  value={
+                    newLead.deadSubReason
+                  }
+                  onChange={(e) =>
+                    setNewLead({
+                      ...newLead,
+                      deadSubReason:
+                        e.target.value
+                    })
+                  }
+                />
+
+              </div>
+
+            )}
+
+            {/* COMMENT */}
+
+            <textarea
+              placeholder="Comment"
+              rows="5"
+              style={{
+                width: "100%",
+                marginTop: "20px"
+              }}
+              value={newLead.comment}
+              onChange={(e) =>
+                setNewLead({
+                  ...newLead,
+                  comment:
+                    e.target.value
+                })
+              }
+            />
+
+            {/* BUTTONS */}
+
+            <div
+              className="modal-actions"
+              style={{
+                marginTop: "20px"
+              }}
+            >
+
+              <button
+                className="cancel-btn"
+                onClick={() =>
+                  setShowNewLeadModal(
+                    false
+                  )
+                }
+              >
+
+                Cancel
+
+              </button>
+
+              <button
+                className="save-btn"
+                onClick={
+                  handleCreateLead
+                }
+              >
+
+                Save Lead
+
+              </button>
 
             </div>
 
           </div>
 
-        )}
+        </div>
+
+      )}
 
     </div>
 
   );
 
 }
-
