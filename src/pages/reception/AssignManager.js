@@ -32,7 +32,7 @@ export default function AssignManager() {
     try {
 
       const res = await axios.get(
-        "http://localhost:5000/api/visit-entries"
+        "https://calling-crm-backend-7w52.onrender.com/api/visit-entries"
       );
 
       setVisits(res.data);

@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import "../../styles/manageprojects.css";
 
-const API = "http://localhost:5000/api/projects";
+const API = "https://calling-crm-backend-7w52.onrender.com/api/projects";
 
 export default function ManageProjects() {
 

@@ -15,7 +15,7 @@ import CountUp from "react-countup";
 
 import "chart.js/auto";
 
-const API = "http://localhost:5000/api";
+const API = "https://calling-crm-backend-7w52.onrender.com/api";
 
 export default function Dashboard() {
 

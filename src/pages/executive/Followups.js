@@ -29,7 +29,7 @@ export default function Followups() {
       }
 
       const res = await axios.get(
-        `http://localhost:5000/api/followups/${user._id}`
+        `https://calling-crm-backend-7w52.onrender.com/api/followups/${user._id}`
       );
 
       setFollowups(res.data);

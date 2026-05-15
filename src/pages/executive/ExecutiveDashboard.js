@@ -25,7 +25,7 @@ import { useNavigate } from "react-router-dom";
 
 import "../../styles/executiveDashboard.css";
 
-const API = "http://localhost:5000/api";
+const API = "https://calling-crm-backend-7w52.onrender.com/api";
 
 export default function ExecutiveDashboard() {
 

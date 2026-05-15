@@ -46,7 +46,7 @@ export default function CreateVisit() {
   const fetchManagers = async () => {
     try {
       const res = await axios.get(
-        "http://localhost:5000/api/managers"
+        "https://calling-crm-backend-7w52.onrender.com/api/managers"
       );
       setManagers(res.data);
     } catch (err) {

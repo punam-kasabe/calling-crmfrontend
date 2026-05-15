@@ -42,10 +42,10 @@ export default function Leads() {
 
     if (!user?.email || !user?.role) return;
 
-    axios.get(`http://localhost:5000/api/dashboard/${user.email}/${user.role}`)
+    axios.get(`https://calling-crm-backend-7w52.onrender.com/api/dashboard/${user.email}/${user.role}`)
       .then(res => setStats(res.data));
 
-    axios.post("http://localhost:5000/api/filter-leads", {
+    axios.post("https://calling-crm-backend-7w52.onrender.com/api/filter-leads", {
       email: user.email.trim().toLowerCase(),
       role: user.role,
     })
@@ -56,7 +56,7 @@ export default function Leads() {
   useEffect(() => { fetchData(); }, [fetchData]);
 
   useEffect(() => {
-    axios.get("http://localhost:5000/api/users")
+    axios.get("https://calling-crm-backend-7w52.onrender.com/api/users")
       .then(res => setUsers(res.data));
   }, []);
        
@@ -75,7 +75,7 @@ export default function Leads() {
     formData.append("assigned_to", selectedUser.trim().toLowerCase());
     formData.append("created_by", user.email);
 
-    await axios.post("http://localhost:5000/api/upload", formData);
+    await axios.post("https://calling-crm-backend-7w52.onrender.com/api/upload", formData);
 
     alert("Uploaded ✅");
     fetchData();
@@ -84,7 +84,7 @@ export default function Leads() {
   /* ================= ADD ================= */
   const handleAddLead = async () => {
     try {
-      await axios.post("http://localhost:5000/api/leads", {
+      await axios.post("https://calling-crm-backend-7w52.onrender.com/api/leads", {
         ...newLead,
         assigned_to: newLead.assigned_to.trim().toLowerCase(),
         created_by: user.email
@@ -102,7 +102,7 @@ export default function Leads() {
   /* ================= UPDATE ================= */
   const handleUpdate = async () => {
     try {
-      await axios.put(`http://localhost:5000/api/leads/${selectedLead.id}`, selectedLead);
+      await axios.put(`https://calling-crm-backend-7w52.onrender.com/api/leads/${selectedLead.id}`, selectedLead);
 
       alert("Updated ✅");
       setShowModal(false);
@@ -115,7 +115,7 @@ export default function Leads() {
 
   /* ================= STATUS ================= */
   const updateStatus = (id, status) => {
-    axios.put(`http://localhost:5000/api/leads/status/${id}`, { status })
+    axios.put(`https://calling-crm-backend-7w52.onrender.com/api/leads/status/${id}`, { status })
       .then(fetchData);
   };
 

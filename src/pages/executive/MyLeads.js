@@ -12,7 +12,7 @@ import Sidebar from "../../components/Sidebar";
 import "../../styles/myleads.css";
 
 const API =
-  "http://localhost:5000/api";
+  "https://calling-crm-backend-7w52.onrender.com/api";
 
 export default function MyLeads() {
 
