@@ -284,45 +284,7 @@ const deadReasonOptions = [
 
     };
 
-  /* ================= DELETE ================= */
-
-  const handleDelete =
-    async (id) => {
-
-      const confirmDelete =
-        window.confirm(
-          "Delete this lead?"
-        );
-
-      if (!confirmDelete)
-        return;
-
-      try {
-
-        await axios.delete(
-
-          `${API}/delete-lead/${id}`
-
-        );
-
-        setLeads((prev) =>
-
-          prev.filter(
-            (lead) =>
-              lead._id !== id
-          )
-
-        );
-
-      }
-
-      catch (err) {
-
-        console.error(err);
-
-      }
-
-    };
+  
 /* ================= ADD NEW LEAD ================= */
 
 const handleAddNewLead = async () => {
