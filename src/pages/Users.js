@@ -26,8 +26,16 @@ export default function Users() {
     try {
       setLoading(true);
 
-      const res = await axios.get(`${API}/all-users`);
+const token = localStorage.getItem("token");
 
+const res = await axios.get(
+  `${API}/all-users`,
+  {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  }
+);
       console.log("API DATA:", res.data); // 🔥 DEBUG
 
       setUsers(Array.isArray(res.data) ? res.data : []);
