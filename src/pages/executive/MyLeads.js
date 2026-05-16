@@ -337,28 +337,42 @@ const departmentOptions = [
 const handleAddNewLead = async () => {
 
   if (
-  !newLead.name ||
-  !newLead.phone ||
-  !newLead.project
-) {
+    !newLead.name ||
+    !newLead.phone ||
+    !newLead.project
+  ) {
 
-  alert(
-    "Please fill required fields ❌"
-  );
+    alert(
+      "Please fill required fields ❌"
+    );
 
-  return;
-}
+    return;
+  }
 
   try {
 
-    await axios.post(
+    const res = await axios.post(
       `${API}/add-lead`,
       newLead
     );
 
-    alert("Lead Added Successfully ✅");
+    /* ================= ADD DIRECTLY IN TABLE ================= */
+
+    const createdLead =
+      res.data?.lead || res.data;
+
+    setLeads((prev) => [
+      createdLead,
+      ...prev
+    ]);
+
+    alert(
+      "Lead Added Successfully ✅"
+    );
 
     setShowNewLeadModal(false);
+
+    /* ================= RESET FORM ================= */
 
     setNewLead({
       name: "",
@@ -379,16 +393,18 @@ const handleAddNewLead = async () => {
       bookingDate: "",
     });
 
-    fetchMyLeads();
-
   }
 
   catch (err) {
 
     console.error(err);
 
-    alert("Failed To Add Lead ❌");
+    alert(
+      "Failed To Add Lead ❌"
+    );
+
   }
+
 };
   /* ================= FILTER ================= */
 
@@ -872,9 +888,7 @@ return (
                   <th>Action</th>
 
                 </tr>
-
               </thead>
-
               <tbody>
 
                 {filteredLeads.map(
