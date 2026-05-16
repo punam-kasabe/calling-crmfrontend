@@ -25,8 +25,6 @@ export default function MyLeads() {
   const [loading, setLoading] =
     useState(true);
 
-  const [saving, setSaving] =
-    useState(false);
 
   const [search, setSearch] =
     useState("");
@@ -1163,30 +1161,28 @@ return (
           }
         />
 
-        <select
-  value={newLead.source}
-  onChange={(e) =>
-    setNewLead({
-      ...newLead,
-      source: e.target.value
-    })
-  }
->
+           <select
+         value={newLead.source}
+        onChange={(e) =>
+        setNewLead({
+        ...newLead,
+         source: e.target.value
+         })
+           }
+           >
+           <option value="">
+              Select Source
+          </option>
 
-  <option value="">
-    Select Source
-  </option>
-
-  {sourceOptions.map((source, i) => (
-    <option
-      key={i}
-      value={source}
-    >
-      {source}
-    </option>
-  ))}
-
-</select>
+           {sourceOptions.map((source, i) => (
+            <option
+              key={i}
+            value={source}
+             >
+            {source}
+            </option>
+                ))}
+             </select>
 
         <input
           type="text"
