@@ -6,11 +6,8 @@ import {
 } from "react";
 
 import axios from "axios";
-
 import Sidebar from "../../components/Sidebar";
-
 import "../../styles/myleads.css";
-
 const API =
   "https://calling-crm-backend-7w52.onrender.com/api";
 
@@ -28,6 +25,9 @@ export default function MyLeads() {
   const [loading, setLoading] =
     useState(true);
 
+  const [saving, setSaving] =
+    useState(false);
+
   const [search, setSearch] =
     useState("");
 
@@ -43,25 +43,24 @@ export default function MyLeads() {
     setShowModal] =
     useState(false);
 
-    const [showAdvancedSearch, setShowAdvancedSearch] =
+  const [showAdvancedSearch, setShowAdvancedSearch] =
     useState(false);
 
-    const [projectFilter, setProjectFilter] =
+  const [projectFilter, setProjectFilter] =
     useState("");
 
-    const [sourceFilter, setSourceFilter] =
+  const [sourceFilter, setSourceFilter] =
     useState("");
 
-    const [executiveFilter, setExecutiveFilter] =
+  const [executiveFilter, setExecutiveFilter] =
     useState("");
-
 
      /* ================= NEW LEAD MODAL ================= */
 
-const [showNewLeadModal, setShowNewLeadModal] =
-  useState(false);
+  const [showNewLeadModal, setShowNewLeadModal] =
+    useState(false);
 
-const [newLead, setNewLead] = useState({
+  const [newLead, setNewLead] = useState({
   name: "",
   phone: "",
   email: "",
@@ -70,7 +69,10 @@ const [newLead, setNewLead] = useState({
   source: "",
   subSource: "",
   city: "",
-  assignedTo: "",
+  assignedTo:
+  user?.name ||
+  user?.username ||
+  "",
   closingExecutive: "",
   next_call_date: "",
   department: "",
@@ -139,6 +141,7 @@ const deadReasonOptions = [
   "Location Issue",
   "Other",
 ];
+
   /* ================= USER ================= */
 
    const user = useMemo(() => {
@@ -148,6 +151,12 @@ const deadReasonOptions = [
     ) || {};
 
   }, []);
+  
+/* ================= NEW LEAD MODAL ================= */
+
+  const [showNewLeadModal, setShowNewLeadModal] =
+  useState(false);
+
 
   /* ================= FETCH LEADS ================= */
 
@@ -238,8 +247,11 @@ const deadReasonOptions = [
           )
 
         );
+        fetchMyLeads();
 
       }
+
+
 
       catch (err) {
 
@@ -263,15 +275,15 @@ const deadReasonOptions = [
        assignedTo: selectedLead.assignedTo,
        closingExecutive: selectedLead.closingExecutive,
        status: selectedLead.status,
-      project: selectedLead.project,
-      next_call_date: selectedLead.next_call_date,
-      description: selectedLead.description,
-};
+       project: selectedLead.project,
+       next_call_date: selectedLead.next_call_date,
+       description: selectedLead.description,
+       };
 
-await axios.put(
-  `${API}/update-lead/${selectedLead._id}`,
-  updatedData
-);
+      await axios.put(
+      `${API}/update-lead/${selectedLead._id}`,
+      updatedData
+      );
 
         setLeads((prev) =>
 
@@ -290,11 +302,11 @@ await axios.put(
 
         setShowModal(false);
 
-fetchMyLeads();
+      fetchMyLeads();
 
-alert(
-  "Lead Updated ✅"
-);
+      alert(
+      "Lead Updated ✅"
+      );
       }
 
       catch (err) {
@@ -313,6 +325,19 @@ alert(
 /* ================= ADD NEW LEAD ================= */
 
 const handleAddNewLead = async () => {
+
+  if (
+  !newLead.name ||
+  !newLead.phone ||
+  !newLead.project
+) {
+
+  alert(
+    "Please fill required fields ❌"
+  );
+
+  return;
+}
 
   try {
 
@@ -368,7 +393,9 @@ const handleAddNewLead = async () => {
            `${lead.name || ""}
             ${lead.phone || ""}
             ${lead.project || ""}
-            ${lead.source || ""}`
+            ${lead.source || ""}
+            ${lead.closingExecutive || ""}`
+                    
 
               .toLowerCase()
 
@@ -611,9 +638,25 @@ return (
 <button
   className="newlead-btn"
 
-  onClick={() =>
-    setShowNewLeadModal(true)
-  }
+  onClick={() => {
+
+  setNewLead((prev) => ({
+    ...prev,
+
+    assignedTo:
+      user?.name ||
+      user?.username ||
+      "",
+
+    closingExecutive:
+      user?.name ||
+      user?.username ||
+      ""
+  }));
+
+  setShowNewLeadModal(true);
+
+}}
 >
 
   + New Lead
@@ -646,20 +689,20 @@ return (
 
       filteredLeads.forEach((lead) => {
 
-        const row = [
+       const row = [
 
-          lead.name || "",
-          lead.phone || "",
-          lead.assignedTo || "",
-          lead.closingExecutive || "",
-          lead.status || "",
-          lead.project || "",
-          lead.description || "",
-          lead.next_call_date || "",
-          lead.subSource || "",
-          lead.createdAt || ""
+  `"${lead.name || ""}"`,
+  `"${lead.phone || ""}"`,
+  `"${lead.assignedTo || ""}"`,
+  `"${lead.closingExecutive || ""}"`,
+  `"${lead.status || ""}"`,
+  `"${lead.project || ""}"`,
+  `"${lead.description || ""}"`,
+  `"${lead.next_call_date || ""}"`,
+  `"${lead.subSource || ""}"`,
+  `"${lead.createdAt || ""}"`
 
-        ];
+];
 
         csvRows.push(row.join(","));
 
@@ -949,8 +992,9 @@ return (
                           </a>
 
                           <a
-                            href={`https://wa.me/91${lead.phone}`}
-
+                        href={`https://wa.me/91${String(
+                        lead.phone
+                      ).replace(/\D/g, "")}`}
                             target="_blank"
 
                             rel="noreferrer"
