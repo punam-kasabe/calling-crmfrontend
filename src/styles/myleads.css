@@ -1,6 +1,4 @@
-/* =========================
-   MY LEADS PAGE
-========================= */
+
 
 .main-content {
   min-height: 100vh;
@@ -60,7 +58,7 @@
   border: 1px solid #edf2f7;
   transition: 0.3s ease;
   position: relative;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .stats-card:hover {
@@ -189,6 +187,10 @@
   display: grid;
   grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
   gap: 16px;
+
+  overflow: visible;
+  position: relative;
+  z-index: 10;
 }
 
 .advanced-search-box input,
@@ -215,9 +217,12 @@
 .table-wrapper {
   background: white;
   border-radius: 24px;
-  overflow: auto;
+  overflow-x: auto;
+  overflow-y: visible;
   box-shadow: 0 12px 40px rgba(0,0,0,0.05);
   border: 1px solid #edf2f7;
+  position: relative;
+  z-index: 1;
 }
 
 .leads-table {
@@ -245,6 +250,7 @@
   font-size: 14px;
   color: #374151;
   vertical-align: middle;
+  overflow: visible;
 }
 
 .leads-table tbody tr {
@@ -361,7 +367,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 999;
+  z-index: 99999;
   padding: 20px;
 }
 
@@ -373,6 +379,14 @@
   padding: 30px;
   box-shadow: 0 25px 60px rgba(0,0,0,0.25);
   animation: popup 0.3s ease;
+
+  overflow: visible;
+  position: relative;
+  z-index: 99999;
+}
+
+.large-modal {
+  overflow: visible;
 }
 
 @keyframes popup {
@@ -400,7 +414,16 @@
   grid-template-columns: repeat(auto-fit,minmax(240px,1fr));
   gap: 18px;
   margin-bottom: 20px;
+
+  overflow: visible;
 }
+
+.lead-form-grid > div {
+  overflow: visible;
+  position: relative;
+}
+
+/* ================= INPUTS ================= */
 
 .lead-form-grid input,
 .lead-form-grid select,
@@ -413,6 +436,7 @@ textarea {
   outline: none;
   transition: 0.3s ease;
   background: #f9fbff;
+  box-sizing: border-box;
 }
 
 .lead-form-grid input:focus,
@@ -496,6 +520,55 @@ label {
   border-radius: 20px;
 }
 
+/* ================= DROPDOWN FIX ================= */
+
+.lead-form-grid select,
+.status-select,
+.filter-bar select,
+.advanced-search-box select {
+  width: 100%;
+  height: 50px;
+  padding: 0 14px;
+  border: 1px solid #dbe2ea;
+  border-radius: 14px;
+  background-color: #ffffff;
+  color: #111827;
+  font-size: 14px;
+  font-weight: 500;
+  outline: none;
+  cursor: pointer;
+
+  appearance: auto !important;
+  -webkit-appearance: menulist !important;
+  -moz-appearance: menulist !important;
+
+  position: relative;
+  z-index: 9999;
+}
+
+/* OPTIONS */
+
+.lead-form-grid select option,
+.status-select option,
+.filter-bar select option,
+.advanced-search-box select option {
+  background: #ffffff !important;
+  color: #111827 !important;
+  padding: 10px;
+}
+
+/* FIX FOR MODAL DROPDOWN */
+
+.modal-box select {
+  position: relative;
+  z-index: 99999;
+}
+
+.modal-overlay select {
+  position: relative;
+  z-index: 99999;
+}
+
 /* ================= RESPONSIVE ================= */
 
 @media(max-width: 992px) {
@@ -554,3 +627,4 @@ label {
     width: 100%;
   }
 }
+
