@@ -25,7 +25,6 @@ export default function MyLeads() {
   const [loading, setLoading] =
     useState(true);
 
-
   const [search, setSearch] =
     useState("");
 
@@ -143,6 +142,14 @@ const sourceOptions = [
   "Hoarding",
   "Microsites",
   "Virtual call"
+];
+
+const departmentOptions = [
+  "Sales/Marketing",
+  "HR/Admin",
+  "Aasma Madam",
+  "Nilesh Sir",
+  "Telecaller"
 ];
 
   /* ================= USER ================= */
@@ -273,14 +280,15 @@ const sourceOptions = [
       try {
 
        const updatedData = {
-       assignedTo: selectedLead.assignedTo,
-       closingExecutive: selectedLead.closingExecutive,
-       status: selectedLead.status,
-       source: selectedLead.source,
-       project: selectedLead.project,
-       next_call_date: selectedLead.next_call_date,
-       description: selectedLead.description,
-       };
+  assignedTo: selectedLead.assignedTo,
+  closingExecutive: selectedLead.closingExecutive,
+  status: selectedLead.status,
+  source: selectedLead.source,
+  project: selectedLead.project,
+  next_call_date: selectedLead.next_call_date,
+  description: selectedLead.description,
+  department: selectedLead.department,
+};
 
       await axios.put(
       `${API}/update-lead/${selectedLead._id}`,
@@ -851,6 +859,8 @@ return (
 
                   <th>Description</th>
 
+                  <th>Department</th>
+
                   <th>Next Call Date</th>
 
                   <th>Sub Source</th>
@@ -919,6 +929,10 @@ return (
                       <td>
                         {lead.project || "-"}
                       </td>
+
+                      <td>
+                         {lead.department || "-"}
+                       </td>
 
                       <td className="description-cell">
                         {lead.description || "-"}
@@ -1233,18 +1247,28 @@ return (
           }
         />
 
-        <input
-          type="text"
-          placeholder="Department"
-          value={newLead.department}
-          onChange={(e) =>
-            setNewLead({
-              ...newLead,
-              department:
-                e.target.value
-            })
-          }
-        />
+        <select
+  value={newLead.department}
+  onChange={(e) =>
+    setNewLead({
+      ...newLead,
+      department: e.target.value
+    })
+  }
+>
+  <option value="">
+    Please Select Department
+  </option>
+
+  {departmentOptions.map((dept, i) => (
+    <option
+      key={i}
+      value={dept}
+    >
+      {dept}
+    </option>
+  ))}
+</select>
 
       </div>
 
@@ -1539,8 +1563,52 @@ return (
 
     ))}
 
+        </select>
+       </div>
+
+        {/* DEPARTMENT */}
+
+<div>
+  <label>Department</label>
+
+  <select
+    value={
+      selectedLead.department || ""
+    }
+
+    onChange={(e) =>
+
+      setSelectedLead({
+
+        ...selectedLead,
+
+        department:
+          e.target.value
+
+      })
+
+    }
+  >
+
+    <option value="">
+      Please Select Department
+    </option>
+
+    {departmentOptions.map((dept, i) => (
+
+      <option
+        key={i}
+        value={dept}
+      >
+        {dept}
+      </option>
+
+    ))}
+
   </select>
 </div>
+
+
 
         {/* NEXT CALL DATE */}
 
