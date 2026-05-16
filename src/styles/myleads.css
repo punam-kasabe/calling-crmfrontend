@@ -528,3 +528,34 @@
   transform: translateY(-2px);
 
 }
+.large-modal {
+  width: 700px;
+  max-width: 95%;
+}
+
+.lead-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.lead-form-grid label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.lead-form-grid input,
+.lead-form-grid select,
+.modal-box textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.modal-box textarea {
+  margin-top: 10px;
+}

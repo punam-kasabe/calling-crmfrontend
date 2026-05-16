@@ -91,29 +91,47 @@ const projectOptions = [
   "Gudipadwa plot in 5 Lacs.",
   "Khopoli-pali Road plots",
   "Maha-Mumbaai",
+  "Mahamumbai",
   "MAHAMUMBAI",
   "Maha-Mumbaii",
   "Mahamumbai Phase 2",
   "Mmahamumbai.",
   "Panvel (99Villa)",
   "Sheetal Campaign.",
+  "Sheetal THANE.",
   "Thane (Nitesh)",
   "Thane (Virendra)",
+  "THANE...( VIRENDRA)",
+  "THANE...( VIRENDRAA)"
 ];
 
 const statusOptions = [
   "New",
-  "Interested",
-  "Not Interested",
-  "Followup",
-  "Booked",
-  "Call Cut",
-  "Call Back",
   "Ringing",
+  "Connected",
+  "Interested",
+  "Very Interested",
+  "Not Interested",
+  "Call Cut",
   "Busy",
-  "Switch Off",
-  "Out of Service",
-  "Wrong Number"
+  "Call Back",
+  "Switched Off",
+  "Number Not Reachable",
+  "Wrong Number",
+  "Invalid Number",
+  "Duplicate Lead",
+  "Follow Up",
+  "Follow Up Done",
+  "Meeting Scheduled",
+  "Site Visit Planned",
+  "Site Visit Done",
+  "Negotiation",
+  "Payment Pending",
+  "Booked",
+  "Token Received",
+  "Cancelled",
+  "Future Prospect",
+  "No Response"
 ];
 
 const deadReasonOptions = [
@@ -856,19 +874,11 @@ return (
                         {lead.description || "-"}
                       </td>
 
-                      <td>
-
-                        {lead.next_call_date
-
-                          ? selectedLead.next_call_date?.split("T")[0]
-
-                              .split(
-                                "T"
-                              )[0]
-
-                          : "-"}
-
-                      </td>
+                     <td>
+                {lead.next_call_date
+                ? lead.next_call_date.split("T")[0]
+                   : "-"}
+                     </td>
 
                       <td>
                         {lead.subSource || "-"}
@@ -947,23 +957,28 @@ return (
 
                           </a>
 
-                          <button
-                            className="edit-btn"
+                         <button
+            className="edit-btn"
+              onClick={() => {
 
-                            onClick={() => {
+                      setSelectedLead({
+                    ...lead,
+                      assignedTo:
+                      lead.assignedTo ||
+                   user.name ||
+                user.username ||
+                  "",
 
-                              setSelectedLead(
-                                {
-                                  ...lead
-                                }
-                              );
+               next_call_date:
+                lead.next_call_date
+                ? lead.next_call_date.split("T")[0]
+                   : ""
+             });
 
-                              setShowModal(
-                                true
-                              );
+              setShowModal(true);
 
-                            }}
-                          >
+           }}
+                >
 
                             Edit
 
@@ -1282,181 +1297,228 @@ return (
 
 )}
 
-      {/* ================= EDIT MODAL ================= */}
+     
 
-      {showModal &&
-        selectedLead && (
+     {/* ================= EDIT MODAL ================= */}
 
-          <div className="modal-overlay">
+{showModal && selectedLead && (
 
-            <div className="modal-box">
+  <div className="modal-overlay">
 
-              <h3>
-                Edit Lead
-              </h3>
+    <div className="modal-box large-modal">
 
-              <input
-                type="text"
+      <h2>Edit Lead</h2>
 
-                value={
-                  selectedLead.name
-                }
+      <div className="lead-form-grid">
 
-                onChange={(e) =>
+        {/* ASSIGN TO */}
 
-                  setSelectedLead({
+        <div>
+          <label>Assign To</label>
 
-                    ...selectedLead,
+          <input
+            type="text"
+            value={
+              selectedLead.assignedTo ||
+              user.name ||
+              ""
+            }
+            readOnly
+          />
+        </div>
 
-                    name:
-                      e.target
-                        .value
+        {/* CLOSING EXECUTIVE */}
 
-                  })
+        <div>
+          <label>Closing Executive</label>
 
-                }
-              />
+          <input
+            type="text"
+            value={
+              selectedLead.closingExecutive || ""
+            }
 
-              <input
-                type="text"
+            onChange={(e) =>
 
-                value={
-                  selectedLead.phone
-                }
+              setSelectedLead({
 
-                onChange={(e) =>
+                ...selectedLead,
 
-                  setSelectedLead({
+                closingExecutive:
+                  e.target.value
 
-                    ...selectedLead,
+              })
 
-                    phone:
-                      e.target
-                        .value
+            }
+          />
+        </div>
 
-                  })
+        {/* STATUS */}
 
-                }
-              />
+        <div>
+          <label>Status</label>
 
-              <input
-                type="text"
+          <select
+            value={
+              selectedLead.status || ""
+            }
 
-                value={
-                  selectedLead.project
-                }
+            onChange={(e) =>
 
-                onChange={(e) =>
+              setSelectedLead({
 
-                  setSelectedLead({
+                ...selectedLead,
 
-                    ...selectedLead,
+                status:
+                  e.target.value
 
-                    project:
-                      e.target
-                        .value
+              })
 
-                  })
+            }
+          >
 
-                }
-              />
+            <option value="">
+              Select Status
+            </option>
 
-              <select
-                value={
-                  selectedLead.status
-                }
+            {statusOptions.map((status, i) => (
 
-                onChange={(e) =>
-
-                  setSelectedLead({
-
-                    ...selectedLead,
-
-                    status:
-                      e.target
-                        .value
-
-                  })
-
-                }
+              <option
+                key={i}
+                value={status}
               >
+                {status}
+              </option>
 
-                {statusOptions.map((status, i) => (
-  <option key={i} value={status}>
-    {status}
-  </option>
-))}
+            ))}
 
-              </select>
+          </select>
+        </div>
 
-              <input
-                type="date"
+        {/* PROJECT */}
 
-                value={
-                  selectedLead.next_call_date
+        <div>
+          <label>Project</label>
 
-                    ? new Date(
-                        selectedLead.next_call_date
-                      )
+          <select
+            value={
+              selectedLead.project || ""
+            }
 
-                        .toISOString()
+            onChange={(e) =>
 
-                        .split("T")[0]
+              setSelectedLead({
 
-                    : ""
-                }
+                ...selectedLead,
 
-                onChange={(e) =>
+                project:
+                  e.target.value
 
-                  setSelectedLead({
+              })
 
-                    ...selectedLead,
+            }
+          >
 
-                    next_call_date:
-                      e.target
-                        .value
+            <option value="">
+              Select Project
+            </option>
 
-                  })
+            {projectOptions.map((project, i) => (
 
-                }
-              />
+              <option
+                key={i}
+                value={project}
+              >
+                {project}
+              </option>
 
-              <div className="modal-actions">
+            ))}
 
-                <button
-                  className="cancel-btn"
+          </select>
+        </div>
 
-                  onClick={() =>
-                    setShowModal(
-                      false
-                    )
-                  }
-                >
+        {/* NEXT CALL DATE */}
 
-                  Cancel
+        <div>
+          <label>Next Call Date</label>
 
-                </button>
+          <input
+            type="date"
 
-                <button
-                  className="save-btn"
+            value={
+              selectedLead.next_call_date || ""
+            }
 
-                  onClick={
-                    handleUpdateLead
-                  }
-                >
+            onChange={(e) =>
 
-                  Save
+              setSelectedLead({
 
-                </button>
+                ...selectedLead,
 
-              </div>
+                next_call_date:
+                  e.target.value
 
-            </div>
+              })
 
-          </div>
+            }
+          />
+        </div>
 
-        )}
+      </div>
 
+      {/* COMMENT */}
+
+      <textarea
+        placeholder="Comment"
+        rows="4"
+
+        value={
+          selectedLead.description || ""
+        }
+
+        onChange={(e) =>
+
+          setSelectedLead({
+
+            ...selectedLead,
+
+            description:
+              e.target.value
+
+          })
+
+        }
+      />
+
+      {/* BUTTONS */}
+
+      <div className="modal-actions">
+
+        <button
+          className="cancel-btn"
+
+          onClick={() =>
+            setShowModal(false)
+          }
+        >
+          Cancel
+        </button>
+
+        <button
+          className="save-btn"
+
+          onClick={handleUpdateLead}
+        >
+          Save
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+)}
     </div>
 
   );
