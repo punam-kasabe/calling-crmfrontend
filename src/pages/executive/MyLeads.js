@@ -284,10 +284,11 @@ const deadReasonOptions = [
 
         setShowModal(false);
 
-        alert(
-          "Lead Updated ✅"
-        );
+fetchMyLeads();
 
+alert(
+  "Lead Updated ✅"
+);
       }
 
       catch (err) {
@@ -440,12 +441,12 @@ return (
             "New"
         ).length,
 
-      interested:
+        interested:
         leads.filter(
-          (l) =>
-            l.status ===
-            "Interested"
-        ).length,
+      (l) =>
+       l.status === "Interested" ||
+       l.status === "Very Interested"
+      ).length,
 
       booked:
         leads.filter(
@@ -454,12 +455,12 @@ return (
             "Booked"
         ).length,
 
-      followup:
-        leads.filter(
-          (l) =>
-            l.status ===
-            "Followup"
-        ).length,
+     followup:
+  leads.filter(
+    (l) =>
+      l.status ===
+      "Follow Up"
+  ).length,
 
       notInterested:
         leads.filter(
@@ -643,7 +644,7 @@ return (
 
           lead.name || "",
           lead.phone || "",
-          lead.assigned_To || "",
+          lead.assignedTo || "",
           lead.closingExecutive || "",
           lead.status || "",
           lead.project || "",
@@ -853,10 +854,8 @@ return (
                         <span
                           className={`status-badge ${lead.status
                             ?.toLowerCase()
-                            .replace(
-                              " ",
-                              "-"
-                            )}`}
+                           .replace(/\s+/g, "-")
+                          }`}
                         >
 
                           {lead.status ||
