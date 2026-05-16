@@ -142,6 +142,16 @@ const deadReasonOptions = [
   "Other",
 ];
 
+const sourceOptions = [
+  "Website",
+  "99 Acres",
+  "Facebook",
+  "Google",
+  "Hoarding",
+  "Microsites",
+  "Virtual call"
+];
+
   /* ================= USER ================= */
 
    const user = useMemo(() => {
@@ -251,8 +261,6 @@ const deadReasonOptions = [
 
       }
 
-
-
       catch (err) {
 
         console.error(
@@ -275,6 +283,7 @@ const deadReasonOptions = [
        assignedTo: selectedLead.assignedTo,
        closingExecutive: selectedLead.closingExecutive,
        status: selectedLead.status,
+       source: selectedLead.source,
        project: selectedLead.project,
        next_call_date: selectedLead.next_call_date,
        description: selectedLead.description,
@@ -1159,17 +1168,30 @@ return (
           }
         />
 
-        <input
-          type="text"
-          placeholder="Source"
-          value={newLead.source}
-          onChange={(e) =>
-            setNewLead({
-              ...newLead,
-              source: e.target.value
-            })
-          }
-        />
+        <select
+  value={newLead.source}
+  onChange={(e) =>
+    setNewLead({
+      ...newLead,
+      source: e.target.value
+    })
+  }
+>
+
+  <option value="">
+    Select Source
+  </option>
+
+  {sourceOptions.map((source, i) => (
+    <option
+      key={i}
+      value={source}
+    >
+      {source}
+    </option>
+  ))}
+
+</select>
 
         <input
           type="text"
@@ -1485,6 +1507,49 @@ return (
 
           </select>
         </div>
+
+
+      {/* SOURCE */}
+
+<div>
+  <label>Source</label>
+
+  <select
+    value={
+      selectedLead.source || ""
+    }
+
+    onChange={(e) =>
+
+      setSelectedLead({
+
+        ...selectedLead,
+
+        source:
+          e.target.value
+
+      })
+
+    }
+  >
+
+    <option value="">
+      Select Source
+    </option>
+
+    {sourceOptions.map((source, i) => (
+
+      <option
+        key={i}
+        value={source}
+      >
+        {source}
+      </option>
+
+    ))}
+
+  </select>
+</div>
 
         {/* NEXT CALL DATE */}
 
