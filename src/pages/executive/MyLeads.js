@@ -57,9 +57,7 @@ export default function MyLeads() {
 
      /* ================= NEW LEAD MODAL ================= */
 
-  const [showNewLeadModal, setShowNewLeadModal] =
-    useState(false);
-
+  
   const [newLead, setNewLead] = useState({
   name: "",
   phone: "",
@@ -69,10 +67,7 @@ export default function MyLeads() {
   source: "",
   subSource: "",
   city: "",
-  assignedTo:
-  user?.name ||
-  user?.username ||
-  "",
+  assignedTo: "",
   closingExecutive: "",
   next_call_date: "",
   department: "",
