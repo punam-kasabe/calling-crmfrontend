@@ -11,6 +11,7 @@ import ManageProjects from "./pages/admin/ManageProjects";
 import ManageCampaigns from "./pages/admin/ManageCampaigns";
 import ApiKeys from "./pages/admin/ApiKeys";
 import BulkUpload from "./pages/admin/BulkUpload";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 /* 👨‍💼 EXECUTIVE */
 import CallLogs from "./pages/executive/CallLogs";
@@ -53,17 +54,6 @@ import Users from "./pages/Users";
 
 import "bootstrap-icons/font/bootstrap-icons.css";
 
-
-
-/* =========================================
-   🔐 PRIVATE ROUTE
-========================================= */
-const PrivateRoute = ({ children }) => {
-  const user = JSON.parse(localStorage.getItem("user"));
-
-  return user ? children : <Navigate to="/" replace />;
-};
-
 /* =========================================
    🔓 PUBLIC ROUTE
 ========================================= */
@@ -100,63 +90,63 @@ export default function App() {
         <Route
           path="/dashboard"
           element={
-            <PrivateRoute>
+            <ProtectedRoute>
               <Dashboard />
-            </PrivateRoute>
+            </ProtectedRoute>
           }
         />
 
         <Route
           path="/reports"
           element={
-            <PrivateRoute>
+            <ProtectedRoute>
               <Reports />
-            </PrivateRoute>
+            </ProtectedRoute>
           }
         />
 
         <Route
           path="/manage-users"
           element={
-            <PrivateRoute>
+            <ProtectedRoute>
               <ManageUsers />
-            </PrivateRoute>
+            </ProtectedRoute>
           }
         />
 
         <Route
           path="/manage-projects"
           element={
-            <PrivateRoute>
+            <ProtectedRoute>
               <ManageProjects />
-            </PrivateRoute>
+            </ProtectedRoute>
           }
         />
 
         <Route
           path="/manage-campaigns"
           element={
-            <PrivateRoute>
+            <ProtectedRoute>
               <ManageCampaigns />
-            </PrivateRoute>
+            </ProtectedRoute>
           }
         />
 
         <Route
           path="/apikeys"
           element={
-            <PrivateRoute>
+            <ProtectedRoute>
               <ApiKeys />
-            </PrivateRoute>
+            </ProtectedRoute>
           }
         />
 
         <Route
           path="/bulk-upload"
           element={
-            <PrivateRoute>
+            <ProtectedRoute>
               <BulkUpload />
-            </PrivateRoute>
+            </ProtectedRoute>
           }
         />
 
@@ -164,36 +154,36 @@ export default function App() {
         <Route
           path="/executive-dashboard"
           element={
-            <PrivateRoute>
+            <ProtectedRoute>
               <ExecutiveDashboard />
-            </PrivateRoute>
+            </ProtectedRoute>
           }
         />
 
         <Route
           path="/call-logs"
           element={
-            <PrivateRoute>
+            <ProtectedRoute>
               <CallLogs />
-            </PrivateRoute>
+            </ProtectedRoute>
           }
         />
 
         <Route
           path="/followups"
           element={
-            <PrivateRoute>
+            <ProtectedRoute>
               <Followups />
-            </PrivateRoute>
+            </ProtectedRoute>
           }
         />
 
         <Route
           path="/my-leads"
           element={
-            <PrivateRoute>
+            <ProtectedRoute>
               <MyLeads />
-            </PrivateRoute>
+            </ProtectedRoute>
           }
         />
 
@@ -201,27 +191,27 @@ export default function App() {
         <Route
           path="/assigned-clients"
           element={
-            <PrivateRoute>
+            <ProtectedRoute>
               <AssignedClients />
-            </PrivateRoute>
+            </ProtectedRoute>
           }
         />
 
         <Route
           path="/manager-dashboard"
           element={
-            <PrivateRoute>
+            <ProtectedRoute>
               <ManagerDashboard />
-            </PrivateRoute>
+            </ProtectedRoute>
           }
         />
 
         <Route
           path="/update-booking-status"
           element={
-            <PrivateRoute>
+            <ProtectedRoute>
               <UpdateBookingStatus />
-            </PrivateRoute>
+            </ProtectedRoute>
           }
         />
 
@@ -229,98 +219,98 @@ export default function App() {
         <Route
   path="/reception-dashboard"
   element={
-    <PrivateRoute>
+    <ProtectedRoute>
       <ReceptionDashboard />
-    </PrivateRoute>
+    </ProtectedRoute>
   }
 />
 
 <Route
   path="/search-client"
   element={
-    <PrivateRoute>
+    <ProtectedRoute>
       <SearchClient />
-    </PrivateRoute>
+    </ProtectedRoute>
   }
 />
 
 <Route
   path="/create-visit"
   element={
-    <PrivateRoute>
+    <ProtectedRoute>
       <CreateVisit />
-    </PrivateRoute>
+    </ProtectedRoute>
   }
 />
 
 <Route
   path="/visit-entries"
   element={
-    <PrivateRoute>
+    <ProtectedRoute>
       <VisitEntries />
-    </PrivateRoute>
+    </ProtectedRoute>
   }
 />
 
 <Route
   path="/assign-manager"
   element={
-    <PrivateRoute>
+    <ProtectedRoute>
       <AssignManager />
-    </PrivateRoute>
+    </ProtectedRoute>
   }
 />
         {/* REPORTS */}
         <Route
           path="/projects-report"
           element={
-            <PrivateRoute>
+            <ProtectedRoute>
               <ProjectsReport />
-            </PrivateRoute>
+            </ProtectedRoute>
           }
         />
 
         <Route
           path="/roi-report"
           element={
-            <PrivateRoute>
+            <ProtectedRoute>
               <ROIReport />
-            </PrivateRoute>
+            </ProtectedRoute>
           }
         />
 
         <Route
           path="/sources-report"
           element={
-            <PrivateRoute>
+            <ProtectedRoute>
               <SourcesReport />
-            </PrivateRoute>
+            </ProtectedRoute>
           }
         />
 
         <Route
           path="/team-performance"
           element={
-            <PrivateRoute>
+            <ProtectedRoute>
               <TeamPerformance />
-            </PrivateRoute>
+            </ProtectedRoute>
           }
         />
 
         {/* GENERAL */}
-        <Route path="/bulk-update" element={<PrivateRoute><BulkUpdate /></PrivateRoute>} />
-        <Route path="/channel-partner" element={<PrivateRoute><ChannelPartner /></PrivateRoute>} />
-        <Route path="/leads" element={<PrivateRoute><Leads /></PrivateRoute>} />
-        <Route path="/lead-volume" element={<PrivateRoute><LeadVolume /></PrivateRoute>} />
-        <Route path="/marketing-roi" element={<PrivateRoute><MarketingROI /></PrivateRoute>} />
-        <Route path="/outgoing-calls" element={<PrivateRoute><OutgoingCalls /></PrivateRoute>} />
-        <Route path="/personalised-report" element={<PrivateRoute><PersonalisedReport /></PrivateRoute>} />
-        <Route path="/pipeline" element={<PrivateRoute><Pipeline /></PrivateRoute>} />
-       <Route path="/request" element={<PrivateRoute><Requests /></PrivateRoute>} />
-       <Route path="/setting" element={<PrivateRoute><Settings /></PrivateRoute>} />
-      <Route path="/svp-dashboard" element={<PrivateRoute><SVPDashboard /></PrivateRoute>} />
-        <Route path="/upload" element={<PrivateRoute><Upload /></PrivateRoute>} />
-        <Route path="/users" element={<PrivateRoute><Users /></PrivateRoute>} />
+        <Route path="/bulk-update" element={<ProtectedRoute><BulkUpdate /></ProtectedRoute>} />
+        <Route path="/channel-partner" element={<ProtectedRoute><ChannelPartner /></ProtectedRoute>} />
+        <Route path="/leads" element={<ProtectedRoute><Leads /></ProtectedRoute>} />
+        <Route path="/lead-volume" element={<ProtectedRoute><LeadVolume /></ProtectedRoute>} />
+        <Route path="/marketing-roi" element={<ProtectedRoute><MarketingROI /></ProtectedRoute>} />
+        <Route path="/outgoing-calls" element={<ProtectedRoute><OutgoingCalls /></ProtectedRoute>} />
+        <Route path="/personalised-report" element={<ProtectedRoute><PersonalisedReport /></ProtectedRoute>} />
+        <Route path="/pipeline" element={<ProtectedRoute><Pipeline /></ProtectedRoute>} />
+       <Route path="/request" element={<ProtectedRoute><Requests /></ProtectedRoute>} />
+       <Route path="/setting" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+      <Route path="/svp-dashboard" element={<ProtectedRoute><SVPDashboard /></ProtectedRoute>} />
+        <Route path="/upload" element={<ProtectedRoute><Upload /></ProtectedRoute>} />
+        <Route path="/users" element={<ProtectedRoute><Users /></ProtectedRoute>} />
 
         {/* FALLBACK */}
         <Route

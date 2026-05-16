@@ -259,13 +259,19 @@ const deadReasonOptions = [
 
       try {
 
-        await axios.put(
+       const updatedData = {
+       assignedTo: selectedLead.assignedTo,
+       closingExecutive: selectedLead.closingExecutive,
+       status: selectedLead.status,
+      project: selectedLead.project,
+      next_call_date: selectedLead.next_call_date,
+      description: selectedLead.description,
+};
 
-          `${API}/update-lead/${selectedLead._id}`,
-
-          selectedLead
-
-        );
+await axios.put(
+  `${API}/update-lead/${selectedLead._id}`,
+  updatedData
+);
 
         setLeads((prev) =>
 
