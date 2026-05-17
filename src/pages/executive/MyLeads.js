@@ -52,8 +52,7 @@ export default function MyLeads() {
   const [executiveFilter, setExecutiveFilter] =
     useState("");
   
-  const [mobileFilter, setMobileFilter] = useState("");
-const [emailFilter, setEmailFilter] = useState("");
+ 
 const [subSourceFilter, setSubSourceFilter] = useState("");
 const [cityFilter, setCityFilter] = useState("");
 const [departmentFilter, setDepartmentFilter] = useState("");
