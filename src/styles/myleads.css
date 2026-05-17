@@ -628,3 +628,32 @@ label {
   }
 }
 
+.advanced-search-box{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:14px;
+  margin-top:20px;
+  padding:20px;
+  background:#fff;
+  border-radius:14px;
+  box-shadow:0 2px 10px rgba(0,0,0,0.08);
+}
+
+.advanced-search-box input,
+.advanced-search-box select{
+  height:45px;
+  border:1px solid #ddd;
+  border-radius:10px;
+  padding:0 14px;
+  font-size:14px;
+}
+
+.clear-filter-btn{
+  height:45px;
+  border:none;
+  border-radius:10px;
+  background:#ff4d4f;
+  color:#fff;
+  font-weight:600;
+  cursor:pointer;
+}

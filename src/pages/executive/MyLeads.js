@@ -51,7 +51,19 @@ export default function MyLeads() {
 
   const [executiveFilter, setExecutiveFilter] =
     useState("");
-
+  
+  const [mobileFilter, setMobileFilter] = useState("");
+const [emailFilter, setEmailFilter] = useState("");
+const [subSourceFilter, setSubSourceFilter] = useState("");
+const [cityFilter, setCityFilter] = useState("");
+const [departmentFilter, setDepartmentFilter] = useState("");
+const [assignedFilter, setAssignedFilter] = useState("");
+const [fromDateFilter, setFromDateFilter] = useState("");
+const [toDateFilter, setToDateFilter] = useState("");
+const [nextCallFrom, setNextCallFrom] = useState("");
+const [nextCallTo, setNextCallTo] = useState("");
+const [descriptionFilter, setDescriptionFilter] = useState("");
+  
      /* ================= NEW LEAD MODAL ================= */
 
   
@@ -406,6 +418,7 @@ const handleAddNewLead = async () => {
   }
 
 };
+
   /* ================= FILTER ================= */
 
   const filteredLeads =
@@ -422,7 +435,6 @@ const handleAddNewLead = async () => {
             ${lead.source || ""}
             ${lead.closingExecutive || ""}`
                     
-
               .toLowerCase()
 
               .includes(
@@ -465,12 +477,118 @@ const matchesExecutive =
         )
     : true;
 
+  const matchesMobile =
+  mobileFilter
+    ? lead.phone
+        ?.toLowerCase()
+        .includes(
+          mobileFilter.toLowerCase()
+        )
+    : true;
+
+const matchesEmail =
+  emailFilter
+    ? lead.email
+        ?.toLowerCase()
+        .includes(
+          emailFilter.toLowerCase()
+        )
+    : true;
+
+const matchesSubSource =
+  subSourceFilter
+    ? lead.subSource
+        ?.toLowerCase()
+        .includes(
+          subSourceFilter.toLowerCase()
+        )
+    : true;
+
+const matchesCity =
+  cityFilter
+    ? lead.city
+        ?.toLowerCase()
+        .includes(
+          cityFilter.toLowerCase()
+        )
+    : true;
+
+const matchesDepartment =
+  departmentFilter
+    ? lead.department
+        ?.toLowerCase()
+        .includes(
+          departmentFilter.toLowerCase()
+        )
+    : true;
+
+const matchesAssigned =
+  assignedFilter
+    ? lead.assignedTo
+        ?.toLowerCase()
+        .includes(
+          assignedFilter.toLowerCase()
+        )
+    : true;
+
+const matchesDescription =
+  descriptionFilter
+    ? lead.description
+        ?.toLowerCase()
+        .includes(
+          descriptionFilter.toLowerCase()
+        )
+    : true;
+
+const createdDate =
+  lead.createdAt
+    ? new Date(lead.createdAt)
+        .toISOString()
+        .split("T")[0]
+    : "";
+
+const matchesFromDate =
+  fromDateFilter
+    ? createdDate >= fromDateFilter
+    : true;
+
+const matchesToDate =
+  toDateFilter
+    ? createdDate <= toDateFilter
+    : true;
+
+const nextCallDate =
+  lead.next_call_date
+    ? lead.next_call_date
+        .split("T")[0]
+    : "";
+
+const matchesNextCallFrom =
+  nextCallFrom
+    ? nextCallDate >= nextCallFrom
+    : true;
+
+const matchesNextCallTo =
+  nextCallTo
+    ? nextCallDate <= nextCallTo
+    : true;
 return (
   matchesSearch &&
   matchesStatus &&
   matchesProject &&
   matchesSource &&
-  matchesExecutive
+  matchesExecutive &&
+  matchesMobile &&
+  matchesEmail &&
+  matchesSubSource &&
+  matchesCity &&
+  matchesDepartment &&
+  matchesAssigned &&
+  matchesDescription &&
+  matchesFromDate &&
+  matchesToDate &&
+  matchesNextCallFrom &&
+  matchesNextCallTo
 );
         }
       );
@@ -760,9 +878,7 @@ return (
   </button>
 
        </div>
-       {/* ================= ADVANCED SEARCH ================= */}
-
-{showAdvancedSearch && (
+       {showAdvancedSearch && (
 
   <div className="advanced-search-box">
 
@@ -777,43 +893,136 @@ return (
 
     <input
       type="text"
-      placeholder="Search Source..."
+      placeholder="Mobile Number..."
+      value={mobileFilter}
+      onChange={(e) =>
+        setMobileFilter(e.target.value)
+      }
+    />
+
+    <input
+      type="text"
+      placeholder="Email..."
+      value={emailFilter}
+      onChange={(e) =>
+        setEmailFilter(e.target.value)
+      }
+    />
+
+    <input
+      type="text"
+      placeholder="Source..."
       value={sourceFilter}
       onChange={(e) =>
         setSourceFilter(e.target.value)
       }
     />
 
-    
-
-    <select
-  value={statusFilter}
-  onChange={(e) =>
-    setStatusFilter(e.target.value)
-  }
->
-  <option value="">
-    All Status
-  </option>
-
-  {statusOptions.map((status, i) => (
-    <option
-      key={i}
-      value={status}
-    >
-      {status}
-    </option>
-  ))}
-</select>
+    <input
+      type="text"
+      placeholder="Sub Source..."
+      value={subSourceFilter}
+      onChange={(e) =>
+        setSubSourceFilter(e.target.value)
+      }
+    />
 
     <input
-  type="text"
-  placeholder="Search Executive..."
-  value={executiveFilter}
-  onChange={(e) =>
-    setExecutiveFilter(e.target.value)
-  }
-/>
+      type="text"
+      placeholder="City..."
+      value={cityFilter}
+      onChange={(e) =>
+        setCityFilter(e.target.value)
+      }
+    />
+
+    <input
+      type="text"
+      placeholder="Assigned To..."
+      value={assignedFilter}
+      onChange={(e) =>
+        setAssignedFilter(e.target.value)
+      }
+    />
+
+    <input
+      type="text"
+      placeholder="Executive..."
+      value={executiveFilter}
+      onChange={(e) =>
+        setExecutiveFilter(e.target.value)
+      }
+    />
+
+    <input
+      type="text"
+      placeholder="Department..."
+      value={departmentFilter}
+      onChange={(e) =>
+        setDepartmentFilter(e.target.value)
+      }
+    />
+
+    <select
+      value={statusFilter}
+      onChange={(e) =>
+        setStatusFilter(e.target.value)
+      }
+    >
+      <option value="">
+        All Status
+      </option>
+
+      {statusOptions.map((status, i) => (
+        <option
+          key={i}
+          value={status}
+        >
+          {status}
+        </option>
+      ))}
+    </select>
+
+    <input
+      type="date"
+      value={fromDateFilter}
+      onChange={(e) =>
+        setFromDateFilter(e.target.value)
+      }
+    />
+
+    <input
+      type="date"
+      value={toDateFilter}
+      onChange={(e) =>
+        setToDateFilter(e.target.value)
+      }
+    />
+
+    <input
+      type="date"
+      value={nextCallFrom}
+      onChange={(e) =>
+        setNextCallFrom(e.target.value)
+      }
+    />
+
+    <input
+      type="date"
+      value={nextCallTo}
+      onChange={(e) =>
+        setNextCallTo(e.target.value)
+      }
+    />
+
+    <input
+      type="text"
+      placeholder="Comment / Description..."
+      value={descriptionFilter}
+      onChange={(e) =>
+        setDescriptionFilter(e.target.value)
+      }
+    />
 
     <button
       className="clear-filter-btn"
@@ -824,12 +1033,28 @@ return (
         setStatusFilter("");
         setSearch("");
         setExecutiveFilter("");
+        setMobileFilter("");
+        setEmailFilter("");
+        setSubSourceFilter("");
+        setCityFilter("");
+        setDepartmentFilter("");
+        setAssignedFilter("");
+        setFromDateFilter("");
+        setToDateFilter("");
+        setNextCallFrom("");
+        setNextCallTo("");
+        setDescriptionFilter("");
+
       }}
     >
       Clear Filters
     </button>
+
   </div>
+
 )}
+
+
         {/* ================= CONTENT ================= */}
 
         {loading ? (
