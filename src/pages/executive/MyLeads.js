@@ -904,25 +904,7 @@ return (
 
     <input
       type="text"
-      placeholder="Mobile Number..."
-      value={mobileFilter}
-      onChange={(e) =>
-        setMobileFilter(e.target.value)
-      }
-    />
-
-    <input
-      type="text"
-      placeholder="Email..."
-      value={emailFilter}
-      onChange={(e) =>
-        setEmailFilter(e.target.value)
-      }
-    />
-
-    <input
-      type="text"
-      placeholder="Source..."
+      placeholder="Search Source..."
       value={sourceFilter}
       onChange={(e) =>
         setSourceFilter(e.target.value)
@@ -931,7 +913,7 @@ return (
 
     <input
       type="text"
-      placeholder="Sub Source..."
+      placeholder="Search Sub Source..."
       value={subSourceFilter}
       onChange={(e) =>
         setSubSourceFilter(e.target.value)
@@ -940,10 +922,28 @@ return (
 
     <input
       type="text"
-      placeholder="City..."
+      placeholder="Search City..."
       value={cityFilter}
       onChange={(e) =>
         setCityFilter(e.target.value)
+      }
+    />
+
+    <input
+      type="text"
+      placeholder="Search Executive..."
+      value={executiveFilter}
+      onChange={(e) =>
+        setExecutiveFilter(e.target.value)
+      }
+    />
+
+    <input
+      type="text"
+      placeholder="Search Department..."
+      value={departmentFilter}
+      onChange={(e) =>
+        setDepartmentFilter(e.target.value)
       }
     />
 
@@ -953,24 +953,6 @@ return (
       value={assignedFilter}
       onChange={(e) =>
         setAssignedFilter(e.target.value)
-      }
-    />
-
-    <input
-      type="text"
-      placeholder="Executive..."
-      value={executiveFilter}
-      onChange={(e) =>
-        setExecutiveFilter(e.target.value)
-      }
-    />
-
-    <input
-      type="text"
-      placeholder="Department..."
-      value={departmentFilter}
-      onChange={(e) =>
-        setDepartmentFilter(e.target.value)
       }
     />
 
@@ -994,41 +976,69 @@ return (
       ))}
     </select>
 
-    <input
-      type="date"
-      value={fromDateFilter}
-      onChange={(e) =>
-        setFromDateFilter(e.target.value)
-      }
-    />
+    {/* CREATED DATE */}
 
-    <input
-      type="date"
-      value={toDateFilter}
-      onChange={(e) =>
-        setToDateFilter(e.target.value)
-      }
-    />
+    <div className="date-group">
+      <label>
+        Created Date From
+      </label>
 
-    <input
-      type="date"
-      value={nextCallFrom}
-      onChange={(e) =>
-        setNextCallFrom(e.target.value)
-      }
-    />
+      <input
+        type="date"
+        value={fromDateFilter}
+        onChange={(e) =>
+          setFromDateFilter(e.target.value)
+        }
+      />
+    </div>
 
-    <input
-      type="date"
-      value={nextCallTo}
-      onChange={(e) =>
-        setNextCallTo(e.target.value)
-      }
-    />
+    <div className="date-group">
+      <label>
+        Created Date To
+      </label>
+
+      <input
+        type="date"
+        value={toDateFilter}
+        onChange={(e) =>
+          setToDateFilter(e.target.value)
+        }
+      />
+    </div>
+
+    {/* NEXT CALL DATE */}
+
+    <div className="date-group">
+      <label>
+        Next Call Date From
+      </label>
+
+      <input
+        type="date"
+        value={nextCallFrom}
+        onChange={(e) =>
+          setNextCallFrom(e.target.value)
+        }
+      />
+    </div>
+
+    <div className="date-group">
+      <label>
+        Next Call Date To
+      </label>
+
+      <input
+        type="date"
+        value={nextCallTo}
+        onChange={(e) =>
+          setNextCallTo(e.target.value)
+        }
+      />
+    </div>
 
     <input
       type="text"
-      placeholder="Comment / Description..."
+      placeholder="Description..."
       value={descriptionFilter}
       onChange={(e) =>
         setDescriptionFilter(e.target.value)
@@ -1041,15 +1051,12 @@ return (
 
         setProjectFilter("");
         setSourceFilter("");
-        setStatusFilter("");
-        setSearch("");
-        setExecutiveFilter("");
-        setMobileFilter("");
-        setEmailFilter("");
         setSubSourceFilter("");
         setCityFilter("");
+        setExecutiveFilter("");
         setDepartmentFilter("");
         setAssignedFilter("");
+        setStatusFilter("");
         setFromDateFilter("");
         setToDateFilter("");
         setNextCallFrom("");
@@ -1181,12 +1188,12 @@ return (
                       </td>
 
                      <td className="description-cell">
-  {lead.description || "-"}
-</td>
+                     {lead.description || "-"}
+                     </td>
 
-<td>
-  {lead.department || "-"}
-</td>
+                         <td>
+                         {lead.department || "-"}
+                           </td>
                      <td>
                 {lead.next_call_date
                 ? lead.next_call_date.split("T")[0]
