@@ -599,7 +599,18 @@ return (
   statusFilter,
   projectFilter,
   sourceFilter,
-  executiveFilter
+  executiveFilter,
+  mobileFilter,
+  emailFilter,
+  subSourceFilter,
+  cityFilter,
+  departmentFilter,
+  assignedFilter,
+  fromDateFilter,
+  toDateFilter,
+  nextCallFrom,
+  nextCallTo,
+  descriptionFilter
 ]);
 
   /* ================= STATS ================= */
@@ -1169,14 +1180,13 @@ return (
                         {lead.project || "-"}
                       </td>
 
-                      <td>
-                         {lead.department || "-"}
-                       </td>
+                     <td className="description-cell">
+  {lead.description || "-"}
+</td>
 
-                      <td className="description-cell">
-                        {lead.description || "-"}
-                      </td>
-
+<td>
+  {lead.department || "-"}
+</td>
                      <td>
                 {lead.next_call_date
                 ? lead.next_call_date.split("T")[0]
