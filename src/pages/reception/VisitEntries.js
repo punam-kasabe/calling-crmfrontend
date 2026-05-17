@@ -23,7 +23,7 @@ export default function VisitEntries() {
     try {
 
       const res = await axios.get(
-        "https://calling-crm-backend-1.onrender.com/api/visits"
+        "https://calling-crm-backend-7w52.onrender.com/api/visits"
       );
 
       setVisits(res.data);
