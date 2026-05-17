@@ -476,23 +476,7 @@ const matchesExecutive =
         )
     : true;
 
-  const matchesMobile =
-  mobileFilter
-    ? lead.phone
-        ?.toLowerCase()
-        .includes(
-          mobileFilter.toLowerCase()
-        )
-    : true;
 
-const matchesEmail =
-  emailFilter
-    ? lead.email
-        ?.toLowerCase()
-        .includes(
-          emailFilter.toLowerCase()
-        )
-    : true;
 
 const matchesSubSource =
   subSourceFilter
@@ -577,8 +561,6 @@ return (
   matchesProject &&
   matchesSource &&
   matchesExecutive &&
-  matchesMobile &&
-  matchesEmail &&
   matchesSubSource &&
   matchesCity &&
   matchesDepartment &&
@@ -599,8 +581,6 @@ return (
   projectFilter,
   sourceFilter,
   executiveFilter,
-  mobileFilter,
-  emailFilter,
   subSourceFilter,
   cityFilter,
   departmentFilter,
