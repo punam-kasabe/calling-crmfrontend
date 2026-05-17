@@ -718,6 +718,36 @@ return (
         {/* ================= FILTERS ================= */}
 
       <div className="filter-bar">
+     
+     {/* ================= FILTERS ================= */}
+
+<div className="filter-bar">
+
+  {/* SEARCH NAME */}
+
+  <input
+    type="text"
+    placeholder="Search Name..."
+    value={search}
+    onChange={(e) =>
+      setSearch(e.target.value)
+    }
+    className="small-search"
+  />
+
+  {/* SEARCH PROJECT */}
+
+  <input
+    type="text"
+    placeholder="Search Project..."
+    value={projectFilter}
+    onChange={(e) =>
+      setProjectFilter(e.target.value)
+    }
+    className="small-search"
+  />
+
+</div>
 
   <input
     type="text"
@@ -727,29 +757,6 @@ return (
       setSearch(e.target.value)
     }
   />
-
-  <select
-    value={statusFilter}
-    onChange={(e) =>
-      setStatusFilter(e.target.value)
-    }
-  >
-
-    <option value="">
-      All Status
-    </option>
-
-    {statusOptions.map((status, i) => (
-      <option
-        key={i}
-        value={status}
-      >
-        {status}
-      </option>
-    ))}
-
-  </select>
-
 </div>
 {/* ================= ACTION BUTTONS ================= */}
 
