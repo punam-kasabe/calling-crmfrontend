@@ -45,16 +45,22 @@ export default function BulkUpdate() {
       );
 
       const {
-      
-        inserted = 0,
-        duplicates = 0,
-        samePhoneDifferentProject = 0
-      } = res.data;
+
+  updated = 0,
+
+  skipped = 0,
+
+  duplicates = 0,
+
+  samePhoneDifferentProject = 0
+
+} = res.data;
+
 
       // 🔥 UI MESSAGE
-      setMessage(
-        `✅ Inserted: ${inserted} | ⚠️ Duplicate Skipped: ${duplicates}`
-      );
+        setMessage(
+       `✅ Updated: ${updated} | ⚠️ Skipped: ${skipped}`
+         );
 
       // 🔥 POPUP ALERTS
       if (duplicates > 0) {
