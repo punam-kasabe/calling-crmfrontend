@@ -62,14 +62,7 @@ export default function BulkUpdate() {
        `✅ Updated: ${updated} | ⚠️ Skipped: ${skipped}`
          );
 
-      // 🔥 POPUP ALERTS
-      if (duplicates > 0) {
-        alert(`⚠️ ${duplicates} leads already exist with SAME project`);
-      }
-
-      if (samePhoneDifferentProject > 0) {
-        alert(`ℹ️ ${samePhoneDifferentProject} leads added (same mobile, different project)`);
-      }
+      
 
     } catch (err) {
 
