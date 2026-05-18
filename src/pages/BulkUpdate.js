@@ -47,12 +47,7 @@ export default function BulkUpdate() {
       const {
 
   updated = 0,
-
   skipped = 0,
-
-  duplicates = 0,
-
-  samePhoneDifferentProject = 0
 
 } = res.data;
 
