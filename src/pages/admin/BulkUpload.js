@@ -26,64 +26,58 @@ export default function BulkUpload() {
 
   const handleUpload = async () => {
 
-    if (!file) {
-      setMessage("Please select CSV file ❌");
-      return;
-    }
+  if (!file) {
+    setMessage("Please select CSV file ❌");
+    return;
+  }
 
-    try {
+  try {
 
-      setLoading(true);
+    setLoading(true);
 
-      const formData = new FormData();
+    const formData = new FormData();
 
-      formData.append("file", file);
+    formData.append("file", file);
 
-      const res = await axios.post(
-        `${API}/bulk-update`,
-        formData,
-        {
-          headers: {
-
-  "Content-Type":
-    "multipart/form-data",
-
-  Authorization:
-    `Bearer ${localStorage.getItem("token")}`
-
-},
+    const res = await axios.post(
+      `${API}/bulk-update`,
+      formData,
+      {
+        headers: {
+          Authorization:
+            `Bearer ${localStorage.getItem("token")}`
         }
-      );
+      }
+    );
 
-      setMessage(
-        res.data.message ||
-        "Bulk update success ✅"
-      );
+    setMessage(
+      res.data.message ||
+      "Bulk update success ✅"
+    );
 
-    }
+  }
 
-    catch (err) {
+  catch (err) {
 
-      console.error(
-        "Bulk upload error",
-        err
-      );
+    console.error(
+      "Bulk upload error",
+      err
+    );
 
-      setMessage(
-        err.response?.data?.message ||
-        "Upload failed ❌"
-      );
+    setMessage(
+      err.response?.data?.message ||
+      "Upload failed ❌"
+    );
 
-    }
+  }
 
-    finally {
+  finally {
 
-      setLoading(false);
+    setLoading(false);
 
-    }
+  }
 
-  };
-
+};
   return (
 
     <div className="layout">
