@@ -371,16 +371,9 @@ export default function ExecutiveDashboard() {
               Dashboard
             </h1>
 
-            <p>
-
-              Welcome back,
-              {" "}
-
-              <strong>
-                {user.name}
-              </strong>
-
-            </p>
+            <p className="welcome-text">
+             Welcome back, <strong>{user.name}</strong>
+               </p>
 
           </div>
           

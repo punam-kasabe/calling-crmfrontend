@@ -35,6 +35,7 @@
 
 .executive-main.sidebar-open {
   margin-left: 250px;
+  padding-left: 28px;
 }
 
 .executive-main.sidebar-close {
@@ -703,4 +704,11 @@
   transition: all 0.3s ease;
   width: 100%;
   overflow-x: hidden;
+}
+.welcome-text {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: nowrap;
+  white-space: nowrap;
 }
