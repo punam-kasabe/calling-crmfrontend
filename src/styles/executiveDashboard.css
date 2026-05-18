@@ -674,6 +674,8 @@
 
   .stat-card {
     padding: 16px;
+    min-width: 0;
+
   }
 
   .stat-card h2 {
@@ -691,4 +693,12 @@
   .table-wrapper table {
     min-width: 600px;
   }
+}
+.executive-main {
+  flex: 1;
+  min-height: 100vh;
+  padding: 18px;
+  transition: all 0.3s ease;
+  width: 100%;
+  overflow-x: hidden;
 }

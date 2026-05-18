@@ -607,9 +607,8 @@ export default function ExecutiveDashboard() {
 
               <tbody>
 
-                {filteredLeads.length > 0 ? (
-
-                  filteredLeads.map(
+          {recentLeads.length > 0 ? (
+                  recentLeads.map(
                     (lead) => (
 
                       <tr
