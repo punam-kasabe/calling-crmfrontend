@@ -51,6 +51,7 @@
   align-items: center;
   margin-bottom: 22px;
   gap: 14px;
+  padding-top: 10px;
 }
 
 .executive-header h1 {
@@ -698,6 +699,7 @@
   flex: 1;
   min-height: 100vh;
   padding: 18px;
+  padding-top: 28px;
   transition: all 0.3s ease;
   width: 100%;
   overflow-x: hidden;
