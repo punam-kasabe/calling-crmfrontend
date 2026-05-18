@@ -16,10 +16,10 @@ import {
   CalendarCheck,
   Flame,
   Clock3,
-  Search,
   Bell,
   MapPinned,
 } from "lucide-react";
+
 
 import { useNavigate } from "react-router-dom";
 
@@ -37,8 +37,7 @@ export default function ExecutiveDashboard() {
   const toggleSidebar = () =>
     setIsOpen(!isOpen);
 
-  const [search, setSearch] =
-    useState("");
+  
 
   /* ===================================== */
   /* POPUP STATE */
@@ -171,29 +170,6 @@ export default function ExecutiveDashboard() {
 
   }, [fetchDashboard]);
 
-  /* ===================================== */
-  /* SEARCH FILTER */
-  /* ===================================== */
-
-  const filteredLeads =
-    recentLeads.filter((lead) =>
-
-      lead.name
-        ?.toLowerCase()
-        .includes(
-          search.toLowerCase()
-        ) ||
-
-      lead.phone
-        ?.includes(search) ||
-
-      lead.project
-        ?.toLowerCase()
-        .includes(
-          search.toLowerCase()
-        )
-
-    );
 
   /* ===================================== */
   /* QUICK ACTIONS */
@@ -407,25 +383,7 @@ export default function ExecutiveDashboard() {
             </p>
 
           </div>
-
-          {/* SEARCH */}
-
-          <div className="search-box">
-
-            <Search size={18} />
-
-            <input
-              type="text"
-              placeholder="Search leads..."
-              value={search}
-              onChange={(e) =>
-                setSearch(
-                  e.target.value
-                )
-              }
-            />
-
-          </div>
+          
 
         </div>
 
