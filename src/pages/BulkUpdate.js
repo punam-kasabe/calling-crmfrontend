@@ -14,6 +14,11 @@ export default function BulkUpdate() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
+  const [duplicates, setDuplicates] = useState([]);
+  const [showPopup, setShowPopup] = useState(false);
+
+  
+
   // ================= FILE CHANGE =================
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
@@ -57,7 +62,20 @@ export default function BulkUpdate() {
        `✅ Updated: ${updated} | ⚠️ Skipped: ${skipped}`
          );
 
-      
+      /* DUPLICATE LEADS */
+
+if (
+  res.data.duplicates &&
+  res.data.duplicates.length > 0
+) {
+
+  setDuplicates(
+    res.data.duplicates
+  );
+
+  setShowPopup(true);
+
+}
 
     } catch (err) {
 
@@ -142,7 +160,72 @@ export default function BulkUpdate() {
 
         </div>
 
-      </div>
+               </div>
+
+      {/* DUPLICATE POPUP */}
+
+      {showPopup && (
+
+        <div className="duplicate-overlay">
+
+          <div className="duplicate-popup">
+
+            <h2>
+              Failures ({duplicates.length})
+            </h2>
+
+            <div className="duplicate-list">
+
+              {duplicates.map((item, index) => (
+
+                <p key={index}>
+
+                  <strong>
+                    {item.name}
+                  </strong>
+
+                  {" - "}
+
+                  Mobile number already exists
+                  for project
+
+                  {" "}
+
+                  <strong>
+                    {item.project}
+                  </strong>
+
+                  {" | Already assigned to "}
+
+                  <strong>
+                    {item.assigned_to}
+                  </strong>
+
+                </p>
+
+              ))}
+
+            </div>
+
+            <button
+              className="close-btn"
+              onClick={() =>
+                setShowPopup(false)
+              }
+            >
+              Close
+            </button>
+
+          </div>
+
+        </div>
+
+      )}
+
     </div>
   );
 }
+
+
+      
+    
