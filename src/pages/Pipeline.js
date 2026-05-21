@@ -30,7 +30,7 @@ export default function Pipeline() {
     from: "",
     to: ""
   });
-
+ 
   const user = useMemo(() => {
     return JSON.parse(localStorage.getItem("user")) || {};
   }, []);
@@ -165,6 +165,7 @@ export default function Pipeline() {
     let newLeads = 0;
     let booked = 0;
     let inactive = 0;
+    let totalLeads = leads.length;
 
     const today = new Date().toISOString().split("T")[0];
 
@@ -179,6 +180,7 @@ export default function Pipeline() {
     });
 
     return {
+      totalLeads,
       todayFollowups,
       backlog,
       hot,
@@ -220,8 +222,7 @@ export default function Pipeline() {
   }}
 >
           {[
-            { title: "Today's Follow-ups", value: stats.todayFollowups, color: "#007bff" },
-            { title: "Backlogs", value: stats.backlog, color: "#6c757d" },
+            { title: "Total Leads", value: stats.totalLeads, color: "#343a40" },            { title: "Backlogs", value: stats.backlog, color: "#6c757d" },
             { title: "Hot Leads", value: stats.hot, color: "#dc3545" },
             { title: "New Leads", value: stats.newLeads, color: "#17a2b8" },
             { title: "Booked Leads", value: stats.booked, color: "#28a745" },
