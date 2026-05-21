@@ -34,28 +34,38 @@ export default function Login() {
         password: data.password,
       });
 
-      localStorage.setItem(
-        "user",
-        JSON.stringify(res.data.user)
-      );
-
       if (res.data.token) {
-        localStorage.setItem(
-          "token",
-          res.data.token
-        );
-      }
 
-      navigate("/dashboard");
+  localStorage.setItem(
+    "token",
+    res.data.token
+  );
+
+}
+
+localStorage.setItem(
+
+  "user",
+
+  JSON.stringify(res.data.user)
+
+);
+
+navigate("/dashboard");
 
     } catch (err) {
 
-      setError(
-        err.response?.data?.message ||
-        "Invalid email or password"
-      );
+  console.log(err);
 
-    } finally {
+  setError(
+
+    err.response?.data?.message ||
+
+    "Login failed ❌"
+
+  );
+
+} finally {
 
       setLoading(false);
 
