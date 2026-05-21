@@ -246,27 +246,7 @@ export default function BulkUpdate() {
 
             </p>
 
-            <p>
-
-              name, phone, Email, Other Contact,
-
-              Lead Source, Channel Partner,
-
-              Referral Name, Referral Mobile,
-
-              Sub Source, Lead Status,
-
-              Next Call Date, Secondary Email,
-
-              assigned_to, Closing Executive,
-
-              Enquiry, City, Locality,
-
-              Dead Reason, Description,
-
-              Created at, Visited, Visited Date
-
-            </p>
+           
 
           </div>
 
