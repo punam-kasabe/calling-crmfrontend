@@ -124,19 +124,18 @@ export default function Pipeline() {
       Status: l.status,
 
       Project: l.project,
-     "Upload Date": l.createdAt
-  ? new Date(l.createdAt)
-      .toISOString()
-      .split("T")[0]
+    "Created Date": l.createdAt
+  ? new Date(l.createdAt).toLocaleDateString("en-GB")
   : "-",
+
+
       Assigned: l.assigned_to,
       "Closing Officer": l.assigned_manager || "-",
 
       "Next Call": l.next_call_date
-        ? new Date(l.next_call_date)
-            .toISOString()
-            .split("T")[0]
-        : "-"
+  ? new Date(l.next_call_date)
+      .toLocaleDateString("en-GB")
+  : "-"
 
     }));
 
@@ -505,7 +504,7 @@ export default function Pipeline() {
 
                 <th>Status</th>
                 <th>Project</th>
-                <th>Upload Date</th>
+                <th>Created Date</th>
                 <th>Next Call</th>
                 <th>Action</th>
               </tr>
@@ -543,18 +542,17 @@ export default function Pipeline() {
 <td>
   {l.createdAt
     ? new Date(l.createdAt)
-        .toISOString()
-        .split("T")[0]
+        .toLocaleDateString("en-GB")
     : "-"}
 </td>
 
 <td>
   {l.next_call_date
     ? new Date(l.next_call_date)
-        .toISOString()
-        .split("T")[0]
+        .toLocaleDateString("en-GB")
     : "-"}
 </td>
+
                     <td>
                       <button className="btn btn-sm btn-warning me-2"
                         onClick={() => {
