@@ -159,36 +159,68 @@ export default function Pipeline() {
 
   /* ================= CARDS ================= */
   const stats = useMemo(() => {
-    let todayFollowups = 0;
-    let backlog = 0;
-    let hot = 0;
-    let newLeads = 0;
-    let booked = 0;
-    let inactive = 0;
-    let totalLeads = leads.length;
 
-    const today = new Date().toISOString().split("T")[0];
+  let totalLeads = leads.length;
 
-    leads.forEach((l) => {
-      if (l.next_call_date === today) todayFollowups++;
-      if (!l.next_call_date) backlog++;
+  let todayFollowups = 0;
+  let backlog = 0;
+  let hot = 0;
+  let newLeads = 0;
+  let booked = 0;
+  let inactive = 0;
 
-      if (l.status === "Interested") hot++;
-      if (l.status === "New") newLeads++;
-      if (l.status === "Booked") booked++;
-      if (l.status === "Not Interested") inactive++;
-    });
+  const today = new Date()
+    .toISOString()
+    .split("T")[0];
 
-    return {
-      totalLeads,
-      todayFollowups,
-      backlog,
-      hot,
-      newLeads,
-      booked,
-      inactive
-    };
-  }, [leads]);
+  leads.forEach((l) => {
+
+    const nextCall = l.next_call_date
+      ? new Date(l.next_call_date)
+          .toISOString()
+          .split("T")[0]
+      : "";
+
+    if (nextCall === today)
+      todayFollowups++;
+
+    if (!l.next_call_date)
+      backlog++;
+
+    if (l.status === "Interested")
+      hot++;
+
+    if (l.status === "New")
+      newLeads++;
+
+    if (l.status === "Booked")
+      booked++;
+
+    if (l.status === "Not Interested")
+      inactive++;
+
+  });
+
+  return {
+
+    totalLeads,
+
+    todayFollowups,
+
+    backlog,
+
+    hot,
+
+    newLeads,
+
+    booked,
+
+    inactive
+
+  };
+
+}, [leads]);
+
 
   return (
     <div className="d-flex">
@@ -222,12 +254,20 @@ export default function Pipeline() {
   }}
 >
           {[
-            { title: "Total Leads", value: stats.totalLeads, color: "#343a40" },            { title: "Backlogs", value: stats.backlog, color: "#6c757d" },
-            { title: "Hot Leads", value: stats.hot, color: "#dc3545" },
-            { title: "New Leads", value: stats.newLeads, color: "#17a2b8" },
-            { title: "Booked Leads", value: stats.booked, color: "#28a745" },
-            { title: "Inactive Leads", value: stats.inactive, color: "#ffc107" },
-          ].map((card, i) => (
+  { title: "Total Leads", value: stats.totalLeads, color: "#343a40" },
+
+  { title: "Today's Follow-ups", value: stats.todayFollowups, color: "#007bff" },
+
+  { title: "Backlogs", value: stats.backlog, color: "#6c757d" },
+
+  { title: "Hot Leads", value: stats.hot, color: "#dc3545" },
+
+  { title: "New Leads", value: stats.newLeads, color: "#17a2b8" },
+
+  { title: "Booked Leads", value: stats.booked, color: "#28a745" },
+
+  { title: "Inactive Leads", value: stats.inactive, color: "#ffc107" },
+].map((card, i) => (
 <div
   className="mb-3"
   key={card.title}
