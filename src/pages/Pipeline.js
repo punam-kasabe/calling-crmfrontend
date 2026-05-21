@@ -124,7 +124,11 @@ export default function Pipeline() {
       Status: l.status,
 
       Project: l.project,
-
+     "Upload Date": l.createdAt
+  ? new Date(l.createdAt)
+      .toISOString()
+      .split("T")[0]
+  : "-",
       Assigned: l.assigned_to,
       "Closing Officer": l.assigned_manager || "-",
 
@@ -501,6 +505,7 @@ export default function Pipeline() {
 
                 <th>Status</th>
                 <th>Project</th>
+                <th>Upload Date</th>
                 <th>Next Call</th>
                 <th>Action</th>
               </tr>
@@ -513,6 +518,7 @@ export default function Pipeline() {
                     <td>{l.name}</td>
                     <td>{l.phone}</td>
                     <td>
+
    <a href={`tel:${l.phone}`} className="btn btn-success btn-sm">
     Call
    </a>
@@ -520,7 +526,7 @@ export default function Pipeline() {
     
      <td>{l.assigned_to || "-"}</td>
 
-<td>
+     <td>
   <span className="badge bg-dark">
     {l.assigned_manager || "-"}
   </span>
@@ -533,13 +539,22 @@ export default function Pipeline() {
 </td>
 
      <td>{l.project || "-"}</td>
-    <td>
+
+<td>
+  {l.createdAt
+    ? new Date(l.createdAt)
+        .toISOString()
+        .split("T")[0]
+    : "-"}
+</td>
+
+<td>
   {l.next_call_date
     ? new Date(l.next_call_date)
         .toISOString()
         .split("T")[0]
     : "-"}
-  </td>
+</td>
                     <td>
                       <button className="btn btn-sm btn-warning me-2"
                         onClick={() => {
