@@ -63,6 +63,14 @@ const [nextCallFrom, setNextCallFrom] = useState("");
 const [nextCallTo, setNextCallTo] = useState("");
 const [descriptionFilter, setDescriptionFilter] = useState("");
   
+
+/* ================= PAGINATION ================= */
+
+const [currentPage, setCurrentPage] = useState(1);
+
+const leadsPerPage = 10;
+
+
      /* ================= NEW LEAD MODAL ================= */
 
   
@@ -592,6 +600,46 @@ return (
   descriptionFilter
 ]);
 
+/* ================= PAGINATION LOGIC ================= */
+
+const totalPages = Math.ceil(
+  filteredLeads.length / leadsPerPage
+);
+
+const indexOfLastLead =
+  currentPage * leadsPerPage;
+
+const indexOfFirstLead =
+  indexOfLastLead - leadsPerPage;
+
+const currentLeads =
+  filteredLeads.slice(
+    indexOfFirstLead,
+    indexOfLastLead
+  );
+
+/* ================= PAGE CHANGE ================= */
+
+const handleNextPage = () => {
+
+  if (currentPage < totalPages) {
+
+    setCurrentPage(currentPage + 1);
+
+  }
+
+};
+
+const handlePrevPage = () => {
+
+  if (currentPage > 1) {
+
+    setCurrentPage(currentPage - 1);
+
+  }
+
+};
+
   /* ================= STATS ================= */
 
   const stats = useMemo(() => {
@@ -1098,7 +1146,7 @@ return (
               </thead>
               <tbody>
 
-                {filteredLeads.map(
+                {currentLeads.map(
 
                   (
                     lead,
@@ -1112,7 +1160,7 @@ return (
                     >
 
                       <td>
-                        {index + 1}
+                       {indexOfFirstLead + index + 1}
                       </td>
 
                       <td>
@@ -1284,6 +1332,33 @@ return (
               </tbody>
 
             </table>
+
+  {/* ================= PAGINATION ================= */}
+
+<div className="pagination">
+
+  <button
+    onClick={handlePrevPage}
+    disabled={currentPage === 1}
+    className="page-btn"
+  >
+    Previous
+  </button>
+
+  <span className="page-info">
+    Page {currentPage} of {totalPages}
+  </span>
+
+  <button
+    onClick={handleNextPage}
+    disabled={currentPage === totalPages}
+    className="page-btn"
+  >
+    Next
+  </button>
+
+</div>
+
 
           </div>
 
