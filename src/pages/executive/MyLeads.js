@@ -719,44 +719,22 @@ return (
 
       <div className="filter-bar">
      
-     {/* ================= FILTERS ================= */}
+
+  {/* ================= SINGLE SEARCH ================= */}
 
 <div className="filter-bar">
 
-  {/* SEARCH NAME */}
-
   <input
     type="text"
-    placeholder="Search Name..."
+    placeholder="Search Name / Phone / Project / Source / Executive..."
     value={search}
     onChange={(e) =>
       setSearch(e.target.value)
     }
-    className="small-search"
-  />
-
-  {/* SEARCH PROJECT */}
-
-  <input
-    type="text"
-    placeholder="Search Project..."
-    value={projectFilter}
-    onChange={(e) =>
-      setProjectFilter(e.target.value)
-    }
-    className="small-search"
+    className="global-search"
   />
 
 </div>
-
-  <input
-    type="text"
-    placeholder="Search Lead..."
-    value={search}
-    onChange={(e) =>
-      setSearch(e.target.value)
-    }
-  />
 </div>
 {/* ================= ACTION BUTTONS ================= */}
 
