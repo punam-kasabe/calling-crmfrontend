@@ -46,6 +46,7 @@ export default function Pipeline() {
       });
 
       setLeads(res.data.data || []);
+      console.log(res.data.data);
       setTotalPages(res.data.totalPages || 1);
 
     } catch (err) {
