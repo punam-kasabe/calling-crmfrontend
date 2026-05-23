@@ -7,6 +7,11 @@ import {
 
 import axios from "axios";
 import Sidebar from "../../components/Sidebar";
+import {
+  FaPhoneAlt,
+  FaWhatsapp,
+  FaEdit
+} from "react-icons/fa";
 import "../../styles/myleads.css";
 const API =
   "https://calling-crm-backend-7w52.onrender.com/api";
@@ -1263,63 +1268,66 @@ const handlePrevPage = () => {
 
                       <td>
 
-                        <div className="action-buttons">
+                      <div className="action-buttons">
 
-                          <a
-                            href={`tel:${lead.phone}`}
+  {/* CALL ICON */}
 
-                            className="call-btn"
-                          >
+  <a
+    href={`tel:${lead.phone}`}
+    className="call-btn icon-btn"
+    title="Call"
+  >
+    <FaPhoneAlt />
+  </a>
 
-                            Call
+  {/* WHATSAPP ICON */}
 
-                          </a>
+  <a
+    href={`https://wa.me/91${String(
+      lead.phone
+    ).replace(/\D/g, "")}`}
 
-                          <a
-                        href={`https://wa.me/91${String(
-                        lead.phone
-                      ).replace(/\D/g, "")}`}
-                            target="_blank"
+    target="_blank"
+    rel="noreferrer"
 
-                            rel="noreferrer"
+    className="whatsapp-btn icon-btn"
+    title="WhatsApp"
+  >
+    <FaWhatsapp />
+  </a>
 
-                            className="whatsapp-btn"
-                          >
+  {/* EDIT ICON */}
 
-                            WhatsApp
+  <button
+    className="edit-btn icon-btn"
 
-                          </a>
+    title="Edit"
 
-                         <button
-            className="edit-btn"
-              onClick={() => {
+    onClick={() => {
 
-                      setSelectedLead({
-                    ...lead,
-                      assignedTo:
-                      lead.assignedTo ||
-                   user.name ||
-                user.username ||
-                  "",
+      setSelectedLead({
+        ...lead,
 
-               next_call_date:
-                lead.next_call_date
-                ? lead.next_call_date.split("T")[0]
-                   : ""
-             });
+        assignedTo:
+          lead.assignedTo ||
+          user.name ||
+          user.username ||
+          "",
 
-              setShowModal(true);
+        next_call_date:
+          lead.next_call_date
+            ? lead.next_call_date.split("T")[0]
+            : ""
+      });
 
-           }}
-                >
+      setShowModal(true);
 
-                            Edit
+    }}
+  >
+    <FaEdit />
+  </button>
 
-                          </button>
-
-                          
-
-                        </div>
+</div>
 
                       </td>
 
