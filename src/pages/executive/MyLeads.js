@@ -89,6 +89,7 @@ const leadsPerPage = 10;
   subSource: "",
   city: "",
   assignedTo: "",
+  assigned_to_email: "",
   closingExecutive: "",
   next_call_date: "",
   department: "",
@@ -306,6 +307,8 @@ const departmentOptions = [
 
        const updatedData = {
   assignedTo: selectedLead.assignedTo,
+  assigned_to_email:
+  selectedLead.assigned_to_email,
   closingExecutive: selectedLead.closingExecutive,
   status: selectedLead.status,
   source: selectedLead.source,
@@ -813,19 +816,22 @@ const handlePrevPage = () => {
 
   onClick={() => {
 
-  setNewLead((prev) => ({
-    ...prev,
+ setNewLead((prev) => ({
+  ...prev,
 
-    assignedTo:
-      user?.name ||
-      user?.username ||
-      "",
+  assignedTo:
+    user?.name ||
+    user?.username ||
+    "",
 
-    closingExecutive:
-      user?.name ||
-      user?.username ||
-      ""
-  }));
+  assigned_to_email:
+    user?.email || "",
+
+  closingExecutive:
+    user?.name ||
+    user?.username ||
+    ""
+}));
 
   setShowNewLeadModal(true);
 
@@ -1178,8 +1184,8 @@ const handlePrevPage = () => {
                       </td>
 
                      <td>
-  {lead.assigned_to_email || lead.assignedTo || "-"}
-</td>
+                    {lead.assignedTo || "-"}
+                    </td>
 
                       <td>
                         {lead.closingExecutive || "-"}
@@ -1314,6 +1320,11 @@ const handlePrevPage = () => {
           user.name ||
           user.username ||
           "",
+        assigned_to_email:
+  lead.assigned_to_email ||
+  user.email ||
+  "",
+
 
         next_call_date:
           lead.next_call_date
