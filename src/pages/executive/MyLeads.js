@@ -720,22 +720,37 @@ return (
       <div className="filter-bar">
      
 
-  {/* ================= SINGLE SEARCH ================= */}
+        {/* ================= SEARCH BOX ================= */}
 
-<div className="filter-bar">
+<div className="search-wrapper">
+
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    className="search-icon"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M21 21l-4.35-4.35m1.85-5.15a7 7 0 11-14 0 7 7 0 0114 0z"
+    />
+  </svg>
 
   <input
-  type="text"
-  placeholder="Type to search"
-  value={search}
-  onChange={(e) =>
-    setSearch(e.target.value)
-  }
-  className="global-search"
-/>
+    type="text"
+    placeholder="Type to search"
+    value={search}
+    onChange={(e) =>
+      setSearch(e.target.value)
+    }
+    className="search-input"
+  />
 
 </div>
-</div>
+       </div>
 {/* ================= ACTION BUTTONS ================= */}
 
 <div className="top-actions">
