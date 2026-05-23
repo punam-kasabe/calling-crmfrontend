@@ -6,7 +6,11 @@ import "react-toastify/dist/ReactToastify.css";
 import Swal from "sweetalert2";
 import * as XLSX from "xlsx";
 import "../styles/pipeline.css";
-
+import {
+  Pencil,
+  Trash2,
+  Phone
+} from "lucide-react";
 const API = "https://calling-crm-backend-7w52.onrender.com/api";
 
 export default function Pipeline() {
@@ -602,7 +606,6 @@ export default function Pipeline() {
 
                 <th>Name</th>
                 <th>Mobile</th>
-                <th>Call</th>
                 <th>Assigned</th>
                 <th>Closing Officer</th>
 
@@ -635,12 +638,7 @@ export default function Pipeline() {
     </td>
   )}                    <td>{l.name}</td>
                     <td>{l.phone}</td>
-                    <td>
-
-   <a href={`tel:${l.phone}`} className="btn btn-success btn-sm">
-    Call
-   </a>
-   </td>
+                    
     
      <td>{l.assigned_to || "-"}</td>
 
@@ -672,20 +670,61 @@ export default function Pipeline() {
     : "-"}
 </td>
 
-                    <td>
-                      <button className="btn btn-sm btn-warning me-2"
-                        onClick={() => {
-                          setSelectedLead({ ...l });
-                          setShowModal(true);
-                        }}>
-                        Edit
-                      </button>
+                  <td>
 
-                      <button className="btn btn-sm btn-danger"
-                        onClick={() => handleDelete(l._id)}>
-                        Delete
-                      </button>
-                    </td>
+  <div
+    style={{
+      display: "flex",
+      gap: "10px",
+      alignItems: "center"
+    }}
+  >
+
+    {/* CALL */}
+
+    <a
+      href={`tel:${l.phone}`}
+      className="action-icon call-icon"
+      title="Call"
+    >
+      <Phone size={18} />
+    </a>
+
+    {/* EDIT */}
+
+    <button
+      className="action-icon edit-icon"
+
+      title="Edit"
+
+      onClick={() => {
+
+        setSelectedLead({ ...l });
+
+        setShowModal(true);
+
+      }}
+    >
+      <Pencil size={18} />
+    </button>
+
+    {/* DELETE */}
+
+    <button
+      className="action-icon delete-icon"
+
+      title="Delete"
+
+      onClick={() =>
+        handleDelete(l._id)
+      }
+    >
+      <Trash2 size={18} />
+    </button>
+
+  </div>
+
+</td>
                   </tr>
                 ))
               ) : (

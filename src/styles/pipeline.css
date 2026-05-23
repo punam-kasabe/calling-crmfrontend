@@ -217,3 +217,49 @@
     align-items: stretch !important;
   }
 }
+/* ===================================== */
+/* ACTION ICONS */
+/* ===================================== */
+
+.action-icon {
+
+  border: none;
+
+  background: transparent;
+
+  cursor: pointer;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  transition: 0.2s ease;
+
+  text-decoration: none;
+}
+
+.action-icon:hover {
+
+  transform: scale(1.15);
+
+}
+
+.call-icon {
+
+  color: #16a34a;
+
+}
+
+.edit-icon {
+
+  color: #f59e0b;
+
+}
+
+.delete-icon {
+
+  color: #dc2626;
+
+}
