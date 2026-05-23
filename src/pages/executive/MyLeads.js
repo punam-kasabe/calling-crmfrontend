@@ -725,14 +725,14 @@ return (
 <div className="filter-bar">
 
   <input
-    type="text"
-    placeholder="Search Name / Phone / Project / Source / Executive..."
-    value={search}
-    onChange={(e) =>
-      setSearch(e.target.value)
-    }
-    className="global-search"
-  />
+  type="text"
+  placeholder="Type to search"
+  value={search}
+  onChange={(e) =>
+    setSearch(e.target.value)
+  }
+  className="global-search"
+/>
 
 </div>
 </div>
