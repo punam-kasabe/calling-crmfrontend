@@ -20,6 +20,7 @@ export default function Pipeline() {
   const [totalPages, setTotalPages] = useState(1);
   const [showModal, setShowModal] = useState(false);
   const [selectedLead, setSelectedLead] = useState(null);
+  const [selectedLeads, setSelectedLeads] = useState([]);
 
   // 🔥 FILTER STATE
   const [filters, setFilters] = useState({
@@ -81,6 +82,62 @@ export default function Pipeline() {
       toast.error("Delete Failed ❌");
     }
   };
+    
+  const handleSelectLead = (id) => {
+
+  setSelectedLeads((prev) => {
+
+    if (prev.includes(id)) {
+      return prev.filter((x) => x !== id);
+    }
+
+    return [...prev, id];
+
+  });
+
+       };  
+
+       const handleMultipleDelete = async () => {
+
+  if (selectedLeads.length === 0) {
+
+    toast.error("Select Leads First ❌");
+
+    return;
+
+  }
+
+  const result = await Swal.fire({
+    title: `Delete ${selectedLeads.length} Leads ?`,
+    text: "This action cannot be undone",
+    icon: "warning",
+    showCancelButton: true,
+  });
+
+  if (!result.isConfirmed) return;
+
+  try {
+
+    await axios.post(
+      `${API}/delete-multiple-leads`,
+      {
+        ids: selectedLeads
+      }
+    );
+
+    toast.success("Leads Deleted Successfully ✅");
+
+    setSelectedLeads([]);
+
+    fetchLeads();
+
+  } catch (err) {
+
+    toast.error("Delete Failed ❌");
+
+  }
+
+};
 
   /* ================= UPDATE ================= */
   const handleUpdate = async () => {
@@ -472,31 +529,77 @@ export default function Pipeline() {
         <div className="card p-3 shadow-sm">
          
 
-           {/* 🔥 HEADER WITH BUTTON */}
-  <div className="d-flex justify-content-between align-items-center mb-3">
-    <h5>Leads List</h5>
+          <div className="d-flex justify-content-between align-items-center mb-3">
+
+  <h5>Leads List</h5>
+
+  <div className="d-flex">
 
     <button
-    className="btn btn-primary"
-    onClick={() => {
-      console.log("New Lead Clicked");
-    }}
-  >
-    + New Lead
-  </button>
+      className="btn btn-primary"
+      onClick={() => {
+        console.log("New Lead Clicked");
+      }}
+    >
+      + New Lead
+    </button>
 
-  <button
-    className="btn btn-success ms-2"
-    onClick={handleExport}
-  >
-    Export Excel
-  </button>
+    <button
+      className="btn btn-success ms-2"
+      onClick={handleExport}
+    >
+      Export Excel
+    </button>
+
+    {user.role === "admin" && (
+      <button
+        className="btn btn-danger ms-2"
+        onClick={handleMultipleDelete}
+      >
+        Delete Selected
+      </button>
+    )}
+
+  </div>
+
+</div>
 
 
-            </div>
           <table className="table table-hover">
             <thead className="table-dark">
-              <tr>
+  <tr>
+
+    {user.role === "admin" && (
+      <th>
+
+        <input
+          type="checkbox"
+
+          checked={
+            filteredLeads.length > 0 &&
+            selectedLeads.length === filteredLeads.length
+          }
+
+          onChange={(e) => {
+
+            if (e.target.checked) {
+
+              setSelectedLeads(
+                filteredLeads.map((l) => l._id)
+              );
+
+            } else {
+
+              setSelectedLeads([]);
+
+            }
+
+          }}
+        />
+
+      </th>
+    )}
+
                 <th>Name</th>
                 <th>Mobile</th>
                 <th>Call</th>
@@ -514,8 +617,23 @@ export default function Pipeline() {
             <tbody>
               {filteredLeads.length > 0 ? (
                 filteredLeads.map((l) => (
-                    <tr key={l._id}>
-                    <td>{l.name}</td>
+<tr key={l._id}>
+
+  {user.role === "admin" && (
+    <td>
+
+      <input
+        type="checkbox"
+
+        checked={selectedLeads.includes(l._id)}
+
+        onChange={() =>
+          handleSelectLead(l._id)
+        }
+      />
+
+    </td>
+  )}                    <td>{l.name}</td>
                     <td>{l.phone}</td>
                     <td>
 
