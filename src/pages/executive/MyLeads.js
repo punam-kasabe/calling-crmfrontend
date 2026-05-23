@@ -146,6 +146,7 @@ const statusOptions = [
   "Negotiation",
   "Payment Pending",
   "Booked",
+  "Other Property Booked",
   "Token Received",
   "Cancelled",
   "Future Prospect",
@@ -1176,9 +1177,9 @@ const handlePrevPage = () => {
                         {lead.phone || "-"}
                       </td>
 
-                      <td>
-                        {lead.assignedTo || "-"}
-                      </td>
+                     <td>
+  {lead.assigned_to_email || lead.assignedTo || "-"}
+</td>
 
                       <td>
                         {lead.closingExecutive || "-"}
