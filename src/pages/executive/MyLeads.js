@@ -68,7 +68,7 @@ const [toDateFilter, setToDateFilter] = useState("");
 const [nextCallFrom, setNextCallFrom] = useState("");
 const [nextCallTo, setNextCallTo] = useState("");
 const [descriptionFilter, setDescriptionFilter] = useState("");
-const [selectedProjects, setSelectedProjects] = useState([]);
+const [selectedProjects, setSelectedProjects] = useState(null);
 const [selectedSources, setSelectedSources] = useState([]);
 const [selectedDepartments, setSelectedDepartments] = useState([]);
 const [selectedExecutives, setSelectedExecutives] = useState([]);
@@ -990,6 +990,18 @@ const handlePrevPage = () => {
     }
 
     placeholder="Search Project..."
+
+    styles={{
+      control: (base) => ({
+        ...base,
+        minHeight: "45px",
+        borderRadius: "10px"
+      }),
+      menu: (base) => ({
+        ...base,
+        zIndex: 9999
+      })
+    }}
   />
 </div>
 
@@ -1175,7 +1187,7 @@ const handlePrevPage = () => {
         setNextCallFrom("");
         setNextCallTo("");
         setDescriptionFilter("");
-        setSelectedProjects([]);
+        setSelectedProjects(null);
         setSelectedSources([]);
         setSelectedDepartments([]);
         setSelectedExecutives([]);

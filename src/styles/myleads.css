@@ -445,3 +445,11 @@ textarea {
   gap: 15px;
   align-items: flex-start;
 }
+
+.multi-filter {
+  min-width: 250px;
+}
+
+.multi-filter .css-b62m3t-container {
+  width: 100%;
+}
