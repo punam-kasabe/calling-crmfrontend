@@ -6,6 +6,7 @@ import {
 } from "react";
 
 import axios from "axios";
+import Select from "react-select";
 import Sidebar from "../../components/Sidebar";
 import {
   FaPhoneAlt,
@@ -67,7 +68,11 @@ const [toDateFilter, setToDateFilter] = useState("");
 const [nextCallFrom, setNextCallFrom] = useState("");
 const [nextCallTo, setNextCallTo] = useState("");
 const [descriptionFilter, setDescriptionFilter] = useState("");
-  
+const [selectedProjects, setSelectedProjects] = useState([]);
+const [selectedSources, setSelectedSources] = useState([]);
+const [selectedDepartments, setSelectedDepartments] = useState([]);
+const [selectedExecutives, setSelectedExecutives] = useState([]);
+const [selectedCities, setSelectedCities] = useState([]);
 
 /* ================= PAGINATION ================= */
 
@@ -177,6 +182,44 @@ const departmentOptions = [
   "Nilesh Sir",
   "Telecaller"
 ];
+
+const projectDropdownOptions = projectOptions.map((item) => ({
+  value: item,
+  label: item
+}));
+
+const sourceDropdownOptions = sourceOptions.map((item) => ({
+  value: item,
+  label: item
+}));
+
+const departmentDropdownOptions = departmentOptions.map((item) => ({
+  value: item,
+  label: item
+}));
+
+const executiveDropdownOptions = [
+  ...new Set(
+    leads
+      .map((l) => l.closingExecutive)
+      .filter(Boolean)
+  )
+].map((item) => ({
+  value: item,
+  label: item
+}));
+
+const cityDropdownOptions = [
+  ...new Set(
+    leads
+      .map((l) => l.city)
+      .filter(Boolean)
+  )
+].map((item) => ({
+  value: item,
+  label: item
+}));
+
 
   /* ================= USER ================= */
 
@@ -297,6 +340,8 @@ const departmentOptions = [
       }
 
     };
+
+
 
   /* ================= UPDATE LEAD ================= */
 
@@ -465,53 +510,41 @@ const handleAddNewLead = async () => {
     : true;
 
 const matchesProject =
-
-  projectFilter
-    ? lead.project
-        ?.toLowerCase()
-        .includes(
-          projectFilter.toLowerCase()
-        )
+  selectedProjects.length > 0
+    ? selectedProjects.some(
+        (p) => p.value === lead.project
+      )
     : true;
 
 const matchesSource =
-
-  sourceFilter
-    ? lead.source
-        ?.toLowerCase()
-        .includes(
-          sourceFilter.toLowerCase()
-        )
+  selectedSources.length > 0
+    ? selectedSources.some(
+        (s) => s.value === lead.source
+      )
     : true;
 
 const matchesExecutive =
-  executiveFilter
-    ? lead.closingExecutive
-        ?.toLowerCase()
-        .includes(
-          executiveFilter.toLowerCase()
-        )
-    : true;
-
-
-
-const matchesSubSource =
-  subSourceFilter
-    ? lead.subSource
-        ?.toLowerCase()
-        .includes(
-          subSourceFilter.toLowerCase()
-        )
+  selectedExecutives.length > 0
+    ? selectedExecutives.some(
+        (e) =>
+          e.value === lead.closingExecutive
+      )
     : true;
 
 const matchesCity =
-  cityFilter
-    ? lead.city
-        ?.toLowerCase()
-        .includes(
-          cityFilter.toLowerCase()
-        )
+  selectedCities.length > 0
+    ? selectedCities.some(
+        (c) => c.value === lead.city
+      )
     : true;
+
+const matchesDepartment =
+  selectedDepartments.length > 0
+    ? selectedDepartments.some(
+        (d) => d.value === lead.department
+      )
+    : true;
+
 
 const matchesDepartment =
   departmentFilter
@@ -592,6 +625,8 @@ return (
       );
 
     }, [
+
+
   leads,
   search,
   statusFilter,
@@ -606,7 +641,12 @@ return (
   toDateFilter,
   nextCallFrom,
   nextCallTo,
-  descriptionFilter
+  descriptionFilter,
+  selectedProjects,
+selectedSources,
+selectedExecutives,
+selectedCities,
+selectedDepartments
 ]);
 
 /* ================= PAGINATION LOGIC ================= */
@@ -917,23 +957,33 @@ const handlePrevPage = () => {
 
   <div className="advanced-search-box">
 
-    <input
-      type="text"
-      placeholder="Search Project..."
-      value={projectFilter}
-      onChange={(e) =>
-        setProjectFilter(e.target.value)
-      }
-    />
+    <div className="multi-filter">
+  <label>Project</label>
 
-    <input
-      type="text"
-      placeholder="Search Source..."
-      value={sourceFilter}
-      onChange={(e) =>
-        setSourceFilter(e.target.value)
-      }
-    />
+  <Select
+    options={projectDropdownOptions}
+    isMulti
+    closeMenuOnSelect={false}
+    hideSelectedOptions={false}
+    value={selectedProjects}
+    onChange={setSelectedProjects}
+    placeholder="Select Project"
+  />
+</div>
+
+   <div className="multi-filter">
+  <label>Source</label>
+
+  <Select
+    options={sourceDropdownOptions}
+    isMulti
+    closeMenuOnSelect={false}
+    hideSelectedOptions={false}
+    value={selectedSources}
+    onChange={setSelectedSources}
+    placeholder="Select Source"
+  />
+</div>
 
     <input
       type="text"
@@ -944,32 +994,48 @@ const handlePrevPage = () => {
       }
     />
 
-    <input
-      type="text"
-      placeholder="Search City..."
-      value={cityFilter}
-      onChange={(e) =>
-        setCityFilter(e.target.value)
-      }
-    />
+   <div className="multi-filter">
+  <label>City</label>
 
-    <input
-      type="text"
-      placeholder="Search Executive..."
-      value={executiveFilter}
-      onChange={(e) =>
-        setExecutiveFilter(e.target.value)
-      }
-    />
+  <Select
+    options={cityDropdownOptions}
+    isMulti
+    closeMenuOnSelect={false}
+    hideSelectedOptions={false}
+    value={selectedCities}
+    onChange={setSelectedCities}
+    placeholder="Select City"
+  />
+</div>
 
-    <input
-      type="text"
-      placeholder="Search Department..."
-      value={departmentFilter}
-      onChange={(e) =>
-        setDepartmentFilter(e.target.value)
-      }
-    />
+
+<div className="multi-filter">
+  <label>Executive</label>
+
+  <Select
+    options={executiveDropdownOptions}
+    isMulti
+    closeMenuOnSelect={false}
+    hideSelectedOptions={false}
+    value={selectedExecutives}
+    onChange={setSelectedExecutives}
+    placeholder="Select Executive"
+  />
+</div>
+
+    <div className="multi-filter">
+  <label>Department</label>
+
+  <Select
+    options={departmentDropdownOptions}
+    isMulti
+    closeMenuOnSelect={false}
+    hideSelectedOptions={false}
+    value={selectedDepartments}
+    onChange={setSelectedDepartments}
+    placeholder="Select Department"
+  />
+</div>
 
     <input
       type="text"
@@ -1086,6 +1152,11 @@ const handlePrevPage = () => {
         setNextCallFrom("");
         setNextCallTo("");
         setDescriptionFilter("");
+        setSelectedProjects([]);
+        setSelectedSources([]);
+        setSelectedDepartments([]);
+        setSelectedExecutives([]);
+        setSelectedCities([]);
 
       }}
     >

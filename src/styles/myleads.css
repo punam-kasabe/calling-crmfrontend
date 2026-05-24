@@ -427,3 +427,21 @@ textarea {
     font-size: 13px;
   }
 }
+.multi-filter {
+  min-width: 240px;
+  flex: 1;
+}
+
+.multi-filter label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.advanced-search-box {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  align-items: flex-start;
+}
