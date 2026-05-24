@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-
+import { useEffect, useState } from "react";
 /* 🔐 AUTH */
 import Login from "./pages/auth/Login";
 
@@ -53,7 +53,7 @@ import SVPDashboard from "./pages/SVPDashboard";
 import Users from "./pages/Users";
 
 import "bootstrap-icons/font/bootstrap-icons.css";
-
+import MobileBlock from "./components/MobileBlock";
 /* =========================================
    🔓 PUBLIC ROUTE
 ========================================= */
@@ -71,6 +71,27 @@ const PublicRoute = ({ children }) => {
    🚀 APP
 ========================================= */
 export default function App() {
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+  const checkDevice = () => {
+    const mobile =
+      /Android|iPhone|iPad|iPod|Opera Mini|IEMobile/i.test(
+        navigator.userAgent
+      ) || window.innerWidth < 1024;
+
+    setIsMobile(mobile);
+  };
+
+  checkDevice();
+
+  window.addEventListener("resize", checkDevice);
+
+  return () => window.removeEventListener("resize", checkDevice);
+}, []);
+
+if (isMobile) {
+  return <MobileBlock />;
+}
   return (
     <BrowserRouter>
 
