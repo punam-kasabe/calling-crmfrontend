@@ -133,102 +133,83 @@ export default function Followups() {
 
             <table className="followup-table">
 
-              <thead>
+            <thead>
+  <tr>
+    <th>Sr No</th>
+    <th>Name</th>
+    <th>Mobile</th>
+    <th>Status</th>
+    <th>Followup Date</th>
+    <th>Project</th>
+    <th>Update</th>
+  </tr>
+</thead>
 
-                <tr>
+<tbody>
+  {followups.map((lead, index) => (
+    <tr key={lead._id}>
 
-                  <th>#</th>
-                  <th>Client Name</th>
-                  <th>Mobile</th>
-                  <th>Project</th>
-                  <th>Next Followup</th>
-                  <th>Status</th>
-                  <th>Update</th>
+      <td>{index + 1}</td>
 
-                </tr>
+      <td>{lead.name}</td>
 
-              </thead>
+      <td>{lead.phone}</td>
 
-              <tbody>
+      <td>
+        <span
+          className={`status-badge ${
+            lead.status?.toLowerCase()
+          }`}
+        >
+          {lead.status}
+        </span>
+      </td>
 
-                {followups.map(
-                  (lead, index) => (
+      <td>
+        {lead.followup_date
+          ? new Date(
+              lead.followup_date
+            ).toLocaleDateString()
+          : "N/A"}
+      </td>
 
-                    <tr key={lead._id}>
+      <td>{lead.project}</td>
 
-                      <td>{index + 1}</td>
+      <td>
 
-                      <td>{lead.name}</td>
+        <select
+          value={lead.status}
+          onChange={(e) =>
+            updateFollowupStatus(
+              lead._id,
+              e.target.value
+            )
+          }
+        >
 
-                      <td>{lead.mobile}</td>
+          <option value="Followup">
+            Followup
+          </option>
 
-                      <td>{lead.project}</td>
+          <option value="Interested">
+            Interested
+          </option>
 
-                      <td>
+          <option value="Booked">
+            Booked
+          </option>
 
-                        {lead.followupDate
-                          ? new Date(
-                              lead.followupDate
-                            ).toLocaleDateString()
-                          : "N/A"}
+          <option value="Not Interested">
+            Not Interested
+          </option>
 
-                      </td>
+        </select>
 
-                      <td>
+      </td>
 
-                        <span
-                          className={`status-badge ${
-                            lead.status?.toLowerCase()
-                          }`}
-                        >
-                          {lead.status}
-                        </span>
-
-                      </td>
-
-                      <td>
-
-                        <select
-                          value={lead.status}
-                          onChange={(e) =>
-                            updateFollowupStatus(
-                              lead._id,
-                              e.target.value
-                            )
-                          }
-                        >
-
-                          <option value="FOLLOWUP">
-                            FOLLOWUP
-                          </option>
-
-                          <option value="INTERESTED">
-                            INTERESTED
-                          </option>
-
-                          <option value="VISIT_SCHEDULED">
-                            VISIT SCHEDULED
-                          </option>
-
-                          <option value="BOOKED">
-                            BOOKED
-                          </option>
-
-                          <option value="NOT_INTERESTED">
-                            NOT INTERESTED
-                          </option>
-
-                        </select>
-
-                      </td>
-
-                    </tr>
-
-                  )
-                )}
-
-              </tbody>
-
+    </tr>
+  ))}
+</tbody>
             </table>
 
           </div>
