@@ -510,10 +510,8 @@ const handleAddNewLead = async () => {
     : true;
 
 const matchesProject =
-  selectedProjects.length > 0
-    ? selectedProjects.some(
-        (p) => p.value === lead.project
-      )
+  selectedProjects
+    ? selectedProjects.label === lead.project
     : true;
 
 const matchesSource =
@@ -959,13 +957,39 @@ const handlePrevPage = () => {
   <label>Project</label>
 
   <Select
-    options={projectDropdownOptions}
-    isMulti
-    closeMenuOnSelect={false}
-    hideSelectedOptions={false}
+    options={[
+      { value: "6672", label: "Mahamumbai" },
+      { value: "6975", label: "Mahamumbai Phase 2" },
+      { value: "7142", label: "Thane (Nitesh)" },
+      { value: "6674", label: "Panvel (99Villa)" },
+      { value: "6673", label: "Thane (Virendra)" },
+      { value: "7517", label: "Affordable life" },
+      { value: "7514", label: "99villa." },
+      { value: "7670", label: "99 villa plot." },
+      { value: "7743", label: "MAHAMUMBAI" },
+      { value: "7747", label: "Khopoli-pali Road plots" },
+      { value: "7843", label: "ANJALI ZAMIN." },
+      { value: "7876", label: "Sheetal THANE." },
+      { value: "7898", label: "THANE...( VIRENDRA)" },
+      { value: "7899", label: "Alibaug Plot." },
+      { value: "7871", label: "Sheetal Campaign." },
+      { value: "7912", label: "Maha-Mumbaai" },
+      { value: "7929", label: "THANE...( VIRENDRAA)" },
+      { value: "7930", label: "Maha-Mumbaii" },
+      { value: "7941", label: "Gudipadwa plot in 5 Lacs." },
+      { value: "7950", label: "Mmahamumbai." }
+    ]}
+
+    isSearchable
+    isClearable
+
     value={selectedProjects}
-    onChange={setSelectedProjects}
-    placeholder="Select Project"
+
+    onChange={(selected) =>
+      setSelectedProjects(selected)
+    }
+
+    placeholder="Search Project..."
   />
 </div>
 
