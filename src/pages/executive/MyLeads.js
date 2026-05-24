@@ -546,14 +546,7 @@ const matchesDepartment =
     : true;
 
 
-const matchesDepartment =
-  departmentFilter
-    ? lead.department
-        ?.toLowerCase()
-        .includes(
-          departmentFilter.toLowerCase()
-        )
-    : true;
+
 
 const matchesAssigned =
   assignedFilter
@@ -589,6 +582,17 @@ const matchesToDate =
   toDateFilter
     ? createdDate <= toDateFilter
     : true;
+
+
+const matchesSubSource =
+  subSourceFilter
+    ? lead.subSource
+        ?.toLowerCase()
+        .includes(
+          subSourceFilter.toLowerCase()
+        )
+    : true;
+
 
 const nextCallDate =
   lead.next_call_date
@@ -630,12 +634,6 @@ return (
   leads,
   search,
   statusFilter,
-  projectFilter,
-  sourceFilter,
-  executiveFilter,
-  subSourceFilter,
-  cityFilter,
-  departmentFilter,
   assignedFilter,
   fromDateFilter,
   toDateFilter,
@@ -643,11 +641,11 @@ return (
   nextCallTo,
   descriptionFilter,
   selectedProjects,
-selectedSources,
-selectedExecutives,
-selectedCities,
-selectedDepartments
-]);
+  selectedSources,
+  selectedExecutives,
+  selectedCities,
+  selectedDepartments
+ ]);
 
 /* ================= PAGINATION LOGIC ================= */
 
@@ -970,6 +968,7 @@ const handlePrevPage = () => {
     placeholder="Select Project"
   />
 </div>
+
 
    <div className="multi-filter">
   <label>Source</label>
