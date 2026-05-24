@@ -23,14 +23,14 @@ export default function Followups() {
 
     try {
 
-      if (!user?._id) {
-        setLoading(false);
-        return;
-      }
+     if (!user?.email) {
+     setLoading(false);
+     return;
+     }
 
       const res = await axios.get(
-        `https://calling-crm-backend-7w52.onrender.com/api/followups/${user._id}`
-      );
+  `https://calling-crm-backend-7w52.onrender.com/api/my-followups?email=${user.email}`
+);
 
       setFollowups(res.data);
 
