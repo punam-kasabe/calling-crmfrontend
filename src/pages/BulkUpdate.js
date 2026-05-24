@@ -20,6 +20,8 @@ export default function BulkUpdate() {
   const [message, setMessage] = useState("");
 
   const [duplicates, setDuplicates] = useState([]);
+  const [duplicateMessage, setDuplicateMessage] =
+  useState("");
 
   const [showPopup, setShowPopup] = useState(false);
 
@@ -100,20 +102,23 @@ export default function BulkUpdate() {
       );
 
       // ✅ DUPLICATES POPUP
-      if (duplicates.length > 0) {
+     if (duplicates.length > 0) {
 
-        setDuplicates(duplicates);
+  setDuplicates(duplicates);
 
-        setShowPopup(true);
+  setDuplicateMessage(
+    `Possible Duplicate Found (${duplicates.length})`
+  );
 
-      } else {
+  setShowPopup(true);
 
-        setDuplicates([]);
+} else {
 
-        setShowPopup(false);
+  setDuplicates([]);
 
-      }
+  setShowPopup(false);
 
+}
     }
 
     catch (err) {
@@ -262,45 +267,53 @@ export default function BulkUpdate() {
 
           <div className="duplicate-popup">
 
-            <h2>
+           <h2>
 
-              Failures ({duplicates.length})
+  {duplicateMessage}
 
-            </h2>
+</h2>
 
             <div className="duplicate-list">
 
               {duplicates.map((item, index) => (
 
-                <p key={index}>
+               <p key={index}>
 
-                  <strong>
+  <strong>
 
-                    {item.name || "No Name"}
+    {item.name || "No Name"}
 
-                  </strong>
+  </strong>
 
-                  {" - "}
+  {" | "}
 
-                  Mobile number already exists
+  <strong>
 
-                  {" | "}
+    {item.phone || "No Phone"}
 
-                  <strong>
+  </strong>
 
-                    {item.phone}
+  {" | "}
 
-                  </strong>
+  {item.email || "No Email"}
 
-                  {" | Assigned to "}
+  {" | "}
 
-                  <strong>
+  <span className="duplicate-type">
 
-                    {item.assigned_to}
+    {item.type || "PHONE"} Duplicate
 
-                  </strong>
+  </span>
 
-                </p>
+  {" | Assigned to "}
+
+  <strong>
+
+    {item.assigned_to || "Unassigned"}
+
+  </strong>
+
+</p>
 
               ))}
 

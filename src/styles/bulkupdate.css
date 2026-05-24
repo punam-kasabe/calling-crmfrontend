@@ -176,3 +176,9 @@
   font-weight: 600;
   cursor: pointer;
 }
+
+.duplicate-type {
+  color: #ff3b3b;
+  font-weight: 700;
+
+}
