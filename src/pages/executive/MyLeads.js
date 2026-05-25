@@ -62,6 +62,7 @@ const [selectedSources, setSelectedSources] = useState([]);
 const [selectedDepartments, setSelectedDepartments] = useState([]);
 const [selectedExecutives, setSelectedExecutives] = useState([]);
 const [selectedCities, setSelectedCities] = useState([]);
+const [executives, setExecutives] = useState([]);
 
 /* ================= PAGINATION ================= */
 
@@ -92,6 +93,8 @@ const leadsPerPage = 10;
   deadSubReason: "",
   bookingDate: "",
 });
+
+
 
 /* ================= DROPDOWNS ================= */
 
@@ -276,6 +279,43 @@ const cityDropdownOptions = [
     fetchMyLeads();
 
   }, [fetchMyLeads]);
+
+  /* ================= FETCH EXECUTIVES ================= */
+
+const fetchExecutives = async () => {
+
+  try {
+
+    const res = await axios.get(
+      `${API}/users`
+    );
+
+    const executiveUsers = res.data.filter(
+      (u) =>
+        u.role === "executive" ||
+        u.role === "attending officer"
+    );
+
+    setExecutives(executiveUsers);
+
+  }
+
+  catch (err) {
+
+    console.error(
+      "Error fetching executives",
+      err
+    );
+
+  }
+
+};
+
+useEffect(() => {
+
+  fetchExecutives();
+
+}, []);
 
   /* ================= UPDATE STATUS ================= */
 
@@ -1821,29 +1861,56 @@ const handlePrevPage = () => {
 
         {/* CLOSING EXECUTIVE */}
 
-        <div>
-          <label>Closing Executive</label>
+<div>
+  <label>Closing Executive</label>
 
-          <input
-            type="text"
-            value={
-              selectedLead.closingExecutive || ""
-            }
+  <select
+    value={
+      selectedLead.closingExecutive || ""
+    }
 
-            onChange={(e) =>
+    onChange={(e) => {
 
-              setSelectedLead({
+      const selectedExecutive =
+        executives.find(
+          (ex) => ex.name === e.target.value
+        );
 
-                ...selectedLead,
+      setSelectedLead({
 
-                closingExecutive:
-                  e.target.value
+        ...selectedLead,
 
-              })
+        closingExecutive:
+          e.target.value,
 
-            }
-          />
-        </div>
+        assignedTo:
+          selectedExecutive?.name || "",
+
+        assigned_to_email:
+          selectedExecutive?.email || ""
+
+      });
+
+    }}
+  >
+
+    <option value="">
+      Select Executive
+    </option>
+
+    {executives.map((exec) => (
+
+      <option
+        key={exec._id}
+        value={exec.name}
+      >
+        {exec.name}
+      </option>
+
+    ))}
+
+  </select>
+</div>
 
         {/* STATUS */}
 
