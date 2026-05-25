@@ -62,8 +62,7 @@ const [selectedSources, setSelectedSources] = useState([]);
 const [selectedDepartments, setSelectedDepartments] = useState([]);
 const [selectedExecutives, setSelectedExecutives] = useState([]);
 const [selectedCities, setSelectedCities] = useState([]);
-const [executives, setExecutives] = useState([]);
-
+const [attendingOfficers, setAttendingOfficers] = useState([]);
 /* ================= PAGINATION ================= */
 
 const [currentPage, setCurrentPage] = useState(1);
@@ -290,20 +289,19 @@ const fetchExecutives = async () => {
       `${API}/users`
     );
 
-    const executiveUsers = res.data.filter(
+    const attendingUsers = res.data.filter(
       (u) =>
-        u.role === "executive" ||
         u.role === "attending officer"
     );
 
-    setExecutives(executiveUsers);
+    setAttendingOfficers(attendingUsers);
 
   }
 
   catch (err) {
 
     console.error(
-      "Error fetching executives",
+      "Error fetching attending officers",
       err
     );
 
@@ -1862,49 +1860,50 @@ const handlePrevPage = () => {
         {/* CLOSING EXECUTIVE */}
 
 <div>
-  <label>Closing Executive</label>
+<label>Attending Officer</label>
 
-  <select
-    value={
-      selectedLead.closingExecutive || ""
-    }
+ <select
+  value={
+    selectedLead.closingExecutive || ""
+  }
 
-    onChange={(e) => {
+  onChange={(e) => {
 
-      const selectedExecutive =
-        executives.find(
-          (ex) => ex.name === e.target.value
-        );
+    const selectedOfficer =
+      attendingOfficers.find(
+        (officer) =>
+          officer.name === e.target.value
+      );
 
-      setSelectedLead({
+    setSelectedLead({
 
-        ...selectedLead,
+      ...selectedLead,
 
-        closingExecutive:
-          e.target.value,
+      closingExecutive:
+        e.target.value,
 
-        assignedTo:
-          selectedExecutive?.name || "",
+      assignedTo:
+        selectedOfficer?.name || "",
 
-        assigned_to_email:
-          selectedExecutive?.email || ""
+      assigned_to_email:
+        selectedOfficer?.email || ""
 
-      });
+    });
 
-    }}
-  >
+  }}
+>
 
     <option value="">
       Select Executive
     </option>
 
-    {executives.map((exec) => (
+{attendingOfficers.map((officer) => (
 
       <option
-        key={exec._id}
-        value={exec.name}
-      >
-        {exec.name}
+       key={officer._id}
+value={officer.name}
+>
+  {officer.name}
       </option>
 
     ))}
