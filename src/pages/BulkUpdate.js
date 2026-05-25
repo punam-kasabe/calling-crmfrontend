@@ -301,9 +301,14 @@ export default function BulkUpdate() {
 
   <span className="duplicate-type">
 
-    {item.type || "PHONE"} Duplicate
+  Mobile number already exists for project:
 
-  </span>
+  <strong>
+    {" "}
+    {item.project || "Unknown Project"}
+  </strong>
+
+</span>
 
   {" | Assigned to "}
 
