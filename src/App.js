@@ -334,7 +334,11 @@ if (isMobile) {
         <Route path="/users" element={<ProtectedRoute><Users /></ProtectedRoute>} />
 <Route
   path="/profile"
-  element={<Profile />}
+  element={
+    <ProtectedRoute>
+      <Profile />
+    </ProtectedRoute>
+  }
 />
         {/* FALLBACK */}
         <Route
