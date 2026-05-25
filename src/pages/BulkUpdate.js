@@ -280,17 +280,13 @@ export default function BulkUpdate() {
                <p key={index}>
 
   <strong>
-
     {item.name || "No Name"}
-
   </strong>
 
   {" | "}
 
   <strong>
-
     {item.phone || "No Phone"}
-
   </strong>
 
   {" | "}
@@ -301,21 +297,22 @@ export default function BulkUpdate() {
 
   <span className="duplicate-type">
 
-  Mobile number already exists for project:
+    Already exists for
 
-  <strong>
     {" "}
-    {item.project || "Unknown Project"}
-  </strong>
 
-</span>
+    <strong>
+      {item.project || "Unknown Project"}
+    </strong>
+
+    {" project"}
+
+  </span>
 
   {" | Assigned to "}
 
   <strong>
-
     {item.assigned_to || "Unassigned"}
-
   </strong>
 
 </p>
