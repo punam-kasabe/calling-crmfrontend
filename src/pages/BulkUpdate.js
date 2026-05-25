@@ -2,6 +2,7 @@
 
 import Sidebar from "../components/Sidebar";
 import { useState } from "react";
+import { X } from "lucide-react";
 import axios from "axios";
 import "../styles/bulkupdate.css";
 
@@ -259,85 +260,107 @@ export default function BulkUpdate() {
 
       </div>
 
-      {/* DUPLICATES POPUP */}
+     {/* DUPLICATES POPUP */}
 
-      {showPopup && (
+{showPopup && (
 
-        <div className="duplicate-overlay">
+  <div className="duplicate-overlay">
 
-          <div className="duplicate-popup">
+    <div className="duplicate-popup">
 
-           <h2>
+      {/* HEADER */}
 
-  {duplicateMessage}
+      <div className="duplicate-header">
 
-</h2>
+        <div>
 
-            <div className="duplicate-list">
+          <h2>Duplicate Leads Found</h2>
 
-              {duplicates.map((item, index) => (
-
-               <p key={index}>
-
-  <strong>
-    {item.name || "No Name"}
-  </strong>
-
-  {" | "}
-
-  <strong>
-    {item.phone || "No Phone"}
-  </strong>
-
-  {" | "}
-
-  {item.email || "No Email"}
-
-  {" | "}
-
-  <span className="duplicate-type">
-
-    Already exists for
-
-    {" "}
-
-    <strong>
-      {item.project || "Unknown Project"}
-    </strong>
-
-    {" project"}
-
-  </span>
-
-  {" | Assigned to "}
-
-  <strong>
-    {item.assigned_to || "Unassigned"}
-  </strong>
-
-</p>
-
-              ))}
-
-            </div>
-
-            <button
-
-              className="close-btn"
-
-              onClick={() => setShowPopup(false)}
-
-            >
-
-              Close
-
-            </button>
-
-          </div>
+          <p>
+            {duplicates.length} duplicate lead(s) already exist in CRM
+          </p>
 
         </div>
 
-      )}
+        {/* CLOSE TOP RIGHT */}
+
+        <button
+          className="popup-close"
+          onClick={() => setShowPopup(false)}
+        >
+
+          <X size={20} />
+
+        </button>
+
+      </div>
+
+      {/* BODY */}
+
+      <div className="duplicate-list">
+
+        {duplicates.map((item, index) => (
+
+          <div
+            className="duplicate-card"
+            key={index}
+          >
+
+            <div className="dup-top">
+
+              <h4>
+                {item.name || "No Name"}
+              </h4>
+
+              <span className="dup-badge">
+                Duplicate
+              </span>
+
+            </div>
+
+            <div className="dup-details">
+
+              <p>
+                📞 {item.phone || "No Phone"}
+              </p>
+
+              <p>
+                ✉️ {item.email || "No Email"}
+              </p>
+
+              <p>
+                🏢 {item.project || "Unknown Project"}
+              </p>
+
+              <p>
+                👤 Assigned To:
+                {" "}
+                <strong>
+                  {item.assigned_to || "Unassigned"}
+                </strong>
+              </p>
+
+              <p>
+                📌 Status:
+                {" "}
+                <strong>
+                  {item.status || "New"}
+                </strong>
+              </p>
+
+            </div>
+
+          </div>
+
+        ))}
+
+      </div>
+
+    </div>
+
+  </div>
+
+)}
 
     </div>
 
