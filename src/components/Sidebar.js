@@ -92,23 +92,45 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
             </div>
           </div>
 
-          {showProfile && (
-            <div className="profile-dropdown">
+         {showProfile && (
 
-              <p>
-                <strong>{user.name}</strong>
-              </p>
+  <div className="profile-dropdown">
 
-              <p>{user.email}</p>
+    <p>
+      <strong>{user.name}</strong>
+    </p>
 
-              <hr />
+    <p>{user.email}</p>
 
-              <button onClick={handleLogout}>
-                Logout
-              </button>
+    <hr />
 
-            </div>
-          )}
+    {/* ✅ PROFILE BUTTON */}
+
+    <button
+      onClick={() => {
+
+        navigate("/profile");
+
+        setShowProfile(false);
+
+      }}
+    >
+
+      My Profile
+
+    </button>
+
+    {/* ✅ LOGOUT */}
+
+    <button onClick={handleLogout}>
+
+      Logout
+
+    </button>
+
+  </div>
+
+)}
 
         </div>
       </div>
