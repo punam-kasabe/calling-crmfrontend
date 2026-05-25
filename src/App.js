@@ -51,9 +51,9 @@ import Settings from "./pages/Settings";
 import Upload from "./pages/Upload";
 import SVPDashboard from "./pages/SVPDashboard";
 import Users from "./pages/Users";
+
 import "bootstrap-icons/font/bootstrap-icons.css";
 import MobileBlock from "./components/MobileBlock";
-import Profile from "./pages/Profile";
 /* =========================================
    🔓 PUBLIC ROUTE
 ========================================= */
@@ -89,9 +89,7 @@ export default function App() {
   return () => window.removeEventListener("resize", checkDevice);
 }, []);
 
-if (isMobile) {
-  return <MobileBlock />;
-}
+
   return (
     <BrowserRouter>
 
@@ -332,14 +330,7 @@ if (isMobile) {
       <Route path="/svp-dashboard" element={<ProtectedRoute><SVPDashboard /></ProtectedRoute>} />
         <Route path="/upload" element={<ProtectedRoute><Upload /></ProtectedRoute>} />
         <Route path="/users" element={<ProtectedRoute><Users /></ProtectedRoute>} />
-<Route
-  path="/profile"
-  element={
-    <ProtectedRoute>
-      <Profile />
-    </ProtectedRoute>
-  }
-/>
+
         {/* FALLBACK */}
         <Route
           path="*"

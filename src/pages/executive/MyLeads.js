@@ -172,6 +172,7 @@ const departmentOptions = [
   "Telecaller"
 ];
 
+
 const sourceDropdownOptions = sourceOptions.map((item) => ({
   value: item,
   label: item
@@ -613,7 +614,7 @@ return (
     }, [
 
 
- leads,
+  leads,
   search,
   statusFilter,
   assignedFilter,
@@ -626,8 +627,7 @@ return (
   selectedSources,
   selectedExecutives,
   selectedCities,
-  selectedDepartments,
-  subSourceFilter
+  selectedDepartments
  ]);
 
 /* ================= PAGINATION LOGIC ================= */
