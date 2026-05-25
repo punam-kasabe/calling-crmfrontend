@@ -120,65 +120,275 @@
   }
 }
 
-/* ===================================
-   DUPLICATE POPUP
-=================================== */
+/* =========================================
+   DUPLICATE POPUP OVERLAY
+========================================= */
 
 .duplicate-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.6);
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(4px);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 999999;
+  z-index: 9999;
+  animation: fadeIn 0.25s ease;
 }
+
+/* =========================================
+   POPUP BOX
+========================================= */
 
 .duplicate-popup {
-  width: 750px;
-  max-height: 80vh;
-  overflow-y: auto;
-  background: #fff;
-  border-radius: 18px;
-  padding: 30px;
-  box-shadow: 0 15px 50px rgba(0,0,0,0.25);
+  width: 90%;
+  max-width: 760px;
+  max-height: 85vh;
+  overflow: hidden;
+
+  background: #ffffff;
+  border-radius: 20px;
+
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.15),
+    0 2px 10px rgba(0, 0, 0, 0.08);
+
+  animation: popupScale 0.25s ease;
+
+  display: flex;
+  flex-direction: column;
+  position: relative;
 }
 
-.duplicate-popup h2 {
-  text-align: center;
-  color: #dc2626;
-  margin-bottom: 20px;
-  font-size: 28px;
-  font-weight: 700;
+/* =========================================
+   HEADER
+========================================= */
+
+.duplicate-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 20px 24px;
+  border-bottom: 1px solid #f1f5f9;
 }
+
+.duplicate-header h2 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 700;
+  color: #dc2626;
+}
+
+/* =========================================
+   CLOSE BUTTON
+========================================= */
+
+.close-icon {
+  width: 38px;
+  height: 38px;
+
+  border: none;
+  border-radius: 10px;
+
+  background: #f8fafc;
+  color: #334155;
+
+  font-size: 22px;
+  font-weight: 600;
+
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.close-icon:hover {
+  background: #ef4444;
+  color: white;
+  transform: rotate(90deg);
+}
+
+/* =========================================
+   BODY
+========================================= */
 
 .duplicate-list {
-  max-height: 450px;
+  padding: 20px 24px;
   overflow-y: auto;
 }
 
-.duplicate-list p {
-  margin-bottom: 14px;
-  color: #991b1b;
-  line-height: 1.7;
+/* =========================================
+   DUPLICATE CARD
+========================================= */
+
+.duplicate-card {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+
+  border-left: 5px solid #ef4444;
+
+  border-radius: 14px;
+
+  padding: 16px;
+  margin-bottom: 16px;
+
+  transition: all 0.2s ease;
+}
+
+.duplicate-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.06);
+}
+
+.duplicate-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.duplicate-name {
+  font-size: 17px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.duplicate-phone {
   font-size: 15px;
+  font-weight: 600;
+  color: #dc2626;
+}
+
+.duplicate-email {
+  font-size: 14px;
+  color: #64748b;
+  margin-bottom: 12px;
+  word-break: break-word;
+}
+
+/* =========================================
+   TAGS
+========================================= */
+
+.duplicate-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.tag {
+  padding: 7px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.tag.project {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.tag.assigned {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.tag.status {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+/* =========================================
+   FOOTER
+========================================= */
+
+.popup-footer {
+  padding: 18px 24px;
+  border-top: 1px solid #f1f5f9;
+  display: flex;
+  justify-content: flex-end;
 }
 
 .close-btn {
-  width: 100%;
-  margin-top: 25px;
   border: none;
-  padding: 14px;
-  border-radius: 12px;
-  background: #7c3aed;
+  background: #ef4444;
   color: white;
-  font-size: 16px;
+
+  padding: 10px 18px;
+
+  border-radius: 10px;
+  font-size: 15px;
   font-weight: 600;
+
   cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-.duplicate-type {
-  color: #ff3b3b;
-  font-weight: 700;
+.close-btn:hover {
+  background: #dc2626;
+}
+
+/* =========================================
+   SCROLLBAR
+========================================= */
+
+.duplicate-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.duplicate-list::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 20px;
+}
+
+/* =========================================
+   ANIMATION
+========================================= */
+
+@keyframes popupScale {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 768px) {
+
+  .duplicate-popup {
+    width: 95%;
+    max-height: 90vh;
+  }
+
+  .duplicate-header h2 {
+    font-size: 20px;
+  }
+
+  .duplicate-top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+  }
+
+  .duplicate-tags {
+    flex-direction: column;
+  }
 
 }
