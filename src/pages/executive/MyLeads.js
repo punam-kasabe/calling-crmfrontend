@@ -48,20 +48,9 @@ export default function MyLeads() {
 
   const [showAdvancedSearch, setShowAdvancedSearch] =
     useState(false);
-
-  const [projectFilter, setProjectFilter] =
-    useState("");
-
-  const [sourceFilter, setSourceFilter] =
-    useState("");
-
-  const [executiveFilter, setExecutiveFilter] =
-    useState("");
   
  
 const [subSourceFilter, setSubSourceFilter] = useState("");
-const [cityFilter, setCityFilter] = useState("");
-const [departmentFilter, setDepartmentFilter] = useState("");
 const [assignedFilter, setAssignedFilter] = useState("");
 const [fromDateFilter, setFromDateFilter] = useState("");
 const [toDateFilter, setToDateFilter] = useState("");
@@ -182,11 +171,6 @@ const departmentOptions = [
   "Nilesh Sir",
   "Telecaller"
 ];
-
-const projectDropdownOptions = projectOptions.map((item) => ({
-  value: item,
-  label: item
-}));
 
 const sourceDropdownOptions = sourceOptions.map((item) => ({
   value: item,
@@ -629,7 +613,7 @@ return (
     }, [
 
 
-  leads,
+ leads,
   search,
   statusFilter,
   assignedFilter,
@@ -642,7 +626,8 @@ return (
   selectedSources,
   selectedExecutives,
   selectedCities,
-  selectedDepartments
+  selectedDepartments,
+  subSourceFilter
  ]);
 
 /* ================= PAGINATION LOGIC ================= */

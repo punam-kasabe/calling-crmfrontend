@@ -21,8 +21,7 @@ export default function BulkUpdate() {
   const [message, setMessage] = useState("");
 
   const [duplicates, setDuplicates] = useState([]);
-  const [duplicateMessage, setDuplicateMessage] =
-  useState("");
+  
 
   const [showPopup, setShowPopup] = useState(false);
 
