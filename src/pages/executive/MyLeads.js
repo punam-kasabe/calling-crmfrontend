@@ -78,7 +78,7 @@ const leadsPerPage = 10;
   phone: "",
   email: "",
   project: "",
-  status: "",
+  status: "New",
   source: "",
   subSource: "",
   city: "",
@@ -376,16 +376,51 @@ useEffect(() => {
       try {
 
        const updatedData = {
-  assignedTo: selectedLead.assignedTo,
+  name: selectedLead.name,
+  phone: selectedLead.phone,
+  email: selectedLead.email,
+
+  assignedTo:
+    selectedLead.assignedTo,
+
   assigned_to_email:
-  selectedLead.assigned_to_email,
-  closingExecutive: selectedLead.closingExecutive,
-  status: selectedLead.status,
-  source: selectedLead.source,
-  project: selectedLead.project,
-  next_call_date: selectedLead.next_call_date,
-  description: selectedLead.description,
-  department: selectedLead.department,
+    selectedLead.assigned_to_email,
+
+  closingExecutive:
+    selectedLead.closingExecutive,
+
+  status:
+    selectedLead.status,
+
+  source:
+    selectedLead.source,
+
+  subSource:
+    selectedLead.subSource,
+
+  city:
+    selectedLead.city,
+
+  project:
+    selectedLead.project,
+
+  next_call_date:
+    selectedLead.next_call_date,
+
+  description:
+    selectedLead.description,
+
+  department:
+    selectedLead.department,
+
+  deadReason:
+    selectedLead.deadReason,
+
+  deadSubReason:
+    selectedLead.deadSubReason,
+
+  bookingDate:
+    selectedLead.bookingDate
 };
 
       await axios.put(
@@ -473,24 +508,24 @@ const handleAddNewLead = async () => {
     /* ================= RESET FORM ================= */
 
     setNewLead({
-      name: "",
-      phone: "",
-      email: "",
-      project: "",
-      status: "",
-      source: "",
-      subSource: "",
-      city: "",
-      assignedTo: "",
-      closingExecutive: "",
-      next_call_date: "",
-      department: "",
-      description: "",
-      deadReason: "",
-      deadSubReason: "",
-      bookingDate: "",
-    });
-
+  name: "",
+  phone: "",
+  email: "",
+  project: "",
+  status: "",
+  source: "",
+  subSource: "",
+  city: "",
+  assignedTo: "",
+  assigned_to_email: "",
+  closingExecutive: "",
+  next_call_date: "",
+  department: "",
+  description: "",
+  deadReason: "",
+  deadSubReason: "",
+  bookingDate: "",
+});
   }
 
   catch (err) {
@@ -504,7 +539,28 @@ const handleAddNewLead = async () => {
   }
 
 };
+  /* ================= RESET PAGE ON FILTER CHANGE ================= */
 
+useEffect(() => {
+
+  setCurrentPage(1);
+
+}, [
+  search,
+  statusFilter,
+  selectedProjects,
+  selectedSources,
+  selectedExecutives,
+  selectedCities,
+  selectedDepartments,
+  subSourceFilter,
+  assignedFilter,
+  fromDateFilter,
+  toDateFilter,
+  nextCallFrom,
+  nextCallTo,
+  descriptionFilter
+]);
   /* ================= FILTER ================= */
 
   const filteredLeads =
@@ -536,7 +592,8 @@ const handleAddNewLead = async () => {
 
 const matchesProject =
   selectedProjects
-    ? selectedProjects.label === lead.project
+    ? selectedProjects.value === lead.project ||
+      selectedProjects.label === lead.project
     : true;
 
 const matchesSource =
@@ -658,6 +715,7 @@ return (
   search,
   statusFilter,
   assignedFilter,
+  subSourceFilter,
   fromDateFilter,
   toDateFilter,
   nextCallFrom,
@@ -833,9 +891,6 @@ const handlePrevPage = () => {
           </div>
         </div>
 
-        {/* ================= FILTERS ================= */}
-
-      <div className="filter-bar">
      
 
          {/* ================= SINGLE SEARCH ================= */}
@@ -853,7 +908,7 @@ const handlePrevPage = () => {
        />
 
        </div>
-       </div>
+       
 {/* ================= ACTION BUTTONS ================= */}
 
 <div className="top-actions">
@@ -938,7 +993,11 @@ const handlePrevPage = () => {
   `"${lead.status || ""}"`,
   `"${lead.project || ""}"`,
   `"${lead.description || ""}"`,
-  `"${lead.next_call_date || ""}"`,
+  `"${
+  lead.next_call_date
+    ? lead.next_call_date.split("T")[0]
+    : ""
+}"`,
   `"${lead.subSource || ""}"`,
   `"${lead.createdAt || ""}"`
 
@@ -983,7 +1042,7 @@ const handlePrevPage = () => {
 
   <Select
     options={[
-      { value: "6672", label: "Mahamumbai" },
+       { value: "Mahamumbai", label: "Mahamumbai" },
       { value: "6975", label: "Mahamumbai Phase 2" },
       { value: "7142", label: "Thane (Nitesh)" },
       { value: "6674", label: "Panvel (99Villa)" },
@@ -1371,22 +1430,38 @@ const handlePrevPage = () => {
 
                       <td>
 
-                        <select
-                          className="status-select"
+                       <select
+  className="status-select"
 
-                          value={
-                            lead.status ||
-                            "New"
-                          }
+  value={
+    lead.status || "New"
+  }
 
-                          onChange={(e) =>
-                            updateStatus(
-                              lead._id,
-                              e.target
-                                .value
-                            )
-                          }
-                        >
+  onChange={async (e) => {
+
+    const value =
+      e.target.value;
+
+    setLeads((prev) =>
+
+      prev.map((l) =>
+
+        l._id === lead._id
+          ? {
+              ...l,
+              status: value
+            }
+          : l
+      )
+    );
+
+    await updateStatus(
+      lead._id,
+      value
+    );
+
+  }}
+>
 
                           {statusOptions.map((status, i) => (
                        <option key={i} value={status}>
@@ -1493,12 +1568,15 @@ const handlePrevPage = () => {
   </button>
 
   <span className="page-info">
-    Page {currentPage} of {totalPages}
+  Page {currentPage} of {totalPages || 1}
   </span>
 
   <button
     onClick={handleNextPage}
-    disabled={currentPage === totalPages}
+   disabled={
+  currentPage === totalPages ||
+  totalPages === 0
+}
     className="page-btn"
   >
     Next
@@ -1844,15 +1922,25 @@ const handlePrevPage = () => {
         <div>
           <label>Assign To</label>
 
-          <input
-            type="text"
-            value={
-              selectedLead.assignedTo ||
-              user.name ||
-              ""
-            }
-            readOnly
-          />
+         <input
+  type="text"
+  value={
+    selectedLead.assignedTo || ""
+  }
+
+  onChange={(e) =>
+
+    setSelectedLead({
+
+      ...selectedLead,
+
+      assignedTo:
+        e.target.value
+
+    })
+
+  }
+/>
         </div>
 
         {/* CLOSING EXECUTIVE */}
@@ -1881,10 +1969,12 @@ const handlePrevPage = () => {
         e.target.value,
 
       assignedTo:
-        selectedOfficer?.name || "",
+  selectedOfficer?.name ||
+  selectedLead.assignedTo,
 
-      assigned_to_email:
-        selectedOfficer?.email || ""
+assigned_to_email:
+  selectedOfficer?.email ||
+  selectedLead.assigned_to_email
 
     });
 
