@@ -25,6 +25,7 @@ export default function Pipeline() {
   const [showModal, setShowModal] = useState(false);
   const [selectedLead, setSelectedLead] = useState(null);
   const [selectedLeads, setSelectedLeads] = useState([]);
+  const [showAdvancedSearch, setShowAdvancedSearch] = useState(false);
 
   // 🔥 FILTER STATE
   const [filters, setFilters] = useState({
@@ -352,8 +353,12 @@ export default function Pipeline() {
         </div>
 
         {/* 🔥 FILTER BAR */}
-        <div className="card p-3 mb-3 shadow-sm">
-          <div className="row g-2">
+{/* 🔥 FILTER BAR */}
+
+{showAdvancedSearch && (
+
+<div className="card p-3 mb-3 shadow-sm">       
+     <div className="row g-2">
 
             <div className="col-md-2">
               <select className="form-select"
@@ -466,7 +471,7 @@ export default function Pipeline() {
 
   </select>
 
-</div>
+       </div>
 
             <div className="col-md-2">
               <select className="form-select"
@@ -518,7 +523,7 @@ export default function Pipeline() {
 
           </div>
         </div>
-
+)}
         {/* SEARCH */}
         <div className="card p-2 mb-3 shadow-sm">
           <input
@@ -530,11 +535,16 @@ export default function Pipeline() {
         </div>
 
         {/* TABLE */}
-        <div className="card p-3 shadow-sm">
-         
-
-          <div className="d-flex justify-content-between align-items-center mb-3">
-
+        <div className="card p-3 shadow-sm">     
+  <div className="d-flex justify-content-between align-items-center mb-3">
+<button
+  className="btn btn-dark me-2"
+  onClick={() =>
+    setShowAdvancedSearch(!showAdvancedSearch)
+  }
+>
+  Advanced Search
+</button>
   <h5>Leads List</h5>
 
   <div className="d-flex">
@@ -705,7 +715,7 @@ export default function Pipeline() {
 
       }}
     >
-      
+
       <Pencil size={18} />
     </button>
 
