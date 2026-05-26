@@ -1195,33 +1195,29 @@ const handlePrevPage = () => {
       }
     />
 
-    <button
-      className="clear-filter-btn"
-      onClick={() => {
+   <button
+  className="clear-filter-btn"
+  onClick={() => {
 
-        setProjectFilter("");
-        setSourceFilter("");
-        setSubSourceFilter("");
-        setCityFilter("");
-        setExecutiveFilter("");
-        setDepartmentFilter("");
-        setAssignedFilter("");
-        setStatusFilter("");
-        setFromDateFilter("");
-        setToDateFilter("");
-        setNextCallFrom("");
-        setNextCallTo("");
-        setDescriptionFilter("");
-        setSelectedProjects(null);
-        setSelectedSources([]);
-        setSelectedDepartments([]);
-        setSelectedExecutives([]);
-        setSelectedCities([]);
+    setSubSourceFilter("");
+    setAssignedFilter("");
+    setStatusFilter("");
+    setFromDateFilter("");
+    setToDateFilter("");
+    setNextCallFrom("");
+    setNextCallTo("");
+    setDescriptionFilter("");
 
-      }}
-    >
-      Clear Filters
-    </button>
+    setSelectedProjects(null);
+    setSelectedSources([]);
+    setSelectedDepartments([]);
+    setSelectedExecutives([]);
+    setSelectedCities([]);
+
+  }}
+>
+  Clear Filters
+</button>
 
   </div>
 
