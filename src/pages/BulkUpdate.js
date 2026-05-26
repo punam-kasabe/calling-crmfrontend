@@ -17,7 +17,7 @@ export default function BulkUpdate() {
   const [file, setFile] = useState(null);
 
   const [loading, setLoading] = useState(false);
-
+  const [, setDuplicateMessage] = useState("");
   const [message, setMessage] = useState("");
 
   const [duplicates, setDuplicates] = useState([]);

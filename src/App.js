@@ -90,6 +90,10 @@ export default function App() {
 }, []);
 
 
+  if (isMobile) {
+  return <MobileBlock />;
+}
+
   return (
     <BrowserRouter>
 
