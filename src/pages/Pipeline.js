@@ -378,8 +378,6 @@ const closingExecutives = [
           />
         </div>
 
-
-{/* ADVANCED SEARCH */}
   {showAdvancedSearch && (
 
 <div className="card p-3 mb-3 shadow-sm">
