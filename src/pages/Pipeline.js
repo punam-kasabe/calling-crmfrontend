@@ -239,7 +239,148 @@ const closingExecutives = [
     toast.success("Excel Exported ✅");
 
   };
- {showAdvancedSearch && (
+
+  /* ================= CARDS ================= */
+  const stats = useMemo(() => {
+
+  let totalLeads = totalLeadsCount;
+  let todayFollowups = 0;
+  let backlog = 0;
+  let hot = 0;
+  let newLeads = 0;
+  let booked = 0;
+  let inactive = 0;
+
+  const today = new Date()
+    .toISOString()
+    .split("T")[0];
+
+  leads.forEach((l) => {
+
+    const nextCall = l.next_call_date
+      ? new Date(l.next_call_date)
+          .toISOString()
+          .split("T")[0]
+      : "";
+
+    if (nextCall === today)
+      todayFollowups++;
+
+    if (!l.next_call_date)
+      backlog++;
+
+    if (l.status === "Interested")
+      hot++;
+
+    if (l.status === "New")
+      newLeads++;
+
+    if (l.status === "Booked")
+      booked++;
+
+    if (l.status === "Not Interested")
+      inactive++;
+
+  });
+
+  return {
+
+    totalLeads,
+
+    todayFollowups,
+
+    backlog,
+
+    hot,
+
+    newLeads,
+
+    booked,
+
+    inactive
+
+  };
+
+}, [leads]);
+
+
+  return (
+    <div className="d-flex">
+
+      <Sidebar isOpen={isOpen} toggleSidebar={toggleSidebar} />
+
+      <div
+  style={{
+    marginLeft: isOpen ? "240px" : "70px",
+    marginTop: "60px",
+    width: "100%",
+    padding: "20px",
+
+    /* 🔥 SCROLL FIX */
+    height: "calc(100vh - 60px)",
+    overflowY: "auto",
+    overflowX: "hidden",
+  }}
+>
+
+        <h4>Pipeline</h4>
+
+        {/* 🔥 CARDS */}
+       <div
+  className="mb-4"
+  style={{
+    display: "flex",
+    gap: "15px",
+    flexWrap: "nowrap",
+    overflowX: "auto",
+  }}
+>
+          {[
+  { title: "Total Leads", value: stats.totalLeads, color: "#343a40" },
+
+  { title: "Today's Follow-ups", value: stats.todayFollowups, color: "#007bff" },
+
+  { title: "Backlogs", value: stats.backlog, color: "#6c757d" },
+
+  { title: "Hot Leads", value: stats.hot, color: "#dc3545" },
+
+  { title: "New Leads", value: stats.newLeads, color: "#17a2b8" },
+
+  { title: "Booked Leads", value: stats.booked, color: "#28a745" },
+
+  { title: "Inactive Leads", value: stats.inactive, color: "#ffc107" },
+].map((card, i) => (
+<div
+  className="mb-3"
+  key={card.title}
+  style={{
+    flex: "1",
+    minWidth: "170px",
+  }}
+>              <div className="card text-white shadow-sm"
+                style={{ background: card.color, borderRadius: "10px", padding: "10px" }}>
+                <div className="text-center">
+                  <h6 style={{ fontSize: "13px" }}>{card.title}</h6>
+                  <h4>{card.value}</h4>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* SEARCH */}
+        <div className="card p-2 mb-3 shadow-sm">
+          <input
+            className="form-control"
+            placeholder="Search leads..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </div>
+
+
+{/* ADVANCED SEARCH */}
+  {showAdvancedSearch && (
 
 <div className="card p-3 mb-3 shadow-sm">
 
@@ -496,144 +637,6 @@ const closingExecutives = [
 </div>
 
 )}
-  /* ================= CARDS ================= */
-  const stats = useMemo(() => {
-
-  let totalLeads = totalLeadsCount;
-  let todayFollowups = 0;
-  let backlog = 0;
-  let hot = 0;
-  let newLeads = 0;
-  let booked = 0;
-  let inactive = 0;
-
-  const today = new Date()
-    .toISOString()
-    .split("T")[0];
-
-  leads.forEach((l) => {
-
-    const nextCall = l.next_call_date
-      ? new Date(l.next_call_date)
-          .toISOString()
-          .split("T")[0]
-      : "";
-
-    if (nextCall === today)
-      todayFollowups++;
-
-    if (!l.next_call_date)
-      backlog++;
-
-    if (l.status === "Interested")
-      hot++;
-
-    if (l.status === "New")
-      newLeads++;
-
-    if (l.status === "Booked")
-      booked++;
-
-    if (l.status === "Not Interested")
-      inactive++;
-
-  });
-
-  return {
-
-    totalLeads,
-
-    todayFollowups,
-
-    backlog,
-
-    hot,
-
-    newLeads,
-
-    booked,
-
-    inactive
-
-  };
-
-}, [leads]);
-
-
-  return (
-    <div className="d-flex">
-
-      <Sidebar isOpen={isOpen} toggleSidebar={toggleSidebar} />
-
-      <div
-  style={{
-    marginLeft: isOpen ? "240px" : "70px",
-    marginTop: "60px",
-    width: "100%",
-    padding: "20px",
-
-    /* 🔥 SCROLL FIX */
-    height: "calc(100vh - 60px)",
-    overflowY: "auto",
-    overflowX: "hidden",
-  }}
->
-
-        <h4>Pipeline</h4>
-
-        {/* 🔥 CARDS */}
-       <div
-  className="mb-4"
-  style={{
-    display: "flex",
-    gap: "15px",
-    flexWrap: "nowrap",
-    overflowX: "auto",
-  }}
->
-          {[
-  { title: "Total Leads", value: stats.totalLeads, color: "#343a40" },
-
-  { title: "Today's Follow-ups", value: stats.todayFollowups, color: "#007bff" },
-
-  { title: "Backlogs", value: stats.backlog, color: "#6c757d" },
-
-  { title: "Hot Leads", value: stats.hot, color: "#dc3545" },
-
-  { title: "New Leads", value: stats.newLeads, color: "#17a2b8" },
-
-  { title: "Booked Leads", value: stats.booked, color: "#28a745" },
-
-  { title: "Inactive Leads", value: stats.inactive, color: "#ffc107" },
-].map((card, i) => (
-<div
-  className="mb-3"
-  key={card.title}
-  style={{
-    flex: "1",
-    minWidth: "170px",
-  }}
->              <div className="card text-white shadow-sm"
-                style={{ background: card.color, borderRadius: "10px", padding: "10px" }}>
-                <div className="text-center">
-                  <h6 style={{ fontSize: "13px" }}>{card.title}</h6>
-                  <h4>{card.value}</h4>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* SEARCH */}
-        <div className="card p-2 mb-3 shadow-sm">
-          <input
-            className="form-control"
-            placeholder="Search leads..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-        </div>
-
         {/* TABLE */}
         <div className="card p-3 shadow-sm">     
   <div className="d-flex justify-content-between align-items-center mb-3">
@@ -840,8 +843,8 @@ const closingExecutives = [
                 ))
               ) : (
                 <tr>
-                  <td colSpan="7" className="text-center">
-                    ❌ No Leads Found
+          <td colSpan="11" className="text-center">
+                      ❌ No Leads Found
                   </td>
                 </tr>
               )}
