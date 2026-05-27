@@ -22,6 +22,7 @@ export default function Pipeline() {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [totalLeadsCount, setTotalLeadsCount] = useState(0);
   const [showModal, setShowModal] = useState(false);
   const [selectedLead, setSelectedLead] = useState(null);
   const [selectedLeads, setSelectedLeads] = useState([]);
@@ -29,18 +30,33 @@ export default function Pipeline() {
 
   // 🔥 FILTER STATE
   const [filters, setFilters] = useState({
-    status: "",
-    assigned: "",
-    project: "",
-    date: "",
-    from: "",
-    to: ""
-  });
+  status: "",
+  assigned: "",
+  closingExecutive: "",
+  project: "",
+  createdFrom: "",
+  createdTo: ""
+});
  
   const user = useMemo(() => {
     return JSON.parse(localStorage.getItem("user")) || {};
   }, []);
 
+   const assignedUsers = [
+  ...new Set(
+    leads
+      .map((l) => l.assigned_to)
+      .filter(Boolean)
+  )
+];
+
+const closingExecutives = [
+  ...new Set(
+    leads
+      .map((l) => l.assigned_manager)
+      .filter(Boolean)
+  )
+];
   /* ================= FETCH ================= */
   const fetchLeads = useCallback(async () => {
     try {
@@ -54,6 +70,7 @@ export default function Pipeline() {
       setLeads(res.data.data || []);
       console.log(res.data.data);
       setTotalPages(res.data.totalPages || 1);
+      setTotalLeadsCount(res.data.total || 0);
 
     } catch (err) {
       console.error("Fetch Leads Error:", err);
@@ -222,12 +239,267 @@ export default function Pipeline() {
     toast.success("Excel Exported ✅");
 
   };
+ {showAdvancedSearch && (
 
+<div className="card p-3 mb-3 shadow-sm">
+
+  <div className="row g-2">
+
+    {/* STATUS */}
+
+    <div className="col-md-2">
+
+      <select
+        className="form-select"
+        value={filters.status}
+        onChange={(e) =>
+          setFilters({
+            ...filters,
+            status: e.target.value
+          })
+        }
+      >
+
+        <option value="">
+          All Status
+        </option>
+
+        <option>New</option>
+        <option>Interested</option>
+        <option>Ringing</option>
+        <option>Booked</option>
+        <option>Not Interested</option>
+        <option>Switch Off</option>
+        <option>Site Visit</option>
+
+
+      </select>
+
+    </div>
+
+    {/* ASSIGNED TO */}
+
+    <div className="col-md-2">
+
+      <select
+        className="form-select"
+        value={filters.assigned}
+        onChange={(e) =>
+          setFilters({
+            ...filters,
+            assigned: e.target.value
+          })
+        }
+      >
+
+        <option value="">
+          Assigned To
+        </option>
+
+        {assignedUsers.map((u, i) => (
+
+          <option
+            key={i}
+            value={u}
+          >
+            {u}
+          </option>
+
+        ))}
+
+      </select>
+
+    </div>
+
+    {/* CLOSING EXECUTIVE */}
+
+    <div className="col-md-2">
+
+      <select
+        className="form-select"
+        value={filters.closingExecutive}
+        onChange={(e) =>
+          setFilters({
+            ...filters,
+            closingExecutive: e.target.value
+          })
+        }
+      >
+
+        <option value="">
+          Closing Executive
+        </option>
+
+        {closingExecutives.map((u, i) => (
+
+          <option
+            key={i}
+            value={u}
+          >
+            {u}
+          </option>
+
+        ))}
+
+      </select>
+
+    </div>
+
+    {/* PROJECT */}
+
+    <div className="col-md-2">
+
+      <select
+        className="form-select"
+        value={filters.project}
+        onChange={(e) =>
+          setFilters({
+            ...filters,
+            project: e.target.value
+          })
+        }
+      >
+
+       <option value="">
+      All Projects
+    </option>
+
+    <option value="99villa">
+      99villa
+    </option>
+
+    <option value="99 villa plot">
+      99 villa plot
+    </option>
+
+    <option value="Affordable life">
+      Affordable life
+    </option>
+
+    <option value="Alibaug Plot">
+      Alibaug Plot
+    </option>
+
+    <option value="ANJALI ZAMIN">
+      ANJALI ZAMIN
+    </option>
+
+    <option value="Gudipadwa plot in 5 Lacs">
+      Gudipadwa plot in 5 Lacs
+    </option>
+
+    <option value="Khopoli-pali Road plots">
+      Khopoli-pali Road plots
+    </option>
+
+    <option value="Maha-Mumbaai">
+      Maha-Mumbaai
+    </option>
+
+    <option value="MAHAMUMBAI">
+      MAHAMUMBAI
+    </option>
+
+    <option value="Maha-Mumbaii">
+      Maha-Mumbaii
+    </option>
+
+    <option value="Mahamumbai Phase 2">
+      Mahamumbai Phase 2
+    </option>
+
+    <option value="Mmahamumbai">
+      Mmahamumbai
+    </option>
+
+    <option value="Panvel (99Villa)">
+      Panvel (99Villa)
+    </option>
+
+    <option value="Sheetal Campaign">
+      Sheetal Campaign
+    </option>
+
+    <option value="Thane (Nitesh)">
+      Thane (Nitesh)
+    </option>
+
+    <option value="Thane (Virendra)">
+      Thane (Virendra)
+    </option>
+
+
+      </select>
+
+    </div>
+
+    {/* CREATED DATE FROM */}
+
+    <div className="col-md-2">
+
+      <input
+        type="date"
+        className="form-control"
+        value={filters.createdFrom}
+        onChange={(e) =>
+          setFilters({
+            ...filters,
+            createdFrom: e.target.value
+          })
+        }
+      />
+
+    </div>
+
+    {/* CREATED DATE TO */}
+
+    <div className="col-md-2">
+
+      <input
+        type="date"
+        className="form-control"
+        value={filters.createdTo}
+        onChange={(e) =>
+          setFilters({
+            ...filters,
+            createdTo: e.target.value
+          })
+        }
+      />
+
+    </div>
+
+    {/* RESET */}
+
+    <div className="col-md-2">
+
+      <button
+        className="btn btn-secondary w-100"
+        onClick={() =>
+          setFilters({
+            status: "",
+            assigned: "",
+            closingExecutive: "",
+            project: "",
+            createdFrom: "",
+            createdTo: ""
+          })
+        }
+      >
+        Reset
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+)}
   /* ================= CARDS ================= */
   const stats = useMemo(() => {
 
-  let totalLeads = leads.length;
-
+  let totalLeads = totalLeadsCount;
   let todayFollowups = 0;
   let backlog = 0;
   let hot = 0;
@@ -352,178 +624,6 @@ export default function Pipeline() {
           ))}
         </div>
 
-        {/* 🔥 FILTER BAR */}
-{/* 🔥 FILTER BAR */}
-
-{showAdvancedSearch && (
-
-<div className="card p-3 mb-3 shadow-sm">       
-     <div className="row g-2">
-
-            <div className="col-md-2">
-              <select className="form-select"
-                value={filters.status}
-                onChange={(e) =>
-                  setFilters({ ...filters, status: e.target.value })
-                }>
-                <option value="">Status</option>
-                <option>New</option>
-                <option>Interested</option>
-                <option>Pending</option>
-                <option>Booked</option>
-                <option>Not Interested</option>
-              </select>
-            </div>
-
-            <div className="col-md-2">
-              <select className="form-select"
-                value={filters.assigned}
-                onChange={(e) =>
-                  setFilters({ ...filters, assigned: e.target.value })
-                }>
-                <option value="">Assigned</option>
-                {users.map(u => (
-                  <option key={u._id} value={u.email}>{u.name}</option>
-                ))}
-              </select>
-            </div>
-
-            <div className="col-md-2">
-
-  <select
-    className="form-select"
-    value={filters.project}
-    onChange={(e) =>
-      setFilters({
-        ...filters,
-        project: e.target.value
-      })
-    }
-  >
-
-    <option value="">
-      All Projects
-    </option>
-
-    <option value="99villa">
-      99villa
-    </option>
-
-    <option value="99 villa plot">
-      99 villa plot
-    </option>
-
-    <option value="Affordable life">
-      Affordable life
-    </option>
-
-    <option value="Alibaug Plot">
-      Alibaug Plot
-    </option>
-
-    <option value="ANJALI ZAMIN">
-      ANJALI ZAMIN
-    </option>
-
-    <option value="Gudipadwa plot in 5 Lacs">
-      Gudipadwa plot in 5 Lacs
-    </option>
-
-    <option value="Khopoli-pali Road plots">
-      Khopoli-pali Road plots
-    </option>
-
-    <option value="Maha-Mumbaai">
-      Maha-Mumbaai
-    </option>
-
-    <option value="MAHAMUMBAI">
-      MAHAMUMBAI
-    </option>
-
-    <option value="Maha-Mumbaii">
-      Maha-Mumbaii
-    </option>
-
-    <option value="Mahamumbai Phase 2">
-      Mahamumbai Phase 2
-    </option>
-
-    <option value="Mmahamumbai">
-      Mmahamumbai
-    </option>
-
-    <option value="Panvel (99Villa)">
-      Panvel (99Villa)
-    </option>
-
-    <option value="Sheetal Campaign">
-      Sheetal Campaign
-    </option>
-
-    <option value="Thane (Nitesh)">
-      Thane (Nitesh)
-    </option>
-
-    <option value="Thane (Virendra)">
-      Thane (Virendra)
-    </option>
-
-  </select>
-
-       </div>
-
-            <div className="col-md-2">
-              <select className="form-select"
-                value={filters.date}
-                onChange={(e) =>
-                  setFilters({ ...filters, date: e.target.value })
-                }>
-                <option value="">Date</option>
-                <option value="today">Today</option>
-                <option value="tomorrow">Tomorrow</option>
-                <option value="week">This Week</option>
-                <option value="custom">Custom</option>
-              </select>
-            </div>
-
-            {filters.date === "custom" && (
-              <>
-                <div className="col-md-2">
-                  <input type="date" className="form-control"
-                    value={filters.from}
-                    onChange={(e) =>
-                      setFilters({ ...filters, from: e.target.value })
-                    } />
-                </div>
-
-                <div className="col-md-2">
-                  <input type="date" className="form-control"
-                    value={filters.to}
-                    onChange={(e) =>
-                      setFilters({ ...filters, to: e.target.value })
-                    } />
-                </div>
-              </>
-            )}
-
-            <div className="col-md-2">
-              <button className="btn btn-secondary w-100"
-                onClick={() => setFilters({
-                  status: "",
-                  assigned: "",
-                  project: "",
-                  date: "",
-                  from: "",
-                  to: ""
-                })}>
-                Reset
-              </button>
-            </div>
-
-          </div>
-        </div>
-)}
         {/* SEARCH */}
         <div className="card p-2 mb-3 shadow-sm">
           <input
