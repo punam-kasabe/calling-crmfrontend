@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 const API = "https://calling-crm-backend-7w52.onrender.com/api";
 
+
 export default function Pipeline() {
 
   const [isOpen, setIsOpen] = useState(true);
@@ -301,8 +302,7 @@ const closingExecutives = [
 
   };
 
-}, [leads]);
-
+}, [leads, totalLeadsCount]);
 
   return (
     <div className="d-flex">
@@ -635,6 +635,7 @@ const closingExecutives = [
 </div>
 
 )}
+
         {/* TABLE */}
         <div className="card p-3 shadow-sm">     
   <div className="d-flex justify-content-between align-items-center mb-3">
@@ -644,6 +645,7 @@ const closingExecutives = [
     setShowAdvancedSearch(!showAdvancedSearch)
   }
 >
+
   Advanced Search
 </button>
   <h5>Leads List</h5>
@@ -888,6 +890,38 @@ const closingExecutives = [
                 onChange={(e) =>
                   setSelectedLead({ ...selectedLead, phone: e.target.value })
                 } />
+
+
+                <select
+  className="form-select mb-2"
+  value={selectedLead.assigned_manager || ""}
+  onChange={(e) =>
+    setSelectedLead({
+      ...selectedLead,
+      assigned_manager: e.target.value
+    })
+  }
+>
+  <option value="">
+    Select Attending Officer
+  </option>
+
+  {users
+    .filter(
+      (u) =>
+        u.role === "attending_officer" ||
+        u.role === "closing_officer"
+    )
+    .map((u) => (
+      <option
+        key={u._id}
+        value={u.email}
+      >
+        {u.name}
+      </option>
+    ))}
+</select>
+
 
               <select className="form-select mb-2"
                 value={selectedLead.status}
