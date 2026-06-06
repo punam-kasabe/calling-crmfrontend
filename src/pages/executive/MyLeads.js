@@ -810,8 +810,16 @@ const handlePrevPage = () => {
           (l) =>
             l.status ===
             "Not Interested"
-        ).length
+        ).length,
 
+        siteVisitDone:
+        leads.filter(
+        (l) =>
+        l.status ===
+        "Site Visit Done"
+  ).length,
+
+         
     };
 
   }, [leads]);
@@ -889,8 +897,14 @@ const handlePrevPage = () => {
             <h5>Not Interested</h5>
             <p>{stats.notInterested}</p>
           </div>
-        </div>
+         
+         <div className="stats-card sitevisit">
+  <h5>Site Visit Done</h5>
+  <p>{stats.siteVisitDone}</p>
+</div>
 
+        </div>
+          
      
 
          {/* ================= SINGLE SEARCH ================= */}

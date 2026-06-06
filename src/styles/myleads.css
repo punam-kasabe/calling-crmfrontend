@@ -95,7 +95,9 @@
 .stats-card.not {
   border-top: 4px solid #ef4444;
 }
-
+.stats-card.sitevisit {
+  border-left: 5px solid #8e44ad;
+}
 /* ================= FILTER BAR ================= */
 
 .filter-bar {
