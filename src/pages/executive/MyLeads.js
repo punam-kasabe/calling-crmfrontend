@@ -1917,36 +1917,57 @@ const handlePrevPage = () => {
 
       <div className="lead-form-grid">
 
-        {/* ASSIGN TO */}
+       <div>
+  <label>Assign To Attending Officer</label>
 
-        <div>
-          <label>Assign To</label>
+  <select
+    value={selectedLead.assignedTo || ""}
 
-         <input
-  type="text"
-  value={
-    selectedLead.assignedTo || ""
-  }
+    onChange={(e) => {
 
-  onChange={(e) =>
+      const selectedOfficer =
+        attendingOfficers.find(
+          (officer) =>
+            officer.name === e.target.value
+        );
 
-    setSelectedLead({
+      setSelectedLead({
 
-      ...selectedLead,
+        ...selectedLead,
 
-      assignedTo:
-        e.target.value
+        assignedTo:
+          selectedOfficer?.name || "",
 
-    })
+        assigned_to_email:
+          selectedOfficer?.email || ""
 
-  }
-/>
-        </div>
+      });
+
+    }}
+  >
+
+    <option value="">
+      Select Attending Officer
+    </option>
+
+    {attendingOfficers.map((officer) => (
+
+      <option
+        key={officer._id}
+        value={officer.name}
+      >
+        {officer.name}
+      </option>
+
+    ))}
+
+  </select>
+</div>
 
         {/* CLOSING EXECUTIVE */}
 
 <div>
-<label>Attending Officer</label>
+<label>Closing Executive</label>
 
  <select
   value={
@@ -1969,12 +1990,10 @@ const handlePrevPage = () => {
         e.target.value,
 
       assignedTo:
-  selectedOfficer?.name ||
-  selectedLead.assignedTo,
+        selectedOfficer?.name || "",
 
-assigned_to_email:
-  selectedOfficer?.email ||
-  selectedLead.assigned_to_email
+      assigned_to_email:
+        selectedOfficer?.email || ""
 
     });
 

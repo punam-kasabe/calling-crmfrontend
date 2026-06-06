@@ -25,7 +25,6 @@ import {
 export default function Sidebar({ isOpen, toggleSidebar }) {
   const location = useLocation();
   const navigate = useNavigate();
-
   const [openMenu, setOpenMenu] = useState(true);
   const [openReports, setOpenReports] = useState(false);
   const [openSettings, setOpenSettings] = useState(false);
