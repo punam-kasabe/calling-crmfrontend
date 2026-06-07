@@ -1,6 +1,6 @@
 import Sidebar from "../../components/Sidebar";
 import "../../styles/dashboard.css";
-
+import { useNavigate } from "react-router-dom";
 import { useEffect, useState, useMemo, useCallback } from "react";
 import axios from "axios";
 
@@ -293,9 +293,15 @@ export default function Dashboard() {
               ].map((item) => (
 
                 <div
-                  key={item.title}
-                  className={`compact-card ${item.cls}`}
-                >
+  key={item.title}
+  className={`compact-card ${item.cls}`}
+  style={{ cursor: "pointer" }}
+  onClick={() => {
+    if (item.title === "Total Leads") {
+      navigate("/reports/total-leads");
+    }
+  }}
+>
 
                   <h6>{item.title}</h6>
 

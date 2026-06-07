@@ -36,6 +36,7 @@ import ProjectsReport from "./pages/reports/ProjectsReport";
 import ROIReport from "./pages/reports/ROIReport";
 import SourcesReport from "./pages/reports/SourcesReport";
 import TeamPerformance from "./pages/reports/TeamPerformance";
+import TotalLeads from "./pages/reports/TotalLeads";
 
 /* 📄 NORMAL PAGES */
 import BulkUpdate from "./pages/BulkUpdate";
@@ -173,6 +174,10 @@ export default function App() {
           }
         />
 
+        <Route
+  path="/reports/total-leads"
+  element={<TotalLeads />}
+/>
         {/* EXECUTIVE */}
         <Route
           path="/executive-dashboard"
