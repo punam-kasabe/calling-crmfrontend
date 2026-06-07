@@ -18,7 +18,7 @@ import "chart.js/auto";
 const API = "https://calling-crm-backend-7w52.onrender.com/api";
 
 export default function Dashboard() {
-
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(true);
 
   const toggleSidebar = () => {
@@ -28,7 +28,7 @@ export default function Dashboard() {
   /* =========================================
      USER
   ========================================= */
-
+  
   const user = useMemo(() => {
     try {
       return JSON.parse(localStorage.getItem("user")) || {};
@@ -296,11 +296,14 @@ export default function Dashboard() {
   key={item.title}
   className={`compact-card ${item.cls}`}
   style={{ cursor: "pointer" }}
+
   onClick={() => {
-    if (item.title === "Total Leads") {
-      navigate("/reports/total-leads");
-    }
-  }}
+  console.log("Clicked:", item.title);
+
+  if (item.title === "Total Leads") {
+    navigate("/reports/total-leads");
+  }
+}}
 >
 
                   <h6>{item.title}</h6>
