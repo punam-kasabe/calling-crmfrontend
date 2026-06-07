@@ -898,10 +898,10 @@ const handlePrevPage = () => {
             <p>{stats.notInterested}</p>
           </div>
          
-         <div className="stats-card sitevisit">
-  <h5>Site Visit Done</h5>
-  <p>{stats.siteVisitDone}</p>
-</div>
+          <div className="stats-card sitevisit">
+         <h5>Site Visit Done</h5>
+          <p>{stats.siteVisitDone}</p>
+         </div>
 
         </div>
           

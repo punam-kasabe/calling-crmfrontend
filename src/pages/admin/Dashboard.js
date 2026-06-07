@@ -386,7 +386,11 @@ export default function Dashboard() {
 
                         <tr key={i}>
 
-                          <td>{e.name}</td>
+                          <td>
+                  {e.name?.includes("@")
+                    ? e.name.split("@")[0]
+                   : e.name}
+                  </td>
 
                           <td>{e.total}</td>
 
