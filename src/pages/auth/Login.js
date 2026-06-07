@@ -44,14 +44,27 @@ export default function Login() {
 }
 
 localStorage.setItem(
-
   "user",
-
   JSON.stringify(res.data.user)
-
 );
 
-navigate("/dashboard");
+const role = res.data.user?.role?.toLowerCase();
+
+if (role === "admin") {
+  navigate("/dashboard");
+}
+else if (role === "executive") {
+  navigate("/executive-dashboard");
+}
+else if (role === "manager") {
+  navigate("/manager-dashboard");
+}
+else if (role === "reception") {
+  navigate("/reception-dashboard");
+}
+else {
+  navigate("/dashboard");
+}
 
     } catch (err) {
 
