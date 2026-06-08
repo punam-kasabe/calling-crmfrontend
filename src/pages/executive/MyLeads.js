@@ -650,7 +650,7 @@ const matchesSource =
         (s) => s.value === lead.source
       )
     : true;
-    
+
 const matchesExecutive =
   selectedExecutives.length > 0
     ? selectedExecutives.some(
@@ -2045,12 +2045,7 @@ const handlePrevPage = () => {
 
   onChange={(e) => {
 
-    const selectedOfficer =
-      attendingOfficers.find(
-        (officer) =>
-          officer.name === e.target.value
-      );
-
+    
     setSelectedLead({
   ...selectedLead,
   closingExecutive: e.target.value
