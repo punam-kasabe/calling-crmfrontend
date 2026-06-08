@@ -489,6 +489,28 @@ useEffect(() => {
 };
 
 
+useEffect(() => {
+
+  let interval;
+
+  if (callModal && callStartTime) {
+
+    interval = setInterval(() => {
+
+      const seconds = Math.floor(
+        (new Date() - callStartTime) / 1000
+      );
+
+      setCallDuration(`${seconds} sec`);
+
+    }, 1000);
+
+  }
+
+  return () => clearInterval(interval);
+
+}, [callModal, callStartTime]);
+
 
   
 /* ================= ADD NEW LEAD ================= */
@@ -622,11 +644,9 @@ const matchesProject =
       selectedProjects.label === lead.project
     : true;
 
-const matchesSource =
-  selectedSources.length > 0
-    ? selectedSources.some(
-        (s) => s.value === lead.source
-      )
+const matchesProject =
+  selectedProjects
+    ? selectedProjects.label === lead.project
     : true;
 
 const matchesExecutive =
@@ -1990,6 +2010,7 @@ const handlePrevPage = () => {
       });
 
     }}
+    
   >
 
     <option value="">
@@ -2029,19 +2050,10 @@ const handlePrevPage = () => {
       );
 
     setSelectedLead({
+  ...selectedLead,
+  closingExecutive: e.target.value
+});
 
-      ...selectedLead,
-
-      closingExecutive:
-        e.target.value,
-
-      assignedTo:
-        selectedOfficer?.name || "",
-
-      assigned_to_email:
-        selectedOfficer?.email || ""
-
-    });
 
   }}
 >
@@ -2316,8 +2328,48 @@ value={officer.name}
 
   </div>
 
-)}
 
+
+)}
+{/* ================= CALL MODAL ================= */}
+
+{callModal && activeCall && (
+
+  <div className="modal-overlay">
+
+    <div className="modal-box">
+
+      <h3>Call In Progress</h3>
+
+      <p>
+        <strong>Name:</strong> {activeCall.name}
+      </p>
+
+      <p>
+        <strong>Phone:</strong> {activeCall.phone}
+      </p>
+
+      <p>
+        <strong>Duration:</strong> {callDuration}
+      </p>
+
+      <button
+        className="save-btn"
+        onClick={() => {
+  setCallModal(false);
+  setCallDuration("");
+  setCallStartTime(null);
+  setActiveCall(null);
+}}
+      >
+        Close
+      </button>
+
+    </div>
+
+  </div>
+
+)}
 
     </div>
 
