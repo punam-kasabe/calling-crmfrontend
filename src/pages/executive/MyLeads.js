@@ -63,6 +63,15 @@ const [selectedDepartments, setSelectedDepartments] = useState([]);
 const [selectedExecutives, setSelectedExecutives] = useState([]);
 const [selectedCities, setSelectedCities] = useState([]);
 const [attendingOfficers, setAttendingOfficers] = useState([]);
+const [callModal, setCallModal] = useState(false);
+
+const [activeCall, setActiveCall] = useState(null);
+
+const [callStartTime, setCallStartTime] = useState(null);
+
+const [callDuration, setCallDuration] = useState("");
+
+
 /* ================= PAGINATION ================= */
 
 const [currentPage, setCurrentPage] = useState(1);
@@ -125,6 +134,7 @@ const statusOptions = [
   "Ringing",
   "Connected",
   "Interested",
+  "Old Booking From Old Data",
   "Very Interested",
   "Not Interested",
   "Call Cut",
@@ -463,6 +473,22 @@ useEffect(() => {
       }
 
     };
+
+    const startCall = async (lead) => {
+
+  setActiveCall(lead);
+
+  setCallStartTime(new Date());
+
+  window.open(`tel:${lead.phone}`);
+
+  setTimeout(() => {
+    setCallModal(true);
+  }, 3000);
+
+};
+
+
 
   
 /* ================= ADD NEW LEAD ================= */
@@ -1493,15 +1519,21 @@ const handlePrevPage = () => {
 
                       <div className="action-buttons">
 
+
+
   {/* CALL ICON */}
 
-  <a
-    href={`tel:${lead.phone}`}
-    className="call-btn icon-btn"
-    title="Call"
-  >
-    <FaPhoneAlt />
-  </a>
+  <button
+  className="call-btn icon-btn"
+  title="Call"
+  onClick={() => startCall(lead)}
+>
+  <FaPhoneAlt />
+</button>
+
+
+
+
 
   {/* WHATSAPP ICON */}
 
@@ -1916,12 +1948,10 @@ const handlePrevPage = () => {
   </div>
 
 )}
-
-     
-
+    
      {/* ================= EDIT MODAL ================= */}
 
-{showModal && selectedLead && (
+    {showModal && selectedLead && (
 
   <div className="modal-overlay">
 
@@ -1932,6 +1962,8 @@ const handlePrevPage = () => {
       <div className="lead-form-grid">
 
        <div>
+
+
   <label>Assign To Attending Officer</label>
 
   <select
@@ -2285,6 +2317,8 @@ value={officer.name}
   </div>
 
 )}
+
+
     </div>
 
   );
