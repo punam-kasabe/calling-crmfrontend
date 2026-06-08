@@ -644,10 +644,6 @@ const matchesProject =
       selectedProjects.label === lead.project
     : true;
 
-const matchesProject =
-  selectedProjects
-    ? selectedProjects.label === lead.project
-    : true;
 
 const matchesExecutive =
   selectedExecutives.length > 0
