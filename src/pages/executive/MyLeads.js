@@ -644,7 +644,13 @@ const matchesProject =
       selectedProjects.label === lead.project
     : true;
 
-
+const matchesSource =
+  selectedSources.length > 0
+    ? selectedSources.some(
+        (s) => s.value === lead.source
+      )
+    : true;
+    
 const matchesExecutive =
   selectedExecutives.length > 0
     ? selectedExecutives.some(
