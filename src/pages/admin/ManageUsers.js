@@ -58,6 +58,17 @@ export default function ManageUsers() {
   editUser
 );
 
+if (
+  editUser.newPassword &&
+  editUser.newPassword.length < 8
+) {
+  alert(
+    "Password must be minimum 8 characters"
+  );
+  return;
+}
+
+
       setEditUser(null);
       fetchUsers();
     } catch (err) {
@@ -88,6 +99,7 @@ export default function ManageUsers() {
                 <th>Birth Date</th>
                 <th>Email</th>
                 <th>Role</th>
+                <th>Last Activity</th>
                 <th width="150">Action</th>
               </tr>
             </thead>
@@ -113,7 +125,12 @@ export default function ManageUsers() {
 </td>
                   <td>{u.email}</td>
                   <td>{u.role}</td>
-
+                   <td>
+  {u.passwordChangedAt
+    ? new Date(u.passwordChangedAt)
+        .toLocaleString("en-GB")
+    : "-"}
+</td>
                   <td>
                     <button
                       className="btn btn-sm btn-primary me-1"
@@ -169,6 +186,15 @@ export default function ManageUsers() {
           .split("T")[0]
       : ""
   }
+  onChange={handleEditChange}
+/>
+
+<input
+  type="password"
+  name="newPassword"
+  className="form-control mb-2"
+  placeholder="New Password (min 8 chars)"
+  value={editUser.newPassword || ""}
   onChange={handleEditChange}
 />
                 <select
