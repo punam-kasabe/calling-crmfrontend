@@ -51,31 +51,39 @@ export default function ManageUsers() {
 
   /* ================= UPDATE ================= */
   const handleUpdate = async () => {
-    try {
 
-      await axios.put(
-  `${API}/update-user/${editUser._id}`,
-  editUser
-);
+  if (
+    editUser.newPassword &&
+    editUser.newPassword.length < 8
+  ) {
+    alert("Password must be minimum 8 characters");
+    return;
+  }
 
-if (
-  editUser.newPassword &&
-  editUser.newPassword.length < 8
-) {
-  alert(
-    "Password must be minimum 8 characters"
-  );
-  return;
-}
+  try {
 
+    await axios.put(
+      `${API}/update-user/${editUser._id}`,
+      editUser
+    );
 
-      setEditUser(null);
-      fetchUsers();
-    } catch (err) {
-      console.error(err);
-      alert("❌ Update failed");
-    }
-  };
+    alert("✅ User Updated");
+
+    setEditUser(null);
+
+    fetchUsers();
+
+  } catch (err) {
+
+    console.error(err);
+
+    console.log(err.response?.data);
+
+    alert("❌ Update failed");
+
+  }
+
+};
 
   return (
     <div className="d-flex">
