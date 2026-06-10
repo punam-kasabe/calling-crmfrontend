@@ -101,9 +101,15 @@ const closingExecutives = [
       await axios.delete(`${API}/delete-lead/${id}`);
       toast.success("Deleted ✅");
       fetchLeads();
-    } catch {
-      toast.error("Delete Failed ❌");
-    }
+    } catch (err) {
+  console.log(err);
+
+  if (err.response) {
+    console.log(err.response.data);
+  }
+
+  toast.error("Delete Failed ❌");
+}
   };
     
   const handleSelectLead = (id) => {
@@ -156,9 +162,15 @@ const closingExecutives = [
 
   } catch (err) {
 
-    toast.error("Delete Failed ❌");
+  console.log(err);
 
+  if (err.response) {
+    console.log(err.response.data);
   }
+
+  toast.error("Delete Failed ❌");
+
+}
 
 };
 
