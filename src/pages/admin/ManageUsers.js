@@ -52,7 +52,12 @@ export default function ManageUsers() {
   /* ================= UPDATE ================= */
   const handleUpdate = async () => {
     try {
-      await axios.put(`${API}/update-user/${editUser.id}`, editUser);
+
+      await axios.put(
+  `${API}/update-user/${editUser._id}`,
+  editUser
+);
+
       setEditUser(null);
       fetchUsers();
     } catch (err) {
@@ -80,6 +85,7 @@ export default function ManageUsers() {
             <thead>
               <tr>
                 <th>Name</th>
+                <th>Birth Date</th>
                 <th>Email</th>
                 <th>Role</th>
                 <th width="150">Action</th>
@@ -99,6 +105,12 @@ export default function ManageUsers() {
              users.map((u) => (
                <tr key={u._id}>
                   <td>{u.name}</td>
+                  <td>
+  {u.birth_date
+    ? new Date(u.birth_date)
+        .toLocaleDateString("en-GB")
+    : "-"}
+</td>
                   <td>{u.email}</td>
                   <td>{u.role}</td>
 
@@ -112,8 +124,7 @@ export default function ManageUsers() {
 
                     <button
                       className="btn btn-sm btn-danger"
-                      onClick={() => handleDelete(u.id)}
-                    >
+                    onClick={() => handleDelete(u._id)}                    >
                       Delete
                     </button>
                   </td>
@@ -146,7 +157,20 @@ export default function ManageUsers() {
                   value={editUser.email}
                   onChange={handleEditChange}
                 />
-
+               
+               <input
+  type="date"
+  name="birth_date"
+  className="form-control mb-2"
+  value={
+    editUser.birth_date
+      ? new Date(editUser.birth_date)
+          .toISOString()
+          .split("T")[0]
+      : ""
+  }
+  onChange={handleEditChange}
+/>
                 <select
                   name="role"
                   className="form-select mb-3"
