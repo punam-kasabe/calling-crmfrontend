@@ -291,7 +291,6 @@ setTotalLeadsCount(
   };
 
   /* ================= CARDS ================= */
-  /* ================= CARDS ================= */
 
 const stats = {
   totalLeads: statsData.totalLeads,
