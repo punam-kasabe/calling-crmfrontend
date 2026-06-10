@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback, useMemo } from "react";
 import axios from "axios";
+import Select from "react-select";
 import Sidebar from "../components/Sidebar";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -31,7 +32,7 @@ export default function Pipeline() {
 
   // 🔥 FILTER STATE
   const [filters, setFilters] = useState({
-  status: "",
+  status: [],
   assigned: "",
   closingExecutive: "",
   project: "",
@@ -57,6 +58,17 @@ const closingExecutives = [
       .map((l) => l.assigned_manager)
       .filter(Boolean)
   )
+];
+const statusOptions = [
+  { value: "New", label: "New" },
+  { value: "Interested", label: "Interested" },
+  { value: "Ringing", label: "Ringing" },
+  { value: "Call Back", label: "Call Back" },
+  { value: "Call Cut", label: "Call Cut" },
+  { value: "Booked", label: "Booked" },
+  { value: "Not Interested", label: "Not Interested" },
+  { value: "Switched Off", label: "Switched Off" },
+  { value: "Site Visit", label: "Site Visit" }
 ];
   /* ================= FETCH ================= */
   const fetchLeads = useCallback(async () => {
@@ -400,31 +412,19 @@ const closingExecutives = [
 
     <div className="col-md-2">
 
-      <select
-        className="form-select"
-        value={filters.status}
-        onChange={(e) =>
-          setFilters({
-            ...filters,
-            status: e.target.value
-          })
-        }
-      >
-
-        <option value="">
-          All Status
-        </option>
-
-        <option>New</option>
-        <option>Interested</option>
-        <option>Ringing</option>
-        <option>Booked</option>
-        <option>Not Interested</option>
-        <option>Switch Off</option>
-        <option>Site Visit</option>
-
-
-      </select>
+     <Select
+  isMulti
+  options={statusOptions}
+  closeMenuOnSelect={false}
+  value={filters.status}
+  onChange={(selected) =>
+    setFilters({
+      ...filters,
+      status: selected || []
+    })
+  }
+  placeholder="Select Status"
+/>
 
     </div>
 
@@ -628,7 +628,7 @@ const closingExecutives = [
         className="btn btn-secondary w-100"
         onClick={() =>
           setFilters({
-            status: "",
+         status: [],
             assigned: "",
             closingExecutive: "",
             project: "",
