@@ -178,6 +178,7 @@ export default function App() {
   path="/reports/total-leads"
   element={<TotalLeads />}
 />
+
         {/* EXECUTIVE */}
         <Route
           path="/executive-dashboard"

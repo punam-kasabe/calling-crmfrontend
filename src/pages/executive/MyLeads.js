@@ -45,6 +45,18 @@ export default function MyLeads() {
   const [showModal,
     setShowModal] =
     useState(false);
+const [showBookingModal,
+setShowBookingModal] =
+useState(false);
+
+const [bookingData,
+setBookingData] =
+useState({
+
+unitNo:"",
+bookingAmount:""
+
+});
 
   const [showAdvancedSearch, setShowAdvancedSearch] =
     useState(false);
@@ -512,7 +524,71 @@ useEffect(() => {
 }, [callModal, callStartTime]);
 
 
-  
+  const handleCreateBooking =
+async()=>{
+
+try{
+
+await axios.post(
+
+`${API}/create-booking`,
+
+{
+
+leadId:
+selectedLead._id,
+
+clientName:
+selectedLead.name,
+
+phone:
+selectedLead.phone,
+
+project:
+selectedLead.project,
+
+executive:
+selectedLead.closingExecutive,
+
+attendingOfficer:
+selectedLead.assignedTo,
+
+unitNo:
+bookingData.unitNo,
+
+bookingAmount:
+bookingData.bookingAmount
+
+}
+
+);
+
+alert(
+"Booking Added ✅"
+);
+
+setShowBookingModal(false);
+
+setBookingData({
+
+unitNo:"",
+bookingAmount:""
+
+});
+
+fetchMyLeads();
+
+}catch(err){
+
+console.log(err);
+
+alert(
+"Booking Failed ❌"
+);
+
+}
+
+};
 /* ================= ADD NEW LEAD ================= */
 
 const handleAddNewLead = async () => {
@@ -1608,7 +1684,25 @@ const handlePrevPage = () => {
   >
     <FaEdit />
   </button>
+{lead.status === "Booked" && (
 
+<button
+className="booking-btn"
+
+onClick={()=>{
+
+setSelectedLead(lead);
+
+setShowBookingModal(true);
+
+}}
+>
+
+Booking
+
+</button>
+
+)}
 </div>
 
                       </td>
@@ -2328,6 +2422,87 @@ value={officer.name}
 
 
 )}
+
+{showBookingModal && (
+
+<div className="modal-overlay">
+
+<div className="modal-box">
+
+<h3>Add Booking</h3>
+
+<input
+type="text"
+placeholder="Unit No"
+
+value={bookingData.unitNo}
+
+onChange={(e)=>
+
+setBookingData({
+
+...bookingData,
+
+unitNo:e.target.value
+
+})
+
+}
+/>
+
+<input
+type="number"
+placeholder="Booking Amount"
+
+value={bookingData.bookingAmount}
+
+onChange={(e)=>
+
+setBookingData({
+
+...bookingData,
+
+bookingAmount:e.target.value
+
+})
+
+}
+/>
+
+<div className="modal-actions">
+
+<button
+className="cancel-btn"
+
+onClick={()=>{
+
+setShowBookingModal(false);
+
+}}
+>
+
+Cancel
+
+</button>
+
+<button
+className="save-btn"
+
+onClick={handleCreateBooking}
+>
+
+Save Booking
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+)}
+
 {/* ================= CALL MODAL ================= */}
 
 {callModal && activeCall && (
