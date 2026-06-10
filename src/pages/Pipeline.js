@@ -29,6 +29,16 @@ export default function Pipeline() {
   const [selectedLead, setSelectedLead] = useState(null);
   const [selectedLeads, setSelectedLeads] = useState([]);
   const [showAdvancedSearch, setShowAdvancedSearch] = useState(false);
+  
+  const [statsData, setStatsData] = useState({
+  totalLeads: 0,
+  hotLeads: 0,
+  newLeads: 0,
+  bookedLeads: 0,
+  inactiveLeads: 0,
+  todayFollowups: 0,
+  backlog: 0
+});
 
   // 🔥 FILTER STATE
   const [filters, setFilters] = useState({
@@ -69,7 +79,9 @@ const statusOptions = [
   { value: "Not Interested", label: "Not Interested" },
   { value: "Switched Off", label: "Switched Off" },
   { value: "Site Visit", label: "Site Visit" }
-];
+   ];
+
+
   /* ================= FETCH ================= */
   const fetchLeads = useCallback(async () => {
     try {
@@ -83,7 +95,20 @@ const statusOptions = [
       setLeads(res.data.data || []);
       console.log(res.data.data);
       setTotalPages(res.data.totalPages || 1);
-      setTotalLeadsCount(res.data.total || 0);
+
+      setStatsData({
+  totalLeads: res.data.totalLeads || 0,
+  hotLeads: res.data.hotLeads || 0,
+  newLeads: res.data.newLeads || 0,
+  bookedLeads: res.data.bookedLeads || 0,
+  inactiveLeads: res.data.inactiveLeads || 0,
+  todayFollowups: res.data.todayFollowups || 0,
+  backlog: res.data.backlog || 0
+});
+
+setTotalLeadsCount(
+  res.data.totalLeads || 0
+);
 
     } catch (err) {
       console.error("Fetch Leads Error:", err);
@@ -266,67 +291,17 @@ const statusOptions = [
   };
 
   /* ================= CARDS ================= */
-  const stats = useMemo(() => {
+  /* ================= CARDS ================= */
 
-  let totalLeads = totalLeadsCount;
-  let todayFollowups = 0;
-  let backlog = 0;
-  let hot = 0;
-  let newLeads = 0;
-  let booked = 0;
-  let inactive = 0;
-
-  const today = new Date()
-    .toISOString()
-    .split("T")[0];
-
-  leads.forEach((l) => {
-
-    const nextCall = l.next_call_date
-      ? new Date(l.next_call_date)
-          .toISOString()
-          .split("T")[0]
-      : "";
-
-    if (nextCall === today)
-      todayFollowups++;
-
-    if (!l.next_call_date)
-      backlog++;
-
-    if (l.status === "Interested")
-      hot++;
-
-    if (l.status === "New")
-      newLeads++;
-
-    if (l.status === "Booked")
-      booked++;
-
-    if (l.status === "Not Interested")
-      inactive++;
-
-  });
-
-  return {
-
-    totalLeads,
-
-    todayFollowups,
-
-    backlog,
-
-    hot,
-
-    newLeads,
-
-    booked,
-
-    inactive
-
-  };
-
-}, [leads, totalLeadsCount]);
+const stats = {
+  totalLeads: statsData.totalLeads,
+  todayFollowups: statsData.todayFollowups,
+  backlog: statsData.backlog,
+  hot: statsData.hotLeads,
+  newLeads: statsData.newLeads,
+  booked: statsData.bookedLeads,
+  inactive: statsData.inactiveLeads
+};
 
   return (
     <div className="d-flex">
