@@ -28,6 +28,9 @@ export default function MyLeads() {
   const [leads, setLeads] =
     useState([]);
 
+    const [bookingCount, setBookingCount] =
+    useState(0);
+
   const [loading, setLoading] =
     useState(true);
 
@@ -303,6 +306,30 @@ const cityDropdownOptions = [
 
   }, [fetchMyLeads]);
 
+  const fetchBookingsCount =
+async () => {
+
+  try {
+
+    const res =
+      await axios.get(
+        `${API}/bookings-count`
+      );
+
+    setBookingCount(
+      res.data.total || 0
+    );
+
+  }
+
+  catch (err) {
+
+    console.log(err);
+
+  }
+
+};
+
   /* ================= FETCH EXECUTIVES ================= */
 
 const fetchExecutives = async () => {
@@ -335,9 +362,11 @@ const fetchExecutives = async () => {
 
 useEffect(() => {
 
-  fetchExecutives();
+  fetchMyLeads();
 
-}, []);
+  fetchBookingsCount();
+
+}, [fetchMyLeads]);
 
   /* ================= UPDATE STATUS ================= */
 
