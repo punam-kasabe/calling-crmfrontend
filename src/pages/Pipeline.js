@@ -29,7 +29,10 @@ export default function Pipeline() {
   const [selectedLead, setSelectedLead] = useState(null);
   const [selectedLeads, setSelectedLeads] = useState([]);
   const [showAdvancedSearch, setShowAdvancedSearch] = useState(false);
-  
+  const [projects, setProjects] = useState([]);
+  useEffect(() => {
+  console.log("PROJECTS STATE =", projects);
+  }, [projects]);
   const [statsData, setStatsData] = useState({
   totalLeads: 0,
   hotLeads: 0,
@@ -120,6 +123,27 @@ setTotalLeadsCount(
 
   useEffect(() => {
   fetchLeads();
+ 
+  const fetchProjects = async () => {
+  try {
+    const res = await axios.get(
+      "https://calling-crm-backend-7w52.onrender.com/api/projects"
+    );
+
+
+     console.log("PROJECT API =", res.data);
+     
+    setProjects(res.data.data || []);
+
+  } catch (err) {
+
+    console.log("Projects Error", err);
+
+  }
+};
+
+
+fetchProjects();
 
   const token = localStorage.getItem("token");
 
@@ -146,6 +170,8 @@ setTotalLeadsCount(
     });
 
 }, [fetchLeads]);
+
+
   /* ================= DELETE ================= */
   const handleDelete = async (id) => {
     const result = await Swal.fire({
@@ -513,75 +539,18 @@ const stats = {
         }
       >
 
-       <option value="">
-      All Projects
-    </option>
+      <option value="">
+  All Projects
+</option>
 
-    <option value="99villa">
-      99villa
-    </option>
-
-    <option value="99 villa plot">
-      99 villa plot
-    </option>
-
-    <option value="Affordable life">
-      Affordable life
-    </option>
-
-    <option value="Alibaug Plot">
-      Alibaug Plot
-    </option>
-
-    <option value="ANJALI ZAMIN">
-      ANJALI ZAMIN
-    </option>
-
-    <option value="Gudipadwa plot in 5 Lacs">
-      Gudipadwa plot in 5 Lacs
-    </option>
-
-    <option value="Khopoli-pali Road plots">
-      Khopoli-pali Road plots
-    </option>
-
-    <option value="Maha-Mumbaai">
-      Maha-Mumbaai
-    </option>
-
-    <option value="MAHAMUMBAI">
-      MAHAMUMBAI
-    </option>
-
-    <option value="Maha-Mumbaii">
-      Maha-Mumbaii
-    </option>
-
-    <option value="Mahamumbai Phase 2">
-      Mahamumbai Phase 2
-    </option>
-
-    <option value="Mmahamumbai">
-      Mmahamumbai
-    </option>
-
-    <option value="Panvel (99Villa)">
-      Panvel (99Villa)
-    </option>
-
-    <option value="Sheetal Campaign">
-      Sheetal Campaign
-    </option>
-
-    <option value="Thane (Nitesh)">
-      Thane (Nitesh)
-    </option>
-
-    <option value="Thane (Virendra)">
-      Thane (Virendra)
-    </option>
-
-
+{projects.map((project) => (
+  <option
+    key={project._id}
+    value={project.name}
+  >
+    {project.name}
+  </option>
+))}
       </select>
 
     </div>
