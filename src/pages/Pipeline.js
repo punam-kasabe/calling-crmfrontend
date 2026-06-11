@@ -24,7 +24,7 @@ export default function Pipeline() {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [totalLeadsCount, setTotalLeadsCount] = useState(0);
+ const [totalLeadsCount, setTotalLeadsCount] = useState(0);
   const [showModal, setShowModal] = useState(false);
   const [selectedLead, setSelectedLead] = useState(null);
   const [selectedLeads, setSelectedLeads] = useState([]);
@@ -106,9 +106,11 @@ const statusOptions = [
   backlog: res.data.backlog || 0
 });
 
+
 setTotalLeadsCount(
   res.data.totalLeads || 0
 );
+
 
     } catch (err) {
       console.error("Fetch Leads Error:", err);
@@ -322,7 +324,7 @@ const stats = {
 >
 
         <h4>Pipeline</h4>
-
+<h6>Total Leads: {totalLeadsCount}</h6>
         {/* 🔥 CARDS */}
        <div
   className="mb-4"
