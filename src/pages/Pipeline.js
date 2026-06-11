@@ -388,11 +388,11 @@ const stats = {
 
   { title: "Hot Leads", value: stats.hot, color: "#007bff" },
 
-  { title: "New Leads", value: stats.newLeads, color: "#007bff" },
+  { title: "New Leads", value: stats.newLeads, color: "#17a2b8" },
 
   { title: "Booked Leads", value: stats.booked, color: "#28a745" },
 
-  { title: "Inactive Leads", value: stats.inactive, color: "#007bff" },
+  { title: "Inactive Leads", value: stats.inactive, color: "#ffc107" },
 ].map((card, i) => (
 
 <div

@@ -440,7 +440,7 @@ useEffect(() => {
     selectedLead.assigned_to_email,
 
   closingExecutive:
-    selectedLead.closingExecutive,
+  selectedLead.assignedTo,
 
   status:
     selectedLead.status,
@@ -2131,16 +2131,18 @@ Booking
 
       setSelectedLead({
 
-        ...selectedLead,
+  ...selectedLead,
 
-        assignedTo:
-          selectedOfficer?.name || "",
+  assignedTo:
+    selectedOfficer?.name || "",
 
-        assigned_to_email:
-          selectedOfficer?.email || ""
+  assigned_to_email:
+    selectedOfficer?.email || "",
 
-      });
+  closingExecutive:
+    selectedOfficer?.name || ""
 
+});
     }}
     
   >
@@ -2163,45 +2165,7 @@ Booking
   </select>
 </div>
 
-        {/* CLOSING EXECUTIVE */}
-
-<div>
-<label>Closing Executive</label>
-
- <select
-  value={
-    selectedLead.closingExecutive || ""
-  }
-
-  onChange={(e) => {
-
-    
-    setSelectedLead({
-  ...selectedLead,
-  closingExecutive: e.target.value
-});
-
-
-  }}
->
-
-    <option value="">
-      Select Executive
-    </option>
-
-{attendingOfficers.map((officer) => (
-
-      <option
-       key={officer._id}
-value={officer.name}
->
-  {officer.name}
-      </option>
-
-    ))}
-
-  </select>
-</div>
+        
 
         {/* STATUS */}
 
