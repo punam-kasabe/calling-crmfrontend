@@ -25,6 +25,10 @@ export default function ManageProjects() {
     active: true,
   });
 
+
+  const user =
+  JSON.parse(localStorage.getItem("user")) || {};
+  
   /* =========================================
      FETCH PROJECTS
   ========================================= */

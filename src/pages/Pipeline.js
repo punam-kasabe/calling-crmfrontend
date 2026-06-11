@@ -130,9 +130,6 @@ setTotalLeadsCount(
       "https://calling-crm-backend-7w52.onrender.com/api/projects"
     );
 
-
-     console.log("PROJECT API =", res.data);
-     
     setProjects(res.data.data || []);
 
   } catch (err) {
@@ -170,7 +167,6 @@ fetchProjects();
     });
 
 }, [fetchLeads]);
-
 
   /* ================= DELETE ================= */
   const handleDelete = async (id) => {
@@ -384,19 +380,19 @@ const stats = {
   }}
 >
           {[
-  { title: "Total Leads", value: stats.totalLeads, color: "#343a40" },
+  { title: "Total Leads", value: stats.totalLeads, color: "#007bff" },
 
   { title: "Today's Follow-ups", value: stats.todayFollowups, color: "#007bff" },
 
-  { title: "Backlogs", value: stats.backlog, color: "#6c757d" },
+  { title: "Backlogs", value: stats.backlog, color: "#007bff" },
 
-  { title: "Hot Leads", value: stats.hot, color: "#dc3545" },
+  { title: "Hot Leads", value: stats.hot, color: "#007bff" },
 
-  { title: "New Leads", value: stats.newLeads, color: "#17a2b8" },
+  { title: "New Leads", value: stats.newLeads, color: "#007bff" },
 
   { title: "Booked Leads", value: stats.booked, color: "#28a745" },
 
-  { title: "Inactive Leads", value: stats.inactive, color: "#ffc107" },
+  { title: "Inactive Leads", value: stats.inactive, color: "#007bff" },
 ].map((card, i) => (
 
 <div
