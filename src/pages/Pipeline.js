@@ -119,21 +119,33 @@ setTotalLeadsCount(
   }, [user, page, filters]);
 
   useEffect(() => {
-    fetchLeads();
+  fetchLeads();
 
   const token = localStorage.getItem("token");
 
-axios.get(`${API}/all-users`, {
-  headers: {
-    Authorization: `Bearer ${token}`
+  if (!token) {
+    console.log("❌ No Token Found");
+    return;
   }
-})
-.then(res => setUsers(res.data || []))
-.catch(err => {
-  console.log("Fetch Users Error:", err);
-});
-  }, [fetchLeads]);
 
+  axios
+    .get(`${API}/all-users`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then((res) => {
+      console.log("✅ Users Loaded:", res.data);
+      setUsers(Array.isArray(res.data) ? res.data : []);
+    })
+    .catch((err) => {
+      console.log(
+        "❌ Fetch Users Error:",
+        err.response?.data || err.message
+      );
+    });
+
+}, [fetchLeads]);
   /* ================= DELETE ================= */
   const handleDelete = async (id) => {
     const result = await Swal.fire({

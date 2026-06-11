@@ -17,6 +17,7 @@ export default function ManageUsers() {
   try {
 
     const token = localStorage.getItem("token");
+    console.log("TOKEN =", token);
 
     const res = await axios.get(
       `${API}/all-users`,
@@ -26,7 +27,7 @@ export default function ManageUsers() {
         }
       }
     );
-
+    
     setUsers(
       Array.isArray(res.data)
         ? res.data
