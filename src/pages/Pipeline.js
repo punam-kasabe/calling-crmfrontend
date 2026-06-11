@@ -355,13 +355,14 @@ const stats = {
 <div
   className="stats-card"
   key={card.title}
-  style={{ background: card.color }}
-
   style={{
+    background: card.color,
     flex: "1",
     minWidth: "170px",
   }}
->              <div className="card text-white shadow-sm"
+>         
+
+ <div className="card text-white shadow-sm"
                 style={{ background: card.color, borderRadius: "10px", padding: "10px" }}>
                 <div className="text-center">
                   <h6 style={{ fontSize: "13px" }}>{card.title}</h6>
