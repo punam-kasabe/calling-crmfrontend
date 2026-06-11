@@ -324,10 +324,11 @@ const stats = {
 >
 
         <h4>Pipeline</h4>
-<h6>Total Leads: {totalLeadsCount}</h6>
+   <h6 className="total-count">
+  Total Leads: {totalLeadsCount}
+</h6>
         {/* 🔥 CARDS */}
-       <div
-  className="mb-4"
+       <div className="stats-wrapper"
   style={{
     display: "flex",
     gap: "15px",
@@ -350,9 +351,12 @@ const stats = {
 
   { title: "Inactive Leads", value: stats.inactive, color: "#ffc107" },
 ].map((card, i) => (
+
 <div
-  className="mb-3"
+  className="stats-card"
   key={card.title}
+  style={{ background: card.color }}
+
   style={{
     flex: "1",
     minWidth: "170px",
@@ -369,8 +373,8 @@ const stats = {
         </div>
 
         {/* SEARCH */}
-        <div className="card p-2 mb-3 shadow-sm">
-          <input
+       <div className="card search-card mb-3">
+            <input
             className="form-control"
             placeholder="Search leads..."
             value={search}
@@ -378,9 +382,9 @@ const stats = {
           />
         </div>
 
-  {showAdvancedSearch && (
+ {showAdvancedSearch && (
 
-<div className="card p-3 mb-3 shadow-sm">
+<div className="advanced-search-card">
 
   <div className="row g-2">
 
@@ -625,7 +629,7 @@ const stats = {
 )}
 
         {/* TABLE */}
-        <div className="card p-3 shadow-sm">     
+       <div className="table-card">    
   <div className="d-flex justify-content-between align-items-center mb-3">
 <button
   className="btn btn-dark me-2"
@@ -840,7 +844,7 @@ const stats = {
           </table>
 
           {/* PAGINATION */}
-          <div className="d-flex justify-content-between mt-3">
+        <div className="pagination-wrapper d-flex justify-content-between">
             <button className="btn btn-outline-primary"
               disabled={page === 1}
               onClick={() => setPage(p => p - 1)}>
