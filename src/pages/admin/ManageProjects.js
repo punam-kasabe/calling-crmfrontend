@@ -200,29 +200,25 @@ export default function ManageProjects() {
 
           <h3>Projects</h3>
 
-          <button
-            className="add-btn"
-            onClick={() => {
-
-              setShowModal(true);
-
-              setEditId(null);
-
-              setProjectData({
-
-                name: "",
-                city: "",
-                address: "",
-                projectId: "",
-                description: "",
-                active: true,
-
-              });
-
-            }}
-          >
-            Add New Project
-          </button>
+         {user?.role === "admin" && (
+  <button
+    className="add-btn"
+    onClick={() => {
+      setShowModal(true);
+      setEditId(null);
+      setProjectData({
+        name: "",
+        city: "",
+        address: "",
+        projectId: "",
+        description: "",
+        active: true,
+      });
+    }}
+  >
+    Add New Project
+  </button>
+)}
 
         </div>
 
@@ -267,25 +263,27 @@ export default function ManageProjects() {
                       {proj.active ? "Yes" : "No"}
                     </td>
 
-                    <td>
+                   <td>
 
-                      <button
-                        className="edit-btn"
-                        onClick={() => handleEdit(proj)}
-                      >
-                        ✏️
-                      </button>
+  {user?.role === "admin" && (
+    <>
+      <button
+        className="edit-btn"
+        onClick={() => handleEdit(proj)}
+      >
+        ✏️
+      </button>
 
-                      <button
-                        className="delete-btn"
-                        onClick={() =>
-                          handleDelete(proj._id)
-                        }
-                      >
-                        🗑️
-                      </button>
+      <button
+        className="delete-btn"
+        onClick={() => handleDelete(proj._id)}
+      >
+        🗑️
+      </button>
+    </>
+  )}
 
-                    </td>
+</td>
 
                   </tr>
 
