@@ -14,25 +14,57 @@ export default function ManageUsers() {
 
   /* ================= FETCH USERS ================= */
   const fetchUsers = async () => {
-    try {
-      const res = await axios.get(`${API}/all-users`);
-      setUsers(Array.isArray(res.data) ? res.data : []);
-    } catch (err) {
-      console.error("Fetch Error:", err);
-      alert("❌ Cannot fetch users");
-    }
-  };
+  try {
 
-  useEffect(() => {
-    fetchUsers();
-  }, []);
+    const token = localStorage.getItem("token");
+
+    const res = await axios.get(
+      `${API}/all-users`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    );
+
+    setUsers(
+      Array.isArray(res.data)
+        ? res.data
+        : []
+    );
+
+  } catch (err) {
+
+    console.error("Fetch Error:", err);
+
+    console.log(err.response?.data);
+
+    alert("❌ Cannot fetch users");
+
+  }
+};
+
+
+useEffect(() => {
+  fetchUsers();
+}, []);
+
 
   /* ================= DELETE ================= */
   const handleDelete = async (id) => {
     if (!window.confirm("Delete user?")) return;
 
     try {
-      await axios.delete(`${API}/delete-user/${id}`);
+      const token = localStorage.getItem("token");
+
+await axios.delete(
+  `${API}/delete-user/${id}`,
+  {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  }
+);
       fetchUsers();
     } catch (err) {
       console.error(err);
@@ -71,10 +103,17 @@ export default function ManageUsers() {
 
   try {
 
-    await axios.put(
-      `${API}/update-user/${editUser._id}`,
-      editUser
-    );
+   const token = localStorage.getItem("token");
+
+await axios.put(
+  `${API}/update-user/${editUser._id}`,
+  editUser,
+  {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  }
+);
 
     alert("✅ User Updated");
 
