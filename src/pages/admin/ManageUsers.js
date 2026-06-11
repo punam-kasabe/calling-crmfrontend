@@ -42,8 +42,13 @@ export default function ManageUsers() {
 
   /* ================= EDIT ================= */
   const openEdit = (user) => {
-    setEditUser(user);
-  };
+
+  setEditUser({
+    ...user,
+    newPassword: ""
+  });
+
+};
 
   const handleEditChange = (e) => {
     setEditUser({ ...editUser, [e.target.name]: e.target.value });
@@ -52,10 +57,14 @@ export default function ManageUsers() {
   /* ================= UPDATE ================= */
   const handleUpdate = async () => {
 
+    console.log("EDIT USER =", editUser);
   if (
     editUser.newPassword &&
     editUser.newPassword.length < 8
   ) {
+      
+    
+
     alert("Password must be minimum 8 characters");
     return;
   }
