@@ -121,8 +121,17 @@ setTotalLeadsCount(
   useEffect(() => {
     fetchLeads();
 
-    axios.get(`${API}/all-users`)
-      .then(res => setUsers(res.data || []));
+  const token = localStorage.getItem("token");
+
+axios.get(`${API}/all-users`, {
+  headers: {
+    Authorization: `Bearer ${token}`
+  }
+})
+.then(res => setUsers(res.data || []))
+.catch(err => {
+  console.log("Fetch Users Error:", err);
+});
   }, [fetchLeads]);
 
   /* ================= DELETE ================= */
