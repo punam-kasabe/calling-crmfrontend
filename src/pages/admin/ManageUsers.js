@@ -27,7 +27,7 @@ export default function ManageUsers() {
         }
       }
     );
-    
+    console.log("FETCHED USERS =", res.data);
     setUsers(
       Array.isArray(res.data)
         ? res.data

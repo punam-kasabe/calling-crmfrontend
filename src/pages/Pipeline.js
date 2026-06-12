@@ -92,7 +92,8 @@ const statusOptions = [
         email: user.email,
         role: user.role,
         page,
-        filters
+        filters,
+        search
       });
 
       setLeads(res.data.data || []);
@@ -119,7 +120,7 @@ setTotalLeadsCount(
       console.error("Fetch Leads Error:", err);
       setLeads([]);
     }
-  }, [user, page, filters]);
+}, [user, page, filters, search]);
 
   useEffect(() => {
   fetchLeads();
@@ -269,13 +270,7 @@ fetchProjects();
   };
 
   /* ================= SEARCH ================= */
-  const filteredLeads = useMemo(() => {
-    return leads.filter((l) =>
-      `${l.name} ${l.phone} ${l.status} ${l.project} ${l.assigned_to}`
-        .toLowerCase()
-        .includes(search.toLowerCase())
-    );
-  }, [search, leads]);
+  const filteredLeads = leads;
 
 
     /* ================= EXPORT EXCEL ================= */
@@ -422,8 +417,10 @@ const stats = {
             className="form-control"
             placeholder="Search leads..."
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
+onChange={(e) => {
+  setSearch(e.target.value);
+  setPage(1);
+}}          />
         </div>
 
  {showAdvancedSearch && (
