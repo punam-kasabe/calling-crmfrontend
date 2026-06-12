@@ -1058,7 +1058,9 @@ const handlePrevPage = () => {
           <p>{stats.siteVisitDone}</p>
          </div>
 
-             
+             <div className="stats-card booked">
+  <h5>Total Bookings</h5>
+  <p>{bookingCount}</p>
 </div> 
 
         </div>
@@ -1619,10 +1621,10 @@ const handlePrevPage = () => {
       prev.map((l) =>
 
         l._id === lead._id
-          ? {
-              ...l,
-              status: value
-            }
+         ? {
+    ...l,
+    status: value
+  }
           : l
       )
     );
