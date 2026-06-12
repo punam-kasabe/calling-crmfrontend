@@ -1059,9 +1059,7 @@ const handlePrevPage = () => {
          </div>
 
              <div className="stats-card booked">
-  <h5>Total Bookings</h5>
-  <p>{bookingCount}</p>
-</div> 
+  
 
         </div>
           
