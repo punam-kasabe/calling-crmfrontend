@@ -1058,8 +1058,8 @@ const handlePrevPage = () => {
           <p>{stats.siteVisitDone}</p>
          </div>
 
-             <div className="stats-card booked">
-  
+             
+</div> 
 
         </div>
           
