@@ -340,8 +340,6 @@ useEffect(() => {
 
   fetchMyLeads();
 
-  fetchBookingsCount();
-
   fetchExecutives();
 
 }, [fetchMyLeads]);
