@@ -5,6 +5,7 @@ import Login from "./pages/auth/Login";
 
 /* 🛠 ADMIN */
 import Dashboard from "./pages/admin/Dashboard";
+import NewLeads from "./pages/NewLeads";
 import Reports from "./pages/admin/Reports";
 import ManageUsers from "./pages/admin/ManageUsers";
 import ManageProjects from "./pages/admin/ManageProjects";
@@ -119,6 +120,11 @@ export default function App() {
             </ProtectedRoute>
           }
         />
+
+        <Route
+  path="/reports/new-leads"
+  element={<NewLeads />}
+/>
 
         <Route
           path="/reports"

@@ -303,6 +303,10 @@ export default function Dashboard() {
   if (item.title === "Total Leads") {
     navigate("/reports/total-leads");
   }
+
+  if (item.title === "New Leads") {
+  navigate("/reports/new-leads");
+}
 }}
 >
 
