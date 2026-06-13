@@ -6,44 +6,85 @@ const API =
   "https://calling-crm-backend-7w52.onrender.com/api";
 
 export default function NewLeads() {
+
   const [leads, setLeads] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isOpen, setIsOpen] = useState(true);
+
+  const [currentPage, setCurrentPage] =
+    useState(1);
+
+  const leadsPerPage = 30;
 
   useEffect(() => {
     fetchLeads();
   }, []);
 
   const fetchLeads = async () => {
+
     try {
+
       setLoading(true);
 
       const res = await axios.get(
         `${API}/all-leads`
       );
 
-      const allLeads = Array.isArray(res.data)
+      const allLeads = Array.isArray(
+        res.data
+      )
         ? res.data
         : [];
 
       const newLeads = allLeads.filter(
         (lead) =>
-          String(lead.status || "")
+          String(
+            lead.status || ""
+          )
             .toLowerCase()
             .trim() === "new"
       );
 
       setLeads(newLeads);
+
     } catch (err) {
+
       console.error(err);
+
       setLeads([]);
+
     } finally {
+
       setLoading(false);
+
     }
   };
 
+  /* ==========================
+     PAGINATION
+  ========================== */
+
+  const indexOfLastLead =
+    currentPage * leadsPerPage;
+
+  const indexOfFirstLead =
+    indexOfLastLead - leadsPerPage;
+
+  const currentLeads =
+    leads.slice(
+      indexOfFirstLead,
+      indexOfLastLead
+    );
+
+  const totalPages =
+    Math.ceil(
+      leads.length / leadsPerPage
+    );
+
   return (
+
     <div className="layout">
+
       <Sidebar
         isOpen={isOpen}
         toggleSidebar={() =>
@@ -53,47 +94,184 @@ export default function NewLeads() {
 
       <div
         className={`main-content ${
-          isOpen ? "shifted" : "full"
+          isOpen
+            ? "shifted"
+            : "full"
         }`}
       >
+
         <div className="page-container">
+
           <h2>New Leads</h2>
 
-          {loading ? (
-            <h4>Loading...</h4>
-          ) : (
-            <table className="table">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Phone</th>
-                  <th>Project</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
+          <p>
+            Total New Leads :
+            <strong>
+              {" "}
+              {leads.length}
+            </strong>
+          </p>
 
-              <tbody>
-                {leads.length === 0 ? (
+          {loading ? (
+
+            <h4>Loading...</h4>
+
+          ) : (
+
+            <>
+              <table className="table">
+
+                <thead>
+
                   <tr>
-                    <td colSpan="4">
-                      No New Leads Found
-                    </td>
+
+                    <th>Name</th>
+
+                    <th>Phone</th>
+
+                    <th>Project</th>
+
+                    <th>Status</th>
+
                   </tr>
-                ) : (
-                  leads.map((lead) => (
-                    <tr key={lead._id}>
-                      <td>{lead.name || "-"}</td>
-                      <td>{lead.phone || "-"}</td>
-                      <td>{lead.project || "-"}</td>
-                      <td>{lead.status || "-"}</td>
+
+                </thead>
+
+                <tbody>
+
+                  {currentLeads.length ===
+                  0 ? (
+
+                    <tr>
+
+                      <td
+                        colSpan="4"
+                        style={{
+                          textAlign:
+                            "center"
+                        }}
+                      >
+                        No New Leads Found
+                      </td>
+
                     </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
+
+                  ) : (
+
+                    currentLeads.map(
+                      (lead) => (
+
+                        <tr
+                          key={lead._id}
+                        >
+
+                          <td>
+                            {lead.name ||
+                              "-"}
+                          </td>
+
+                          <td>
+                            {lead.phone ||
+                              "-"}
+                          </td>
+
+                          <td>
+                            {lead.project ||
+                              "-"}
+                          </td>
+
+                          <td>
+                            {lead.status ||
+                              "-"}
+                          </td>
+
+                        </tr>
+
+                      )
+                    )
+
+                  )}
+
+                </tbody>
+
+              </table>
+
+              {/* PAGINATION */}
+
+              {totalPages > 1 && (
+
+                <div
+                  style={{
+                    display:
+                      "flex",
+                    justifyContent:
+                      "center",
+                    alignItems:
+                      "center",
+                    gap: "15px",
+                    marginTop:
+                      "20px"
+                  }}
+                >
+
+                  <button
+                    className="btn btn-primary"
+                    disabled={
+                      currentPage ===
+                      1
+                    }
+                    onClick={() =>
+                      setCurrentPage(
+                        currentPage -
+                          1
+                      )
+                    }
+                  >
+                    Previous
+                  </button>
+
+                  <span>
+
+                    Page{" "}
+                    <strong>
+                      {currentPage}
+                    </strong>{" "}
+                    of{" "}
+                    <strong>
+                      {totalPages}
+                    </strong>
+
+                  </span>
+
+                  <button
+                    className="btn btn-primary"
+                    disabled={
+                      currentPage ===
+                      totalPages
+                    }
+                    onClick={() =>
+                      setCurrentPage(
+                        currentPage +
+                          1
+                      )
+                    }
+                  >
+                    Next
+                  </button>
+
+                </div>
+
+              )}
+
+            </>
+
           )}
+
         </div>
+
       </div>
+
     </div>
+
   );
 }
