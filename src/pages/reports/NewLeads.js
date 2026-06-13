@@ -6,7 +6,6 @@ const API =
   "https://calling-crm-backend-7w52.onrender.com/api";
 
 export default function NewLeads() {
-
   const [leads, setLeads] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isOpen, setIsOpen] = useState(true);
@@ -21,9 +20,7 @@ export default function NewLeads() {
   }, []);
 
   const fetchLeads = async () => {
-
     try {
-
       setLoading(true);
 
       const res = await axios.get(
@@ -38,31 +35,25 @@ export default function NewLeads() {
 
       const newLeads = allLeads.filter(
         (lead) =>
-          String(
-            lead.status || ""
-          )
+          String(lead.status || "")
             .toLowerCase()
             .trim() === "new"
       );
 
       setLeads(newLeads);
-
     } catch (err) {
-
-      console.error(err);
+      console.error(
+        "Fetch Leads Error:",
+        err
+      );
 
       setLeads([]);
-
     } finally {
-
       setLoading(false);
-
     }
   };
 
-  /* ==========================
-     PAGINATION
-  ========================== */
+  /* PAGINATION */
 
   const indexOfLastLead =
     currentPage * leadsPerPage;
@@ -76,15 +67,12 @@ export default function NewLeads() {
       indexOfLastLead
     );
 
-  const totalPages =
-    Math.ceil(
-      leads.length / leadsPerPage
-    );
+  const totalPages = Math.ceil(
+    leads.length / leadsPerPage
+  );
 
   return (
-
     <div className="layout">
-
       <Sidebar
         isOpen={isOpen}
         toggleSidebar={() =>
@@ -94,12 +82,9 @@ export default function NewLeads() {
 
       <div
         className={`main-content ${
-          isOpen
-            ? "shifted"
-            : "full"
+          isOpen ? "shifted" : "full"
         }`}
       >
-
         <div className="page-container">
 
           <h2>New Leads</h2>
@@ -112,38 +97,45 @@ export default function NewLeads() {
             </strong>
           </p>
 
+          {!loading && (
+            <p>
+              Showing{" "}
+              <strong>
+                {currentLeads.length}
+              </strong>{" "}
+              of{" "}
+              <strong>
+                {leads.length}
+              </strong>{" "}
+              leads
+            </p>
+          )}
+
           {loading ? (
-
-            <h4>Loading...</h4>
-
+            <div
+              style={{
+                padding: "30px",
+                textAlign: "center",
+                fontSize: "18px"
+              }}
+            >
+              Loading Leads...
+            </div>
           ) : (
-
             <>
               <table className="table">
-
                 <thead>
-
                   <tr>
-
                     <th>Name</th>
-
                     <th>Phone</th>
-
                     <th>Project</th>
-
                     <th>Status</th>
-
                   </tr>
-
                 </thead>
 
                 <tbody>
-
-                  {currentLeads.length ===
-                  0 ? (
-
+                  {currentLeads.length === 0 ? (
                     <tr>
-
                       <td
                         colSpan="4"
                         style={{
@@ -153,18 +145,13 @@ export default function NewLeads() {
                       >
                         No New Leads Found
                       </td>
-
                     </tr>
-
                   ) : (
-
                     currentLeads.map(
                       (lead) => (
-
                         <tr
                           key={lead._id}
                         >
-
                           <td>
                             {lead.name ||
                               "-"}
@@ -184,46 +171,35 @@ export default function NewLeads() {
                             {lead.status ||
                               "-"}
                           </td>
-
                         </tr>
-
                       )
                     )
-
                   )}
-
                 </tbody>
-
               </table>
 
-              {/* PAGINATION */}
-
               {totalPages > 1 && (
-
                 <div
                   style={{
-                    display:
-                      "flex",
+                    display: "flex",
                     justifyContent:
                       "center",
                     alignItems:
                       "center",
                     gap: "15px",
-                    marginTop:
+                    marginTop: "20px",
+                    marginBottom:
                       "20px"
                   }}
                 >
-
                   <button
                     className="btn btn-primary"
                     disabled={
-                      currentPage ===
-                      1
+                      currentPage === 1
                     }
                     onClick={() =>
                       setCurrentPage(
-                        currentPage -
-                          1
+                        currentPage - 1
                       )
                     }
                   >
@@ -231,7 +207,6 @@ export default function NewLeads() {
                   </button>
 
                   <span>
-
                     Page{" "}
                     <strong>
                       {currentPage}
@@ -240,7 +215,6 @@ export default function NewLeads() {
                     <strong>
                       {totalPages}
                     </strong>
-
                   </span>
 
                   <button
@@ -251,27 +225,18 @@ export default function NewLeads() {
                     }
                     onClick={() =>
                       setCurrentPage(
-                        currentPage +
-                          1
+                        currentPage + 1
                       )
                     }
                   >
                     Next
                   </button>
-
                 </div>
-
               )}
-
             </>
-
           )}
-
         </div>
-
       </div>
-
     </div>
-
   );
 }
