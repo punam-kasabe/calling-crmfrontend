@@ -316,11 +316,16 @@ const fetchExecutives = async () => {
       `${API}/users`
     );
 
-    const attendingUsers = res.data.filter(
+  const attendingUsers = res.data.filter(
   (u) =>
-    u.name?.toLowerCase().includes(
-      "attending officer"
-    )
+
+    u.role === "attending officer" ||
+
+    u.email ===
+      "suvarna@zaminwale.com" ||
+
+    u.email ===
+      "sreeniwas@zaminwale.com"
 );
 
 console.log(
