@@ -121,7 +121,7 @@ export default function App() {
           }
         />
 
-        <Route
+       <Route
   path="/reports/new-leads"
   element={<NewLeads />}
 />
