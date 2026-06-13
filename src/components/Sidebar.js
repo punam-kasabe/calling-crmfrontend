@@ -233,15 +233,15 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
               </li>
 
               <li>
-                <Link
-                  to="/updated-booking-status"
-                  className={
-                    location.pathname ===
-                    "/updated-booking-status"
-                      ? "active"
-                      : ""
-                  }
-                >
+               <Link
+  to="/update-booking-status"
+  className={
+    location.pathname ===
+    "/update-booking-status"
+      ? "active"
+      : ""
+  }
+>
                   <ClipboardList size={18} />
                   <span className="text">
                     Booking Status
@@ -250,6 +250,7 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
               </li>
             </>
           )}
+
 {/* ================= EXECUTIVE ================= */}
 {isExecutive && (
   <>
