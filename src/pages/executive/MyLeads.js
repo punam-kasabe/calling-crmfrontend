@@ -415,7 +415,7 @@ useEffect(() => {
     selectedLead.assigned_to_email,
 
   closingExecutive:
-  selectedLead.assignedTo,
+    selectedLead.closingExecutive,
 
   status:
     selectedLead.status,
@@ -2086,57 +2086,65 @@ Booking
 
       <div className="lead-form-grid">
 
-       <div>
 
 
-  <label>Assign To Attending Officer</label>
+      {(
+  selectedLead.status === "Interested" ||
+  selectedLead.status === "Very Interested"
+) && (
 
-  <select
-    value={selectedLead.assignedTo || ""}
+<div>
 
-    onChange={(e) => {
+<label>
+Assign To Attending Officer
+</label>
 
-      const selectedOfficer =
-        attendingOfficers.find(
-          (officer) =>
-            officer.name === e.target.value
-        );
+<select
+  value={selectedLead.assignedTo || ""}
 
-      setSelectedLead({
+  onChange={(e) => {
 
-  ...selectedLead,
+    const selectedOfficer =
+      attendingOfficers.find(
+        (officer) =>
+          officer.name === e.target.value
+      );
 
-  assignedTo:
-    selectedOfficer?.name || "",
+    setSelectedLead({
 
-  assigned_to_email:
-    selectedOfficer?.email || "",
+      ...selectedLead,
 
-  closingExecutive:
-    selectedOfficer?.name || ""
+      assignedTo:
+        selectedOfficer?.name || "",
 
-         });
-    }}
-    
-  >
+      assigned_to_email:
+        selectedOfficer?.email || ""
 
-    <option value="">
-      Select Attending Officer
-    </option>
+    });
 
-    {attendingOfficers.map((officer) => (
+  }}
+>
 
-      <option
-        key={officer._id}
-        value={officer.name}
-      >
-        {officer.name}
-      </option>
+<option value="">
+Select Attending Officer
+</option>
 
-    ))}
+{attendingOfficers.map((officer) => (
 
-  </select>
+<option
+  key={officer._id}
+  value={officer.name}
+>
+  {officer.name}
+</option>
+
+))}
+
+</select>
+
 </div>
+
+)}
 
         
 
