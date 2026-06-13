@@ -125,19 +125,20 @@ export default function NewLeads() {
             <>
               <table className="table">
                 <thead>
-                  <tr>
-                    <th>Name</th>
-                    <th>Phone</th>
-                    <th>Project</th>
-                    <th>Status</th>
-                  </tr>
+                 <tr>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>Project</th>
+                <th>Assigned To</th>
+               <th>Status</th>
+               </tr>
                 </thead>
 
                 <tbody>
                   {currentLeads.length === 0 ? (
                     <tr>
                       <td
-                        colSpan="4"
+                        colSpan="5"
                         style={{
                           textAlign:
                             "center"
@@ -149,28 +150,20 @@ export default function NewLeads() {
                   ) : (
                     currentLeads.map(
                       (lead) => (
-                        <tr
-                          key={lead._id}
-                        >
-                          <td>
-                            {lead.name ||
-                              "-"}
-                          </td>
+                        <tr key={lead._id}>
+                      <td>{lead.name || "-"}</td>
 
-                          <td>
-                            {lead.phone ||
-                              "-"}
-                          </td>
+                      <td>{lead.phone || "-"}</td>
 
-                          <td>
-                            {lead.project ||
-                              "-"}
-                          </td>
+                      <td>{lead.project || "-"}</td>
 
-                          <td>
-                            {lead.status ||
-                              "-"}
-                          </td>
+                      <td>
+                       {lead.assigned_to
+                       ? lead.assigned_to.split("@")[0]
+                       : "Unassigned"}
+                        </td>
+
+                   <td>{lead.status || "-"}</td>
                         </tr>
                       )
                     )
