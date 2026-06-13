@@ -317,9 +317,16 @@ const fetchExecutives = async () => {
     );
 
     const attendingUsers = res.data.filter(
-      (u) =>
-        u.role === "attending officer"
-    );
+  (u) =>
+    u.name?.toLowerCase().includes(
+      "attending officer"
+    )
+);
+
+console.log(
+  "Attending Officers:",
+  attendingUsers
+);
 
     setAttendingOfficers(attendingUsers);
 
