@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import Sidebar from "../../components/Sidebar";
-
+import Sidebar from "../components/Sidebar";
 const API =
   "https://calling-crm-backend-7w52.onrender.com/api";
 
