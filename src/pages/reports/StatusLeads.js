@@ -21,8 +21,6 @@ export default function StatusLeads() {
     useState([]);
 
   useEffect(() => {
-    fetchLeads();
-  }, [status]);
 
   const fetchLeads = async () => {
 
@@ -30,10 +28,9 @@ export default function StatusLeads() {
 
       setLoading(true);
 
-      const res =
-        await axios.get(
-          `${API}/all-leads`
-        );
+      const res = await axios.get(
+        `${API}/all-leads`
+      );
 
       const filtered =
         res.data.filter(
@@ -59,6 +56,10 @@ export default function StatusLeads() {
     }
 
   };
+
+  fetchLeads();
+
+}, [status]);
 
   return (
 

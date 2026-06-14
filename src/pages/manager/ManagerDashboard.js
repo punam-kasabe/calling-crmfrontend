@@ -17,12 +17,13 @@ export default function ManagerDashboard() {
   const [isOpen, setIsOpen] = useState(true);
 
   const [stats, setStats] = useState({
-
-    total: 0,
-
-    booked: 0
-
-  });
+  total: 0,
+  booked: 0,
+  interested: 0,
+  pending: 0,
+  visits: 0,
+  followups: 0
+});
 
   const user =
     JSON.parse(localStorage.getItem("user"));
@@ -86,33 +87,39 @@ export default function ManagerDashboard() {
             Manager Dashboard
           </h1>
 
-          <div className="dashboard-grid">
+         <div className="dashboard-grid">
 
-            <div className="dashboard-card">
+  <div className="dashboard-card">
+    <h3>Total Clients</h3>
+    <h2>{stats.total}</h2>
+  </div>
 
-              <h3>
-                Total Clients
-              </h3>
+  <div className="dashboard-card">
+    <h3>Booked Clients</h3>
+    <h2>{stats.booked}</h2>
+  </div>
 
-              <h2>
-                {stats.total}
-              </h2>
+  <div className="dashboard-card">
+    <h3>Interested Leads</h3>
+    <h2>{stats.interested || 0}</h2>
+  </div>
 
-            </div>
+  <div className="dashboard-card">
+    <h3>Pending Leads</h3>
+    <h2>{stats.pending || 0}</h2>
+  </div>
 
-            <div className="dashboard-card">
+  <div className="dashboard-card">
+    <h3>Today's Visits</h3>
+    <h2>{stats.visits || 0}</h2>
+  </div>
 
-              <h3>
-                Booked Clients
-              </h3>
+  <div className="dashboard-card">
+    <h3>Today's Followups</h3>
+    <h2>{stats.followups || 0}</h2>
+  </div>
 
-              <h2>
-                {stats.booked}
-              </h2>
-
-            </div>
-
-          </div>
+</div>
 
         </div>
 

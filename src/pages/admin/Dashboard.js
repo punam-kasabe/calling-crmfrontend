@@ -310,20 +310,20 @@ export default function Dashboard() {
   }
 
   else if (item.title === "Interested") {
-    navigate("/status/interested");
-  }
+  navigate("/reports/status/interested");
+}
 
-  else if (item.title === "Booked") {
-    navigate("/status/booked");
-  }
+else if (item.title === "Booked") {
+  navigate("/reports/status/booked");
+}
 
-  else if (item.title === "Pending") {
-    navigate("/status/new");
-  }
+else if (item.title === "Pending") {
+  navigate("/reports/status/new");
+}
 
-  else if (item.title === "Not Interested") {
-    navigate("/status/not interested");
-  }
+else if (item.title === "Not Interested") {
+  navigate("/reports/status/not-interested");
+}
 
 }}
 >
