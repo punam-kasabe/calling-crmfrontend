@@ -26,22 +26,19 @@ export default function TotalLeads() {
     setIsOpen(!isOpen);
   };
 
-  useEffect(() => {
-    fetchLeads();
-  }, []);
+ useEffect(() => {
+  fetchLeads();
+}, []);
 
-  const fetchLeads = async () => {
+const fetchLeads = async () => {
   try {
     setLoading(true);
 
-    console.log("TOTAL LEADS PAGE LOADED");
-    console.log("Calling API:", `${API}/all-leads`);
+    console.log("Fetching:", `${API}/all-leads`);
 
-    const res = await axios.get(
-      `${API}/all-leads`
-    );
+    const res = await axios.get(`${API}/all-leads`);
 
-    console.log("API RESPONSE:", res.data);
+    console.log("Response:", res.data);
 
     setLeads(
       Array.isArray(res.data)
@@ -51,10 +48,7 @@ export default function TotalLeads() {
 
   } catch (err) {
 
-    console.error(
-      "TOTAL LEADS ERROR:",
-      err
-    );
+    console.error("TOTAL LEADS ERROR:", err);
 
     setLeads([]);
 
@@ -64,6 +58,7 @@ export default function TotalLeads() {
 
   }
 };
+
   /* ======================
      PAGINATION
   ====================== */
