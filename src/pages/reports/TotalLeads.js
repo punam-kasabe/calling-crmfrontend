@@ -2,123 +2,325 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Sidebar from "../../components/Sidebar";
 import "../../styles/dashboard.css";
-const API = "https://calling-crm-backend-7w52.onrender.com/api";
+
+const API =
+  "https://calling-crm-backend-7w52.onrender.com/api";
 
 export default function TotalLeads() {
-    const [isOpen, setIsOpen] = useState(true);
 
-const toggleSidebar = () => {
-  setIsOpen(!isOpen);
-};
-  const [leads, setLeads] = useState([]);
+  const [isOpen, setIsOpen] =
+    useState(true);
+
+  const [leads, setLeads] =
+    useState([]);
+
+  const [loading, setLoading] =
+    useState(true);
+
+  const [currentPage, setCurrentPage] =
+    useState(1);
+
+  const leadsPerPage = 30;
+
+  const toggleSidebar = () => {
+    setIsOpen(!isOpen);
+  };
 
   useEffect(() => {
     fetchLeads();
   }, []);
 
   const fetchLeads = async () => {
+
     try {
-      const res = await axios.get(`${API}/leads`);
-      setLeads(res.data || []);
+
+      setLoading(true);
+
+      const res = await axios.get(
+        `${API}/all-leads`
+      );
+
+      setLeads(
+        Array.isArray(res.data)
+          ? res.data
+          : []
+      );
+
     } catch (err) {
+
       console.log(err);
+
+      setLeads([]);
+
+    } finally {
+
+      setLoading(false);
+
     }
+
   };
 
+  /* ======================
+     PAGINATION
+  ====================== */
+
+  const indexOfLastLead =
+    currentPage * leadsPerPage;
+
+  const indexOfFirstLead =
+    indexOfLastLead - leadsPerPage;
+
+  const currentLeads =
+    leads.slice(
+      indexOfFirstLead,
+      indexOfLastLead
+    );
+
+  const totalPages =
+    Math.ceil(
+      leads.length / leadsPerPage
+    );
+
   return (
-  <div className="dashboard-page">
 
-    <Sidebar
-      isOpen={isOpen}
-      toggleSidebar={toggleSidebar}
-    />
+    <div className="dashboard-page">
 
-    <div
-      className="dashboard-container"
-      style={{
-        marginLeft: isOpen ? "240px" : "70px"
-      }}
-    >
+      <Sidebar
+        isOpen={isOpen}
+        toggleSidebar={toggleSidebar}
+      />
 
-      <h2 className="dashboard-title">
-        Total Leads Report
-      </h2>
+      <div
+        className="dashboard-container"
+        style={{
+          marginLeft: isOpen
+            ? "240px"
+            : "70px"
+        }}
+      >
 
-      <div className="chart-card">
+        <h2 className="dashboard-title">
+          Total Leads Report
+        </h2>
 
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            marginBottom: "15px"
-          }}
-        >
+        <div className="chart-card">
 
-          <h5>
-            All Leads ({leads.length})
-          </h5>
+          <div
+            style={{
+              display: "flex",
+              justifyContent:
+                "space-between",
+              alignItems: "center",
+              marginBottom: "15px"
+            }}
+          >
 
-        </div>
+            <h5>
+              All Leads (
+              {leads.length}
+              )
+            </h5>
 
-        <div className="table-responsive">
+            <span>
+              Page {currentPage} of{" "}
+              {totalPages || 1}
+            </span>
 
-          <table className="table table-bordered table-hover">
+          </div>
 
-            <thead>
+          {loading ? (
 
-              <tr>
-                <th>#</th>
-                <th>Name</th>
-                <th>Phone</th>
-                <th>Project</th>
-                <th>Assigned To</th>
-                <th>Status</th>
-              </tr>
+            <div
+              style={{
+                textAlign: "center",
+                padding: "30px"
+              }}
+            >
+              Loading Leads...
+            </div>
 
-            </thead>
+          ) : (
 
-            <tbody>
+            <>
 
-              {leads.length > 0 ? (
+              <div className="table-responsive">
 
-                leads.map((lead, index) => (
+                <table className="table table-bordered table-hover">
 
-                  <tr key={lead._id}>
+                  <thead>
 
-                    <td>{index + 1}</td>
+                    <tr>
 
-                    <td>{lead.name}</td>
+                      <th>#</th>
 
-                    <td>{lead.phone}</td>
+                      <th>Name</th>
 
-                    <td>{lead.project}</td>
+                      <th>Phone</th>
 
-                    <td>{lead.assigned_to}</td>
+                      <th>Project</th>
 
-                    <td>{lead.status}</td>
+                      <th>Assigned To</th>
 
-                  </tr>
+                      <th>Status</th>
 
-                ))
+                    </tr>
 
-              ) : (
+                  </thead>
 
-                <tr>
+                  <tbody>
 
-                  <td
-                    colSpan="6"
-                    align="center"
+                    {currentLeads.length >
+                    0 ? (
+
+                      currentLeads.map(
+                        (
+                          lead,
+                          index
+                        ) => (
+
+                          <tr
+                            key={
+                              lead._id
+                            }
+                          >
+
+                            <td>
+                              {indexOfFirstLead +
+                                index +
+                                1}
+                            </td>
+
+                            <td>
+                              {lead.name ||
+                                "-"}
+                            </td>
+
+                            <td>
+                              {lead.phone ||
+                                "-"}
+                            </td>
+
+                            <td>
+                              {lead.project ||
+                                "-"}
+                            </td>
+
+                            <td>
+
+                              {lead.assigned_to
+                                ? lead.assigned_to
+                                    .split(
+                                      "@"
+                                    )[0]
+                                    .replace(
+                                      /\./g,
+                                      " "
+                                    )
+                                : "Unassigned"}
+
+                            </td>
+
+                            <td>
+                              {lead.status ||
+                                "-"}
+                            </td>
+
+                          </tr>
+
+                        )
+                      )
+
+                    ) : (
+
+                      <tr>
+
+                        <td
+                          colSpan="6"
+                          align="center"
+                        >
+                          No Leads Found
+                        </td>
+
+                      </tr>
+
+                    )}
+
+                  </tbody>
+
+                </table>
+
+              </div>
+
+              {/* PAGINATION */}
+
+              {totalPages > 1 && (
+
+                <div
+                  style={{
+                    display:
+                      "flex",
+                    justifyContent:
+                      "center",
+                    alignItems:
+                      "center",
+                    gap: "15px",
+                    marginTop:
+                      "20px"
+                  }}
+                >
+
+                  <button
+                    className="btn btn-primary"
+                    disabled={
+                      currentPage ===
+                      1
+                    }
+                    onClick={() =>
+                      setCurrentPage(
+                        currentPage -
+                          1
+                      )
+                    }
                   >
-                    No Leads Found
-                  </td>
+                    Previous
+                  </button>
 
-                </tr>
+                  <span>
+
+                    Page{" "}
+                    <strong>
+                      {currentPage}
+                    </strong>{" "}
+                    of{" "}
+                    <strong>
+                      {totalPages}
+                    </strong>
+
+                  </span>
+
+                  <button
+                    className="btn btn-primary"
+                    disabled={
+                      currentPage ===
+                      totalPages
+                    }
+                    onClick={() =>
+                      setCurrentPage(
+                        currentPage +
+                          1
+                      )
+                    }
+                  >
+                    Next
+                  </button>
+
+                </div>
 
               )}
 
-            </tbody>
+            </>
 
-          </table>
+          )}
 
         </div>
 
@@ -126,6 +328,6 @@ const toggleSidebar = () => {
 
     </div>
 
-  </div>
-);
+  );
+
 }
