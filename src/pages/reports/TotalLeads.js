@@ -35,9 +35,16 @@ export default function TotalLeads() {
   };
 
   useEffect(() => {
-
+    console.log("PAGE LOADED");
     fetchLeads();
     fetchExecutives();
+
+   console.log(
+
+  "executives count =",
+
+  executives.length
+);
 
   }, []);
 
@@ -107,43 +114,53 @@ export default function TotalLeads() {
   };
 
   /* ======================
-     FETCH EXECUTIVES
-  ====================== */
+   FETCH EXECUTIVES
+====================== */
 
-  const fetchExecutives =
-    async () => {
+const fetchExecutives = async () => {
+console.log("FETCH EXECUTIVES START");
+  try {
 
-      try {
+    const res = await axios.get(
+      `${API}/users`
+    );
 
-        const res =
-          await axios.get(
-            `${API}/users`
-          );
+    console.log(
+      "USERS API:",
+      res.data
+    );
 
-        const execs =
-          res.data.filter(
-            (u) =>
-              u.role?.toLowerCase() ===
-              "executive"
-          );
+    const execs = res.data.filter(
+      (u) =>
+        u.role &&
+        u.role
+          .toLowerCase()
+          .includes(
+            "executive"
+          )
+    );
 
-        console.log(
-          "EXECUTIVES:",
-          execs
-        );
+    console.log(
+      "FILTERED EXECUTIVES:",
+      execs
+    );
 
-        setExecutives(execs);
+    setExecutives(execs);
 
-      } catch (err) {
+  } catch (err) {
 
-        console.log(
-          "EXECUTIVE ERROR:",
-          err
-        );
+    console.log(
+      "EXECUTIVE ERROR:",
+      err
+    );
 
-      }
+  }
 
-    };
+};
+console.log(
+  "Executives Count:",
+  executives.length
+);
 
   /* ======================
      FILTER LEADS
@@ -177,6 +194,12 @@ export default function TotalLeads() {
     filteredLeads.length
   );
 
+   console.log("selectedExecutive =", selectedExecutive);
+
+console.log(
+  "assigned_to sample =",
+  leads[0]?.assigned_to
+);
   /* ======================
      PAGINATION
   ====================== */
