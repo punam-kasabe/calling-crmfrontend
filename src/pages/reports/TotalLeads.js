@@ -46,7 +46,7 @@ export default function TotalLeads() {
   executives.length
 );
 
-  }, []);
+  }, [executives.length]);
 
   /* ======================
      FETCH LEADS
