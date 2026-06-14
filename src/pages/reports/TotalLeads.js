@@ -14,10 +14,18 @@ export default function TotalLeads() {
   const [leads, setLeads] =
     useState([]);
 
+  const [executives, setExecutives] =
+    useState([]);
+
+  const [selectedExecutive,
+    setSelectedExecutive] =
+    useState("all");
+
   const [loading, setLoading] =
     useState(true);
 
-  const [currentPage, setCurrentPage] =
+  const [currentPage,
+    setCurrentPage] =
     useState(1);
 
   const leadsPerPage = 30;
@@ -26,58 +34,171 @@ export default function TotalLeads() {
     setIsOpen(!isOpen);
   };
 
- useEffect(() => {
-  fetchLeads();
-}, []);
+  useEffect(() => {
 
-const fetchLeads = async () => {
-  try {
-    setLoading(true);
+    fetchLeads();
+    fetchExecutives();
 
-    console.log("Fetching:", `${API}/all-leads`);
+  }, []);
 
-    const res = await axios.get(`${API}/all-leads`);
+  /* ======================
+     FETCH LEADS
+  ====================== */
 
-    console.log("Response:", res.data);
+  const fetchLeads = async () => {
 
-    setLeads(
-      Array.isArray(res.data)
-        ? res.data
-        : []
-    );
+    try {
 
-  } catch (err) {
+      setLoading(true);
 
-    console.error("TOTAL LEADS ERROR:", err);
+      console.log(
+        "Fetching:",
+        `${API}/all-leads`
+      );
 
-    setLeads([]);
+      const res =
+        await axios.get(
+          `${API}/all-leads`
+        );
 
-  } finally {
+      console.log(
+        "LEADS RESPONSE:",
+        res.data
+      );
 
-    setLoading(false);
+      if (
+        Array.isArray(res.data)
+      ) {
 
-  }
-};
+        setLeads(res.data);
+
+        if (
+          res.data.length > 0
+        ) {
+
+          console.log(
+            "FIRST LEAD:",
+            res.data[0]
+          );
+
+        }
+
+      } else {
+
+        setLeads([]);
+
+      }
+
+    } catch (err) {
+
+      console.error(
+        "TOTAL LEADS ERROR:",
+        err
+      );
+
+      setLeads([]);
+
+    } finally {
+
+      setLoading(false);
+
+    }
+
+  };
+
+  /* ======================
+     FETCH EXECUTIVES
+  ====================== */
+
+  const fetchExecutives =
+    async () => {
+
+      try {
+
+        const res =
+          await axios.get(
+            `${API}/users`
+          );
+
+        const execs =
+          res.data.filter(
+            (u) =>
+              u.role?.toLowerCase() ===
+              "executive"
+          );
+
+        console.log(
+          "EXECUTIVES:",
+          execs
+        );
+
+        setExecutives(execs);
+
+      } catch (err) {
+
+        console.log(
+          "EXECUTIVE ERROR:",
+          err
+        );
+
+      }
+
+    };
+
+  /* ======================
+     FILTER LEADS
+  ====================== */
+
+  const filteredLeads =
+
+    selectedExecutive === "all"
+
+      ? leads
+
+      : leads.filter(
+          (lead) =>
+
+            lead.assigned_to
+              ?.trim()
+              .toLowerCase() ===
+
+            selectedExecutive
+              ?.trim()
+              .toLowerCase()
+        );
+
+  console.log(
+    "Selected Executive:",
+    selectedExecutive
+  );
+
+  console.log(
+    "Filtered Leads:",
+    filteredLeads.length
+  );
 
   /* ======================
      PAGINATION
   ====================== */
 
   const indexOfLastLead =
-    currentPage * leadsPerPage;
+    currentPage *
+    leadsPerPage;
 
   const indexOfFirstLead =
-    indexOfLastLead - leadsPerPage;
+    indexOfLastLead -
+    leadsPerPage;
 
   const currentLeads =
-    leads.slice(
+    filteredLeads.slice(
       indexOfFirstLead,
       indexOfLastLead
     );
 
   const totalPages =
     Math.ceil(
-      leads.length / leadsPerPage
+      filteredLeads.length /
+        leadsPerPage
     );
 
   return (
@@ -92,9 +213,10 @@ const fetchLeads = async () => {
       <div
         className="dashboard-container"
         style={{
-          marginLeft: isOpen
-            ? "240px"
-            : "70px"
+          marginLeft:
+            isOpen
+              ? "240px"
+              : "70px"
         }}
       >
 
@@ -109,20 +231,80 @@ const fetchLeads = async () => {
               display: "flex",
               justifyContent:
                 "space-between",
-              alignItems: "center",
-              marginBottom: "15px"
+              alignItems:
+                "center",
+              marginBottom:
+                "15px",
+              flexWrap:
+                "wrap",
+              gap: "10px"
             }}
           >
 
-            <h5>
+            <select
+              className="form-select"
+              style={{
+                width: "250px"
+              }}
+              value={
+                selectedExecutive
+              }
+              onChange={(e) => {
+
+                setSelectedExecutive(
+                  e.target.value
+                );
+
+                setCurrentPage(1);
+
+              }}
+            >
+
+              <option value="all">
+                All Executives
+              </option>
+
+              {executives.map(
+                (exec) => (
+
+                  <option
+                    key={
+                      exec._id
+                    }
+                    value={
+                      exec.email
+                    }
+                  >
+                    {exec.name}
+                  </option>
+
+                )
+              )}
+
+            </select>
+
+            <h5
+              style={{
+                margin: 0
+              }}
+            >
               All Leads (
-              {leads.length}
+              {
+                filteredLeads.length
+              }
               )
             </h5>
 
             <span>
-              Page {currentPage} of{" "}
-              {totalPages || 1}
+              Page{" "}
+              {
+                currentPage
+              }{" "}
+              of{" "}
+              {
+                totalPages ||
+                1
+              }
             </span>
 
           </div>
@@ -131,8 +313,10 @@ const fetchLeads = async () => {
 
             <div
               style={{
-                textAlign: "center",
-                padding: "30px"
+                textAlign:
+                  "center",
+                padding:
+                  "30px"
               }}
             >
               Loading Leads...
@@ -158,9 +342,13 @@ const fetchLeads = async () => {
 
                       <th>Project</th>
 
-                      <th>Assigned To</th>
+                      <th>
+                        Assigned To
+                      </th>
 
-                      <th>Status</th>
+                      <th>
+                        Status
+                      </th>
 
                     </tr>
 
@@ -207,6 +395,7 @@ const fetchLeads = async () => {
                             <td>
 
                               {lead.assigned_to
+
                                 ? lead.assigned_to
                                     .split(
                                       "@"
@@ -215,6 +404,7 @@ const fetchLeads = async () => {
                                       /\./g,
                                       " "
                                     )
+
                                 : "Unassigned"}
 
                             </td>
@@ -249,8 +439,6 @@ const fetchLeads = async () => {
                 </table>
 
               </div>
-
-              {/* PAGINATION */}
 
               {totalPages > 1 && (
 
@@ -287,12 +475,19 @@ const fetchLeads = async () => {
                   <span>
 
                     Page{" "}
+
                     <strong>
-                      {currentPage}
-                    </strong>{" "}
-                    of{" "}
+                      {
+                        currentPage
+                      }
+                    </strong>
+
+                    {" "}of{" "}
+
                     <strong>
-                      {totalPages}
+                      {
+                        totalPages
+                      }
                     </strong>
 
                   </span>
