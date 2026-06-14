@@ -357,7 +357,7 @@ console.log(
 
                     <tr>
 
-                      <th>#</th>
+                      <th>Sr No.</th>
 
                       <th>Name</th>
 
