@@ -6,7 +6,6 @@ import Login from "./pages/auth/Login";
 /* 🛠 ADMIN */
 import Dashboard from "./pages/admin/Dashboard";
 import NewLeads from "./pages/reports/NewLeads";
-import StatusLeads from "./pages/reports/StatusLeads";
 import Reports from "./pages/admin/Reports";
 import ManageUsers from "./pages/admin/ManageUsers";
 import ManageProjects from "./pages/admin/ManageProjects";
@@ -39,6 +38,7 @@ import ROIReport from "./pages/reports/ROIReport";
 import SourcesReport from "./pages/reports/SourcesReport";
 import TeamPerformance from "./pages/reports/TeamPerformance";
 import TotalLeads from "./pages/reports/TotalLeads";
+import StatusLeads from "./pages/reports/StatusLeads";
 
 /* 📄 NORMAL PAGES */
 import BulkUpdate from "./pages/BulkUpdate";
@@ -190,7 +190,7 @@ export default function App() {
         path="/reports/status/:status"
           element={<StatusLeads />}
        />
-       
+
         {/* EXECUTIVE */}
         <Route
           path="/executive-dashboard"

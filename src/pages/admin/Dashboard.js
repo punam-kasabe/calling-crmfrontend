@@ -298,15 +298,33 @@ export default function Dashboard() {
   style={{ cursor: "pointer" }}
 
   onClick={() => {
+
   console.log("Clicked:", item.title);
 
   if (item.title === "Total Leads") {
     navigate("/reports/total-leads");
   }
 
-  if (item.title === "New Leads") {
-  navigate("/reports/new-leads");
-}
+  else if (item.title === "New Leads") {
+    navigate("/reports/new-leads");
+  }
+
+  else if (item.title === "Interested") {
+    navigate("/status/interested");
+  }
+
+  else if (item.title === "Booked") {
+    navigate("/status/booked");
+  }
+
+  else if (item.title === "Pending") {
+    navigate("/status/new");
+  }
+
+  else if (item.title === "Not Interested") {
+    navigate("/status/not interested");
+  }
+
 }}
 >
 
