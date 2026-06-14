@@ -31,35 +31,39 @@ export default function TotalLeads() {
   }, []);
 
   const fetchLeads = async () => {
+  try {
+    setLoading(true);
 
-    try {
+    console.log("TOTAL LEADS PAGE LOADED");
+    console.log("Calling API:", `${API}/all-leads`);
 
-      setLoading(true);
+    const res = await axios.get(
+      `${API}/all-leads`
+    );
 
-      const res = await axios.get(
-        `${API}/all-leads`
-      );
+    console.log("API RESPONSE:", res.data);
 
-      setLeads(
-        Array.isArray(res.data)
-          ? res.data
-          : []
-      );
+    setLeads(
+      Array.isArray(res.data)
+        ? res.data
+        : []
+    );
 
-    } catch (err) {
+  } catch (err) {
 
-      console.log(err);
+    console.error(
+      "TOTAL LEADS ERROR:",
+      err
+    );
 
-      setLeads([]);
+    setLeads([]);
 
-    } finally {
+  } finally {
 
-      setLoading(false);
+    setLoading(false);
 
-    }
-
-  };
-
+  }
+};
   /* ======================
      PAGINATION
   ====================== */
