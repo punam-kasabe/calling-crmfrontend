@@ -32,6 +32,50 @@ export default function AssignedClients() {
   const [selectedStatus,
     setSelectedStatus] =
     useState("");
+  const [showModal, setShowModal] =
+  useState(false);
+
+const [selectedClient, setSelectedClient] =
+  useState(null);
+
+const [remark, setRemark] =
+  useState("");
+
+const [followupDate,
+  setFollowupDate] =
+  useState("");
+
+const [visitDate,
+  setVisitDate] =
+  useState("");
+
+const openEditModal = (client) => {
+
+  setSelectedClient(client);
+
+  setSelectedStatus(
+    client.status || "New"
+  );
+
+  setRemark(
+    client.remark || ""
+  );
+
+  setFollowupDate(
+    client.followup_date
+      ? client.followup_date.substring(0,10)
+      : ""
+  );
+
+  setVisitDate(
+    client.visitDate
+      ? client.visitDate.substring(0,10)
+      : ""
+  );
+
+  setShowModal(true);
+
+};
 
   const user =
     JSON.parse(
@@ -120,23 +164,7 @@ export default function AssignedClients() {
 
   }, [search, clients]);
 
-  /* =========================================
-     START EDIT
-  ========================================= */
-
-  const handleEdit = (
-    id,
-    currentStatus
-  ) => {
-
-    setEditingId(id);
-
-    setSelectedStatus(
-      currentStatus
-    );
-
-  };
-
+  
   /* =========================================
      CANCEL EDIT
   ========================================= */
@@ -153,52 +181,48 @@ export default function AssignedClients() {
      SAVE STATUS
   ========================================= */
 
-  const handleSave = async (id) => {
+  const handleSave = async () => {
 
-    try {
+  try {
 
-     const currentClient =
-  clients.find((c) => c._id === id);
+    await axios.put(
 
-await axios.put(
-  `https://calling-crm-backend-7w52.onrender.com/api/update-status/${id}`,
-  {
-    status: selectedStatus,
-    remark: currentClient?.remark || ""
+      `https://calling-crm-backend-7w52.onrender.com/api/update-status/${selectedClient._id}`,
+
+      {
+
+        status: selectedStatus,
+
+        remark,
+
+        followup_date: followupDate,
+
+        visitDate,
+
+        visit_created:
+          selectedStatus === "Site Visit"
+
+      }
+
+    );
+
+    alert("Status Updated ✅");
+
+    setShowModal(false);
+
+    fetchClients();
+
   }
-);
-      alert(
-        "Status Updated ✅"
-      );
 
-     setClients(prev =>
-  prev.map(client =>
-    client._id === id
-      ? {
-          ...client,
-          status: selectedStatus,
-          remark:
-            currentClient?.remark || ""
-        }
-      : client
-  )
-);
+  catch (err) {
 
-      setEditingId(null);
+    console.log(err);
 
-    }
+    alert("Update Failed ❌");
 
-    catch (err) {
+  }
 
-      console.log(err);
-
-      alert(
-        "Update Failed ❌"
-      );
-
-    }
-
-  };
+};
 
   return (
 
@@ -283,102 +307,27 @@ await axios.put(
                      
 {/* STATUS */}
 <td>
-  {editingId === c._id ? (
-    <select
-      value={selectedStatus}
-      onChange={(e) =>
-        setSelectedStatus(e.target.value)
-      }
-      className="status-select"
-    >
-      <option value="New">New</option>
-      <option value="Interested">Interested</option>
-      <option value="Not Interested">Not Interested</option>
-      <option value="Followup">Followup</option>
-      <option value="Booked">Booked</option>
-    </select>
-  ) : (
-    <span className="status-badge">
-      {c.status}
-    </span>
-  )}
+  <span className="status-badge">
+    {c.status}
+  </span>
 </td>
 
 {/* REMARK */}
 <td>
-  {editingId === c._id ? (
-    <input
-      type="text"
-      value={c.remark || ""}
-      onChange={(e) => {
-        setClients((prev) =>
-          prev.map((item) =>
-            item._id === c._id
-              ? {
-                  ...item,
-                  remark: e.target.value
-                }
-              : item
-          )
-        );
-      }}
-      className="remark-input"
-      placeholder="Enter remark"
-    />
-  ) : (
-    c.remark || "-"
-  )}
+  {c.remark || "-"}
 </td>
-                      <td>
 
-                        {editingId === c._id ? (
 
-                          <div className="action-buttons">
-
-                            <button
-                              className="save-btn"
-                              onClick={() =>
-                                handleSave(c._id)
-                              }
-                            >
-
-                              Save
-
-                            </button>
-
-                            <button
-                              className="cancel-btn"
-                              onClick={
-                                handleCancel
-                              }
-                            >
-
-                              Cancel
-
-                            </button>
-
-                          </div>
-
-                        ) : (
-
-                          <button
-                            className="edit-btn"
-                            onClick={() =>
-                              handleEdit(
-                                c._id,
-                                c.status
-                              )
-                            }
-                          >
-
-                            Edit
-
-                          </button>
-
-                        )}
-
-                      </td>
-
+                     <td>
+  <button
+    className="edit-btn"
+    onClick={() =>
+      openEditModal(c)
+    }
+  >
+    Edit
+  </button>
+</td>
                     </tr>
 
                   ))
@@ -405,6 +354,115 @@ await axios.put(
             </table>
 
           </div>
+
+{showModal && (
+
+<div className="modal-overlay">
+
+  <div className="modal-box">
+
+    <h2>
+      Update Lead
+    </h2>
+
+    <select
+      value={selectedStatus}
+      onChange={(e) =>
+        setSelectedStatus(
+          e.target.value
+        )
+      }
+    >
+      <option value="New">
+        New
+      </option>
+
+      <option value="Interested">
+        Interested
+      </option>
+
+      <option value="Not Interested">
+        Not Interested
+      </option>
+
+      <option value="Followup">
+        Followup
+      </option>
+
+      <option value="Site Visit">
+        Site Visit
+      </option>
+
+      <option value="Booked">
+        Booked
+      </option>
+
+    </select>
+
+    <textarea
+      placeholder="Remark"
+      value={remark}
+      onChange={(e) =>
+        setRemark(
+          e.target.value
+        )
+      }
+    />
+
+    {selectedStatus === "Followup" && (
+
+      <input
+        type="date"
+        value={followupDate}
+        onChange={(e) =>
+          setFollowupDate(
+            e.target.value
+          )
+        }
+      />
+
+    )}
+
+    {selectedStatus === "Site Visit" && (
+
+      <input
+        type="date"
+        value={visitDate}
+        onChange={(e) =>
+          setVisitDate(
+            e.target.value
+          )
+        }
+      />
+
+    )}
+
+    <div
+      className="modal-actions"
+    >
+
+      <button
+        onClick={handleSave}
+      >
+        Save
+      </button>
+
+      <button
+        onClick={() =>
+          setShowModal(false)
+        }
+      >
+        Cancel
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+)}
+
 
         </div>
 
