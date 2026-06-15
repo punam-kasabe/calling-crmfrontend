@@ -25,6 +25,8 @@ export default function ManagerDashboard() {
 
   const [isOpen, setIsOpen] = useState(true);
   const [stats, setStats] = useState({
+    
+
     total: 0,
     booked: 0,
     interested: 0,
@@ -32,7 +34,9 @@ export default function ManagerDashboard() {
     visits: 0,
     followups: 0
   });
-
+ 
+  const [todayFollowups, setTodayFollowups] =
+  useState([]);
   const user = JSON.parse(
     localStorage.getItem("user") || "{}"
   );
@@ -87,6 +91,43 @@ export default function ManagerDashboard() {
 
   }, [fetchDashboard]);
 
+  /* =========================================
+   TODAY FOLLOWUPS
+========================================= */
+
+useEffect(() => {
+
+  if (!user?.email) return;
+
+  axios
+    .get(
+      `https://calling-crm-backend-7w52.onrender.com/api/today-followups/${user.email}`
+    )
+
+    .then((res) => {
+
+      setTodayFollowups(
+        res.data || []
+      );
+
+      if (
+        res.data &&
+        res.data.length > 0
+      ) {
+
+        alert(
+          `🔔 Today ${res.data.length} Followups Pending`
+        );
+
+      }
+
+    })
+
+    .catch((err) =>
+      console.log(err)
+    );
+
+}, [user?.email]);
   return (
 
     <div className="layout">
@@ -109,8 +150,14 @@ export default function ManagerDashboard() {
           <h1 className="page-title">
             Manager Dashboard
           </h1>
+         <div className="notification-bell">
 
+          🔔 {todayFollowups.length}
+
+           </div>
          <div className="dashboard-grid">
+
+
 
   <div className="dashboard-card card-blue">
     <div className="card-icon">

@@ -94,9 +94,14 @@ const openEditModal = (client) => {
 
       );
 
-      setClients(res.data);
+      const interestedClients = res.data.filter(
+  (lead) =>
+    lead.status === "Interested" ||
+    lead.status === "Very Interested"
+);
 
-      setFilteredClients(res.data);
+setClients(interestedClients);
+setFilteredClients(interestedClients);
 
     }
 
