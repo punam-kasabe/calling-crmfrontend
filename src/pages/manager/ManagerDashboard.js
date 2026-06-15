@@ -1,3 +1,5 @@
+// FILE: src/pages/manager/ManagerDashboard.js
+
 import {
   useEffect,
   useState,
@@ -23,10 +25,9 @@ export default function ManagerDashboard() {
     followups: 0
   });
 
-  const user =
-    JSON.parse(
-      localStorage.getItem("user") || "{}"
-    );
+  const user = JSON.parse(
+    localStorage.getItem("user") || "{}"
+  );
 
   /* =========================================
      FETCH DASHBOARD
@@ -38,17 +39,23 @@ export default function ManagerDashboard() {
 
       if (!user?.email) return;
 
-      const res = await axios.get(
-        `https://calling-crm-backend-7w52.onrender.com/api/dashboard?email=${user.email}&role=manager`
+      const { data } = await axios.get(
+        `https://calling-crm-backend-7w52.onrender.com/api/dashboard`,
+        {
+          params: {
+            email: user.email,
+            role: "manager"
+          }
+        }
       );
 
       setStats({
-        total: res.data.total || 0,
-        booked: res.data.booked || 0,
-        interested: res.data.interested || 0,
-        pending: res.data.pending || 0,
-        visits: res.data.visits || 0,
-        followups: res.data.followups || 0
+        total: data.total || 0,
+        booked: data.booked || 0,
+        interested: data.interested || 0,
+        pending: data.pending || 0,
+        visits: data.visits || 0,
+        followups: data.followups || 0
       });
 
     } catch (err) {
@@ -98,12 +105,12 @@ export default function ManagerDashboard() {
           <div className="dashboard-grid">
 
             <div className="dashboard-card">
-              <h3>Total Clients</h3>
+              <h3>Total Assigned Leads</h3>
               <h2>{stats.total}</h2>
             </div>
 
             <div className="dashboard-card">
-              <h3>Booked Clients</h3>
+              <h3>Booked Leads</h3>
               <h2>{stats.booked}</h2>
             </div>
 
