@@ -158,40 +158,32 @@ export default function AssignedClients() {
 
     try {
 
-      await axios.put(
+     const currentClient =
+  clients.find((c) => c._id === id);
 
-        `https://calling-crm-backend-7w52.onrender.com/api/update-status/${id}`,
-
-        {
-
-          status:
-            selectedStatus
-
-        }
-
-      );
-
+await axios.put(
+  `https://calling-crm-backend-7w52.onrender.com/api/update-status/${id}`,
+  {
+    status: selectedStatus,
+    remark: currentClient?.remark || ""
+  }
+);
       alert(
         "Status Updated ✅"
       );
 
-      setClients((prev) =>
-
-        prev.map((client) =>
-
-          client._id === id
-
-            ? {
-                ...client,
-                status:
-                  selectedStatus
-              }
-
-            : client
-
-        )
-
-      );
+     setClients(prev =>
+  prev.map(client =>
+    client._id === id
+      ? {
+          ...client,
+          status: selectedStatus,
+          remark:
+            currentClient?.remark || ""
+        }
+      : client
+  )
+);
 
       setEditingId(null);
 
@@ -273,7 +265,8 @@ export default function AssignedClients() {
                   <th>
                     Status
                   </th>
-
+                 
+                   <th>Remark</th>
                   <th>
                     Action
                   </th>
@@ -301,6 +294,33 @@ export default function AssignedClients() {
                       <td>
                         {c.project}
                       </td>
+                     
+                     <td>
+  {editingId === c._id ? (
+    <input
+      type="text"
+      value={c.remark || ""}
+      onChange={(e) => {
+        setClients((prev) =>
+          prev.map((item) =>
+            item._id === c._id
+              ? {
+                  ...item,
+                  remark: e.target.value
+                }
+              : item
+          )
+        );
+      }}
+      className="remark-input"
+      placeholder="Enter remark"
+    />
+  ) : (
+    c.remark || "-"
+  )}
+</td>
+
+
 
                       <td>
 
