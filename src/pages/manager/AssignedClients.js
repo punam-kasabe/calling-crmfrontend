@@ -264,8 +264,10 @@ const openEditModal = (client) => {
                <th>Phone</th>
                <th>Project</th>
                <th>Status</th>
-               <th>Remark</th>
-               <th>Action</th>
+<th>Remark</th>
+<th>Followup Date</th>
+<th>Site Visit Date</th>
+<th>Action</th>
 
                 </tr>
 
@@ -304,8 +306,23 @@ const openEditModal = (client) => {
   {c.remark || "-"}
 </td>
 
+{/* FOLLOWUP DATE */}
+<td>
+  {c.followup_date
+    ? new Date(c.followup_date)
+        .toLocaleDateString("en-IN")
+    : "-"}
+</td>
 
-                     <td>
+{/* SITE VISIT DATE */}
+<td>
+  {c.visitDate
+    ? new Date(c.visitDate)
+        .toLocaleDateString("en-IN")
+    : "-"}
+</td>
+
+<td>
   <button
     className="edit-btn"
     onClick={() =>
@@ -324,7 +341,7 @@ const openEditModal = (client) => {
                   <tr>
 
                     <td
-                      colSpan="5"
+                      colSpan="8"
                       className="no-data"
                     >
 
