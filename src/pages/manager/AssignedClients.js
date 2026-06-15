@@ -250,26 +250,12 @@ await axios.put(
 
                 <tr>
 
-                  <th>
-                    Client Name
-                  </th>
-
-                  <th>
-                    Phone
-                  </th>
-
-                  <th>
-                    Project
-                  </th>
-
-                  <th>
-                    Status
-                  </th>
-                 
-                   <th>Remark</th>
-                  <th>
-                    Action
-                  </th>
+               <th>Client Name</th>
+               <th>Phone</th>
+               <th>Project</th>
+               <th>Status</th>
+               <th>Remark</th>
+               <th>Action</th>
 
                 </tr>
 
@@ -295,7 +281,32 @@ await axios.put(
                         {c.project}
                       </td>
                      
-                     <td>
+                     
+{/* STATUS */}
+<td>
+  {editingId === c._id ? (
+    <select
+      value={selectedStatus}
+      onChange={(e) =>
+        setSelectedStatus(e.target.value)
+      }
+      className="status-select"
+    >
+      <option value="New">New</option>
+      <option value="Interested">Interested</option>
+      <option value="Not Interested">Not Interested</option>
+      <option value="Followup">Followup</option>
+      <option value="Booked">Booked</option>
+    </select>
+  ) : (
+    <span className="status-badge">
+      {c.status}
+    </span>
+  )}
+</td>
+
+{/* REMARK */}
+<td>
   {editingId === c._id ? (
     <input
       type="text"
@@ -319,63 +330,6 @@ await axios.put(
     c.remark || "-"
   )}
 </td>
-
-
-
-                      <td>
-
-                        {editingId === c._id ? (
-
-                          <select
-
-                            value={
-                              selectedStatus
-                            }
-
-                            onChange={(e) =>
-                              setSelectedStatus(
-                                e.target.value
-                              )
-                            }
-
-                            className="status-select"
-
-                          >
-
-                            <option value="New">
-                              New
-                            </option>
-
-                            <option value="Interested">
-                              Interested
-                            </option>
-
-                            <option value="Not Interested">
-                              Not Interested
-                            </option>
-
-                            <option value="Followup">
-                              Followup
-                            </option>
-
-                            <option value="Booked">
-                              Booked
-                            </option>
-
-                          </select>
-
-                        ) : (
-
-                          <span className="status-badge">
-
-                            {c.status}
-
-                          </span>
-
-                        )}
-
-                      </td>
-
                       <td>
 
                         {editingId === c._id ? (
