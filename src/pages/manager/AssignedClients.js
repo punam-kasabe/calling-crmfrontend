@@ -25,9 +25,7 @@ export default function AssignedClients() {
     setSearch] =
     useState("");
 
-  const [editingId,
-    setEditingId] =
-    useState(null);
+
 
   const [selectedStatus,
     setSelectedStatus] =
@@ -165,17 +163,6 @@ const openEditModal = (client) => {
   }, [search, clients]);
 
   
-  /* =========================================
-     CANCEL EDIT
-  ========================================= */
-
-  const handleCancel = () => {
-
-    setEditingId(null);
-
-    setSelectedStatus("");
-
-  };
 
   /* =========================================
      SAVE STATUS
