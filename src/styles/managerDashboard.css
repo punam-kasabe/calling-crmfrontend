@@ -1,0 +1,81 @@
+/* =========================================
+   DASHBOARD
+========================================= */
+
+.page-container {
+  padding: 25px;
+}
+
+.page-title {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 25px;
+  color: #1e293b;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(260px,1fr));
+  gap: 20px;
+}
+
+.dashboard-card {
+  background: white;
+  padding: 25px;
+  border-radius: 18px;
+  box-shadow: 0 4px 18px rgba(0,0,0,.08);
+  transition: .3s;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-5px);
+}
+
+.dashboard-card h3 {
+  font-size: 14px;
+  color: #64748b;
+  margin-bottom: 10px;
+}
+
+.dashboard-card h2 {
+  font-size: 40px;
+  font-weight: 700;
+}
+
+/* ICON */
+
+.card-icon {
+  width: 55px;
+  height: 55px;
+  border-radius: 12px;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 15px;
+  font-size: 22px;
+}
+
+.card-blue .card-icon {
+  background: #2563eb;
+}
+
+.card-green .card-icon {
+  background: #16a34a;
+}
+
+.card-orange .card-icon {
+  background: #f59e0b;
+}
+
+.card-red .card-icon {
+  background: #ef4444;
+}
+
+.card-purple .card-icon {
+  background: #8b5cf6;
+}
+
+.card-cyan .card-icon {
+  background: #06b6d4;
+}

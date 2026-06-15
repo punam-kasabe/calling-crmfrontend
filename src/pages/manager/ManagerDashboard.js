@@ -10,12 +10,20 @@ import axios from "axios";
 
 import Sidebar from "../../components/Sidebar";
 
-import "../../styles/manager.css";
+import "../../styles/managerDashboard.css";
+import CountUp from "react-countup";
 
+import {
+  FaUsers,
+  FaCheckCircle,
+  FaFire,
+  FaClock,
+  FaHome,
+  FaPhoneAlt
+} from "react-icons/fa";
 export default function ManagerDashboard() {
 
   const [isOpen, setIsOpen] = useState(true);
-
   const [stats, setStats] = useState({
     total: 0,
     booked: 0,
@@ -102,40 +110,99 @@ export default function ManagerDashboard() {
             Manager Dashboard
           </h1>
 
-          <div className="dashboard-grid">
+         <div className="dashboard-grid">
 
-            <div className="dashboard-card">
-              <h3>Total Assigned Leads</h3>
-              <h2>{stats.total}</h2>
-            </div>
+  <div className="dashboard-card card-blue">
+    <div className="card-icon">
+      <FaUsers />
+    </div>
 
-            <div className="dashboard-card">
-              <h3>Booked Leads</h3>
-              <h2>{stats.booked}</h2>
-            </div>
+    <h3>Total Assigned Leads</h3>
 
-            <div className="dashboard-card">
-              <h3>Interested Leads</h3>
-              <h2>{stats.interested}</h2>
-            </div>
+    <h2>
+      <CountUp
+        end={stats.total}
+        duration={2}
+      />
+    </h2>
+  </div>
 
-            <div className="dashboard-card">
-              <h3>Pending Leads</h3>
-              <h2>{stats.pending}</h2>
-            </div>
+  <div className="dashboard-card card-green">
+    <div className="card-icon">
+      <FaCheckCircle />
+    </div>
 
-            <div className="dashboard-card">
-              <h3>Today's Visits</h3>
-              <h2>{stats.visits}</h2>
-            </div>
+    <h3>Booked Leads</h3>
 
-            <div className="dashboard-card">
-              <h3>Today's Followups</h3>
-              <h2>{stats.followups}</h2>
-            </div>
+    <h2>
+      <CountUp
+        end={stats.booked}
+        duration={2}
+      />
+    </h2>
+  </div>
 
-          </div>
+  <div className="dashboard-card card-orange">
+    <div className="card-icon">
+      <FaFire />
+    </div>
 
+    <h3>Interested Leads</h3>
+
+    <h2>
+      <CountUp
+        end={stats.interested}
+        duration={2}
+      />
+    </h2>
+  </div>
+
+  <div className="dashboard-card card-red">
+    <div className="card-icon">
+      <FaClock />
+    </div>
+
+    <h3>Pending Leads</h3>
+
+    <h2>
+      <CountUp
+        end={stats.pending}
+        duration={2}
+      />
+    </h2>
+  </div>
+
+  <div className="dashboard-card card-purple">
+    <div className="card-icon">
+      <FaHome />
+    </div>
+
+    <h3>Today's Visits</h3>
+
+    <h2>
+      <CountUp
+        end={stats.visits}
+        duration={2}
+      />
+    </h2>
+  </div>
+
+  <div className="dashboard-card card-cyan">
+    <div className="card-icon">
+      <FaPhoneAlt />
+    </div>
+
+    <h3>Today's Followups</h3>
+
+    <h2>
+      <CountUp
+        end={stats.followups}
+        duration={2}
+      />
+    </h2>
+  </div>
+
+</div>
         </div>
 
       </div>

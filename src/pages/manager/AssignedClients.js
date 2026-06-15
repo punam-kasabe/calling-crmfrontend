@@ -10,8 +10,7 @@ import axios from "axios";
 
 import Sidebar from "../../components/Sidebar";
 
-import "../../styles/manager.css";
-
+import "../../styles/assignedClients.css";
 export default function AssignedClients() {
 
   const [isOpen, setIsOpen] = useState(true);
