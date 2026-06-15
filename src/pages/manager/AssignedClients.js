@@ -396,33 +396,25 @@ const openEditModal = (client) => {
       }
     />
 
-    {selectedStatus === "Followup" && (
+    <label>Followup Date</label>
 
-      <input
-        type="date"
-        value={followupDate}
-        onChange={(e) =>
-          setFollowupDate(
-            e.target.value
-          )
-        }
-      />
+<input
+  type="date"
+  value={followupDate}
+  onChange={(e) =>
+    setFollowupDate(e.target.value)
+  }
+/>
 
-    )}
+<label>Site Visit Date</label>
 
-    {selectedStatus === "Site Visit" && (
-
-      <input
-        type="date"
-        value={visitDate}
-        onChange={(e) =>
-          setVisitDate(
-            e.target.value
-          )
-        }
-      />
-
-    )}
+<input
+  type="date"
+  value={visitDate}
+  onChange={(e) =>
+    setVisitDate(e.target.value)
+  }
+/>
 
     <div
       className="modal-actions"
