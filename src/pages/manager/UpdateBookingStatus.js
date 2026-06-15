@@ -10,8 +10,7 @@ import axios from "axios";
 
 import Sidebar from "../../components/Sidebar";
 
-import "../../styles/manager.css";
-
+import "../../styles/updateBookingStatus.css";
 export default function UpdateBookingStatus() {
 
   const [isOpen, setIsOpen] = useState(true);
