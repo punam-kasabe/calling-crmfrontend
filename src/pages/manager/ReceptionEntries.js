@@ -19,7 +19,7 @@ export default function ReceptionEntries() {
   const fetchLeads = useCallback(async () => {
     try {
       const res = await axios.get(
-  `${API}/api/manager/reception-entries`,
+  `${API}/manager/reception-entries`,
   {
     params: {
       email: user?.email
