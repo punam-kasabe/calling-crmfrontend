@@ -31,7 +31,8 @@ import SearchClient from "./pages/reception/SearchClient";
 import CreateVisit from "./pages/reception/CreateVisit";
 import VisitEntries from "./pages/reception/VisitEntries";
 import AssignManager from "./pages/reception/AssignManager";
-import ReceptionEntries from "./pages/executive/ReceptionEntries";
+import ReceptionEntries from "./pages/manager/ReceptionEntries";
+
 
 /* 📊 REPORTS */
 import ProjectsReport from "./pages/reports/ProjectsReport";
@@ -228,17 +229,8 @@ export default function App() {
             </ProtectedRoute>
           }
         />
+
         
-        <Route
-  path="/reception-entries"
-  element={
-    <ProtectedRoute>
-      <ReceptionEntries />
-    </ProtectedRoute>
-  }
-/>
-
-
         {/* MANAGER */}
         <Route
           path="/assigned-clients"
@@ -248,6 +240,16 @@ export default function App() {
             </ProtectedRoute>
           }
         />
+
+            <Route
+  path="/reception-entries"
+  element={
+    <ProtectedRoute>
+      <ReceptionEntries />
+    </ProtectedRoute>
+  }
+/>
+
 
         <Route
           path="/manager-dashboard"
