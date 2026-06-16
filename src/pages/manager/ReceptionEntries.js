@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Sidebar from "../../components/Sidebar";
-import "../../styles/manager.css";
+import "../../styles/receptionEntries.css";
 
-const API =
-  process.env.REACT_APP_API_URL ||
-  "http://localhost:5000";
+const API = process.env.REACT_APP_API_URL;
+
 
 export default function ReceptionEntries() {
   const [isOpen, setIsOpen] = useState(true);
