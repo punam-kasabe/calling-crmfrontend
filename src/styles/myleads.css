@@ -70,8 +70,10 @@
 
 .stats-card p {
   margin-top: 10px;
-  font-size: 28px;
-  font-weight: 700;
+  font-size: 34px;
+  font-weight: 800;
+  color: #111;
+  line-height: 1;
 }
 
 .stats-card.new {
