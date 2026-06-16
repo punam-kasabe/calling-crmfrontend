@@ -284,12 +284,29 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
         }
       >
         <Users size={18} />
-
         <span className="text">
           My Leads
         </span>
       </Link>
     </li>
+
+    <li>
+  <Link
+    to="/reception-entries"
+    className={
+      location.pathname ===
+      "/reception-entries"
+        ? "active"
+        : ""
+    }
+  >
+    <ClipboardList size={18} />
+
+    <span className="text">
+      Reception Entries
+    </span>
+  </Link>
+</li>
 
     <li>
       <Link

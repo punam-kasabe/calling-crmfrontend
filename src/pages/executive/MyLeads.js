@@ -1896,6 +1896,9 @@ Booking
           {statusOptions.map((s, i) => (
             <option key={i} value={s}>
               {s}
+
+
+              
             </option>
           ))}
 

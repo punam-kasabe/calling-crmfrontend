@@ -57,9 +57,9 @@
 
 .lead-form-grid {
   display: grid;
-  grid-template-columns: repeat(3,1fr);
-  gap: 16px;
-  margin-bottom: 18px;
+  grid-template-columns: repeat(4, minmax(180px,1fr));
+  gap: 20px;
+  align-items: start;
 }
 
 /* =========================
