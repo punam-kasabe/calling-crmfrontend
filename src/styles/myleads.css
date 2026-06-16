@@ -12,13 +12,13 @@
 .main-content.shifted {
   margin-left: 240px;
   width: calc(100% - 240px);
-  overflow-x: hidden;
+  overflow-x: auto;
 }
 
 .main-content.full {
   margin-left: 70px;
   width: calc(100% - 70px);
-  overflow-x: hidden;
+  overflow-x: auto;
 }
 
 /* ===============================
@@ -211,15 +211,18 @@
 .table-wrapper {
   background: white;
   border-radius: 14px;
-  overflow-x: auto;
   width: 100%;
-  max-width: 100%;
-  box-shadow: 0 2px 12px rgba(0,0,0,.08);
+
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  display: block;
+  white-space: nowrap;
 }
 
 .leads-table {
   width: max-content;
-  min-width: 100%;
+  min-width: 2600px;
   border-collapse: collapse;
 }
 
