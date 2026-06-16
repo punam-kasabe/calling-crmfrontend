@@ -7,7 +7,6 @@
   min-height: 100vh;
   background: #f4f6f9;
   transition: all 0.3s ease;
-  overflow-x: auto;
 }
 
 .main-content.shifted {
