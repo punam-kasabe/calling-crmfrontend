@@ -1,214 +1,474 @@
-/* =========================
-   MODAL OVERLAY
-========================= */
+/* ===============================
+   MAIN LAYOUT
+================================= */
 
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.45);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-  padding: 20px;
-}
-
-/* =========================
-   MODAL BOX
-========================= */
-
-.modal-box {
-  width: 100%;
-  max-width: 850px;
-  background: #fff;
-  border-radius: 16px;
+.main-content {
   padding: 25px;
-  box-shadow: 0 15px 40px rgba(0,0,0,0.15);
-  animation: popup 0.25s ease;
+  min-height: 100vh;
+  background: #f4f6f9;
+  transition: all 0.3s ease;
 }
 
-.large-modal {
-  max-width: 950px;
+.main-content.shifted {
+  margin-left: 240px;
 }
 
-@keyframes popup {
-  from {
-    transform: translateY(20px);
-    opacity: 0;
-  }
-
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
+.main-content.full {
+  margin-left: 70px;
 }
 
-.modal-box h2,
-.modal-box h3 {
-  margin-bottom: 20px;
+/* ===============================
+   HEADER
+================================= */
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.page-header h2 {
   font-size: 28px;
   font-weight: 700;
   color: #222;
 }
 
-/* =========================
-   FORM GRID
-========================= */
+.page-header p {
+  font-size: 16px;
+  color: #666;
+}
 
-.lead-form-grid {
+/* ===============================
+   STATS
+================================= */
+
+.stats-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(180px,1fr));
-  gap: 20px;
-  align-items: start;
+  grid-template-columns: repeat(auto-fit,minmax(180px,1fr));
+  gap: 15px;
+  margin-bottom: 25px;
 }
 
-/* =========================
-   INPUTS
-========================= */
-
-.lead-form-grid input,
-.lead-form-grid select,
-.lead-form-grid textarea,
-.modal-box textarea {
-  width: 100%;
-  padding: 12px 14px;
-  border: 1px solid #dcdcdc;
-  border-radius: 10px;
-  font-size: 14px;
+.stats-card {
   background: #fff;
-  transition: 0.2s;
+  border-radius: 14px;
+  padding: 18px;
+  box-shadow: 0 2px 12px rgba(0,0,0,.08);
+  transition: .3s;
 }
 
-.lead-form-grid input:focus,
-.lead-form-grid select:focus,
-.modal-box textarea:focus {
-  outline: none;
-  border-color: #4f46e5;
-  box-shadow: 0 0 0 3px rgba(79,70,229,0.15);
+.stats-card:hover {
+  transform: translateY(-4px);
 }
 
-/* =========================
-   LABEL
-========================= */
+.stats-card h5 {
+  margin: 0;
+  color: #666;
+  font-size: 14px;
+}
 
-.lead-form-grid label {
+.stats-card p {
+  margin-top: 10px;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.stats-card.new {
+  border-left: 5px solid #0d6efd;
+}
+
+.stats-card.interested {
+  border-left: 5px solid #20c997;
+}
+
+.stats-card.booked {
+  border-left: 5px solid #198754;
+}
+
+.stats-card.followup {
+  border-left: 5px solid orange;
+}
+
+.stats-card.not {
+  border-left: 5px solid red;
+}
+
+.stats-card.sitevisit {
+  border-left: 5px solid purple;
+}
+
+/* ===============================
+   SEARCH
+================================= */
+
+.filter-bar {
+  margin-bottom: 20px;
+}
+
+.global-search {
+  width: 100%;
+  height: 50px;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 0 18px;
+  font-size: 15px;
+  background: white;
+}
+
+/* ===============================
+   BUTTONS
+================================= */
+
+.top-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.advanced-btn,
+.export-btn,
+.newlead-btn {
+  border: none;
+  padding: 12px 18px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.advanced-btn {
+  background: #212529;
+  color: white;
+}
+
+.export-btn {
+  background: #198754;
+  color: white;
+}
+
+.newlead-btn {
+  background: #0d6efd;
+  color: white;
+}
+
+/* ===============================
+   ADVANCED SEARCH
+================================= */
+
+.advanced-search-box {
+  background: white;
+  padding: 20px;
+  border-radius: 14px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 12px rgba(0,0,0,.08);
+
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(250px,1fr));
+  gap: 15px;
+}
+
+.advanced-search-box input,
+.advanced-search-box select {
+  width: 100%;
+  height: 45px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 0 12px;
+}
+
+.date-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.multi-filter label {
   display: block;
   margin-bottom: 6px;
-  font-size: 13px;
   font-weight: 600;
-  color: #444;
 }
 
-/* =========================
-   TEXTAREA
-========================= */
-
-.modal-box textarea {
-  min-height: 120px;
-  resize: vertical;
-  margin-top: 10px;
-}
-
-/* =========================
-   BUTTONS
-========================= */
-
-.modal-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 12px;
-  margin-top: 20px;
-}
-
-.cancel-btn,
-.save-btn {
-  min-width: 140px;
+.clear-filter-btn {
+  background: crimson;
+  color: white;
   border: none;
-  padding: 12px 20px;
   border-radius: 10px;
-  font-size: 15px;
-  font-weight: 600;
+  height: 45px;
   cursor: pointer;
 }
 
-.cancel-btn {
-  background: #efefef;
-  color: #333;
+/* ===============================
+   TABLE
+================================= */
+
+.table-wrapper {
+  background: white;
+  border-radius: 14px;
+  overflow-x: auto;
+  box-shadow: 0 2px 12px rgba(0,0,0,.08);
 }
 
-.cancel-btn:hover {
-  background: #ddd;
+.leads-table {
+  width: 100%;
+  border-collapse: collapse;
 }
 
-.save-btn {
-  background: #4f46e5;
+.leads-table thead {
+  background: #0d6efd;
   color: white;
 }
 
-.save-btn:hover {
-  background: #4338ca;
+.leads-table th,
+.leads-table td {
+  padding: 14px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+  white-space: nowrap;
 }
 
-/* =========================
-   BOOKING MODAL
-========================= */
+.leads-table tbody tr:hover {
+  background: #f9fafb;
+}
+
+.description-cell {
+  min-width: 250px;
+  white-space: normal;
+}
+
+/* ===============================
+   STATUS BADGES
+================================= */
+
+.status-badge {
+  padding: 6px 12px;
+  border-radius: 50px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.status-badge.new {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.status-badge.interested {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.status-badge.very-interested {
+  background: #bbf7d0;
+  color: #14532d;
+}
+
+.status-badge.follow-up {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.status-badge.not-interested {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.status-badge.booked {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+/* ===============================
+   ACTION BUTTONS
+================================= */
+
+.action-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.icon-btn {
+  width: 38px;
+  height: 38px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  color: white;
+}
+
+.call-btn {
+  background: #0d6efd;
+}
+
+.whatsapp-btn {
+  background: #25d366;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.edit-btn {
+  background: orange;
+}
 
 .booking-btn {
-  background: #16a34a;
-  color: white;
   border: none;
-  padding: 7px 14px;
+  background: purple;
+  color: white;
+  padding: 8px 14px;
   border-radius: 8px;
   cursor: pointer;
 }
 
-.booking-btn:hover {
-  background: #15803d;
+/* ===============================
+   STATUS SELECT
+================================= */
+
+.status-select {
+  width: 160px;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
 }
 
-/* =========================
-   CALL MODAL
-========================= */
+/* ===============================
+   PAGINATION
+================================= */
 
-.modal-box p {
-  margin: 10px 0;
-  font-size: 15px;
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  padding: 20px;
 }
 
-/* =========================
-   RESPONSIVE
-========================= */
-
-@media (max-width: 992px) {
-
-  .lead-form-grid {
-    grid-template-columns: repeat(2,1fr);
-  }
-
+.page-btn {
+  border: none;
+  background: #0d6efd;
+  color: white;
+  padding: 10px 18px;
+  border-radius: 8px;
+  cursor: pointer;
 }
+
+.page-btn:disabled {
+  opacity: .5;
+  cursor: not-allowed;
+}
+
+.page-info {
+  font-weight: 600;
+}
+
+/* ===============================
+   MODAL
+================================= */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.modal-box {
+  background: white;
+  border-radius: 16px;
+  padding: 25px;
+  width: 500px;
+  max-width: 95%;
+}
+
+.large-modal {
+  width: 900px;
+}
+
+.modal-box h2,
+.modal-box h3 {
+  margin-bottom: 20px;
+}
+
+.lead-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  gap: 15px;
+}
+
+.lead-form-grid input,
+.lead-form-grid select,
+textarea {
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 12px;
+}
+
+textarea {
+  margin-top: 15px;
+  resize: none;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.cancel-btn {
+  background: #6c757d;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+}
+
+.save-btn {
+  background: #198754;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+}
+
+/* ===============================
+   LOADER
+================================= */
+
+.loader,
+.empty-state {
+  text-align: center;
+  padding: 50px;
+  font-size: 18px;
+  color: #666;
+}
+
+/* ===============================
+   MOBILE
+================================= */
 
 @media (max-width: 768px) {
-
-  .modal-box {
-    max-height: 90vh;
-    overflow-y: auto;
-  }
 
   .lead-form-grid {
     grid-template-columns: 1fr;
   }
 
-  .modal-actions {
+  .stats-grid {
+    grid-template-columns: repeat(2,1fr);
+  }
+
+  .top-actions {
     flex-direction: column;
   }
 
-  .save-btn,
-  .cancel-btn {
-    width: 100%;
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
   }
 
-}
-.form-group{
-  display:flex;
-  flex-direction:column;
 }
