@@ -1,10 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import Sidebar from "../../components/Sidebar";
 import "../../styles/receptionEntries.css";
 
 const API = process.env.REACT_APP_API_URL;
-
 
 export default function ReceptionEntries() {
   const [isOpen, setIsOpen] = useState(true);
@@ -15,34 +14,33 @@ export default function ReceptionEntries() {
     setIsOpen(!isOpen);
 
   const user =
-    JSON.parse(localStorage.getItem("user"));
+    JSON.parse(localStorage.getItem("user")) || {};
 
-  useEffect(() => {
-    fetchLeads();
-  }, []);
-
-  const fetchLeads = async () => {
+  const fetchLeads = useCallback(async () => {
     try {
       const res = await axios.get(
         `${API}/api/manager/reception-entries`,
         {
           params: {
-            email: user?.email
-          }
+            email: user?.email,
+          },
         }
       );
 
       setLeads(res.data || []);
     } catch (err) {
-      console.log(err);
+      console.error(err);
     } finally {
       setLoading(false);
     }
-  };
+  }, [user?.email]);
+
+  useEffect(() => {
+    fetchLeads();
+  }, [fetchLeads]);
 
   return (
     <div className="layout">
-
       <Sidebar
         isOpen={isOpen}
         toggleSidebar={toggleSidebar}
@@ -58,7 +56,6 @@ export default function ReceptionEntries() {
         </div>
 
         <div className="table-card">
-
           {loading ? (
             <p>Loading...</p>
           ) : (
@@ -77,70 +74,57 @@ export default function ReceptionEntries() {
               </thead>
 
               <tbody>
-
                 {leads.length === 0 ? (
                   <tr>
                     <td
                       colSpan="8"
                       style={{
-                        textAlign: "center"
+                        textAlign: "center",
                       }}
                     >
                       No Reception Entries Found
                     </td>
                   </tr>
                 ) : (
-                  leads.map(
-                    (lead, index) => (
-                      <tr key={lead._id}>
-                        <td>
-                          {index + 1}
-                        </td>
+                  leads.map((lead, index) => (
+                    <tr key={lead._id}>
+                      <td>{index + 1}</td>
 
-                        <td>
-                          {lead.name}
-                        </td>
+                      <td>{lead.name}</td>
 
-                        <td>
-                          {lead.phone}
-                        </td>
+                      <td>{lead.phone}</td>
 
-                        <td>
-                          {lead.project}
-                        </td>
+                      <td>{lead.project}</td>
 
-                        <td>
-                          {lead.assignedTo ||
-                            "-"}
-                        </td>
+                      <td>
+                        {lead.assignedTo || "-"}
+                      </td>
 
-                        <td>
-                          {lead.status ||
-                            "New"}
-                        </td>
+                      <td>
+                        {lead.status || "New"}
+                      </td>
 
-                        <td>
-                          {lead.next_call_date
-                            ? new Date(
-                                lead.next_call_date
-                              ).toLocaleDateString()
-                            : "-"}
-                        </td>
+                      <td>
+                        {lead.next_call_date
+                          ? new Date(
+                              lead.next_call_date
+                            ).toLocaleDateString()
+                          : "-"}
+                      </td>
 
-                        <td>
-                          {new Date(
-                            lead.createdAt
-                          ).toLocaleString()}
-                        </td>
-                      </tr>
-                    )
-                  )
+                      <td>
+                        {lead.createdAt
+                          ? new Date(
+                              lead.createdAt
+                            ).toLocaleString()
+                          : "-"}
+                      </td>
+                    </tr>
+                  ))
                 )}
-
               </tbody>
             </table>
           )}
-
         </div>
       </div>
     </div>
