@@ -225,40 +225,41 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
                       : ""
                   }
                 >
-
-                  <li>
-  <Link
-    to="/reception-entries"
-    className={
-      location.pathname ===
-      "/reception-entries"
-        ? "active"
-        : ""
-    }
-  >
-    <ClipboardList size={18} />
-    <span className="text">
-      Reception Entries
-    </span>
-  </Link>
-</li>
-                  <Users size={18} />
+              <Users size={18} />
                   <span className="text">
                     Assigned Clients
                   </span>
                 </Link>
               </li>
 
+
+              <li>
+             <Link
+             to="/reception-entries"
+               className={
+                    location.pathname === "/reception-entries"
+                   ? "active"
+                       : ""
+                }
+               >
+               <ClipboardList size={18} />
+                <span className="text">
+                 Reception Entries
+                  </span>
+               </Link>
+            </li>
+
+
               <li>
                <Link
-  to="/update-booking-status"
-  className={
-    location.pathname ===
-    "/update-booking-status"
-      ? "active"
-      : ""
-  }
->
+                  to="/update-booking-status"
+                    className={
+                     location.pathname ===
+                   "/update-booking-status"
+                   ? "active"
+                    : ""
+                      }
+                     >
                   <ClipboardList size={18} />
                   <span className="text">
                     Booking Status
