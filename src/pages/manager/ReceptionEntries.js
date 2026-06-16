@@ -18,14 +18,12 @@ export default function ReceptionEntries() {
 
   const fetchLeads = useCallback(async () => {
     try {
-      const res = await axios.get(
-        `${API}/api/manager/reception-entries`,
-        {
-          params: {
-            email: user?.email,
-          },
-        }
-      );
+      const res = await axios.post(
+  `${API}/api/reception-entries`,
+  {
+    email: user?.email
+  }
+);
 
       setLeads(res.data || []);
     } catch (err) {
