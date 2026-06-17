@@ -21,19 +21,38 @@ import {
   FaHome,
   FaPhoneAlt
 } from "react-icons/fa";
+import {
+  Pie
+} from "react-chartjs-2";
+
+import {
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+  Legend
+} from "chart.js";
+
+ChartJS.register(
+  ArcElement,
+  Tooltip,
+  Legend
+);
 export default function ManagerDashboard() {
 
   const [isOpen, setIsOpen] = useState(true);
   const [stats, setStats] = useState({
-    
+  total: 0,
+  booked: 0,
+  interested: 0,
+  pending: 0,
+  visits: 0,
+  followups: 0,
 
-    total: 0,
-    booked: 0,
-    interested: 0,
-    pending: 0,
-    visits: 0,
-    followups: 0
-  });
+  newLeads: 0,
+  veryInterested: 0,
+  notInterested: 0,
+  siteVisit: 0
+});
  
   const [todayFollowups, setTodayFollowups] =
   useState([]);
@@ -62,13 +81,23 @@ export default function ManagerDashboard() {
       );
 
       setStats({
-        total: data.total || 0,
-        booked: data.booked || 0,
-        interested: data.interested || 0,
-        pending: data.pending || 0,
-        visits: data.visits || 0,
-        followups: data.followups || 0
-      });
+  total: data.total || 0,
+  booked: data.booked || 0,
+  interested: data.interested || 0,
+  pending: data.pending || 0,
+  visits: data.visits || 0,
+  followups: data.followups || 0,
+
+  newLeads: data.newLeads || 0,
+  veryInterested:
+    data.veryInterested || 0,
+
+  notInterested:
+    data.notInterested || 0,
+
+  siteVisit:
+    data.siteVisit || 0
+});
 
     } catch (err) {
 
@@ -128,6 +157,43 @@ useEffect(() => {
     );
 
 }, [user?.email]);
+const pieData = {
+  labels: [
+    "New",
+    "Interested",
+    "Very Interested",
+    "Followup",
+    "Booked",
+    "Not Interested",
+    "Site Visit"
+  ],
+
+  datasets: [
+    {
+      data: [
+        stats.newLeads,
+        stats.interested,
+        stats.veryInterested,
+        stats.followups,
+        stats.booked,
+        stats.notInterested,
+        stats.siteVisit
+      ],
+
+      backgroundColor: [
+        "#0d6efd",
+        "#20c997",
+        "#198754",
+        "#ffc107",
+        "#6f42c1",
+        "#dc3545",
+        "#0dcaf0"
+      ],
+
+      borderWidth: 1
+    }
+  ]
+};
   return (
 
     <div className="layout">
@@ -144,7 +210,6 @@ useEffect(() => {
           isOpen ? "shifted" : "full"
         }`}
       >
-
         <div className="page-container">
 
           <h1 className="page-title">
@@ -156,8 +221,6 @@ useEffect(() => {
 
            </div>
          <div className="dashboard-grid">
-
-
 
   <div className="dashboard-card card-blue">
     <div className="card-icon">
@@ -248,6 +311,17 @@ useEffect(() => {
       />
     </h2>
   </div>
+
+</div>
+<div className="chart-card">
+
+  <h2>
+    Lead Status Summary
+  </h2>
+
+  <div className="chart-wrapper">
+  <Pie data={pieData} />
+</div>
 
 </div>
         </div>
