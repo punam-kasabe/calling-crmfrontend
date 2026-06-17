@@ -324,6 +324,35 @@ const pieData = {
 </div>
 
 </div>
+
+{/* =========================================
+   TODAY TASKS
+========================================= */}
+
+<div className="tasks-widget">
+
+  <h2>Today's Tasks</h2>
+
+  <div className="tasks-grid">
+
+    <div className="task-box followup-task">
+      <h3>🔔 Today's Followups</h3>
+      <span>{stats.followups}</span>
+    </div>
+
+    <div className="task-box visit-task">
+      <h3>🏠 Today's Site Visits</h3>
+      <span>{stats.visits}</span>
+    </div>
+
+    <div className="task-box call-task">
+      <h3>📞 Pending Calls</h3>
+      <span>{stats.pending}</span>
+    </div>
+
+  </div>
+
+</div>
         </div>
 
       </div>
