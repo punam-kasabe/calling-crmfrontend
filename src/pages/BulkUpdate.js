@@ -316,7 +316,14 @@ export default function BulkUpdate() {
               </span>
 
             </div>
-
+<div className="duplicate-footer">
+  <button
+    className="btn btn-danger"
+    onClick={() => setShowPopup(false)}
+  >
+    Close
+  </button>
+</div>
             <div className="dup-details">
 
               <p>
