@@ -10,7 +10,6 @@ export default function CreateVisit() {
 
   const [isOpen, setIsOpen] = useState(true);
   const [loading, setLoading] = useState(false);
-
   const [managers, setManagers] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false); // 🔥 NEW
 
@@ -35,7 +34,8 @@ export default function CreateVisit() {
     visitStatus: "IN_OFFICE",
     bookingStatus: "PENDING",
     calling_by: [],
-    remark: ""
+    remark: "",
+    status: "New"
   });
 
   useEffect(() => {
@@ -109,7 +109,8 @@ export default function CreateVisit() {
         visitStatus: "IN_OFFICE",
         bookingStatus: "PENDING",
         calling_by: [],
-        remark: ""
+        remark: "",
+        status: "New"
       });
 
     } catch (err) {
@@ -208,13 +209,13 @@ export default function CreateVisit() {
                   value={form.bookingStatus}
                   onChange={handleChange}
                 >
-                  <option value="PENDING">Pending</option>
+                  <option value="PENDING">Site visit Pending</option>
                   <option value="BOOKED">Booked</option>
                   <option value="NOT_BOOKED">Not Booked</option>
                 </select>
               </div>
 
-              {/* 🔥 CALLING BY DROPDOWN */}
+               {/* 🔥 CALLING BY DROPDOWN */}
               <div className="form-group">
                 <label>Calling By</label>
 
@@ -246,6 +247,26 @@ export default function CreateVisit() {
                 </div>
 
               </div>
+
+{/* LEAD STATUS */}
+<div className="form-group">
+  <label>Lead Status</label>
+
+  <select
+    name="status"
+    value={form.status}
+    onChange={handleChange}
+  >
+    <option value="New">New</option>
+    <option value="Fresh">Fresh</option>
+    <option value="Interested">Interested</option>
+    <option value="Followup">Followup</option>
+    <option value="Not Interested">Not Interested</option>
+    <option value="Visit Done">Visit Done</option>
+    <option value="Booked">Booked</option>
+  </select>
+</div>
+             
 
               {/* REMARK */}
               <div className="form-group">
