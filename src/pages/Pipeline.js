@@ -258,16 +258,32 @@ fetchProjects();
 };
 
   /* ================= UPDATE ================= */
-  const handleUpdate = async () => {
-    try {
-      await axios.put(`${API}/update-lead/${selectedLead._id}`, selectedLead);
-      toast.success("Updated Successfully ✅");
-      setShowModal(false);
-      fetchLeads();
-    } catch {
-      toast.error("Update Failed ❌");
-    }
-  };
+ const handleUpdate = async () => {
+
+  const selectedUser = users.find(
+    (u) => u.email === selectedLead.assigned_to
+  );
+
+  selectedLead.assigned_to_email =
+    selectedUser?.email || "";
+
+  try {
+
+    await axios.put(
+      `${API}/update-lead/${selectedLead._id}`,
+      selectedLead
+    );
+
+    toast.success("Updated Successfully ✅");
+    setShowModal(false);
+    fetchLeads();
+
+  } catch {
+
+    toast.error("Update Failed ❌");
+
+  }
+};
 
   /* ================= SEARCH ================= */
   const filteredLeads = leads;
@@ -868,26 +884,22 @@ onChange={(e) => {
                 } />
 
 
-                <select
+               <select
   className="form-select mb-2"
-  value={selectedLead.assigned_manager || ""}
+  value={selectedLead.assigned_to || ""}
   onChange={(e) =>
     setSelectedLead({
       ...selectedLead,
-      assigned_manager: e.target.value
+      assigned_to: e.target.value
     })
   }
 >
   <option value="">
-    Select Attending Officer
+    Select Executive
   </option>
 
   {users
-    .filter(
-      (u) =>
-        u.role === "attending_officer" ||
-        u.role === "closing_officer"
-    )
+    .filter((u) => u.role === "executive")
     .map((u) => (
       <option
         key={u._id}
