@@ -252,9 +252,7 @@ fetchProjects();
   }
 
   toast.error("Delete Failed ❌");
-
 }
-
 };
 
   /* ================= UPDATE ================= */
