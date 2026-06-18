@@ -16,7 +16,7 @@ export default function SourceReport() {
   const [isOpen, setIsOpen] = useState(true);
   const toggleSidebar = () => setIsOpen(!isOpen);
 
-  /* 🔥 STATIC DATA (API नंतर जोडू) */
+  /* 🔥 STATIC DATA */
   const data = [
     {
       source: "Facebook",
