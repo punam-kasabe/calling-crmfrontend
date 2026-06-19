@@ -203,9 +203,10 @@ export default function CreateVisit() {
                 >
                   <option value="">Select Project</option>
                   <option value="99villa">99villa</option>
-                  <option value="99 villa plot">99 villa plot</option>
-                  <option value="Affordable life">Affordable life</option>
-                  <option value="Alibaug Plot">Alibaug Plot</option>
+                  <option value="Karjat">Karjat</option>
+                  <option value="Alibaug Plot">Alibaug</option>
+                  <option value="Pen">Pen</option>
+                  <option value="MahaMumbai">MahaMumbai</option>
                 </select>
               </div>
 
@@ -226,6 +227,10 @@ export default function CreateVisit() {
 
     <option value="HR/Admin">
       HR/Admin
+    </option>
+
+    <option value="TeleCaller">
+      TeleCaller
     </option>
 
     <option value="Aasma Ma'am">
