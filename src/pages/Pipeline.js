@@ -764,14 +764,7 @@ onChange={(e) => {
 
      <td>{l.project || "-"}</td>
 
-<td
-  style={{
-    minWidth: "250px",
-    maxWidth: "350px",
-    whiteSpace: "normal",
-    wordBreak: "break-word"
-  }}
->
+<td>
   {l.remark || "-"}
 </td>
 
