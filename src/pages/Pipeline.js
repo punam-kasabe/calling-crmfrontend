@@ -766,18 +766,11 @@ onChange={(e) => {
 
 
 <td>
-  {l.followups?.length > 0 ? (
-    l.followups
-      .slice()
-      .reverse()
-      .map((f, i) => (
-        <div key={i}>
-          {f.note}
-        </div>
-      ))
-  ) : (
-    l.remark || "-"
-  )}
+  {l.remark ||
+   l.description ||
+   (l.followups?.length > 0
+     ? l.followups[l.followups.length - 1].note
+     : "-")}
 </td>
 
 <td>

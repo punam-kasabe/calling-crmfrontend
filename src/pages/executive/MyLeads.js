@@ -460,47 +460,34 @@ if (
   phone: selectedLead.phone,
   email: selectedLead.email,
 
- assignedTo:
-  assignedOfficer,
+  assignedTo: assignedOfficer,
+  assigned_to_email: assignedEmail,
 
-assigned_to_email:
-  assignedEmail,
+  closingExecutive: selectedLead.closingExecutive,
 
-  closingExecutive:
-    selectedLead.closingExecutive,
+  status: selectedLead.status,
 
-  status:
-    selectedLead.status,
+  source: selectedLead.source,
+  subSource: selectedLead.subSource,
 
-  source:
-    selectedLead.source,
+  city: selectedLead.city,
 
-  subSource:
-    selectedLead.subSource,
+  project: selectedLead.project,
 
-  city:
-    selectedLead.city,
+  next_call_date: selectedLead.next_call_date,
 
-  project:
-    selectedLead.project,
+  /* Executive Description */
+  description: selectedLead.description,
 
-  next_call_date:
-    selectedLead.next_call_date,
+  /* Admin Pipeline Remark */
+  remark: selectedLead.description,
 
-  description:
-    selectedLead.description,
+  department: selectedLead.department,
 
-  department:
-    selectedLead.department,
+  deadReason: selectedLead.deadReason,
+  deadSubReason: selectedLead.deadSubReason,
 
-  deadReason:
-    selectedLead.deadReason,
-
-  deadSubReason:
-    selectedLead.deadSubReason,
-
-  bookingDate:
-    selectedLead.bookingDate
+  bookingDate: selectedLead.bookingDate
 };
 
       await axios.put(
