@@ -209,20 +209,15 @@
 ================================= */
 
 .table-wrapper {
-  background: white;
-  border-radius: 14px;
   width: 100%;
-
   overflow-x: auto;
   overflow-y: hidden;
-
-  display: block;
-  white-space: nowrap;
+  border-radius: 12px;
 }
 
 .leads-table {
-  width: max-content;
-  min-width: 2600px;
+  min-width: 1400px; 
+  width: 100%;
   border-collapse: collapse;
 }
 
@@ -246,6 +241,23 @@
 .description-cell {
   min-width: 250px;
   white-space: normal;
+}
+/* Custom Scrollbar */
+.table-wrapper::-webkit-scrollbar {
+  height: 8px;
+}
+
+.table-wrapper::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }
 
 /* ===============================
