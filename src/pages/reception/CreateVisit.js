@@ -11,6 +11,7 @@ export default function CreateVisit() {
   const [isOpen, setIsOpen] = useState(true);
   const [loading, setLoading] = useState(false);
   const [managers, setManagers] = useState([]);
+  const [users, setUsers] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false); // 🔥 NEW
 
   // 🔥 STATIC EXECUTIVE LIST
@@ -35,12 +36,35 @@ export default function CreateVisit() {
     bookingStatus: "PENDING",
     calling_by: [],
     remark: "",
-    status: "New"
+    status: "New",
+    department: "",
+    source: "",
+    assigned_to: ""
   });
 
   useEffect(() => {
-    fetchManagers();
-  }, []);
+  fetchManagers();
+  fetchUsers();
+}, []);
+
+  const fetchUsers = async () => {
+  try {
+
+    const res = await axios.get(
+      "https://calling-crm-backend-7w52.onrender.com/api/all-users",
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`
+        }
+      }
+    );
+
+    setUsers(res.data || []);
+
+  } catch (err) {
+    console.log(err);
+  }
+};
 
   // ================= FETCH MANAGERS =================
   const fetchManagers = async () => {
@@ -185,6 +209,66 @@ export default function CreateVisit() {
                 </select>
               </div>
 
+
+              <div className="form-group">
+  <label>Department</label>
+
+  <select
+    name="department"
+    value={form.department}
+    onChange={handleChange}
+  >
+    <option value="">Select Department</option>
+
+    <option value="Sales & Marketing">
+      Sales & Marketing
+    </option>
+
+    <option value="HR/Admin">
+      HR/Admin
+    </option>
+
+    <option value="Aasma Ma'am">
+      Aasma Ma'am
+    </option>
+
+    <option value="Nilesh Sir">
+      Nilesh Sir
+    </option>
+
+  </select>
+</div>
+
+<div className="form-group">
+  <label>Source</label>
+
+  <select
+    name="source"
+    value={form.source}
+    onChange={handleChange}
+  >
+
+    <option value="">Select Source</option>
+
+    <option value="Facebook">Facebook</option>
+    <option value="Instagram">Instagram</option>
+    <option value="Google Ads">Google Ads</option>
+    <option value="99acres">99acres</option>
+    <option value="MagicBricks">MagicBricks</option>
+    <option value="Housing">Housing</option>
+    <option value="Website">Website</option>
+    <option value="WhatsApp">WhatsApp</option>
+    <option value="JustDial">JustDial</option>
+    <option value="Reference">Reference</option>
+    <option value="Hoarding">Hoarding</option>
+    <option value="Newspaper">Newspaper</option>
+    <option value="Walk-In">Walk-In</option>
+    <option value="Call Center">Call Center</option>
+    <option value="Property Expo">Property Expo</option>
+    <option value="YouTube">YouTube</option>
+
+  </select>
+</div>
               {/* VISIT STATUS */}
               <div className="form-group">
                 <label>Visit Status</label>
@@ -248,6 +332,38 @@ export default function CreateVisit() {
 
               </div>
 
+
+<div className="form-group">
+
+  <label>Assign To</label>
+
+  <select
+    name="assigned_to"
+    value={form.assigned_to}
+    onChange={handleChange}
+  >
+
+    <option value="">
+      Select Executive
+    </option>
+
+    {users
+      .filter(
+        (u) =>
+          u.role === "executive"
+      )
+      .map((u) => (
+        <option
+          key={u._id}
+          value={u.email}
+        >
+          {u.name}
+        </option>
+      ))}
+
+  </select>
+
+</div>
 {/* LEAD STATUS */}
 <div className="form-group">
   <label>Lead Status</label>
