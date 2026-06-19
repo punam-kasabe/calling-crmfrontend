@@ -72,7 +72,7 @@ export default function VisitEntries() {
                 <th>Booking</th>
 
                 <th>Manager</th>
-
+                <th>Calling By</th>
                 <th>Date</th>
 
               </tr>
@@ -114,6 +114,13 @@ export default function VisitEntries() {
                     </td>
 
                     <td>
+  {Array.isArray(v.calling_by)
+    ? v.calling_by.join(", ")
+    : v.calling_by || "-"}
+</td>
+
+
+                    <td>
 
                       {new Date(
                         v.createdAt
@@ -128,9 +135,8 @@ export default function VisitEntries() {
               ) : (
 
                 <tr>
-
                   <td
-                    colSpan="7"
+                    colSpan="8"
                     style={{
                       textAlign: "center"
                     }}
