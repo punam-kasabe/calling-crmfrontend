@@ -11,13 +11,11 @@
 
 .main-content.shifted {
   margin-left: 240px;
-  width: calc(100% - 240px);
   overflow-x: auto;
 }
 
 .main-content.full {
   margin-left: 70px;
-  width: calc(100% - 70px);
   overflow-x: auto;
 }
 

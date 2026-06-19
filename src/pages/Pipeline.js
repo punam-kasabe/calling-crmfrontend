@@ -308,6 +308,7 @@ fetchProjects();
       Status: l.status,
 
       Project: l.project,
+      Remark: l.remark || "-",
     "Created Date": l.createdAt
   ? new Date(l.createdAt).toLocaleDateString("en-GB")
   : "-",
@@ -442,6 +443,9 @@ onChange={(e) => {
 <div className="advanced-search-card">
 
   <div className="row g-2">
+
+
+
 
     {/* STATUS */}
 
@@ -714,6 +718,7 @@ onChange={(e) => {
 
                 <th>Status</th>
                 <th>Project</th>
+                 <th>Remark</th>
                 <th>Created Date</th>
                 <th>Next Call</th>
                 <th>Action</th>
@@ -758,6 +763,17 @@ onChange={(e) => {
 </td>
 
      <td>{l.project || "-"}</td>
+
+<td
+  style={{
+    minWidth: "250px",
+    maxWidth: "350px",
+    whiteSpace: "normal",
+    wordBreak: "break-word"
+  }}
+>
+  {l.remark || "-"}
+</td>
 
 <td>
   {l.createdAt
@@ -833,7 +849,7 @@ onChange={(e) => {
                 ))
               ) : (
                 <tr>
-          <td colSpan="11" className="text-center">
+          <td colSpan="13" className="text-center">
                       ❌ No Leads Found
                   </td>
                 </tr>
@@ -881,6 +897,18 @@ onChange={(e) => {
                   setSelectedLead({ ...selectedLead, phone: e.target.value })
                 } />
 
+<textarea
+  className="form-control mb-2"
+  rows="3"
+  placeholder="Remark"
+  value={selectedLead.remark || ""}
+  onChange={(e) =>
+    setSelectedLead({
+      ...selectedLead,
+      remark: e.target.value
+    })
+  }
+/>
 
                <select
   className="form-select mb-2"
