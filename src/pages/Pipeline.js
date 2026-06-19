@@ -765,7 +765,10 @@ onChange={(e) => {
      <td>{l.project || "-"}</td>
 
 <td>
-  {l.remark || "-"}
+  {l.remark ||
+    (l.followups?.length > 0
+      ? l.followups[l.followups.length - 1].note
+      : "-")}
 </td>
 
 <td>
