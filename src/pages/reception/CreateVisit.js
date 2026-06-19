@@ -284,6 +284,7 @@ export default function CreateVisit() {
                 >
                   <option value="IN_OFFICE">In Office</option>
                   <option value="VISIT_DONE">Site Visit Done</option>
+                  <option value="VISIT_PENDING">Site Visit Pending</option>
                   <option value="BOOKED">Booked</option>
                   <option value="FOLLOWUP">Followup</option>
                   <option value="NOT_BOOKED">Not Booked</option>
