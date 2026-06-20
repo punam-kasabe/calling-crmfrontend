@@ -413,35 +413,41 @@ body,
   }
 }
 
+/* GLOBAL FONT SIZE */
+
 body {
-  font-size: 16px;
+  font-size: 25px;
 }
 
-.sidebar a,
-button,
 input,
 select,
 textarea,
-label {
-  font-size: 15px;
+button {
+  font-size: 17px !important;
 }
 
-.table td,
-.table th,
-.leads-table td,
-.leads-table th {
-  font-size: 15px;
+table th {
+  font-size: 16px !important;
+}
+
+table td {
+  font-size: 16px !important;
+}
+
+.sidebar .text {
+  font-size: 16px !important;
+}
+
+.page-header h2,
+.dashboard-title {
+  font-size: 32px !important;
 }
 
 .stats-card h5 {
-  font-size: 17px;
+  font-size: 16px !important;
 }
 
 .stats-card p {
-  font-size: 28px;
-}
-
-.dashboard-title,
-.page-title {
-  font-size: 32px;
+  font-size: 28px !important;
+  font-weight: 700;
 }
