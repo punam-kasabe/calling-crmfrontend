@@ -17,8 +17,9 @@ body,
   overflow-y: auto;
   font-family: "Segoe UI", sans-serif;
   background: #f4f6f9;
-}
 
+  font-size: 18px; 
+}
 /* =========================================
    PAGE
 ========================================= */
@@ -412,4 +413,43 @@ body,
     align-items: flex-start;
     gap: 5px;
   }
+}
+
+/* GLOBAL FONT SIZE */
+
+body {
+  font-size: 18px;
+}
+
+input,
+select,
+textarea,
+button {
+  font-size: 17px !important;
+}
+
+table th {
+  font-size: 16px !important;
+}
+
+table td {
+  font-size: 16px !important;
+}
+
+.sidebar .text {
+  font-size: 16px !important;
+}
+
+.page-header h2,
+.dashboard-title {
+  font-size: 32px !important;
+}
+
+.stats-card h5 {
+  font-size: 16px !important;
+}
+
+.stats-card p {
+  font-size: 28px !important;
+  font-weight: 700;
 }
