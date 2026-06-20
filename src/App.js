@@ -18,6 +18,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import CallLogs from "./pages/executive/CallLogs";
 import ExecutiveDashboard from "./pages/executive/ExecutiveDashboard";
 import MyLeads from "./pages/executive/MyLeads";
+import ExecutiveReports from "./pages/executive/ExecutiveReports";
 import Followups from "./pages/executive/Followups";
 
 /* 👨‍💻 MANAGER */
@@ -220,7 +221,8 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-
+         
+        
         <Route
           path="/my-leads"
           element={
@@ -230,6 +232,14 @@ export default function App() {
           }
         />
 
+         <Route
+           path="/executive-reports"
+           element={
+          <ProtectedRoute>
+          <ExecutiveReports />
+           </ProtectedRoute>
+          }
+              />
         
         {/* MANAGER */}
         <Route

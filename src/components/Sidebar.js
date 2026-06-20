@@ -329,6 +329,23 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
     </li>
 
     <li>
+  <Link
+    to="/executive-reports"
+    className={
+      location.pathname === "/executive-reports"
+        ? "active"
+        : ""
+    }
+  >
+    <BarChart3 size={18} />
+
+    <span className="text">
+      Reports
+    </span>
+  </Link>
+</li>
+
+    <li>
       <Link
         to="/call-logs"
         className={
