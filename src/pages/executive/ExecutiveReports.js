@@ -17,28 +17,31 @@ export default function ExecutiveReports() {
   const toggleSidebar = () =>
     setIsOpen(!isOpen);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+
+ const fetchReportData = async () => {
+  try {
+    const res = await axios.get(
+      `${API}/my-leads`,
+      {
+        params: {
+          email: user.email
+        }
+      }
+    );
+
+    setLeads(res.data || []);
+  } catch (err) {
+    console.log(err);
+  } finally {
+    setLoading(false);
+  }
+};
+
+// eslint-disable-next-line react-hooks/exhaustive-deps
 useEffect(() => {
   fetchReportData();
 }, []);
 
-  const fetchReportData = async () => {
-    try {
-      const res = await axios.get(
-        `${API}/my-leads`,
-        {
-          params: {
-            email: user.email
-          }
-        }
-      );
-      setLeads(res.data || []);
-    } catch (err) {
-      console.log(err);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const stats = useMemo(() => {
     return {
