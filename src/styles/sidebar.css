@@ -3,7 +3,7 @@
 /* ================= MAIN SIDEBAR ================= */
 
 .sidebar {
-  width: 260px;
+  width: 240px;
   height: 100vh;
   background: #111827;
   color: white;
@@ -33,17 +33,20 @@
   position: fixed;
   top: 0;
   right: 0;
-  left: 260px;
+  left: 240px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 20px;
   z-index: 1100;
   transition: 0.3s ease;
+  width: calc(100% - 240px);
+
 }
 
 .top-navbar.collapsed {
   left: 80px;
+  width: calc(100% - 80px);
 }
 
 .nav-left {
@@ -53,8 +56,8 @@
 }
 
 .logo {
-  width: 40px;
-  height: 40px;
+  width: 50px;
+  height: 50px;
   object-fit: contain;
 }
 
@@ -145,8 +148,10 @@
   padding: 12px 15px;
   border-radius: 10px;
   text-decoration: none;
-  color: rgb(0, 0, 0);
-  cursor: pointer;
+color: #ffffff;
+  font-size: 15px;
+  font-weight: 500;
+    cursor: pointer;
   transition: 0.3s ease;
 }
 
@@ -168,7 +173,7 @@
 }
 
 .text {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
 }
 
@@ -189,7 +194,7 @@
 
 .submenu li a {
   padding: 10px 15px;
-  font-size: 14px;
+  font-size: 15px;
   background: #ffffff;
 }
 
