@@ -17,9 +17,10 @@ export default function ExecutiveReports() {
   const toggleSidebar = () =>
     setIsOpen(!isOpen);
 
-  useEffect(() => {
-    fetchReportData();
-  }, []);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+useEffect(() => {
+  fetchReportData();
+}, []);
 
   const fetchReportData = async () => {
     try {
