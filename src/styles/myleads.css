@@ -209,13 +209,12 @@
   width: 100%;
   overflow-x: auto;
   overflow-y: hidden;
-  border-radius: 12px;
+  -webkit-overflow-scrolling: touch;
 }
 
 .leads-table {
-  min-width: 1400px; 
-  width: 100%;
-  border-collapse: collapse;
+  min-width: 1800px;
+  width: max-content;
 }
 
 .leads-table thead {
