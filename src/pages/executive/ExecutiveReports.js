@@ -18,29 +18,28 @@ export default function ExecutiveReports() {
     setIsOpen(!isOpen);
 
 
- const fetchReportData = async () => {
-  try {
-    const res = await axios.get(
-      `${API}/my-leads`,
-      {
-        params: {
-          email: user.email
+ useEffect(() => {
+  const fetchReportData = async () => {
+    try {
+      const res = await axios.get(
+        `${API}/my-leads`,
+        {
+          params: {
+            email: user.email
+          }
         }
-      }
-    );
+      );
 
-    setLeads(res.data || []);
-  } catch (err) {
-    console.log(err);
-  } finally {
-    setLoading(false);
-  }
-};
+      setLeads(res.data || []);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-// eslint-disable-next-line react-hooks/exhaustive-deps
-useEffect(() => {
   fetchReportData();
-}, []);
+}, [user.email]);
 
 
   const stats = useMemo(() => {
