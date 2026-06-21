@@ -1499,7 +1499,7 @@ const handlePrevPage = () => {
         ) : (
 
           <div className="table-wrapper">
-            
+
             <table className="leads-table">
 
               <thead>
@@ -1535,7 +1535,6 @@ const handlePrevPage = () => {
                   <th>Action</th>
 
                 </tr>
-                
               </thead>
               <tbody>
 
@@ -1773,7 +1772,6 @@ Booking
               </tbody>
 
             </table>
-            
 
   {/* ================= PAGINATION ================= */}
 
