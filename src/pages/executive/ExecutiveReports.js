@@ -10,6 +10,7 @@ export default function ExecutiveReports() {
   const [isOpen, setIsOpen] = useState(true);
   const [leads, setLeads] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedDate, setSelectedDate] = useState("");
 
   const user =
     JSON.parse(localStorage.getItem("user")) || {};
@@ -41,11 +42,28 @@ export default function ExecutiveReports() {
   fetchReportData();
 }, [user.email]);
 
+const filteredLeads = useMemo(() => {
+
+  if (!selectedDate) {
+    return leads;
+  }
+
+  return leads.filter((lead) => {
+
+    const leadDate =
+      lead.createdAt?.split("T")[0];
+
+    return leadDate === selectedDate;
+
+  });
+
+}, [leads, selectedDate]);
+
 
   const stats = useMemo(() => {
     return {
-      total: leads.length,
-      new: leads.filter(
+      total: filteredLeads.length,
+      new: filteredLeads.filter(
         (l) => l.status === "New"
       ).length,
 
@@ -95,15 +113,15 @@ export default function ExecutiveReports() {
           "Token Received"
       ).length
     };
-  }, [leads]);
+  }, [filteredLeads]);
 
   const todayFollowups = useMemo(() => {
     const today = new Date()
       .toISOString()
       .split("T")[0];
 
-    return leads.filter(
-      (lead) =>
+return filteredLeads.filter(
+          (lead) =>
         lead.next_call_date &&
         lead.next_call_date
           .split("T")[0] === today
@@ -118,8 +136,8 @@ const downloadReport = () => {
   let csv =
     "Name,Phone,Project,Status,Next Call Date\n";
 
-  leads.forEach((lead) => {
-    csv += `"${lead.name || ""}","${lead.phone || ""}","${lead.project || ""}","${lead.status || ""}","${lead.next_call_date || ""}"\n`;
+filteredLeads.forEach((lead) => {
+        csv += `"${lead.name || ""}","${lead.phone || ""}","${lead.project || ""}","${lead.status || ""}","${lead.next_call_date || ""}"\n`;
   });
 
   const blob = new Blob([csv], {
@@ -156,15 +174,15 @@ const downloadReport = () => {
         }`}
       >
        <div className="page-header">
-  <h2>Executive Reports</h2>
+        <h2>Executive Reports</h2>
 
-  <p>
-    Welcome,
-    <strong>
-      {" "}
-      {user.name}
-    </strong>
-  </p>
+        <p>
+            Welcome,
+           <strong>
+           {" "}
+            {user.name}
+                  </strong>
+            </p>
 
   <div
     style={{
@@ -187,6 +205,57 @@ const downloadReport = () => {
       Download Daily Report
     </button>
   </div>
+</div>
+
+
+ <div
+  style={{
+    marginBottom: "20px",
+    display: "flex",
+    gap: "10px",
+    alignItems: "center"
+  }}
+>
+
+  <label
+    style={{
+      fontWeight: "600"
+    }}
+  >
+    Select Date:
+  </label>
+
+  <input
+    type="date"
+    value={selectedDate}
+    onChange={(e) =>
+      setSelectedDate(
+        e.target.value
+      )
+    }
+    style={{
+      padding: "10px",
+      border: "1px solid #ddd",
+      borderRadius: "8px"
+    }}
+  />
+
+  <button
+    onClick={() =>
+      setSelectedDate("")
+    }
+    style={{
+      background: "#dc3545",
+      color: "#fff",
+      border: "none",
+      padding: "10px 15px",
+      borderRadius: "8px",
+      cursor: "pointer"
+    }}
+  >
+    Clear
+  </button>
+
 </div>
 
         {loading ? (
@@ -355,8 +424,9 @@ const downloadReport = () => {
                   </thead>
 
                   <tbody>
-                    {Object.entries(
-                      leads.reduce(
+                    {
+                    Object.entries(
+                   filteredLeads.reduce(
                         (acc, lead) => {
                           const project =
                             lead.project ||
