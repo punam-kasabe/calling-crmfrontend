@@ -11,13 +11,16 @@
 
 .main-content.shifted {
   margin-left: 240px;
+  width: calc(100% - 240px);
   overflow-x: auto;
 }
 
 .main-content.full {
   margin-left: 70px;
+  width: calc(100% - 70px);
   overflow-x: auto;
 }
+
 /* ===============================
    HEADER
 ================================= */
@@ -209,14 +212,12 @@
   width: 100%;
   overflow-x: auto;
   overflow-y: hidden;
-  max-height: 600px;
-  -webkit-overflow-scrolling: touch;
-  border-radius: 10px;
+  border-radius: 12px;
 }
 
 .leads-table {
-  min-width: 1800px; 
-  width: max-content;
+  min-width: 1400px; 
+  width: 100%;
   border-collapse: collapse;
 }
 
@@ -225,12 +226,6 @@
   color: white;
 }
 
-
-.leads-table thead th {
-  position: sticky;
-  top: 0;
-  z-index: 10;
-}
 .leads-table th,
 .leads-table td {
   padding: 14px;
