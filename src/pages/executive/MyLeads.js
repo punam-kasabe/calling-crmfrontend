@@ -1564,9 +1564,12 @@ const handlePrevPage = () => {
                         {lead.phone || "-"}
                       </td>
 
-                     <td>
-                    {lead.assignedTo || "-"}
-                    </td>
+                    <td>
+  {lead.assignedTo ||
+   lead.assigned_to ||
+   lead.assigned_to_email ||
+   "-"}
+</td>
 
                       <td>
                         {lead.closingExecutive || "-"}
