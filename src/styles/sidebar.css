@@ -46,7 +46,6 @@
 
 .top-navbar.collapsed {
   left: 80px;
-  width: calc(100% - 80px);
 }
 
 .nav-left {
@@ -56,8 +55,8 @@
 }
 
 .logo {
-  width: 50px;
-  height: 0px;
+  width: 40px;
+  height: 40px;
   object-fit: contain;
 }
 
@@ -148,10 +147,8 @@
   padding: 12px 15px;
   border-radius: 10px;
   text-decoration: none;
-  color: #000000;
-  font-size: 15px;
-  font-weight: 500;
-    cursor: pointer;
+  color: rgb(0, 0, 0);
+  cursor: pointer;
   transition: 0.3s ease;
 }
 
@@ -173,7 +170,7 @@
 }
 
 .text {
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 500;
 }
 
@@ -194,7 +191,7 @@
 
 .submenu li a {
   padding: 10px 15px;
-  font-size: 15px;
+  font-size: 14px;
   background: #ffffff;
 }
 
