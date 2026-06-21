@@ -69,7 +69,7 @@ const [fromDateFilter, setFromDateFilter] = useState("");
 const [toDateFilter, setToDateFilter] = useState("");
 const [nextCallFrom, setNextCallFrom] = useState("");
 const [nextCallTo, setNextCallTo] = useState("");
-const [descriptionFilter, setDescriptionFilter] = useState("");
+const [remarkFilter, setRemarkFilter] = useState("");
 const [selectedProjects, setSelectedProjects] = useState(null);
 const [selectedSources, setSelectedSources] = useState([]);
 const [selectedDepartments, setSelectedDepartments] = useState([]);
@@ -109,7 +109,7 @@ const leadsPerPage = 10;
   closingExecutive: "",
   next_call_date: "",
   department: "",
-  description: "",
+  remark: "",
   deadReason: "",
   deadSubReason: "",
   bookingDate: "",
@@ -487,8 +487,8 @@ assigned_to_email:
   next_call_date:
     selectedLead.next_call_date,
 
-  description:
-    selectedLead.description,
+  remark:
+    selectedLead.remark,
 
   department:
     selectedLead.department,
@@ -703,7 +703,7 @@ const handleAddNewLead = async () => {
   closingExecutive: "",
   next_call_date: "",
   department: "",
-  description: "",
+  remark: "",
   deadReason: "",
   deadSubReason: "",
   bookingDate: "",
@@ -741,7 +741,7 @@ useEffect(() => {
   toDateFilter,
   nextCallFrom,
   nextCallTo,
-  descriptionFilter
+  remarkFilter
 ]);
   /* ================= FILTER ================= */
 
@@ -819,12 +819,12 @@ const matchesAssigned =
         )
     : true;
 
-const matchesDescription =
-  descriptionFilter
-    ? lead.description
+const matchesRemark =
+  remarkFilter
+    ? lead.remark
         ?.toLowerCase()
         .includes(
-          descriptionFilter.toLowerCase()
+          remarkFilter.toLowerCase()
         )
     : true;
 
@@ -881,7 +881,7 @@ return (
   matchesCity &&
   matchesDepartment &&
   matchesAssigned &&
-  matchesDescription &&
+  matchesRemark &&
   matchesFromDate &&
   matchesToDate &&
   matchesNextCallFrom &&
@@ -902,7 +902,7 @@ return (
   toDateFilter,
   nextCallFrom,
   nextCallTo,
-  descriptionFilter,
+  remarkFilter,
   selectedProjects,
   selectedSources,
   selectedExecutives,
@@ -1186,7 +1186,7 @@ const handlePrevPage = () => {
   `"${lead.closingExecutive || ""}"`,
   `"${lead.status || ""}"`,
   `"${lead.project || ""}"`,
-  `"${lead.description || ""}"`,
+  `"${lead.remark || ""}"`,
   `"${
   lead.next_call_date
     ? lead.next_call_date.split("T")[0]
@@ -1441,10 +1441,10 @@ const handlePrevPage = () => {
 
     <input
       type="text"
-      placeholder="Description..."
-      value={descriptionFilter}
+      placeholder="Remark..."
+      value={remarkFilter}
       onChange={(e) =>
-        setDescriptionFilter(e.target.value)
+        setRemarkFilter(e.target.value)
       }
     />
 
@@ -1459,7 +1459,7 @@ const handlePrevPage = () => {
     setToDateFilter("");
     setNextCallFrom("");
     setNextCallTo("");
-    setDescriptionFilter("");
+    setRemarkFilter("");
 
     setSelectedProjects(null);
     setSelectedSources([]);
@@ -1520,7 +1520,7 @@ const handlePrevPage = () => {
 
                   <th>Project</th>
 
-                  <th>Description</th>
+                  <th>Remark</th>
 
                   <th>Department</th>
 
@@ -1595,8 +1595,8 @@ const handlePrevPage = () => {
                         {lead.project || "-"}
                       </td>
 
-                     <td className="description-cell">
-                     {lead.description || "-"}
+                     <td className="remark-cell">
+                     {lead.remark || "-"}
                      </td>
 
                          <td>
@@ -2093,11 +2093,11 @@ Booking
       <textarea
         placeholder="Comment"
         rows="4"
-        value={newLead.description}
+        value={newLead.remark}
         onChange={(e) =>
           setNewLead({
             ...newLead,
-            description:
+            remark:
               e.target.value
           })
         }
@@ -2410,7 +2410,7 @@ Select Attending Officer
         rows="4"
 
         value={
-          selectedLead.description || ""
+          selectedLead.remark || ""
         }
 
         onChange={(e) =>
@@ -2419,7 +2419,7 @@ Select Attending Officer
 
             ...selectedLead,
 
-            description:
+            remark:
               e.target.value
 
           })
