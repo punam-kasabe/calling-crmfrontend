@@ -400,6 +400,82 @@ const filteredLeads = useMemo(() => {
               </div>
             </div>
 
+
+             {/* LEADS DETAILS */}
+
+<div
+  style={{
+    marginTop: "30px"
+  }}
+>
+  <h3>
+    Lead Details ({filteredLeads.length})
+  </h3>
+
+  <div className="table-wrapper">
+    <table className="leads-table">
+
+      <thead>
+        <tr>
+          <th>Sr No</th>
+          <th>Client Name</th>
+          <th>Project</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        {filteredLeads.length > 0 ? (
+
+          filteredLeads.map(
+            (lead, index) => (
+
+              <tr key={lead._id}>
+
+                <td>
+                  {index + 1}
+                </td>
+
+                <td>
+                  {lead.name || "-"}
+                </td>
+
+                <td>
+                  {lead.project || "-"}
+                </td>
+
+                <td>
+                  {lead.status || "-"}
+                </td>
+
+              </tr>
+
+            )
+          )
+
+        ) : (
+
+          <tr>
+            <td
+              colSpan="4"
+              style={{
+                textAlign: "center"
+              }}
+            >
+              No Leads Found
+            </td>
+          </tr>
+
+        )}
+
+      </tbody>
+
+    </table>
+  </div>
+</div>
+
+
             {/* PROJECT SUMMARY */}
 
             <div
