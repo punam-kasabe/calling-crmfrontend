@@ -460,34 +460,47 @@ if (
   phone: selectedLead.phone,
   email: selectedLead.email,
 
-  assignedTo: assignedOfficer,
-  assigned_to_email: assignedEmail,
+ assignedTo:
+  assignedOfficer,
 
-  closingExecutive: selectedLead.closingExecutive,
+assigned_to_email:
+  assignedEmail,
 
-  status: selectedLead.status,
+  closingExecutive:
+    selectedLead.closingExecutive,
 
-  source: selectedLead.source,
-  subSource: selectedLead.subSource,
+  status:
+    selectedLead.status,
 
-  city: selectedLead.city,
+  source:
+    selectedLead.source,
 
-  project: selectedLead.project,
+  subSource:
+    selectedLead.subSource,
 
-  next_call_date: selectedLead.next_call_date,
+  city:
+    selectedLead.city,
 
-  /* Executive Description */
-  description: selectedLead.description,
+  project:
+    selectedLead.project,
 
-  /* Admin Pipeline Remark */
-  remark: selectedLead.description,
+  next_call_date:
+    selectedLead.next_call_date,
 
-  department: selectedLead.department,
+  description:
+    selectedLead.description,
 
-  deadReason: selectedLead.deadReason,
-  deadSubReason: selectedLead.deadSubReason,
+  department:
+    selectedLead.department,
 
-  bookingDate: selectedLead.bookingDate
+  deadReason:
+    selectedLead.deadReason,
+
+  deadSubReason:
+    selectedLead.deadSubReason,
+
+  bookingDate:
+    selectedLead.bookingDate
 };
 
       await axios.put(
@@ -1579,7 +1592,9 @@ const handlePrevPage = () => {
                         {lead.project || "-"}
                       </td>
 
-                       <td>{lead.description || "-"}</td>
+                     <td className="description-cell">
+                     {lead.description || "-"}
+                     </td>
 
                          <td>
                          {lead.department || "-"}
