@@ -207,7 +207,7 @@
 
 .table-wrapper {
   width: 100%;
-  overflow-x: auto;
+  overflow-x: scroll;
   overflow-y: auto;
 
   max-height: 650px;
@@ -221,7 +221,7 @@
 }
 
 .leads-table {
-  min-width: 2200px;
+  min-width: 2500px;
   width: max-content;
   border-collapse: collapse;
 }
