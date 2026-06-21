@@ -67,47 +67,47 @@ const filteredLeads = useMemo(() => {
         (l) => l.status === "New"
       ).length,
 
-      interested: leads.filter(
+     interested: filteredLeads.filter(
         (l) =>
           l.status === "Interested" ||
           l.status === "Very Interested"
       ).length,
 
-      followup: leads.filter(
+      followup: filteredLeads.filter(
         (l) => l.status === "Follow Up"
       ).length,
 
-      booked: leads.filter(
+      booked: filteredLeads.filter(
         (l) => l.status === "Booked"
       ).length,
 
-      siteVisit: leads.filter(
+      siteVisit: filteredLeads.filter(
         (l) =>
           l.status === "Site Visit Done"
       ).length,
 
-      notInterested: leads.filter(
+      notInterested: filteredLeads.filter(
         (l) =>
           l.status === "Not Interested"
       ).length,
 
-      callback: leads.filter(
+      callback: filteredLeads.filter(
         (l) =>
           l.status === "Call Back"
       ).length,
 
-      meeting: leads.filter(
+      meeting: filteredLeads.filter(
         (l) =>
           l.status ===
           "Meeting Scheduled"
       ).length,
 
-      negotiation: leads.filter(
+      negotiation: filteredLeads.filter(
         (l) =>
           l.status === "Negotiation"
       ).length,
 
-      tokenReceived: leads.filter(
+      tokenReceived: filteredLeads.filter(
         (l) =>
           l.status ===
           "Token Received"
@@ -120,15 +120,15 @@ const filteredLeads = useMemo(() => {
       .toISOString()
       .split("T")[0];
 
-return filteredLeads.filter(
+  return filteredLeads.filter(
           (lead) =>
         lead.next_call_date &&
         lead.next_call_date
           .split("T")[0] === today
     );
-  }, [leads]);
+  }, [filteredLeads]);
 
-const downloadReport = () => {
+   const downloadReport = () => {
   const today = new Date()
     .toISOString()
     .split("T")[0];
@@ -136,7 +136,7 @@ const downloadReport = () => {
   let csv =
     "Name,Phone,Project,Status,Next Call Date\n";
 
-filteredLeads.forEach((lead) => {
+   filteredLeads.forEach((lead) => {
         csv += `"${lead.name || ""}","${lead.phone || ""}","${lead.project || ""}","${lead.status || ""}","${lead.next_call_date || ""}"\n`;
   });
 
