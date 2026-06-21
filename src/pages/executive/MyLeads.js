@@ -1499,10 +1499,8 @@ const handlePrevPage = () => {
 
         ) : (
 
-          <div className="table-wrapper">
-
-            <table className="leads-table">
-
+      <div className="table-wrapper">
+         <table className="leads-table">
               <thead>
 
                 <tr>

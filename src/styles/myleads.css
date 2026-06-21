@@ -210,14 +210,20 @@
 
 .table-wrapper {
   width: 100%;
+  max-width: 100%;
   overflow-x: auto;
   overflow-y: hidden;
+  display: block;
+
   border-radius: 12px;
+  background: #fff;
+
+  -webkit-overflow-scrolling: touch;
 }
 
 .leads-table {
-  min-width: 1400px; 
-  width: 100%;
+  min-width: 2200px;
+  width: max-content;
   border-collapse: collapse;
 }
 
@@ -242,9 +248,10 @@
   min-width: 250px;
   white-space: normal;
 }
+
 /* Custom Scrollbar */
 .table-wrapper::-webkit-scrollbar {
-  height: 8px;
+  height: 10px;
 }
 
 .table-wrapper::-webkit-scrollbar-track {
