@@ -1513,15 +1513,14 @@ const handlePrevPage = () => {
 
                   <th>Assigned To</th>
 
-                  <th>Closing Executive</th>
+                  
 
                   <th>Status</th>
 
                   <th>Project</th>
 
                   <th>Description</th>
-
-                  <th>Department</th>
+             
 
                   <th>Next Call Date</th>
 
@@ -1566,9 +1565,7 @@ const handlePrevPage = () => {
                     {lead.assignedTo || "-"}
                     </td>
 
-                      <td>
-                        {lead.closingExecutive || "-"}
-                      </td>
+                    
 
                       <td>
 
@@ -1594,9 +1591,7 @@ const handlePrevPage = () => {
                      {lead.description || "-"}
                      </td>
 
-                         <td>
-                         {lead.department || "-"}
-                           </td>
+                         
                      <td>
                 {lead.next_call_date
                 ? lead.next_call_date.split("T")[0]
