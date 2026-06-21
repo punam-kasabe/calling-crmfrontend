@@ -1579,9 +1579,7 @@ const handlePrevPage = () => {
                         {lead.project || "-"}
                       </td>
 
-                     <td className="description-cell">
-                     {lead.description || "-"}
-                     </td>
+                       <td>{lead.description || "-"}</td>
 
                          <td>
                          {lead.department || "-"}

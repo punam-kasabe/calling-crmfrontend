@@ -252,11 +252,11 @@ export default function App() {
         />
 
             <Route
-  path="/reception-entries"
-  element={
-    <ProtectedRoute>
-      <ReceptionEntries />
-    </ProtectedRoute>
+         path="/reception-entries"
+         element={
+        <ProtectedRoute>
+         <ReceptionEntries />
+               </ProtectedRoute>
   }
 />
 
