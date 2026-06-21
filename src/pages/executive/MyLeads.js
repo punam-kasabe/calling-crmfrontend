@@ -76,6 +76,34 @@ const [selectedDepartments, setSelectedDepartments] = useState([]);
 const [selectedExecutives, setSelectedExecutives] = useState([]);
 const [selectedCities, setSelectedCities] = useState([]);
 const [attendingOfficers, setAttendingOfficers] = useState([]);
+
+useEffect(() => {
+
+  const fetchAttendingOfficers = async () => {
+
+    try {
+
+      const res = await axios.get(
+        `${API}/attending-officers`
+      );
+
+      setAttendingOfficers(
+        res.data || []
+      );
+
+    } catch (err) {
+
+      console.log("Attending Officer Load Error:", err);
+
+    }
+
+  };
+
+  fetchAttendingOfficers();
+
+}, []);
+
+
 const [callModal, setCallModal] = useState(false);
 
 const [activeCall, setActiveCall] = useState(null);
@@ -1173,7 +1201,6 @@ const handlePrevPage = () => {
         "Next Call Date",
         "Sub Source",
         "Created At"
-
       ];
 
       csvRows.push(headers.join(","));
@@ -1561,9 +1588,21 @@ const handlePrevPage = () => {
                         {lead.phone || "-"}
                       </td>
 
-                     <td>
-                    {lead.assignedTo || "-"}
-                    </td>
+                   <td>
+{
+  lead.assignedTo ||
+
+  (
+    lead.assigned_to ===
+    "vrushali@zaminwale.com"
+      ? "Suvarna Khaire(Attending Officer)"
+      : lead.assigned_to ===
+        "jyoti@zaminwale.com"
+      ? "Sreeniwas (Attending Officer)"
+      : "-"
+  )
+}
+</td>
 
                     
 
@@ -1701,31 +1740,62 @@ const handlePrevPage = () => {
 
     title="Edit"
 
-    onClick={() => {
+   onClick={() => {
 
-      setSelectedLead({
-        ...lead,
+  let defaultOfficer =
+    lead.assignedTo || "";
 
-        assignedTo:
-          lead.assignedTo ||
-          user.name ||
-          user.username ||
-          "",
-        assigned_to_email:
-  lead.assigned_to_email ||
-  user.email ||
-  "",
+  if (
+    !defaultOfficer &&
+    (
+      lead.status === "Interested" ||
+      lead.status === "Very Interested"
+    )
+  ) {
 
+    if (
+      lead.assigned_to ===
+      "vrushali@zaminwale.com"
+    ) {
 
-        next_call_date:
-          lead.next_call_date
-            ? lead.next_call_date.split("T")[0]
-            : ""
-      });
+      defaultOfficer =
+        "Suvarna Khaire(Attending Officer)";
 
-      setShowModal(true);
+    }
 
-    }}
+    if (
+      lead.assigned_to ===
+      "jyoti@zaminwale.com"
+    ) {
+
+      defaultOfficer =
+        "Sreeniwas (Attending Officer)";
+
+    }
+
+  }
+
+  setSelectedLead({
+
+    ...lead,
+
+    assignedTo: defaultOfficer,
+
+    assigned_to_email:
+      lead.assigned_to_email ||
+      user.email ||
+      "",
+
+    next_call_date:
+      lead.next_call_date
+        ? lead.next_call_date.split("T")[0]
+        : ""
+
+  });
+
+  setShowModal(true);
+
+}}
   >
     <FaEdit />
   </button>
