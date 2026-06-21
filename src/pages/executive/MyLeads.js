@@ -1507,7 +1507,7 @@ const handlePrevPage = () => {
 
                 <tr>
 
-                  <th>#</th>
+                  <th>Sr No</th>
 
                   <th>Name</th>
 
