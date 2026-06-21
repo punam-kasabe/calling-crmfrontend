@@ -129,7 +129,7 @@ const filteredLeads = useMemo(() => {
   }, [filteredLeads]);
 
    const downloadReport = () => {
-  const today = new Date()
+   const today = new Date()
     .toISOString()
     .split("T")[0];
 
@@ -210,13 +210,13 @@ const filteredLeads = useMemo(() => {
 
  <div
   style={{
+    marginTop: "15px",
     marginBottom: "20px",
     display: "flex",
     gap: "10px",
     alignItems: "center"
   }}
 >
-
   <label
     style={{
       fontWeight: "600"
@@ -229,9 +229,7 @@ const filteredLeads = useMemo(() => {
     type="date"
     value={selectedDate}
     onChange={(e) =>
-      setSelectedDate(
-        e.target.value
-      )
+      setSelectedDate(e.target.value)
     }
     style={{
       padding: "10px",
@@ -255,7 +253,6 @@ const filteredLeads = useMemo(() => {
   >
     Clear
   </button>
-
 </div>
 
         {loading ? (
