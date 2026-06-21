@@ -466,6 +466,8 @@ if (
 assigned_to_email:
   assignedEmail,
 
+   assigned_to: assignedEmail,
+
   closingExecutive:
     selectedLead.closingExecutive,
 
@@ -1460,7 +1462,6 @@ const handlePrevPage = () => {
     setNextCallFrom("");
     setNextCallTo("");
     setDescriptionFilter("");
-
     setSelectedProjects(null);
     setSelectedSources([]);
     setSelectedDepartments([]);
