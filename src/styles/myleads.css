@@ -209,23 +209,18 @@
   width: 100%;
   overflow-x: scroll;
   overflow-y: auto;
-
   max-height: 650px;
-
   background: #fff;
   border-radius: 12px;
-
   box-shadow: 0 2px 12px rgba(0,0,0,.08);
-
   -webkit-overflow-scrolling: touch;
 }
 
 .leads-table {
   min-width: 2500px;
-  width: max-content;
+  width: 2500px;
   border-collapse: collapse;
 }
-
 .leads-table thead {
   background: linear-gradient(
     90deg,
