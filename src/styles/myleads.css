@@ -209,17 +209,27 @@
   width: 100%;
   overflow-x: auto;
   overflow-y: hidden;
+  max-height: 600px;
   -webkit-overflow-scrolling: touch;
+  border-radius: 10px;
 }
 
 .leads-table {
-  min-width: 1800px;
+  min-width: 1800px; 
   width: max-content;
+  border-collapse: collapse;
 }
 
 .leads-table thead {
   background: #0d6efd;
   color: white;
+}
+
+
+.leads-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
 .leads-table th,

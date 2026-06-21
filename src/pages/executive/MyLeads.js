@@ -1654,16 +1654,13 @@ const handlePrevPage = () => {
       lead._id,
       value
     );
-
   }}
 >
-
                           {statusOptions.map((status, i) => (
                        <option key={i} value={status}>
                         {status}
                     </option>
                           ))}
-
                         </select>
 
                       </td>
@@ -1673,8 +1670,6 @@ const handlePrevPage = () => {
                       <td>
 
                       <div className="action-buttons">
-
-
 
   {/* CALL ICON */}
 
