@@ -1648,7 +1648,7 @@ const handlePrevPage = () => {
 
                           ? new Date(
                               lead.createdAt
-                            ).toLocaleString()
+                            ).toLocaleString("en-IN")
 
                           : "-"}
 
