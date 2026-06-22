@@ -1554,8 +1554,9 @@ const handlePrevPage = () => {
                   <th>Sub Source</th>
 
                   <th>Created At</th>
-
+                  <th>Last Activity</th>
                   <th>Update Status</th>
+                  
 
                   <th>Action</th>
 
@@ -1653,6 +1654,14 @@ const handlePrevPage = () => {
 
                       </td>
 
+                       <td>
+  {lead.updatedAt
+    ? new Date(
+        lead.updatedAt
+      ).toLocaleString("en-IN")
+    : "-"}
+</td>
+
                       {/* STATUS UPDATE */}
 
                       <td>
@@ -1696,6 +1705,8 @@ const handlePrevPage = () => {
                         </select>
 
                       </td>
+
+
 
                       {/* ACTIONS */}
 
