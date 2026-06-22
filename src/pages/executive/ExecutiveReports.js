@@ -174,7 +174,6 @@ const totalPages =
     lead.createdAt?.split("T")[0] === todayDate
 );
 
-  console.log("TODAY STATUS DATA =", todayStatusData);
   console.log("LEADS =", leads);
 
   const statusCount = {};
