@@ -70,9 +70,10 @@ export default function ExecutiveDashboard() {
   const [recentLeads, setRecentLeads] =
     useState([]);
   
-  setRecentActivities(
-  res.data.recentActivities || []
-);
+    const [recentActivities, setRecentActivities] =
+  useState([]);
+
+  
 
 
   const user =
