@@ -19,7 +19,10 @@ export default function ExecutiveReports() {
   const [leads, setLeads] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedDate, setSelectedDate] = useState("");
+  const [currentPage, setCurrentPage] =
+  useState(1);
 
+const leadsPerPage = 20;
   const user =
     JSON.parse(localStorage.getItem("user")) || {};
 
@@ -127,7 +130,25 @@ const filteredLeads = useMemo(() => {
     const today = new Date()
       .toISOString()
       .split("T")[0];
+/* PAGINATION */
 
+const indexOfLastLead =
+  currentPage * leadsPerPage;
+
+const indexOfFirstLead =
+  indexOfLastLead - leadsPerPage;
+
+const currentLeads =
+  filteredLeads.slice(
+    indexOfFirstLead,
+    indexOfLastLead
+  );
+
+const totalPages =
+  Math.ceil(
+    filteredLeads.length /
+    leadsPerPage
+  );
   return filteredLeads.filter(
           (lead) =>
         lead.next_call_date &&
@@ -151,7 +172,6 @@ const filteredLeads = useMemo(() => {
   (lead) =>
     lead.createdAt?.split("T")[0] === todayDate
 );
-
 
   console.log("TODAY STATUS DATA =", todayStatusData);
   console.log("LEADS =", leads);
@@ -293,9 +313,12 @@ const COLORS = [
   className="date-input"
   type="date"
     value={selectedDate}
-    onChange={(e) =>
-      setSelectedDate(e.target.value)
-    }
+    onChange={(e) => {
+  setSelectedDate(
+    e.target.value
+  );
+  setCurrentPage(1);
+}}
     style={{
       padding: "10px",
       border: "1px solid #ddd",
@@ -305,9 +328,10 @@ const COLORS = [
 
   <button
   className="clear-btn"
-  onClick={() =>
-    setSelectedDate("")
-  }
+  onClick={() => {
+  setSelectedDate("");
+  setCurrentPage(1);
+}}
 
     style={{
       background: "#dc3545",
@@ -597,9 +621,13 @@ const COLORS = [
 </thead>
 
      <tbody>
-{filteredLeads.map((lead,index)=>(
-<tr key={lead._id}>
-  <td>{index+1}</td>
+{currentLeads.map((lead,index)=>(
+    <tr key={lead._id}>
+ <td>
+  {indexOfFirstLead +
+    index +
+    1}
+</td>
   <td>{lead.name}</td>
   <td>{lead.project}</td>
 
@@ -615,6 +643,48 @@ const COLORS = [
   </div>
 </div>
 
+{/* PAGINATION */}
+
+<div
+  style={{
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: "15px",
+    marginTop: "20px"
+  }}
+>
+
+ <button
+  className="pagination-btn"
+  onClick={() =>
+    setCurrentPage(
+      currentPage - 1
+    )
+  }
+  disabled={currentPage === 1}
+>
+  Previous
+</button>
+
+  <span>
+    Page {currentPage} of {totalPages}
+  </span>
+
+  <button
+  className="pagination-btn"
+  onClick={() =>
+    setCurrentPage(
+      currentPage + 1
+    )
+  }
+  disabled={
+    currentPage === totalPages
+  }
+>
+  Next
+</button>
+</div>
 
             {/* PROJECT SUMMARY */}
 
