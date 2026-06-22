@@ -69,6 +69,11 @@ export default function ExecutiveDashboard() {
 
   const [recentLeads, setRecentLeads] =
     useState([]);
+  
+  setRecentActivities(
+  res.data.recentActivities || []
+);
+
 
   const user =
     JSON.parse(
@@ -119,6 +124,10 @@ export default function ExecutiveDashboard() {
           res.data.recentLeads || []
         );
 
+
+         setRecentActivities(
+         res.data.recentActivities || []
+           );
         /* ===================================== */
         /* POPUP DATA */
         /* ===================================== */
@@ -654,6 +663,90 @@ export default function ExecutiveDashboard() {
             </table>
 
           </div>
+          {/* RECENT ACTIVITIES */}
+
+<div className="recent-section">
+
+  <h3>
+    Recent Activities
+  </h3>
+
+  <div className="table-wrapper">
+
+    <table>
+
+      <thead>
+
+        <tr>
+
+          <th>Client</th>
+
+          <th>Status</th>
+
+          <th>Remark</th>
+
+          <th>Updated On</th>
+
+        </tr>
+
+      </thead>
+
+      <tbody>
+
+        {recentActivities.length > 0 ? (
+
+          recentActivities.map(
+            (item, index) => (
+
+              <tr key={index}>
+
+                <td>
+                  {item.name}
+                </td>
+
+                <td>
+                  {item.status}
+                </td>
+
+                <td>
+                  {item.remark || "-"}
+                </td>
+
+                <td>
+                  {new Date(
+                    item.updatedAt
+                  ).toLocaleString()}
+                </td>
+
+              </tr>
+
+            )
+          )
+
+        ) : (
+
+          <tr>
+
+            <td
+              colSpan="4"
+              style={{
+                textAlign: "center"
+              }}
+            >
+              No Recent Activities
+            </td>
+
+          </tr>
+
+        )}
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</div>
 
         </div>
 
