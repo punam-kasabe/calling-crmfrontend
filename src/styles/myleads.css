@@ -237,7 +237,18 @@
   background: #888;
   border-radius: 10px;
 }
+/* Description Column */
 
+.leads-table td:nth-child(7) {
+  max-width: 250px;
+  min-width: 250px;
+
+  white-space: normal;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+
+  line-height: 1.5;
+}
 /* ===============================
    STATUS BADGES
 ================================= */
