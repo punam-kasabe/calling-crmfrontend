@@ -70,6 +70,25 @@ const filteredLeads = useMemo(() => {
 
 }, [leads, selectedDate]);
 
+/* PAGINATION */
+
+const indexOfLastLead =
+  currentPage * leadsPerPage;
+
+const indexOfFirstLead =
+  indexOfLastLead - leadsPerPage;
+
+const currentLeads =
+  filteredLeads.slice(
+    indexOfFirstLead,
+    indexOfLastLead
+  );
+
+const totalPages =
+  Math.ceil(
+    filteredLeads.length /
+    leadsPerPage
+  );
 
   const stats = useMemo(() => {
     return {
@@ -130,25 +149,7 @@ const filteredLeads = useMemo(() => {
     const today = new Date()
       .toISOString()
       .split("T")[0];
-/* PAGINATION */
 
-const indexOfLastLead =
-  currentPage * leadsPerPage;
-
-const indexOfFirstLead =
-  indexOfLastLead - leadsPerPage;
-
-const currentLeads =
-  filteredLeads.slice(
-    indexOfFirstLead,
-    indexOfLastLead
-  );
-
-const totalPages =
-  Math.ceil(
-    filteredLeads.length /
-    leadsPerPage
-  );
   return filteredLeads.filter(
           (lead) =>
         lead.next_call_date &&
