@@ -9,7 +9,7 @@ import {
   Legend,
   ResponsiveContainer
 } from "recharts";
-import "../../styles/dashboard.css";
+import "../../styles/executiveReports.css";
 
 const API =
   "https://calling-crm-backend-7w52.onrender.com/api";
@@ -281,7 +281,8 @@ const COLORS = [
   </label>
 
   <input
-    type="date"
+  className="date-input"
+  type="date"
     value={selectedDate}
     onChange={(e) =>
       setSelectedDate(e.target.value)
@@ -294,9 +295,11 @@ const COLORS = [
   />
 
   <button
-    onClick={() =>
-      setSelectedDate("")
-    }
+  className="clear-btn"
+  onClick={() =>
+    setSelectedDate("")
+  }
+
     style={{
       background: "#dc3545",
       color: "#fff",
@@ -378,15 +381,7 @@ const COLORS = [
             </div>
 
 
-<div
-  style={{
-    marginTop: "30px",
-    marginBottom: "30px",
-    background: "#fff",
-    padding: "20px",
-    borderRadius: "12px"
-  }}
->
+<div className="chart-card">
   <h3>
     Today's Status Distribution
   </h3>
@@ -430,14 +425,11 @@ const COLORS = [
 
 {/* STATUS WISE COUNT TABLE */}
 
-<div
-  style={{
-    marginTop: "30px"
-  }}
->
+<div className="report-card">
   <h3>
     Today's Status Count
   </h3>
+
 
   <div className="table-wrapper">
 
@@ -503,13 +495,9 @@ const COLORS = [
 
             {/* TODAY FOLLOWUPS */}
 
-            <div
-              style={{
-                marginTop: "30px"
-              }}
-            >
-              <h3>
-                Today's Followups (
+            <div className="report-card">
+  <h3>
+    Today's Followups(
                 {todayFollowups.length})
               </h3>
 
@@ -582,11 +570,7 @@ const COLORS = [
 
              {/* LEADS DETAILS */}
 
-<div
-  style={{
-    marginTop: "30px"
-  }}
->
+<div className="report-card">
   <h3>
     Lead Details ({filteredLeads.length})
   </h3>
@@ -625,13 +609,9 @@ const COLORS = [
 
             {/* PROJECT SUMMARY */}
 
-            <div
-              style={{
-                marginTop: "30px"
-              }}
-            >
-              <h3>
-                Project Wise Leads
+            <div className="report-card">
+  <h3>
+    Project Wise Leads
               </h3>
 
               <div className="table-wrapper">
