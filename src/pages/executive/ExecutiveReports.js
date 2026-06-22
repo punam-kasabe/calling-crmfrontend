@@ -138,9 +138,9 @@ const filteredLeads = useMemo(() => {
 
    const todayStatusData = useMemo(() => {
 
-  const today = new Date();
+   const today = new Date();
 
-const todayDate =
+  const todayDate =
   `${today.getFullYear()}-${
     String(today.getMonth() + 1).padStart(2, "0")
   }-${
@@ -152,10 +152,6 @@ const todayDate =
     lead.createdAt?.split("T")[0] === todayDate
 );
 
-  const todayLeads = leads.filter(
-    (lead) =>
-      lead.createdAt?.split("T")[0] === today
-  );
 
   console.log("TODAY STATUS DATA =", todayStatusData);
   console.log("LEADS =", leads);
