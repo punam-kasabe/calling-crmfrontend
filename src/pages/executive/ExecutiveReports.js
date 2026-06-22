@@ -138,14 +138,27 @@ const filteredLeads = useMemo(() => {
 
    const todayStatusData = useMemo(() => {
 
-  const today = new Date()
-    .toISOString()
-    .split("T")[0];
+  const today = new Date();
+
+const todayDate =
+  `${today.getFullYear()}-${
+    String(today.getMonth() + 1).padStart(2, "0")
+  }-${
+    String(today.getDate()).padStart(2, "0")
+  }`;
+
+  const todayLeads = leads.filter(
+  (lead) =>
+    lead.createdAt?.split("T")[0] === todayDate
+);
 
   const todayLeads = leads.filter(
     (lead) =>
       lead.createdAt?.split("T")[0] === today
   );
+
+  console.log("TODAY STATUS DATA =", todayStatusData);
+  console.log("LEADS =", leads);
 
   const statusCount = {};
 
@@ -610,8 +623,8 @@ const COLORS = [
             {/* PROJECT SUMMARY */}
 
             <div className="report-card">
-  <h3>
-    Project Wise Leads
+           <h3>
+            Project Wise Leads
               </h3>
 
               <div className="table-wrapper">
