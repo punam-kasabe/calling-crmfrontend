@@ -140,24 +140,30 @@
 }
 
 .table-wrapper {
-  overflow-x: auto;
+  width: 100%;
+  overflow-x: hidden;
 }
 
 .leads-table {
   width: 100%;
   border-collapse: collapse;
+  table-layout: fixed;
 }
 
 .leads-table th {
   background: #0d6efd;
   color: white;
-  padding: 12px;
-  text-align: left;
+  padding: 8px;
+  text-align: center;
+  font-size: 12px;
 }
 
 .leads-table td {
-  padding: 12px;
+  padding: 8px;
   border-bottom: 1px solid #eee;
+  font-size: 12px;
+  text-align: center;
+  word-break: break-word;
 }
 
 .leads-table tr:hover {
@@ -175,6 +181,23 @@
 .pagination-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+.report-card {
+  overflow: hidden;
+}
+
+.chart-card,
+.report-card,
+.table-card {
+  width: 100%;
+}
+
+.leads-table th,
+.leads-table td {
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 /* RESPONSIVE */
 
