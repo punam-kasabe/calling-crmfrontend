@@ -457,7 +457,7 @@ const COLORS = [
 </div>
 
 {/* STATUS WISE COUNT TABLE */}
-
+<div className="reports-row">
 <div className="report-card">
   <h3>
     Today's Status Count
@@ -524,6 +524,7 @@ const COLORS = [
     </table>
 
   </div>
+</div>
 </div>
 
             {/* TODAY FOLLOWUPS */}
