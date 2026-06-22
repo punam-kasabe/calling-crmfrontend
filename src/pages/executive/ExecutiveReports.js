@@ -1,6 +1,14 @@
 import { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import Sidebar from "../../components/Sidebar";
+import {
+  PieChart,
+  Pie,
+  Cell,
+  Tooltip,
+  Legend,
+  ResponsiveContainer
+} from "recharts";
 import "../../styles/dashboard.css";
 
 const API =
@@ -128,6 +136,53 @@ const filteredLeads = useMemo(() => {
     );
   }, [filteredLeads]);
 
+   const todayStatusData = useMemo(() => {
+
+  const today = new Date()
+    .toISOString()
+    .split("T")[0];
+
+  const todayLeads = leads.filter(
+    (lead) =>
+      lead.createdAt?.split("T")[0] === today
+  );
+
+  const statusCount = {};
+
+  todayLeads.forEach((lead) => {
+
+    const status =
+      lead.status || "No Status";
+
+    statusCount[status] =
+      (statusCount[status] || 0) + 1;
+
+  });
+
+  return Object.entries(statusCount).map(
+    ([name, value]) => ({
+      name,
+      value
+    })
+  );
+
+}, [leads]);
+     
+
+const COLORS = [
+  "#0088FE",
+  "#00C49F",
+  "#FFBB28",
+  "#FF8042",
+  "#A020F0",
+  "#FF4560",
+  "#775DD0",
+  "#3F51B5",
+  "#26A69A",
+  "#D10CE8",
+  "#546E7A"
+];
+   
    const downloadReport = () => {
    const today = new Date()
     .toISOString()
@@ -322,6 +377,130 @@ const filteredLeads = useMemo(() => {
 
             </div>
 
+
+<div
+  style={{
+    marginTop: "30px",
+    marginBottom: "30px",
+    background: "#fff",
+    padding: "20px",
+    borderRadius: "12px"
+  }}
+>
+  <h3>
+    Today's Status Distribution
+  </h3>
+
+  <ResponsiveContainer
+    width="100%"
+    height={400}
+  >
+    <PieChart>
+
+      <Pie
+        data={todayStatusData}
+        cx="50%"
+        cy="50%"
+        outerRadius={130}
+        dataKey="value"
+        label
+      >
+        {todayStatusData.map(
+          (entry, index) => (
+            <Cell
+              key={index}
+              fill={
+                COLORS[
+                  index %
+                  COLORS.length
+                ]
+              }
+            />
+          )
+        )}
+      </Pie>
+
+      <Tooltip />
+
+      <Legend />
+
+    </PieChart>
+  </ResponsiveContainer>
+</div>
+
+{/* STATUS WISE COUNT TABLE */}
+
+<div
+  style={{
+    marginTop: "30px"
+  }}
+>
+  <h3>
+    Today's Status Count
+  </h3>
+
+  <div className="table-wrapper">
+
+    <table className="leads-table">
+
+      <thead>
+        <tr>
+          <th>Sr No</th>
+          <th>Status</th>
+          <th>Count</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        {todayStatusData.length > 0 ? (
+
+          todayStatusData.map(
+            (item, index) => (
+
+              <tr key={index}>
+
+                <td>
+                  {index + 1}
+                </td>
+
+                <td>
+                  {item.name}
+                </td>
+
+                <td>
+                  {item.value}
+                </td>
+
+              </tr>
+
+            )
+          )
+
+        ) : (
+
+          <tr>
+
+            <td
+              colSpan="3"
+              style={{
+                textAlign: "center"
+              }}
+            >
+              No Data Available
+            </td>
+
+          </tr>
+
+        )}
+
+      </tbody>
+
+    </table>
+
+  </div>
+</div>
+
             {/* TODAY FOLLOWUPS */}
 
             <div
@@ -415,61 +594,29 @@ const filteredLeads = useMemo(() => {
   <div className="table-wrapper">
     <table className="leads-table">
 
-      <thead>
-        <tr>
-          <th>Sr No</th>
-          <th>Client Name</th>
-          <th>Project</th>
-          <th>Status</th>
-        </tr>
-      </thead>
+     <thead>
+<tr>
+  <th>Sr No</th>
+  <th>Client Name</th>
+  <th>Project</th>
+  <th>Status</th>
+</tr>
+</thead>
 
-      <tbody>
+     <tbody>
+{filteredLeads.map((lead,index)=>(
+<tr key={lead._id}>
+  <td>{index+1}</td>
+  <td>{lead.name}</td>
+  <td>{lead.project}</td>
 
-        {filteredLeads.length > 0 ? (
+  <td>
+    {lead.status || "-"}
+  </td>
 
-          filteredLeads.map(
-            (lead, index) => (
-
-              <tr key={lead._id}>
-
-                <td>
-                  {index + 1}
-                </td>
-
-                <td>
-                  {lead.name || "-"}
-                </td>
-
-                <td>
-                  {lead.project || "-"}
-                </td>
-
-                <td>
-                  {lead.status || "-"}
-                </td>
-
-              </tr>
-
-            )
-          )
-
-        ) : (
-
-          <tr>
-            <td
-              colSpan="4"
-              style={{
-                textAlign: "center"
-              }}
-            >
-              No Leads Found
-            </td>
-          </tr>
-
-        )}
-
-      </tbody>
+</tr>
+))}
+</tbody>
 
     </table>
   </div>
