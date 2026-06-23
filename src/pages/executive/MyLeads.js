@@ -1754,7 +1754,7 @@ const handlePrevPage = () => {
   let defaultOfficer =
     lead.assignedTo || "";
 
-  let defaultOfficer =
+  defaultOfficer =
   lead.assignedTo || "";
 
 if (
