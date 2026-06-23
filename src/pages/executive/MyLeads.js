@@ -1653,7 +1653,6 @@ const handlePrevPage = () => {
                           : "-"}
 
                       </td>
-                      
 
                       {/* STATUS UPDATE */}
 
@@ -1698,7 +1697,6 @@ const handlePrevPage = () => {
                         </select>
 
                       </td>
-
 
 
                       {/* ACTIONS */}
