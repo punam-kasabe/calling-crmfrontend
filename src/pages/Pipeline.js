@@ -751,7 +751,12 @@ onChange={(e) => {
                     <td>{l.phone}</td>
                     
     
-     <td>{l.assigned_to || "-"}</td>
+<td>
+  {l.status === "Interested"
+    ? (l.assigned_to || "-")
+    : "-"}
+</td>
+
 
      <td>
   <span className="badge bg-dark">

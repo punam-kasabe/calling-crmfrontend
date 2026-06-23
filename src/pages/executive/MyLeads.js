@@ -377,11 +377,8 @@ console.log(
 };
 
 useEffect(() => {
-
   fetchMyLeads();
-
   fetchExecutives();
-
 }, [fetchMyLeads]);
 
 
