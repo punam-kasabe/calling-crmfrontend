@@ -1191,17 +1191,28 @@ const handlePrevPage = () => {
 
       const headers = [
 
-        "Name",
-        "Mobile",
-        "Assigned To",
-        "Closing Executive",
-        "Status",
-        "Project",
-        "Description",
-        "Next Call Date",
-        "Sub Source",
-        "Created At"
-      ];
+"Name",
+"Mobile",
+
+"Assigned To",
+
+"Assigned Email",
+
+"Closing Executive",
+
+"Status",
+
+"Project",
+
+"Description",
+
+"Next Call Date",
+
+"Sub Source",
+
+"Created At"
+
+];
 
       csvRows.push(headers.join(","));
 
@@ -1212,6 +1223,7 @@ const handlePrevPage = () => {
   `"${lead.name || ""}"`,
   `"${lead.phone || ""}"`,
   `"${lead.assignedTo || ""}"`,
+  `"${lead.assigned_to_email || ""}"`,
   `"${lead.closingExecutive || ""}"`,
   `"${lead.status || ""}"`,
   `"${lead.project || ""}"`,
@@ -1589,20 +1601,10 @@ const handlePrevPage = () => {
                         {lead.phone || "-"}
                       </td>
 
-                   <td>
-{
-  lead.assignedTo ||
-
-  (
-    lead.assigned_to ===
-    "vrushali@zaminwale.com"
-      ? "Suvarna Khaire(Attending Officer)"
-      : lead.assigned_to ===
-        "jyoti@zaminwale.com"
-      ? "Sreeniwas (Attending Officer)"
-      : "-"
-  )
-}
+               <td>
+         {lead.assignedTo ||
+           lead.assigned_to_email ||
+          "-"}
 </td>
 
                     
@@ -1653,6 +1655,13 @@ const handlePrevPage = () => {
                           : "-"}
 
                       </td>
+                      <td>
+  {lead.updatedAt
+    ? new Date(lead.updatedAt).toLocaleString()
+    : "-"
+  }
+</td>
+                      
 
                       {/* STATUS UPDATE */}
 
@@ -1697,6 +1706,7 @@ const handlePrevPage = () => {
                         </select>
 
                       </td>
+
 
 
                       {/* ACTIONS */}
