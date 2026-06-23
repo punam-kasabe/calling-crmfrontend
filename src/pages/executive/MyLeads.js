@@ -1589,8 +1589,7 @@ const handlePrevPage = () => {
                         {lead.phone || "-"}
                       </td>
 
-                   <td>
-
+                   
 
                     
 
