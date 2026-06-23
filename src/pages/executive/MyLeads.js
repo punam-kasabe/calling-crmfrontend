@@ -377,8 +377,11 @@ console.log(
 };
 
 useEffect(() => {
+
   fetchMyLeads();
+
   fetchExecutives();
+
 }, [fetchMyLeads]);
 
 
@@ -1586,7 +1589,21 @@ const handlePrevPage = () => {
                         {lead.phone || "-"}
                       </td>
 
-                   
+                   <td>
+{
+  lead.assignedTo ||
+
+  (
+    lead.assigned_to ===
+    "vrushali@zaminwale.com"
+      ? "Suvarna Khaire(Attending Officer)"
+      : lead.assigned_to ===
+        "jyoti@zaminwale.com"
+      ? "Sreeniwas (Attending Officer)"
+      : "-"
+  )
+}
+</td>
 
                     
 
