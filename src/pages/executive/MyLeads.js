@@ -1602,9 +1602,11 @@ const handlePrevPage = () => {
                       </td>
 
                <td>
-         {lead.assignedTo ||
-           lead.assigned_to_email ||
-          "-"}
+  {lead.assignedTo
+    ? lead.assignedTo
+    : lead.assigned_to_email
+    ? lead.assigned_to_email
+    : "-"}
 </td>
 
                     
@@ -1644,50 +1646,36 @@ const handlePrevPage = () => {
                         {lead.subSource || "-"}
                       </td>
 
-                      <td>
+                     <td>
+  {lead.createdAt
+    ? new Date(lead.createdAt).toLocaleString()
+    : "-"
+  }
+</td>
 
-                        {lead.createdAt
-
-                          ? new Date(
-                              lead.createdAt
-                            ).toLocaleString()
-
-                          : "-"}
-
-                      </td>
-                      <td>
+<td>
   {lead.updatedAt
     ? new Date(lead.updatedAt).toLocaleString()
     : "-"
   }
 </td>
-                      
 
-                      {/* STATUS UPDATE */}
+<td>
 
-                      <td>
-
-                       <select
+<select
   className="status-select"
-
-  value={
-    lead.status || "New"
-  }
-
+  value={lead.status || "New"}
   onChange={async (e) => {
 
-    const value =
-      e.target.value;
+    const value = e.target.value;
 
     setLeads((prev) =>
-
       prev.map((l) =>
-
         l._id === lead._id
-         ? {
-    ...l,
-    status: value
-  }
+          ? {
+              ...l,
+              status: value
+            }
           : l
       )
     );
@@ -1698,17 +1686,19 @@ const handlePrevPage = () => {
     );
   }}
 >
-                          {statusOptions.map((status, i) => (
-                       <option key={i} value={status}>
-                        {status}
-                    </option>
-                          ))}
-                        </select>
 
-                      </td>
+{statusOptions.map((status, i) => (
+  <option
+    key={i}
+    value={status}
+  >
+    {status}
+  </option>
+))}
 
+</select>
 
-
+</td>
                       {/* ACTIONS */}
 
                       <td>
@@ -1757,35 +1747,38 @@ const handlePrevPage = () => {
   let defaultOfficer =
     lead.assignedTo || "";
 
+  let defaultOfficer =
+  lead.assignedTo || "";
+
+if (
+  !defaultOfficer &&
+  (
+    lead.status === "Interested" ||
+    lead.status === "Very Interested"
+  )
+) {
+
   if (
-    !defaultOfficer &&
-    (
-      lead.status === "Interested" ||
-      lead.status === "Very Interested"
-    )
+    lead.assigned_to_email ===
+    "suvarna@zaminwale.com"
   ) {
 
-    if (
-      lead.assigned_to ===
-      "vrushali@zaminwale.com"
-    ) {
-
-      defaultOfficer =
-        "Suvarna Khaire(Attending Officer)";
-
-    }
-
-    if (
-      lead.assigned_to ===
-      "jyoti@zaminwale.com"
-    ) {
-
-      defaultOfficer =
-        "Sreeniwas (Attending Officer)";
-
-    }
+    defaultOfficer =
+      "Suvarna Khaire(Attending Officer)";
 
   }
+
+  if (
+    lead.assigned_to_email ===
+    "sreeniwas@zaminwale.com"
+  ) {
+
+    defaultOfficer =
+      "Sreeniwas (Attending Officer)";
+
+  }
+
+}
 
   setSelectedLead({
 
