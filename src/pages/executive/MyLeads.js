@@ -127,6 +127,7 @@ const leadsPerPage = 10;
   name: "",
   phone: "",
   email: "",
+  executive_email: "",
   project: "",
   status: "New",
   source: "",
@@ -483,7 +484,9 @@ if (
   }
 
 }
-       const updatedData = {
+
+  const updatedData = {
+  executive_email: selectedLead.executive_email,
   name: selectedLead.name,
   phone: selectedLead.phone,
   email: selectedLead.email,
@@ -1167,6 +1170,9 @@ const handlePrevPage = () => {
   assigned_to_email:
     user?.email || "",
 
+    executive_email:
+  user?.email || "",
+
   closingExecutive:
     user?.name ||
     user?.username ||
@@ -1699,6 +1705,7 @@ const handlePrevPage = () => {
 </select>
 
 </td>
+
                       {/* ACTIONS */}
 
                       <td>
