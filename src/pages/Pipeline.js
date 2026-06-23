@@ -87,6 +87,7 @@ const statusOptions = [
 
   /* ================= FETCH ================= */
   const fetchLeads = useCallback(async () => {
+    console.log("FILTERS SENT =", filters);
     try {
       const res = await axios.post(`${API}/filter-leads`, {
         email: user.email,
@@ -156,10 +157,12 @@ fetchProjects();
         Authorization: `Bearer ${token}`,
       },
     })
+
     .then((res) => {
       console.log("✅ Users Loaded:", res.data);
       setUsers(Array.isArray(res.data) ? res.data : []);
     })
+
     .catch((err) => {
       console.log(
         "❌ Fetch Users Error:",

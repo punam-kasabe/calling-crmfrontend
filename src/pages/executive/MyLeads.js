@@ -1590,20 +1590,7 @@ const handlePrevPage = () => {
                       </td>
 
                    <td>
-{
-  lead.assignedTo ||
 
-  (
-    lead.assigned_to ===
-    "vrushali@zaminwale.com"
-      ? "Suvarna Khaire(Attending Officer)"
-      : lead.assigned_to ===
-        "jyoti@zaminwale.com"
-      ? "Sreeniwas (Attending Officer)"
-      : "-"
-  )
-}
-</td>
 
                     
 
@@ -1648,19 +1635,12 @@ const handlePrevPage = () => {
 
                           ? new Date(
                               lead.createdAt
-                            ).toLocaleString("en-IN")
+                            ).toLocaleString()
 
                           : "-"}
 
                       </td>
-
-                       <td>
-  {lead.updatedAt
-    ? new Date(
-        lead.updatedAt
-      ).toLocaleString("en-IN")
-    : "-"}
-</td>
+                      
 
                       {/* STATUS UPDATE */}
 
