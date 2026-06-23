@@ -486,8 +486,10 @@ if (
 }
 
   const updatedData = {
-  executive_email: selectedLead.executive_email,
-  name: selectedLead.name,
+executive_email:
+  selectedLead.executive_email ||
+  user.email,
+    name: selectedLead.name,
   phone: selectedLead.phone,
   email: selectedLead.email,
 
@@ -1790,6 +1792,10 @@ if (
   setSelectedLead({
 
     ...lead,
+
+    executive_email:
+    lead.executive_email ||
+    user.email,
 
     assignedTo: defaultOfficer,
 
