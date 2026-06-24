@@ -455,6 +455,7 @@ const COLORS = [
     </PieChart>
   </ResponsiveContainer>
 </div>
+
 {/* STATUS + FOLLOWUPS */}
 
 <div className="reports-row">
