@@ -455,153 +455,130 @@ const COLORS = [
     </PieChart>
   </ResponsiveContainer>
 </div>
+{/* STATUS + FOLLOWUPS */}
 
-{/* STATUS WISE COUNT TABLE */}
 <div className="reports-row">
-<div className="report-card">
-  <h3>
-    Today's Status Count
-  </h3>
 
+  {/* STATUS COUNT */}
+  <div className="report-card">
 
-  <div className="table-wrapper">
+    <h3>Today's Status Count</h3>
 
-    <table className="leads-table">
+    <div className="table-wrapper">
+      <table className="leads-table">
 
-      <thead>
-        <tr>
-          <th>Sr No</th>
-          <th>Status</th>
-          <th>Count</th>
-        </tr>
-      </thead>
+        <thead>
+          <tr>
+            <th>Sr No</th>
+            <th>Status</th>
+            <th>Count</th>
+          </tr>
+        </thead>
 
-      <tbody>
+        <tbody>
 
-        {todayStatusData.length > 0 ? (
+          {todayStatusData.length > 0 ? (
 
-          todayStatusData.map(
-            (item, index) => (
+            todayStatusData.map((item, index) => (
 
               <tr key={index}>
+                <td>{index + 1}</td>
+                <td>{item.name}</td>
+                <td>{item.value}</td>
+              </tr>
+
+            ))
+
+          ) : (
+
+            <tr>
+              <td
+                colSpan="3"
+                style={{ textAlign: "center" }}
+              >
+                No Data Available
+              </td>
+            </tr>
+
+          )}
+
+        </tbody>
+
+      </table>
+    </div>
+
+  </div>
+
+  {/* FOLLOWUPS */}
+
+  <div className="report-card">
+
+    <h3>
+      Today's Followups ({todayFollowups.length})
+    </h3>
+
+    <div className="table-wrapper">
+
+      <table className="leads-table">
+
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Project</th>
+            <th>Status</th>
+            <th>Next Call</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          {todayFollowups.length > 0 ? (
+
+            todayFollowups.map((lead) => (
+
+              <tr key={lead._id}>
+
+                <td>{lead.name}</td>
+
+                <td>{lead.phone}</td>
+
+                <td>{lead.project}</td>
+
+                <td>{lead.status}</td>
 
                 <td>
-                  {index + 1}
-                </td>
-
-                <td>
-                  {item.name}
-                </td>
-
-                <td>
-                  {item.value}
+                  {lead.next_call_date?.split("T")[0]}
                 </td>
 
               </tr>
 
-            )
-          )
+            ))
 
-        ) : (
+          ) : (
 
-          <tr>
+            <tr>
+              <td
+                colSpan="5"
+                style={{
+                  textAlign: "center"
+                }}
+              >
+                No Followups Today
+              </td>
+            </tr>
 
-            <td
-              colSpan="3"
-              style={{
-                textAlign: "center"
-              }}
-            >
-              No Data Available
-            </td>
+          )}
 
-          </tr>
+        </tbody>
 
-        )}
+      </table>
 
-      </tbody>
-
-    </table>
+    </div>
 
   </div>
+
 </div>
-</div>
-
-            {/* TODAY FOLLOWUPS */}
-
-            <div className="report-card">
-  <h3>
-    Today's Followups(
-                {todayFollowups.length})
-              </h3>
-
-              <div className="table-wrapper">
-                <table className="leads-table">
-                  <thead>
-                    <tr>
-                      <th>Name</th>
-                      <th>Phone</th>
-                      <th>Project</th>
-                      <th>Status</th>
-                      <th>Next Call</th>
-                    </tr>
-                  </thead>
-
-                  <tbody>
-                    {todayFollowups.length >
-                    0 ? (
-                      todayFollowups.map(
-                        (lead) => (
-                          <tr
-                            key={
-                              lead._id
-                            }
-                          >
-                            <td>
-                              {lead.name}
-                            </td>
-
-                            <td>
-                              {lead.phone}
-                            </td>
-
-                            <td>
-                              {lead.project}
-                            </td>
-
-                            <td>
-                              {lead.status}
-                            </td>
-
-                            <td>
-                              {lead.next_call_date
-                                ?.split(
-                                  "T"
-                                )[0]}
-                            </td>
-                          </tr>
-                        )
-                      )
-                    ) : (
-                      <tr>
-                        <td
-                          colSpan="5"
-                          style={{
-                            textAlign:
-                              "center"
-                          }}
-                        >
-                          No Followups
-                          Today
-                        </td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-
              {/* LEADS DETAILS */}
 
 <div className="report-card">
