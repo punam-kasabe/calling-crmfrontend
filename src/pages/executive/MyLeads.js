@@ -1767,28 +1767,31 @@ if (
   )
 ) {
 
-  if (
-    lead.assigned_to_email ===
-    "suvarna@zaminwale.com"
-  ) {
+  const officerMap = {
 
-    defaultOfficer =
-      "Suvarna Khaire(Attending Officer)";
+    "suvarna@zaminwale.com":
+      "Suvarna Khaire(Attending Officer)",
 
-  }
+    "sreeniwas@zaminwale.com":
+      "Sreeniwas (Attending Officer)",
 
-  if (
-    lead.assigned_to_email ===
-    "sreeniwas@zaminwale.com"
-  ) {
+    "avdhut@zaminwale.com":
+      "Avdhut",
 
-    defaultOfficer =
-      "Sreeniwas (Attending Officer)";
+    "chaitanya@zaminwale.com":
+      "Chaitanya",
 
-  }
+    "harsh@zaminwale.com":
+      "Harsh"
+
+  };
+
+  defaultOfficer =
+    officerMap[
+      lead.assigned_to_email
+    ] || "";
 
 }
-
   setSelectedLead({
 
     ...lead,

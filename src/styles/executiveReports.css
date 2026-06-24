@@ -168,6 +168,7 @@
   font-size: 12px;
 }
 
+
 .leads-table td {
   padding: 8px;
   border-bottom: 1px solid #eee;
@@ -179,6 +180,7 @@
 .leads-table tr:hover {
   background: #f8f9fa;
 }
+
 
 .pagination-btn {
   padding: 8px 16px;
@@ -200,6 +202,7 @@
   border-radius: 12px;
   box-shadow: 0 2px 10px rgba(0,0,0,0.08);
   margin-top: 20px;
+  overflow-x: auto;
 }
 
 .chart-card,
@@ -230,7 +233,7 @@
   }
 
   .reports-row{
-    grid-template-columns:1fr;
+    flex-direction: column;
   }
 
   .page-header{
