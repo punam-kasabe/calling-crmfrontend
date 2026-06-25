@@ -342,21 +342,21 @@ const pieData = {
       <span>{stats.total}</span>
     </div>
 
-    <div className="funnel-arrow">↓</div>
+    <div className="funnel-arrow">➜</div>
 
     <div className="funnel-box interested">
       <h3>Interested</h3>
       <span>{stats.interested}</span>
     </div>
 
-    <div className="funnel-arrow">↓</div>
+    <div className="funnel-arrow">➜</div>
 
     <div className="funnel-box visit">
       <h3>Site Visits</h3>
       <span>{stats.visits}</span>
     </div>
 
-    <div className="funnel-arrow">↓</div>
+    <div className="funnel-arrow">➜</div>
 
     <div className="funnel-box booked">
       <h3>Booked</h3>
