@@ -445,75 +445,34 @@ useEffect(() => {
       try {
 
          let assignedOfficer =
-  selectedLead.assignedTo;
+        selectedLead.assignedTo;
 
-let assignedEmail =
-  selectedLead.assigned_to_email;
+        let assignedEmail =
+        selectedLead.assigned_to_email;
 
 /* INTERESTED AUTO ASSIGN */
 
-if (
-  selectedLead.status === "Interested" ||
-  selectedLead.status === "Very Interested"
-) {
-
-  if (
-    user?.email?.toLowerCase() ===
-    "vrushali@zaminwale.com"
-  ) {
-
-    assignedOfficer =
-      "Suvarna Khaire(Attending Officer)";
-
-    assignedEmail =
-      "suvarna@zaminwale.com";
-
-      assignedEmail =
-      "chaitanya@zaminwale.com";
-
-  }
-
-  if (
-    user?.email?.toLowerCase() ===
-    "jyoti@zaminwale.com"
-  ) {
-
-    assignedOfficer =
-      "Sreeniwas (Attending Officer)";
-
-    assignedEmail =
-      "sreeniwas@zaminwale.com";
-
-      assignedEmail =
-      "avdhut@zaminwale.com";
-
-      assignedEmail =
-      "harsh@zaminwale.com";
-
-  }
-
-}
 
   const updatedData = {
-executive_email:
+ executive_email:
   selectedLead.executive_email ||
   user.email,
     name: selectedLead.name,
   phone: selectedLead.phone,
   email: selectedLead.email,
 
- assignedTo:
+  assignedTo:
   assignedOfficer,
 
-assigned_to_email:
+  assigned_to_email:
   assignedEmail,
 
    assigned_to: assignedEmail,
 
-  closingExecutive:
+   closingExecutive:
     selectedLead.closingExecutive,
 
-  status:
+   status:
     selectedLead.status,
 
   source:
