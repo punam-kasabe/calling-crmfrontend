@@ -2275,9 +2275,7 @@ Select Attending Officer
 </div>
 
 )}
-
-        
-
+      
         {/* STATUS */}
 
         <div>
