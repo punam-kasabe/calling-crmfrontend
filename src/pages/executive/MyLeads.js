@@ -347,14 +347,15 @@ const fetchExecutives = async () => {
 
   const attendingUsers = res.data.filter(
   (u) =>
-
-    u.role === "attending officer" ||
-
-    u.email ===
-      "suvarna@zaminwale.com" ||
-
-    u.email ===
-      "sreeniwas@zaminwale.com"
+    [
+      "suvarna@zaminwale.com",
+      "sreeniwas@zaminwale.com",
+      "harsh@zaminwale.com",
+      "avdhut@zaminwale.com",
+      "chaitanya@zaminwale.com"
+    ].includes(
+      u.email?.toLowerCase()
+    )
 );
 
 console.log(
@@ -362,8 +363,7 @@ console.log(
   attendingUsers
 );
 
-    setAttendingOfficers(attendingUsers);
-
+setAttendingOfficers(attendingUsers);
   }
 
   catch (err) {
@@ -468,6 +468,9 @@ if (
     assignedEmail =
       "suvarna@zaminwale.com";
 
+      assignedEmail =
+      "chaitanya@zaminwale.com";
+
   }
 
   if (
@@ -480,6 +483,12 @@ if (
 
     assignedEmail =
       "sreeniwas@zaminwale.com";
+
+      assignedEmail =
+      "avdhut@zaminwale.com";
+
+      assignedEmail =
+      "harsh@zaminwale.com";
 
   }
 
