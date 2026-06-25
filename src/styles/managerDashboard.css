@@ -1,179 +1,53 @@
-/* =========================================
+/* =========================
    PAGE
-========================================= */
+========================= */
 
 .page-container {
-  padding: 25px;
+  padding: 20px;
 }
 
 .page-title {
-  font-size: 30px;
+  font-size: 28px;
   font-weight: 700;
   margin-bottom: 20px;
-  color: #222;
 }
 
-/* =========================================
+/* =========================
    NOTIFICATION
-========================================= */
+========================= */
 
 .notification-bell {
   position: fixed;
   top: 20px;
   right: 30px;
-  background: #fff;
+  background: #ff4757;
+  color: #fff;
   padding: 10px 18px;
-  border-radius: 12px;
-  font-size: 18px;
-  font-weight: 700;
-  box-shadow: 0 2px 10px rgba(0,0,0,.1);
+  border-radius: 30px;
+  font-weight: 600;
   z-index: 100;
-}
-/* =========================================
-   TODAY TASKS WIDGET
-========================================= */
-
-.tasks-widget {
-  margin-top: 25px;
-  background: #fff;
-  padding: 20px;
-  border-radius: 16px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  box-shadow: 0 4px 12px rgba(0,0,0,.15);
 }
 
-.tasks-widget h2 {
-  margin-bottom: 20px;
-  font-size: 22px;
-  font-weight: 700;
-}
-
-.tasks-grid {
-  display: grid;
-  grid-template-columns: repeat(3,1fr);
-  gap: 20px;
-}
-
-.task-box {
-  padding: 20px;
-  border-radius: 14px;
-  color: white;
-  text-align: center;
-}
-
-.task-box h3 {
-  margin-bottom: 10px;
-  font-size: 16px;
-}
-
-.task-box span {
-  font-size: 34px;
-  font-weight: 700;
-}
-
-.followup-task {
-  background: linear-gradient(
-    135deg,
-    #0d6efd,
-    #3d8bfd
-  );
-}
-
-.visit-task {
-  background: linear-gradient(
-    135deg,
-    #6f42c1,
-    #8a63d2
-  );
-}
-
-.call-task {
-  background: linear-gradient(
-    135deg,
-    #dc3545,
-    #ff5d6c
-  );
-}
-.funnel-card {
-  background: #fff;
-  margin-top: 25px;
-  padding: 25px;
-  border-radius: 16px;
-  box-shadow: 0 3px 12px rgba(0,0,0,.08);
-}
-
-.funnel-card h2 {
-  text-align: center;
-  margin-bottom: 25px;
-}
-
-.funnel-step {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-}
-
-.funnel-box {
-  width: 280px;
-  text-align: center;
-  color: white;
-  border-radius: 12px;
-  padding: 15px;
-}
-
-.funnel-box span {
-  font-size: 30px;
-  font-weight: 700;
-}
-
-.total {
-  background: #0d6efd;
-}
-
-.interested {
-  background: #fd7e14;
-}
-
-.visit {
-  background: #6f42c1;
-}
-
-.booked {
-  background: #198754;
-}
-
-.funnel-arrow {
-  font-size: 30px;
-  font-weight: bold;
-}
-@media (max-width: 900px) {
-
-  .tasks-grid {
-    grid-template-columns: 1fr;
-  }
-
-}
-/* =========================================
-   DASHBOARD GRID
-========================================= */
+/* =========================
+   DASHBOARD CARDS
+========================= */
 
 .dashboard-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit,minmax(250px,1fr));
+  grid-template-columns: repeat(auto-fit,minmax(240px,1fr));
   gap: 20px;
-  margin-top: 20px;
+  margin-bottom: 30px;
 }
 
-/* =========================================
-   CARDS
-========================================= */
-
 .dashboard-card {
-  background: #fff;
   border-radius: 16px;
   padding: 22px;
-  box-shadow: 0 3px 12px rgba(0,0,0,.08);
-  transition: .3s ease;
+  color: white;
+  position: relative;
+  overflow: hidden;
+  transition: 0.3s;
+  box-shadow: 0 8px 20px rgba(0,0,0,.08);
 }
 
 .dashboard-card:hover {
@@ -181,235 +55,199 @@
 }
 
 .dashboard-card h3 {
-  margin: 10px 0;
   font-size: 15px;
-  color: #666;
+  margin-bottom: 10px;
 }
 
 .dashboard-card h2 {
   font-size: 34px;
-  font-weight: 700;
-  color: #111;
+  margin: 0;
 }
 
 .card-icon {
-  font-size: 30px;
+  position: absolute;
+  right: 20px;
+  top: 18px;
+  font-size: 32px;
+  opacity: 0.3;
 }
 
-/* =========================================
-   CARD COLORS
-========================================= */
-
 .card-blue {
-  border-left: 6px solid #0d6efd;
+  background: linear-gradient(135deg,#0d6efd,#4d94ff);
 }
 
 .card-green {
-  border-left: 6px solid #198754;
+  background: linear-gradient(135deg,#198754,#3cb371);
 }
 
 .card-orange {
-  border-left: 6px solid #fd7e14;
+  background: linear-gradient(135deg,#fd7e14,#ffb347);
 }
 
 .card-red {
-  border-left: 6px solid #dc3545;
+  background: linear-gradient(135deg,#dc3545,#ff6b6b);
 }
 
 .card-purple {
-  border-left: 6px solid #6f42c1;
+  background: linear-gradient(135deg,#6f42c1,#9b6dff);
 }
 
 .card-cyan {
-  border-left: 6px solid #0dcaf0;
+  background: linear-gradient(135deg,#0dcaf0,#66e3ff);
 }
 
-/* =========================================
+/* =========================
    PIE CHART
-========================================= */
+========================= */
 
 .chart-card {
-  background: #fff;
-  margin-top: 30px;
-  padding: 25px;
+  background: white;
   border-radius: 16px;
-  box-shadow: 0 3px 12px rgba(0,0,0,.08);
+  padding: 25px;
+  margin-bottom: 30px;
+  box-shadow: 0 4px 15px rgba(0,0,0,.08);
 }
 
 .chart-card h2 {
-  text-align: center;
-  margin-bottom: 25px;
-  font-size: 24px;
-  color: #222;
+  margin-bottom: 20px;
 }
 
 .chart-wrapper {
   width: 100%;
-  max-width: 500px;
+  max-width: 450px;
   margin: auto;
 }
 
-/* =========================================
-   SIDEBAR LAYOUT
-========================================= */
+/* =========================
+   SALES FUNNEL
+========================= */
 
-.main-content {
-  min-height: 100vh;
-  background: #f5f7fb;
-  transition: all .3s ease;
-}
-
-.main-content.shifted {
-  margin-left: 240px;
-}
-
-.main-content.full {
-  margin-left: 70px;
-}
-/* =========================================
-   PROJECT WISE LEADS
-========================================= */
-
-.project-card {
-  background: #fff;
+.funnel-card {
+  background: white;
   padding: 25px;
-  margin-top: 25px;
   border-radius: 16px;
-  box-shadow: 0 3px 12px rgba(0,0,0,.08);
+  margin-bottom: 30px;
+  box-shadow: 0 4px 15px rgba(0,0,0,.08);
 }
 
-.project-card h2 {
+.funnel-card h2 {
   margin-bottom: 20px;
 }
 
-.project-list {
+.funnel-step {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  align-items: center;
 }
 
-.project-item {
-  display: flex;
-  justify-content: space-between;
+.funnel-box {
+  width: 320px;
+  text-align: center;
+  padding: 16px;
+  border-radius: 12px;
+  color: white;
   font-weight: 600;
 }
 
-.project-bar {
-  width: 100%;
-  height: 12px;
-  background: #edf2f7;
-  border-radius: 30px;
-  overflow: hidden;
+.funnel-box span {
+  display: block;
+  margin-top: 8px;
+  font-size: 26px;
 }
 
-.project-fill {
-  height: 100%;
-  border-radius: 30px;
+.total {
+  background: #0d6efd;
 }
 
-.project-fill.green {
-  background: #22c55e;
+.interested {
+  background: #20c997;
 }
 
-.project-fill.blue {
-  background: #3b82f6;
+.visit {
+  background: #fd7e14;
 }
 
-.project-fill.orange {
-  background: #f97316;
-}
-/* =========================================
-   RESPONSIVE
-========================================= */
-
-@media (max-width: 1200px) {
-
-  .dashboard-grid {
-    grid-template-columns: repeat(3,1fr);
-  }
-
+.booked {
+  background: #6f42c1;
 }
 
-@media (max-width: 900px) {
-
-  .dashboard-grid {
-    grid-template-columns: repeat(2,1fr);
-  }
-
-  .chart-wrapper {
-    max-width: 400px;
-  }
-
+.funnel-arrow {
+  font-size: 28px;
+  margin: 10px 0;
 }
 
-@media (max-width: 768px) {
+/* =========================
+   TASKS
+========================= */
 
-  .main-content.shifted,
-  .main-content.full {
-    margin-left: 0;
-  }
-
-  .dashboard-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .notification-bell {
-    position: static;
-    width: fit-content;
-    margin-bottom: 15px;
-  }
-
-  .chart-wrapper {
-    max-width: 320px;
-  }
-
-}
-
-@media (max-width: 480px) {
-
-  .page-container {
-    padding: 15px;
-  }
-
-  .dashboard-card h2 {
-    font-size: 28px;
-  }
-
-  .chart-wrapper {
-    max-width: 260px;
-  }
-
-}
-.project-card {
-  background: #fff;
+.tasks-widget {
+  background: white;
   padding: 25px;
   border-radius: 16px;
-  margin-top: 25px;
-  box-shadow: 0 2px 10px rgba(0,0,0,.08);
+  margin-bottom: 30px;
+  box-shadow: 0 4px 15px rgba(0,0,0,.08);
 }
 
-.project-card h2 {
-  margin-bottom: 20px;
+.tasks-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+  gap: 20px;
 }
+
+.task-box {
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  color: white;
+}
+
+.task-box h3 {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.task-box span {
+  font-size: 32px;
+  font-weight: 700;
+}
+
+.followup-task {
+  background: #0d6efd;
+}
+
+.visit-task {
+  background: #20c997;
+}
+
+.call-task {
+  background: #fd7e14;
+}
+
+/* =========================
+   PROJECT STATS
+========================= */
 
 .project-list {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
+  background: white;
+  padding: 25px;
+  border-radius: 16px;
+  box-shadow: 0 4px 15px rgba(0,0,0,.08);
 }
 
 .project-item {
   display: flex;
   justify-content: space-between;
+  margin-bottom: 8px;
   font-weight: 600;
 }
 
 .project-bar {
   width: 100%;
   height: 10px;
-  background: #eee;
-  border-radius: 20px;
+  background: #e9ecef;
+  border-radius: 50px;
   overflow: hidden;
+  margin-bottom: 20px;
 }
 
 .project-fill {
@@ -419,5 +257,28 @@
     #0d6efd,
     #20c997
   );
-  border-radius: 20px;
+  border-radius: 50px;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 768px) {
+
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .tasks-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .funnel-box {
+    width: 100%;
+  }
+
+  .notification-bell {
+    right: 15px;
+  }
 }
