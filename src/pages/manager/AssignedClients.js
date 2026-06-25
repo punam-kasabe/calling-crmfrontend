@@ -94,14 +94,9 @@ const openEditModal = (client) => {
 
       );
 
-      const interestedClients = res.data.filter(
-  (lead) =>
-    lead.status === "Interested" ||
-    lead.status === "Very Interested"
-);
+     setClients(res.data);
+     setFilteredClients(res.data);
 
-setClients(interestedClients);
-setFilteredClients(interestedClients);
 
     }
 
@@ -238,6 +233,9 @@ setFilteredClients(interestedClients);
           <h1 className="page-title">
             Assigned Clients
           </h1>
+
+
+
 
           {/* SEARCH BAR */}
 
