@@ -21,6 +21,8 @@ export default function ExecutiveReports() {
   const [selectedDate, setSelectedDate] = useState("");
   const [currentPage, setCurrentPage] =
   useState(1);
+  const [selectedStatus, setSelectedStatus] =
+  useState("");
 
 const leadsPerPage = 20;
   const user =
@@ -79,16 +81,16 @@ const indexOfFirstLead =
   indexOfLastLead - leadsPerPage;
 
 const currentLeads =
-  filteredLeads.slice(
+  displayLeads.slice(
     indexOfFirstLead,
     indexOfLastLead
   );
 
 const totalPages =
-  Math.ceil(
-    filteredLeads.length /
-    leadsPerPage
-  );
+Math.ceil(
+displayLeads.length /
+leadsPerPage
+);
 
   const stats = useMemo(() => {
     return {
@@ -186,6 +188,32 @@ const totalPages =
 
 }, [leads, selectedDate]);
      
+
+const statusWiseLeads = useMemo(() => {
+
+  if (!selectedStatus) return [];
+
+  const filterDate =
+    selectedDate ||
+    new Date().toISOString().split("T")[0];
+
+  return leads.filter((lead) => {
+
+    const leadDate =
+      lead.createdAt?.split("T")[0];
+
+    return (
+      leadDate === filterDate &&
+      (lead.status || "No Status") === selectedStatus
+    );
+
+  });
+
+}, [
+  leads,
+  selectedDate,
+  selectedStatus
+]);
 
 const COLORS = [
   "#0088FE",
@@ -467,12 +495,24 @@ const COLORS = [
 
             todayStatusData.map((item, index) => (
 
-              <tr key={index}>
-                <td>{index + 1}</td>
-                <td>{item.name}</td>
-                <td>{item.value}</td>
-              </tr>
+             <tr
+  key={index}
+  style={{
+    cursor: "pointer",
+    background:
+      selectedStatus === item.name
+        ? "#dbeafe"
+        : ""
+  }}
+>
 
+  <td>{index + 1}</td>
+
+  <td>{item.name}</td>
+
+  <td>{item.value}</td>
+
+</tr>
             ))
 
           ) : (
@@ -495,6 +535,86 @@ const COLORS = [
 
   </div>
 
+{selectedStatus && (
+
+<div
+  className="report-card"
+  style={{ marginTop: "20px" }}
+>
+
+<h3>
+  {selectedStatus} Leads
+  ({statusWiseLeads.length})
+</h3>
+
+<div className="table-wrapper">
+
+<table className="leads-table">
+
+<thead>
+
+<tr>
+
+<th>Sr No</th>
+
+<th>Name</th>
+
+<th>Phone</th>
+
+<th>Project</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+{statusWiseLeads.length > 0 ? (
+
+statusWiseLeads.map((lead, index) => (
+
+<tr key={lead._id}>
+
+<td>{index + 1}</td>
+
+<td>{lead.name}</td>
+
+<td>{lead.phone}</td>
+
+<td>{lead.project}</td>
+
+</tr>
+
+))
+
+) : (
+
+<tr>
+
+<td
+colSpan="4"
+style={{
+textAlign: "center"
+}}
+>
+
+No Leads
+
+</td>
+
+</tr>
+
+)}
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+)}
   {/* FOLLOWUPS */}
 
   <div className="report-card">
@@ -571,7 +691,7 @@ const COLORS = [
 
 <div className="report-card">
   <h3>
-    Lead Details ({filteredLeads.length})
+   Lead Details ({displayLeads.length})
   </h3>
 
   <div className="table-wrapper">
