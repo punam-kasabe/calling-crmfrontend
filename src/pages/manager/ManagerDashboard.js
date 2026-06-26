@@ -422,7 +422,7 @@ const pieData = {
 </div>
 </div>
 
-
+</div>
 
 <div className="project-list">
 
@@ -467,7 +467,7 @@ const pieData = {
         </div>
 
       </div>
-</div>
+
     </div>
 
   );
