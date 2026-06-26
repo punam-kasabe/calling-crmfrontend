@@ -76,7 +76,7 @@ const [projectStats, setProjectStats] =
         {
           params: {
             email: user.email,
-            role: "Manager"
+            role: "manager"
           }
         }
       );
