@@ -132,16 +132,9 @@ const totalPages =
           "Meeting Scheduled"
       ).length,
 
-      negotiation: filteredLeads.filter(
-        (l) =>
-          l.status === "Negotiation"
-      ).length,
+    
 
-      tokenReceived: filteredLeads.filter(
-        (l) =>
-          l.status ===
-          "Token Received"
-      ).length
+     
     };
   }, [filteredLeads]);
 
@@ -395,15 +388,8 @@ const COLORS = [
                 <p>{stats.meeting}</p>
               </div>
 
-              <div className="stats-card">
-                <h5>Negotiation</h5>
-                <p>{stats.negotiation}</p>
-              </div>
-
-              <div className="stats-card booked">
-                <h5>Token Received</h5>
-                <p>{stats.tokenReceived}</p>
-              </div>
+              
+              
 
             </div>
 
