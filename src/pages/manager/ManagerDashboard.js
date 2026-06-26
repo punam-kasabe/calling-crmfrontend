@@ -217,14 +217,38 @@ const pieData = {
       >
         <div className="page-container">
 
-          <h1 className="page-title">
-            Manager Dashboard
-          </h1>
-         <div className="notification-bell">
+         <div className="dashboard-header">
 
-          🔔 {todayFollowups.length}
+  <div className="header-left">
+    <h1>CRM Dashboard</h1>
+    <p>Welcome back, {user.name}</p>
+  </div>
 
-           </div>
+  <div className="header-right">
+
+    <div className="notification-box">
+      🔔
+      <span>{todayFollowups.length}</span>
+    </div>
+
+    <div className="profile-box">
+
+      <div className="profile-circle">
+        {user.name?.charAt(0)}
+      </div>
+
+      <div>
+        <h4>{user.name}</h4>
+        <small>Manager</small>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
          <div className="dashboard-grid">
 
   <div className="dashboard-card card-blue">
@@ -318,24 +342,24 @@ const pieData = {
   </div>
 
 </div>
-<div className="chart-card">
+<div className="middle-section">
 
-  <h2>
-    Lead Status Summary
-  </h2>
+  <div className="chart-card">
 
-  <div className="chart-wrapper">
-  <Pie data={pieData} />
-</div>
+    <h2>Lead Status Summary</h2>
 
-</div>
+    <div className="chart-wrapper">
+      <Pie data={pieData} />
+    </div>
 
+  </div>
 
-<div className="funnel-card">
+  <div className="funnel-card">
 
-  <h2>Sales Conversion Funnel</h2>
+    <h2>Sales Conversion Funnel</h2>
 
-  <div className="funnel-step">
+    <div className="funnel-step">
+
 
     <div className="funnel-box total">
       <h3>Total Leads</h3>
@@ -365,12 +389,17 @@ const pieData = {
 
   </div>
 
+  </div>
 </div>
+
+
 {/* =========================================
    TODAY TASKS
 ========================================= */}
 
-<div className="tasks-widget">
+<div className="bottom-section">
+
+  <div className="tasks-widget">
 
   <h2>Today's Tasks</h2>
 
@@ -390,10 +419,10 @@ const pieData = {
       <h3>📞 Pending Calls</h3>
       <span>{stats.pending}</span>
     </div>
-
-  </div>
-
 </div>
+</div>
+
+
 
 <div className="project-list">
 
@@ -438,7 +467,7 @@ const pieData = {
         </div>
 
       </div>
-
+</div>
     </div>
 
   );

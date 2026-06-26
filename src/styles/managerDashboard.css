@@ -2,31 +2,85 @@
    PAGE
 ========================= */
 
-.page-container {
-  padding: 20px;
+.page-container{
+    padding:25px;
+    background:#f4f7fb;
+    min-height:100vh;
 }
 
-.page-title {
-  font-size: 28px;
-  font-weight: 700;
-  margin-bottom: 20px;
+.dashboard-header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:30px;
 }
 
-/* =========================
-   NOTIFICATION
-========================= */
+.header-left h1{
+font-size:32px;
+font-weight:700;
+color:#1f2937;
+}
 
-.notification-bell {
-  position: fixed;
-  top: 20px;
-  right: 30px;
-  background: #ff4757;
-  color: #fff;
-  padding: 10px 18px;
-  border-radius: 30px;
-  font-weight: 600;
-  z-index: 100;
-  box-shadow: 0 4px 12px rgba(0,0,0,.15);
+.header-left p{
+margin-top:5px;
+color:#6b7280;
+}
+
+.header-right{
+display:flex;
+align-items:center;
+gap:20px;
+}
+
+.notification-box{
+width:50px;
+height:50px;
+background:#fff;
+border-radius:50%;
+display:flex;
+justify-content:center;
+align-items:center;
+position:relative;
+box-shadow:0 8px 20px rgba(0,0,0,.08);
+font-size:22px;
+}
+
+.notification-box span{
+position:absolute;
+top:-4px;
+right:-4px;
+background:#ef4444;
+color:#fff;
+width:20px;
+height:20px;
+border-radius:50%;
+font-size:11px;
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+.profile-box{
+display:flex;
+align-items:center;
+gap:10px;
+padding:10px 18px;
+background:#fff;
+border-radius:12px;
+box-shadow:0 8px 20px rgba(0,0,0,.08);
+}
+
+.profile-circle{
+width:45px;
+height:45px;
+border-radius:50%;
+background:#2563eb;
+color:#fff;
+display:flex;
+justify-content:center;
+align-items:center;
+font-weight:bold;
+font-size:18px;
 }
 
 /* =========================
@@ -100,12 +154,11 @@
    PIE CHART
 ========================= */
 
-.chart-card {
-  background: white;
-  border-radius: 16px;
-  padding: 25px;
-  margin-bottom: 30px;
-  box-shadow: 0 4px 15px rgba(0,0,0,.08);
+.chart-card{
+background:#fff;
+padding:25px;
+border-radius:18px;
+box-shadow:0 10px 25px rgba(0,0,0,.08);
 }
 
 .chart-card h2 {
@@ -122,12 +175,11 @@
    SALES FUNNEL
 ========================= */
 
-.funnel-card {
-  background: white;
-  padding: 25px;
-  border-radius: 16px;
-  margin-bottom: 30px;
-  box-shadow: 0 4px 15px rgba(0,0,0,.08);
+.funnel-card{
+background:#fff;
+padding:25px;
+border-radius:18px;
+box-shadow:0 10px 25px rgba(0,0,0,.08);
 }
 
 .funnel-card h2 {
@@ -185,16 +237,16 @@
   display: flex;
   align-items: center;
 }
+
 /* =========================
    TASKS
 ========================= */
 
-.tasks-widget {
-  background: white;
-  padding: 25px;
-  border-radius: 16px;
-  margin-bottom: 30px;
-  box-shadow: 0 4px 15px rgba(0,0,0,.08);
+.tasks-widget{
+background:#fff;
+padding:25px;
+border-radius:18px;
+box-shadow:0 10px 25px rgba(0,0,0,.08);
 }
 
 .tasks-grid {
@@ -236,12 +288,13 @@
    PROJECT STATS
 ========================= */
 
-.project-list {
-  background: white;
-  padding: 25px;
-  border-radius: 16px;
-  box-shadow: 0 4px 15px rgba(0,0,0,.08);
+.project-list{
+background:#fff;
+padding:25px;
+border-radius:18px;
+box-shadow:0 10px 25px rgba(0,0,0,.08);
 }
+
 
 .project-item {
   display: flex;
@@ -269,6 +322,21 @@
   border-radius: 50px;
 }
 
+
+.middle-section{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:25px;
+margin-bottom:30px;
+}
+
+.bottom-section{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:25px;
+margin-bottom:30px;
+}
+
 /* =========================
    MOBILE
 ========================= */
@@ -290,4 +358,17 @@
   .notification-bell {
     right: 15px;
   }
+  .dashboard-header{
+flex-direction:column;
+align-items:flex-start;
+gap:20px;
+}
+
+.middle-section{
+grid-template-columns:1fr;
+}
+
+.bottom-section{
+grid-template-columns:1fr;
+}
 }
