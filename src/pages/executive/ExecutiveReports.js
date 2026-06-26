@@ -389,8 +389,6 @@ const COLORS = [
               </div>
 
               
-              
-
             </div>
 
 

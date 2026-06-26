@@ -25,7 +25,10 @@ export default function AssignedClients() {
     setSearch] =
     useState("");
 
+const [currentPage, setCurrentPage] =
+  useState(1);
 
+const leadsPerPage = 20;
 
   const [selectedStatus,
     setSelectedStatus] =
@@ -159,10 +162,30 @@ const openEditModal = (client) => {
       });
 
     setFilteredClients(filtered);
-
+setCurrentPage(1);
   }, [search, clients]);
 
-  
+  /* =========================================
+   PAGINATION
+========================================= */
+
+const indexOfLastLead =
+  currentPage * leadsPerPage;
+
+const indexOfFirstLead =
+  indexOfLastLead - leadsPerPage;
+
+const currentClients =
+  filteredClients.slice(
+    indexOfFirstLead,
+    indexOfLastLead
+  );
+
+const totalPages =
+  Math.ceil(
+    filteredClients.length /
+    leadsPerPage
+  );
 
   /* =========================================
      SAVE STATUS
@@ -262,7 +285,7 @@ const openEditModal = (client) => {
               <thead>
 
                 <tr>
-
+               <th>Sr No</th>
                <th>Client Name</th>
                <th>Phone</th>
                <th>Project</th>
@@ -280,10 +303,12 @@ const openEditModal = (client) => {
 
                 {filteredClients.length > 0 ? (
 
-                  filteredClients.map((c) => (
+                  currentClients.map((c, index) => (
 
                     <tr key={c._id}>
-
+                     <td>
+  {indexOfFirstLead + index + 1}
+</td>
                       <td>
                         {c.name}
                       </td>
@@ -344,7 +369,7 @@ const openEditModal = (client) => {
                   <tr>
 
                     <td
-                      colSpan="8"
+                      colSpan="9"
                       className="no-data"
                     >
 
@@ -362,6 +387,43 @@ const openEditModal = (client) => {
 
           </div>
 
+ <div
+  style={{
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: "15px",
+    marginTop: "20px"
+  }}
+>
+
+<button
+  className="pagination-btn"
+  onClick={() =>
+    setCurrentPage(currentPage - 1)
+  }
+  disabled={currentPage === 1}
+>
+  Previous
+</button>
+
+<span>
+  Page {currentPage} of {totalPages}
+</span>
+
+<button
+  className="pagination-btn"
+  onClick={() =>
+    setCurrentPage(currentPage + 1)
+  }
+  disabled={
+    currentPage === totalPages
+  }
+>
+  Next
+</button>
+
+</div>
 {showModal && (
 
 <div className="modal-overlay">
