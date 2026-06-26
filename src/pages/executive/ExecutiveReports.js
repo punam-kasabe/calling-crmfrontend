@@ -80,17 +80,17 @@ const indexOfLastLead =
 const indexOfFirstLead =
   indexOfLastLead - leadsPerPage;
 
-const currentLeads =
-  displayLeads.slice(
+const displayLeads =
+  filteredLeads.slice(
     indexOfFirstLead,
     indexOfLastLead
   );
 
 const totalPages =
-Math.ceil(
-displayLeads.length /
-leadsPerPage
-);
+  Math.ceil(
+    filteredLeads.length /
+    leadsPerPage
+  );
 
   const stats = useMemo(() => {
     return {
@@ -495,8 +495,15 @@ const COLORS = [
 
             todayStatusData.map((item, index) => (
 
-             <tr
+      <tr
   key={index}
+  onClick={() =>
+    setSelectedStatus(
+      selectedStatus === item.name
+        ? ""
+        : item.name
+    )
+  }
   style={{
     cursor: "pointer",
     background:
@@ -707,7 +714,7 @@ No Leads
 </thead>
 
      <tbody>
-{currentLeads.map((lead,index)=>(
+{displayLeads.map((lead,index)=>(
     <tr key={lead._id}>
  <td>
   {indexOfFirstLead +
