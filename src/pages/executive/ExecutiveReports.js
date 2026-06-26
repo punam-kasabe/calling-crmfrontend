@@ -397,7 +397,7 @@ const COLORS = [
   <h3>
   {selectedDate
     ? `${selectedDate} Status Distribution`
-    : "Today's Status Distribution"}
+    : "Status Distribution"}
 </h3>
 
   <ResponsiveContainer
@@ -447,7 +447,7 @@ const COLORS = [
     <h3>
   {selectedDate
     ? `${selectedDate} Status Count`
-    : "Today's Status Count"}
+    : "Status Count"}
 </h3>
 
     <div className="table-wrapper">
