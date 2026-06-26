@@ -160,25 +160,19 @@ const totalPages =
 
    const todayStatusData = useMemo(() => {
 
-   const today = new Date();
+  const filterDate =
+    selectedDate ||
+    new Date().toISOString().split("T")[0];
 
-  const todayDate =
-  `${today.getFullYear()}-${
-    String(today.getMonth() + 1).padStart(2, "0")
-  }-${
-    String(today.getDate()).padStart(2, "0")
-  }`;
-
-  const todayLeads = leads.filter(
-  (lead) =>
-    lead.createdAt?.split("T")[0] === todayDate
-);
-
-  console.log("LEADS =", leads);
+  const dateLeads = leads.filter(
+    (lead) =>
+      lead.createdAt?.split("T")[0] ===
+      filterDate
+  );
 
   const statusCount = {};
 
-  todayLeads.forEach((lead) => {
+  dateLeads.forEach((lead) => {
 
     const status =
       lead.status || "No Status";
@@ -195,7 +189,7 @@ const totalPages =
     })
   );
 
-}, [leads]);
+}, [leads, selectedDate]);
      
 
 const COLORS = [
