@@ -76,7 +76,7 @@ const [projectStats, setProjectStats] =
         {
           params: {
             email: user.email,
-            role: "manager"
+            role: "Manager"
           }
         }
       );
@@ -342,25 +342,64 @@ const pieData = {
   </div>
 
 </div>
-<div className="chart-card">
+<div className="middle-section">
 
-  <h2>
-    Lead Status Summary
-  </h2>
+  <div className="chart-card">
 
-  <div className="chart-wrapper">
-  <Pie data={pieData} />
+    <h2>Lead Status Summary</h2>
+
+    <div className="chart-wrapper">
+      <Pie data={pieData} />
+    </div>
+
+  </div>
+
+  <div className="funnel-card">
+
+    <h2>Sales Conversion Funnel</h2>
+
+    <div className="funnel-step">
+
+
+    <div className="funnel-box total">
+      <h3>Total Leads</h3>
+      <span>{stats.total}</span>
+    </div>
+
+    <div className="funnel-arrow">➜</div>
+
+    <div className="funnel-box interested">
+      <h3>Interested</h3>
+      <span>{stats.interested}</span>
+    </div>
+
+    <div className="funnel-arrow">➜</div>
+
+    <div className="funnel-box visit">
+      <h3>Site Visits</h3>
+      <span>{stats.visits}</span>
+    </div>
+
+    <div className="funnel-arrow">➜</div>
+
+    <div className="funnel-box booked">
+      <h3>Booked</h3>
+      <span>{stats.booked}</span>
+    </div>
+
+  </div>
+
+  </div>
 </div>
-
-</div>
-
 
 
 {/* =========================================
    TODAY TASKS
 ========================================= */}
 
-<div className="tasks-widget">
+<div className="bottom-section">
+
+  <div className="tasks-widget">
 
   <h2>Today's Tasks</h2>
 
@@ -380,10 +419,10 @@ const pieData = {
       <h3>📞 Pending Calls</h3>
       <span>{stats.pending}</span>
     </div>
-
-  </div>
-
 </div>
+</div>
+
+
 
 <div className="project-list">
 
@@ -428,7 +467,7 @@ const pieData = {
         </div>
 
       </div>
-
+</div>
     </div>
 
   );
