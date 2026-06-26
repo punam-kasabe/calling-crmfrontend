@@ -139,17 +139,19 @@ const totalPages =
   }, [filteredLeads]);
 
   const todayFollowups = useMemo(() => {
-    const today = new Date()
-      .toISOString()
-      .split("T")[0];
 
-  return filteredLeads.filter(
-          (lead) =>
-        lead.next_call_date &&
-        lead.next_call_date
-          .split("T")[0] === today
-    );
-  }, [filteredLeads]);
+  const filterDate =
+    selectedDate ||
+    new Date().toISOString().split("T")[0];
+
+  return leads.filter((lead) =>
+
+    lead.next_call_date &&
+    lead.next_call_date.split("T")[0] === filterDate
+
+  );
+
+}, [leads, selectedDate]);
 
    const todayStatusData = useMemo(() => {
 
@@ -339,6 +341,7 @@ const COLORS = [
           </div>
         ) : (
           <>
+
             {/* STATS */}
 
             <div className="stats-grid">
@@ -390,12 +393,12 @@ const COLORS = [
 
               
             </div>
-
-
-<div className="chart-card">
+        <div className="chart-card">
   <h3>
-    Today's Status Distribution
-  </h3>
+  {selectedDate
+    ? `${selectedDate} Status Distribution`
+    : "Today's Status Distribution"}
+</h3>
 
   <ResponsiveContainer
     width="100%"
@@ -441,7 +444,11 @@ const COLORS = [
   {/* STATUS COUNT */}
   <div className="report-card">
 
-    <h3>Today's Status Count</h3>
+    <h3>
+  {selectedDate
+    ? `${selectedDate} Status Count`
+    : "Today's Status Count"}
+</h3>
 
     <div className="table-wrapper">
       <table className="leads-table">
@@ -493,8 +500,10 @@ const COLORS = [
   <div className="report-card">
 
     <h3>
-      Today's Followups ({todayFollowups.length})
-    </h3>
+  {selectedDate
+    ? `${selectedDate} Followups (${todayFollowups.length})`
+    : `Today's Followups (${todayFollowups.length})`}
+</h3>
 
     <div className="table-wrapper">
 
