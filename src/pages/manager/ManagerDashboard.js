@@ -56,6 +56,17 @@ export default function ManagerDashboard() {
  
   const [todayFollowups, setTodayFollowups] =
   useState([]);
+
+  const [showPopup, setShowPopup] =
+  useState(false);
+
+const [popupData, setPopupData] =
+  useState({
+    todayFollowups: [],
+    todayVisits: []
+  });
+
+
   const user = JSON.parse(
     localStorage.getItem("user") || "{}"
   );
@@ -88,7 +99,6 @@ const [projectStats, setProjectStats] =
   pending: data.pending || 0,
   visits: data.visits || 0,
   followups: data.followups || 0,
-
   newLeads: data.newLeads || 0,
   veryInterested:
     data.veryInterested || 0,
@@ -103,6 +113,21 @@ const [projectStats, setProjectStats] =
 setProjectStats(
   data.projectStats || []
 );
+
+setPopupData({
+  todayFollowups:
+    data.todayFollowupsList || [],
+  todayVisits:
+    data.todaySiteVisits || []
+});
+
+if (
+  (data.todayFollowupsList?.length || 0) > 0 ||
+  (data.todaySiteVisits?.length || 0) > 0
+) {
+  setShowPopup(true);
+}
+
 
     } catch (err) {
 
@@ -210,6 +235,116 @@ const pieData = {
         }
       />
 
+{showPopup && (
+
+<div className="work-popup-overlay">
+
+<div className="work-popup">
+
+<div className="popup-header">
+
+<h2>
+Today's Work
+</h2>
+
+<button
+className="close-btn"
+onClick={() =>
+setShowPopup(false)
+}
+>
+✕
+</button>
+
+</div>
+
+<div className="popup-section">
+
+<h3>
+📞 Today's Followups
+</h3>
+
+{
+popupData.todayFollowups.length ?
+
+popupData.todayFollowups.map(
+(item,index)=>(
+
+<div
+className="popup-item"
+key={index}
+>
+
+<strong>
+{item.name}
+</strong>
+
+<div>
+{item.phone}
+</div>
+
+<div>
+{item.project}
+</div>
+
+</div>
+
+))
+
+:
+
+<p>No Followups Today</p>
+
+}
+
+</div>
+
+<div className="popup-section">
+
+<h3>
+🏠 Today's Site Visits
+</h3>
+
+{
+popupData.todayVisits.length ?
+
+popupData.todayVisits.map(
+(item,index)=>(
+
+<div
+className="popup-item"
+key={index}
+>
+
+<strong>
+{item.name}
+</strong>
+
+<div>
+{item.phone}
+</div>
+
+<div>
+{item.project}
+</div>
+
+</div>
+
+))
+
+:
+
+<p>No Site Visits Today</p>
+
+}
+
+</div>
+
+</div>
+
+</div>
+
+)}
       <div
         className={`main-content ${
           isOpen ? "shifted" : "full"
