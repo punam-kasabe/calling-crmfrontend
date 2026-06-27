@@ -675,71 +675,64 @@ export default function ExecutiveDashboard() {
 
       <thead>
 
-        <tr>
+<tr>
 
-          <th>Client</th>
+  <th>Created Date</th>
 
-          <th>Status</th>
+  <th>Client</th>
 
-          <th>Remark</th>
+  <th>Status</th>
 
-          <th>Updated On</th>
+  <th>Remark</th>
 
-        </tr>
+  <th>Updated Date</th>
 
-      </thead>
+</tr>
+
+</thead>
+
 
       <tbody>
 
-        {recentActivities.length > 0 ? (
+{recentActivities.length > 0 ? (
 
-          recentActivities.map(
-            (item, index) => (
+  recentActivities.map((item, index) => (
 
-              <tr key={index}>
+    <tr key={index}>
 
-                <td>
-                  {item.name}
-                </td>
+      <td>
+        {item.createdAt
+          ? new Date(item.createdAt).toLocaleDateString("en-IN")
+          : "-"}
+      </td>
 
-                <td>
-                  {item.status}
-                </td>
+      <td>{item.name}</td>
 
-                <td>
-                  {item.remark || "-"}
-                </td>
+      <td>{item.status}</td>
 
-                <td>
-                  {new Date(
-                    item.updatedAt
-                  ).toLocaleString()}
-                </td>
+      <td>{item.remark || "-"}</td>
 
-              </tr>
+      <td>
+        {item.updatedAt
+          ? new Date(item.updatedAt).toLocaleString("en-IN")
+          : "-"}
+      </td>
 
-            )
-          )
+    </tr>
 
-        ) : (
+  ))
 
-          <tr>
+) : (
 
-            <td
-              colSpan="4"
-              style={{
-                textAlign: "center"
-              }}
-            >
-              No Recent Activities
-            </td>
+<tr>
+  <td colSpan="5" style={{ textAlign: "center" }}>
+    No Recent Activities
+  </td>
+</tr>
 
-          </tr>
+)}
 
-        )}
-
-      </tbody>
-
+</tbody>
     </table>
 
   </div>
