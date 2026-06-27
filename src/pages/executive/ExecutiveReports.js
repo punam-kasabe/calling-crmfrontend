@@ -106,7 +106,7 @@ const totalPages =
       ).length,
 
       followup: filteredLeads.filter(
-        (l) => l.status === "Follow Up"
+        (l) => l.status === "Followup"
       ).length,
 
       booked: filteredLeads.filter(
@@ -115,7 +115,7 @@ const totalPages =
 
       siteVisit: filteredLeads.filter(
         (l) =>
-          l.status === "Site Visit Done"
+          l.status === "Site Visit"
       ).length,
 
       notInterested: filteredLeads.filter(
@@ -141,7 +141,6 @@ const totalPages =
   }, [filteredLeads]);
 
   const todayFollowups = useMemo(() => {
-
   const filterDate =
     selectedDate ||
     new Date().toISOString().split("T")[0];
@@ -149,18 +148,17 @@ const totalPages =
   return leads.filter((lead) =>
 
     lead.next_call_date &&
-    lead.next_call_date.split("T")[0] === filterDate
+    lead.next_call_date.split("T")[0] === filterDate &&
+    lead.status === "Followup"
 
   );
 
 }, [leads, selectedDate]);
 
    const todayStatusData = useMemo(() => {
-
   const filterDate =
     selectedDate ||
     new Date().toISOString().split("T")[0];
-
   const dateLeads = leads.filter(
     (lead) =>
       lead.createdAt?.split("T")[0] ===

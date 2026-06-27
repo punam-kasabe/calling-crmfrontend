@@ -72,6 +72,7 @@ const closingExecutives = [
       .filter(Boolean)
   )
 ];
+
 const statusOptions = [
   { value: "New", label: "New" },
   { value: "Interested", label: "Interested" },
