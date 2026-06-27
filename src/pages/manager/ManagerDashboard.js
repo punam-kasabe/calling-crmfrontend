@@ -102,7 +102,6 @@ const [projectStats, setProjectStats] =
   newLeads: data.newLeads || 0,
   veryInterested:
     data.veryInterested || 0,
-
   notInterested:
     data.notInterested || 0,
 
@@ -114,12 +113,14 @@ setProjectStats(
   data.projectStats || []
 );
 
+
 setPopupData({
   todayFollowups:
     data.todayFollowupsList || [],
   todayVisits:
     data.todaySiteVisits || []
 });
+
 
 if (
   (data.todayFollowupsList?.length || 0) > 0 ||
@@ -286,7 +287,15 @@ key={index}
 <div>
 {item.project}
 </div>
-
+<div style={{ color: "#0d6efd", fontWeight: "600" }}>
+🕒 {item.followup_date
+  ? new Date(item.followup_date).toLocaleTimeString("en-IN", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true
+    })
+  : "-"}
+</div>
 </div>
 
 ))
@@ -328,6 +337,15 @@ key={index}
 {item.project}
 </div>
 
+<div style={{ color: "#198754", fontWeight: "600" }}>
+🕒 {item.visitDate
+  ? new Date(item.visitDate).toLocaleTimeString("en-IN", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true
+    })
+  : "-"}
+</div>
 </div>
 
 ))
