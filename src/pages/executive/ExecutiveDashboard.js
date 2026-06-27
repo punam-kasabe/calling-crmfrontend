@@ -582,28 +582,14 @@ export default function ExecutiveDashboard() {
             <table>
 
               <thead>
-
-                <tr>
-
-                  <th>
-                    Client
-                  </th>
-
-                  <th>
-                    Phone
-                  </th>
-
-                  <th>
-                    Project
-                  </th>
-
-                  <th>
-                    Status
-                  </th>
-
-                </tr>
-
-              </thead>
+<tr>
+  <th>Date</th>
+  <th>Client</th>
+  <th>Phone</th>
+  <th>Project</th>
+  <th>Status</th>
+</tr>
+</thead>
 
               <tbody>
 
@@ -611,33 +597,27 @@ export default function ExecutiveDashboard() {
                   recentLeads.map(
                     (lead) => (
 
-                      <tr
-                        key={lead._id}
-                      >
+                     <tr key={lead._id}>
 
-                        <td>
-                          {lead.name}
-                        </td>
+  <td>
+    {lead.createdAt
+      ? new Date(lead.createdAt).toLocaleDateString("en-IN")
+      : "-"}
+  </td>
 
-                        <td>
-                          {lead.phone}
-                        </td>
+  <td>{lead.name}</td>
 
-                        <td>
-                          {lead.project}
-                        </td>
+  <td>{lead.phone}</td>
 
-                        <td>
+  <td>{lead.project}</td>
 
-                          <span
-                            className={`status ${lead.status}`}
-                          >
-                            {lead.status}
-                          </span>
+  <td>
+    <span className={`status ${lead.status}`}>
+      {lead.status}
+    </span>
+  </td>
 
-                        </td>
-
-                      </tr>
+</tr>
 
                     )
                   )
@@ -647,7 +627,7 @@ export default function ExecutiveDashboard() {
                   <tr>
 
                     <td
-                      colSpan="4"
+                      colSpan="5"
                     >
                       No leads found
                     </td>
