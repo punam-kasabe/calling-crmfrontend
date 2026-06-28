@@ -1,12 +1,43 @@
 import Sidebar from "../../components/Sidebar";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 import "../../styles/receptiondashboard.css";
 
 export default function ReceptionDashboard() {
 
   const [isOpen, setIsOpen] = useState(true);
+  const [dashboard, setDashboard] = useState({
+  totalVisits: 0,
+  todayVisits: 0,
+  assignedManagers: 0
+});
 
+  useEffect(() => {
+
+  fetchDashboard();
+
+}, []);
+
+const fetchDashboard = async () => {
+
+  try {
+
+    const res = await axios.get(
+      "https://calling-crm-backend-7w52.onrender.com/api/reception-dashboard"
+    );
+
+    setDashboard(res.data);
+
+  }
+
+  catch (err) {
+
+    console.log(err);
+
+  }
+
+};
   return (
 
     <div className="layout">
@@ -49,7 +80,7 @@ export default function ReceptionDashboard() {
                 <h3>Total Visits</h3>
               </div>
 
-              <p>0</p>
+              <p>{dashboard.totalVisits}</p>
 
             </div>
 
@@ -60,7 +91,7 @@ export default function ReceptionDashboard() {
                 <h3>Today's Visits</h3>
               </div>
 
-              <p>0</p>
+              <p>{dashboard.todayVisits}</p>
 
             </div>
 
@@ -71,8 +102,7 @@ export default function ReceptionDashboard() {
                 <h3>Assigned Managers</h3>
               </div>
 
-              <p>0</p>
-
+              <p>{dashboard.assignedManagers}</p>
             </div>
 
           </div>
