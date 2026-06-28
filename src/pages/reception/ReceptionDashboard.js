@@ -200,49 +200,73 @@ export default function ReceptionDashboard() {
 
           </div>
 
-          {/* QUICK ACTION */}
+         {/* QUICK ACTION */}
 
-          <div className="quick-section">
+<div className="quick-section">
 
-            <h2>
-              Quick Overview
-            </h2>
+  <h2>Quick Actions</h2>
 
-            <div className="quick-grid">
+  <div className="quick-grid">
 
-              <div className="quick-card">
+    <div
+      className="quick-card"
+      onClick={() => navigate("/create-visit")}
+    >
+      <div className="quick-icon">➕</div>
 
-                <h3>Walk-in Clients</h3>
+      <h3>Create New Visit</h3>
 
-                <p>
-                  Reception can register new walk-in visitors.
-                </p>
+      <p>
+        Register a new walk-in client instantly.
+      </p>
 
-              </div>
+    </div>
 
-              <div className="quick-card">
+    <div
+      className="quick-card"
+      onClick={() => navigate("/visit-entries")}
+    >
+      <div className="quick-icon">📋</div>
 
-                <h3>Today's Visit Schedule</h3>
+      <h3>Visit Entries</h3>
 
-                <p>
-                  Check all today's appointments quickly.
-                </p>
+      <p>
+        View today's and previous visit records.
+      </p>
 
-              </div>
+    </div>
 
-              <div className="quick-card">
+    <div
+      className="quick-card"
+      onClick={() => navigate("/assign-manager")}
+    >
+      <div className="quick-icon">👤</div>
 
-                <h3>Managers</h3>
+      <h3>Assign Manager</h3>
 
-                <p>
-                  Assign visitors to available managers.
-                </p>
+      <p>
+        Assign clients to available managers.
+      </p>
 
-              </div>
+    </div>
 
-            </div>
+    <div
+      className="quick-card"
+      onClick={exportTodayVisits}
+    >
+      <div className="quick-icon">📄</div>
 
-          </div>
+      <h3>Export Report</h3>
+
+      <p>
+        Download today's visits as CSV.
+      </p>
+
+    </div>
+
+  </div>
+
+</div>
      
      {/* ACTION BUTTONS */}
 
