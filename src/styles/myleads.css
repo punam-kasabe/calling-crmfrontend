@@ -81,27 +81,27 @@
 }
 
 .stats-card.new {
-  border-left: 5px solid #0d6efd;
+  border-left: 5px solid #ffffff;
 }
 
 .stats-card.interested {
-  border-left: 5px solid #20c997;
+  border-left: 5px solid #ffffff;
 }
 
 .stats-card.booked {
-  border-left: 5px solid #198754;
+  border-left: 5px solid #ffffff;
 }
 
 .stats-card.followup {
-  border-left: 5px solid orange;
+  border-left: 5px solid rgb(255, 255, 255);
 }
 
 .stats-card.not {
-  border-left: 5px solid red;
+  border-left: 5px solid rgb(255, 255, 255);
 }
 
 .stats-card.sitevisit {
-  border-left: 5px solid purple;
+  border-left: 5px solid rgb(255, 255, 255);
 }
 
 /* ===============================
