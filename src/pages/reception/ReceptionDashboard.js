@@ -1,5 +1,6 @@
 import Sidebar from "../../components/Sidebar";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 import "../../styles/receptiondashboard.css";
@@ -7,6 +8,7 @@ import "../../styles/receptiondashboard.css";
 export default function ReceptionDashboard() {
 
   const [isOpen, setIsOpen] = useState(true);
+  const navigate = useNavigate();
 
   const [dashboard, setDashboard] = useState({
     totalVisits: 0,
@@ -47,6 +49,61 @@ export default function ReceptionDashboard() {
     }
 
   };
+  const exportTodayVisits = () => {
+
+  const csvRows = [];
+
+  csvRows.push([
+    "Client",
+    "Phone",
+    "Project",
+    "Manager",
+    "Visit Time",
+    "Status"
+  ]);
+
+  todayVisits.forEach((v) => {
+
+    csvRows.push([
+      v.clientName,
+      v.mobile,
+      v.project,
+      v.assigned_manager,
+      v.visitDate
+        ? new Date(v.visitDate).toLocaleString("en-IN")
+        : "-",
+      v.visitStatus
+    ]);
+
+  });
+
+  const csvContent =
+    "data:text/csv;charset=utf-8," +
+    csvRows
+      .map(e => e.join(","))
+      .join("\n");
+
+  const encodedUri =
+    encodeURI(csvContent);
+
+  const link =
+    document.createElement("a");
+
+  link.setAttribute(
+    "href",
+    encodedUri
+  );
+
+  link.setAttribute(
+    "download",
+    "Today_Visits.csv"
+  );
+
+  document.body.appendChild(link);
+
+  link.click();
+
+};
 
   return (
 
@@ -186,7 +243,47 @@ export default function ReceptionDashboard() {
             </div>
 
           </div>
+     
+     {/* ACTION BUTTONS */}
 
+<div className="action-toolbar">
+
+  <button
+    className="action-btn blue"
+    onClick={() => navigate("/create-visit")}
+  >
+    + New Visit
+  </button>
+
+  <button
+    className="action-btn green"
+    onClick={() => navigate("/visit-entries")}
+  >
+    View Visits
+  </button>
+
+  <button
+    className="action-btn orange"
+    onClick={exportTodayVisits}
+  >
+    Export CSV
+  </button>
+
+  <div className="calendar-box">
+
+    <label>
+
+      Select Date
+
+    </label>
+
+    <input
+      type="date"
+    />
+
+  </div>
+
+</div>
 
 {/* TODAY'S VISITS */}
 
