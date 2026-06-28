@@ -294,23 +294,7 @@ export default function ReceptionDashboard() {
 
 </div>
 
-          {/* WELCOME */}
-
-          <div className="welcome-box">
-
-            <h2>
-              Welcome 👋
-            </h2>
-
-            <p>
-
-              Use the sidebar to manage site visits, assign managers,
-              check today's appointments and maintain visitor records.
-
-            </p>
-
-          </div>
-
+          
         </div>
 
       </div>
