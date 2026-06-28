@@ -232,14 +232,7 @@ export default function ReceptionDashboard() {
 
               <td>{index + 1}</td>
 
-             <td>{visit.name || "-"}</td>
-
-<td>{visit.phone || "-"}</td>
-
-<td>{visit.project || "-"}</td>
-
-<td>{visit.assigned_to || "-"}</td>
-
+             
 <td>
   {visit.clientName}
 </td>
