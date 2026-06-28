@@ -125,6 +125,14 @@ export default function App() {
           }
         />
 
+          <Route
+  path="/admin/reception-entries"
+  element={
+    <ProtectedRoute>
+      <ReceptionEntries />
+    </ProtectedRoute>
+  }
+/>
          <Route
          path="/reports/new-leads"
         element={<NewLeads />}

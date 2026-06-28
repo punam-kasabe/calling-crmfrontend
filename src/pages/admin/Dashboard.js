@@ -333,7 +333,7 @@ else if (item.title === "Not Interested") {
   navigate("/reports/status/not-interested");
 }
 else if (item.title === "Reception Entries") {
-  navigate("/visit-entries");
+  navigate("/admin/reception-entries");
 }
 
 }}
