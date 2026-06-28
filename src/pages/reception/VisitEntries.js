@@ -73,6 +73,7 @@ export default function VisitEntries() {
 
                 <th>Manager</th>
                 <th>Calling By</th>
+                <th>Remark</th>
                 <th>Date</th>
 
               </tr>
@@ -100,12 +101,34 @@ export default function VisitEntries() {
                     </td>
 
                     <td>
-                      {v.visitStatus}
-                    </td>
+  <span
+    className={`status ${
+      v.visitStatus === "IN_OFFICE"
+        ? "inoffice"
+        : v.visitStatus === "VISIT_DONE"
+        ? "done"
+        : v.visitStatus === "FOLLOWUP"
+        ? "follow"
+        : "booked"
+    }`}
+  >
+    {v.visitStatus}
+  </span>
+</td>
 
-                    <td>
-                      {v.bookingStatus}
-                    </td>
+                  <td>
+  <span
+    className={`booking ${
+      v.bookingStatus === "PENDING"
+        ? "pending"
+        : v.bookingStatus === "BOOKED"
+        ? "booked"
+        : "notbooked"
+    }`}
+  >
+    {v.bookingStatus}
+  </span>
+</td>
 
                     <td>
 
@@ -119,7 +142,9 @@ export default function VisitEntries() {
     : v.calling_by || "-"}
 </td>
 
-
+<td className="remark-cell">
+  {v.remark || "-"}
+</td>
                     <td>
 
                       {new Date(
@@ -136,7 +161,7 @@ export default function VisitEntries() {
 
                 <tr>
                   <td
-                    colSpan="8"
+                    colSpan="9"
                     style={{
                       textAlign: "center"
                     }}
