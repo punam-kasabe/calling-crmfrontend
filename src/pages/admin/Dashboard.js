@@ -61,7 +61,8 @@ export default function Dashboard() {
     sources: [],
     revenue: [],
     activities: [],
-    weekly: []
+    weekly: [],
+    todayVisitList: []
   });
 
   /* =========================================
@@ -678,6 +679,106 @@ else if (item.title === "Not Interested") {
 
             </div>
 
+              {/* =========================================
+   TODAY'S VISITS
+========================================= */}
+
+<div className="chart-card mt-4">
+
+  <h5>Today's Visits</h5>
+
+  <div className="table-responsive">
+
+    <table className="table table-bordered">
+
+      <thead>
+
+        <tr>
+
+          <th>Sr No</th>
+
+          <th>Client</th>
+
+          <th>Mobile</th>
+
+          <th>Project</th>
+
+          <th>Manager</th>
+
+          <th>Visit Date</th>
+
+          <th>Status</th>
+
+        </tr>
+
+      </thead>
+
+      <tbody>
+
+        {dashboard.todayVisitList?.length > 0 ? (
+
+          dashboard.todayVisitList.map((visit, index) => (
+
+            <tr key={visit._id}>
+
+              <td>{index + 1}</td>
+
+              <td>{visit.clientName}</td>
+
+              <td>{visit.mobile}</td>
+
+              <td>{visit.project}</td>
+
+              <td>{visit.assigned_manager || "-"}</td>
+
+              <td>
+
+                {visit.visitDate
+                  ? new Date(
+                      visit.visitDate
+                    ).toLocaleString("en-IN")
+                  : "-"}
+
+              </td>
+
+              <td>
+
+                <span className="badge bg-success">
+
+                  {visit.visitStatus}
+
+                </span>
+
+              </td>
+
+            </tr>
+
+          ))
+
+        ) : (
+
+          <tr>
+
+            <td
+              colSpan="7"
+              align="center"
+            >
+
+              No Visits Today
+
+            </td>
+
+          </tr>
+
+        )}
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</div>
             {/* =========================================
                ROW 8 — RECENT ACTIVITIES
             ========================================= */}
