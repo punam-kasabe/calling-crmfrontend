@@ -9,7 +9,7 @@ import {
 import axios from "axios";
 
 import Sidebar from "../../components/Sidebar";
-
+import Select from "react-select";
 import "../../styles/assignedClients.css";
 export default function AssignedClients() {
 
@@ -24,11 +24,28 @@ export default function AssignedClients() {
   const [search,
     setSearch] =
     useState("");
+const [showFilters, setShowFilters] =
+  useState(false);
 
+const [filters, setFilters] =
+  useState({
+    status: [],
+    project: "",
+    createdFrom: "",
+    createdTo: ""
+  });
 const [currentPage, setCurrentPage] =
   useState(1);
 
 const leadsPerPage = 20;
+const statusOptions = [
+  { value: "New", label: "New" },
+  { value: "Interested", label: "Interested" },
+  { value: "Followup", label: "Followup" },
+  { value: "Site Visit", label: "Site Visit" },
+  { value: "Booked", label: "Booked" },
+  { value: "Not Interested", label: "Not Interested" }
+];
 
   const [selectedStatus,
     setSelectedStatus] =
@@ -121,50 +138,92 @@ const openEditModal = (client) => {
 
   }, [fetchClients]);
 
-  /* =========================================
-     SEARCH FILTER
-  ========================================= */
+ useEffect(() => {
 
-  useEffect(() => {
+  let filtered = [...clients];
 
-    const filtered =
-      clients.filter((client) => {
+  // SEARCH
+  if (search) {
 
-        const searchText =
-          search.toLowerCase();
+    const txt = search.toLowerCase();
 
-        return (
+    filtered = filtered.filter((c) =>
 
-          client.name
-            ?.toLowerCase()
-            .includes(searchText)
+      c.name?.toLowerCase().includes(txt) ||
 
-          ||
+      c.phone?.toLowerCase().includes(txt) ||
 
-          client.phone
-            ?.toLowerCase()
-            .includes(searchText)
+      c.project?.toLowerCase().includes(txt) ||
 
-          ||
+      c.status?.toLowerCase().includes(txt)
 
-          client.project
-            ?.toLowerCase()
-            .includes(searchText)
+    );
 
-          ||
+  }
 
-          client.status
-            ?.toLowerCase()
-            .includes(searchText)
+  // STATUS
+  if (filters.status.length) {
 
-        );
+    filtered = filtered.filter((c) =>
 
-      });
+      filters.status.some(
 
-    setFilteredClients(filtered);
-setCurrentPage(1);
-  }, [search, clients]);
+        (s) => s.value === c.status
 
+      )
+
+    );
+
+  }
+
+  // PROJECT
+  if (filters.project) {
+
+    filtered = filtered.filter(
+
+      (c) => c.project === filters.project
+
+    );
+
+  }
+
+  // CREATED FROM
+  if (filters.createdFrom) {
+
+    const from = new Date(filters.createdFrom);
+
+    filtered = filtered.filter(
+
+      (c) => new Date(c.createdAt) >= from
+
+    );
+
+  }
+
+  // CREATED TO
+  if (filters.createdTo) {
+
+    const to = new Date(filters.createdTo);
+
+    to.setHours(23,59,59,999);
+
+    filtered = filtered.filter(
+
+      (c) => new Date(c.createdAt) <= to
+
+    );
+
+  }
+
+  setFilteredClients(filtered);
+
+  setCurrentPage(1);
+
+}, [
+  clients,
+  search,
+  filters
+]);
   /* =========================================
    PAGINATION
 ========================================= */
@@ -187,6 +246,13 @@ const totalPages =
     leadsPerPage
   );
 
+  const projects = [
+  ...new Set(
+    clients
+      .map((c) => c.project)
+      .filter(Boolean)
+  )
+];
   /* =========================================
      SAVE STATUS
   ========================================= */
@@ -278,6 +344,95 @@ const totalPages =
 
           </div>
 
+       <button
+  className="btn btn-dark mb-3"
+  onClick={() =>
+    setShowFilters(!showFilters)
+  }
+>
+  Advanced Search
+</button>
+
+{showFilters && (
+
+<div className="filters-box">
+
+  <Select
+    isMulti
+    placeholder="Status"
+    options={statusOptions}
+    value={filters.status}
+    onChange={(value)=>
+      setFilters({
+        ...filters,
+        status:value
+      })
+    }
+  />
+
+  <select
+    value={filters.project}
+    onChange={(e)=>
+      setFilters({
+        ...filters,
+        project:e.target.value
+      })
+    }
+  >
+    <option value="">
+      All Projects
+    </option>
+
+    {projects.map((p)=>(
+      <option
+        key={p}
+        value={p}
+      >
+        {p}
+      </option>
+    ))}
+
+  </select>
+
+  <input
+    type="date"
+    value={filters.createdFrom}
+    onChange={(e)=>
+      setFilters({
+        ...filters,
+        createdFrom:e.target.value
+      })
+    }
+  />
+
+  <input
+    type="date"
+    value={filters.createdTo}
+    onChange={(e)=>
+      setFilters({
+        ...filters,
+        createdTo:e.target.value
+      })
+    }
+  />
+
+  <button
+    className="clear-btn"
+    onClick={()=>
+      setFilters({
+        status:[],
+        project:"",
+        createdFrom:"",
+        createdTo:""
+      })
+    }
+  >
+    Clear Filters
+  </button>
+
+</div>
+
+)}
           <div className="table-wrapper">
 
             <table className="table">
