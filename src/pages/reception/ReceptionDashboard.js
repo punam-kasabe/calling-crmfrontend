@@ -232,34 +232,43 @@ export default function ReceptionDashboard() {
 
               <td>{index + 1}</td>
 
-              <td>{visit.name}</td>
+             <td>{visit.name || "-"}</td>
 
-              <td>{visit.phone}</td>
+<td>{visit.phone || "-"}</td>
 
-              <td>{visit.project}</td>
+<td>{visit.project || "-"}</td>
 
-              <td>
+<td>{visit.assigned_to || "-"}</td>
 
-                {visit.assigned_to || "-"}
+<td>
+  {visit.clientName}
+</td>
 
-              </td>
+<td>
+  {visit.mobile}
+</td>
 
-              <td>
+<td>
+  {visit.project}
+</td>
 
-                {visit.visitTime || "-"}
+<td>
+  {visit.assigned_manager || "-"}
+</td>
 
-              </td>
+<td>
+  {
+    visit.visitDate
+      ? new Date(visit.visitDate).toLocaleString("en-IN")
+      : "-"
+  }
+</td>
 
-              <td>
-
-                <span className="visit-status">
-
-                  {visit.status}
-
-                </span>
-
-              </td>
-
+<td>
+  <span className="visit-status">
+    {visit.visitStatus}
+  </span>
+</td>
             </tr>
 
           ))
