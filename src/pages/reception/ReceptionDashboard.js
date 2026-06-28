@@ -15,6 +15,7 @@ export default function ReceptionDashboard() {
   });
 
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [todayVisits, setTodayVisits] = useState([]);
 
   useEffect(() => {
 
@@ -37,6 +38,7 @@ export default function ReceptionDashboard() {
       );
 
       setDashboard(res.data);
+      setTodayVisits(res.data.todayVisitList || []);
 
     } catch (err) {
 
@@ -184,6 +186,111 @@ export default function ReceptionDashboard() {
             </div>
 
           </div>
+
+
+{/* TODAY'S VISITS */}
+
+<div className="today-visits-section">
+
+  <h2>
+    Today's Visits
+  </h2>
+
+  <div className="table-responsive">
+
+    <table className="today-table">
+
+      <thead>
+
+        <tr>
+
+          <th>Sr No</th>
+
+          <th>Client</th>
+
+          <th>Phone</th>
+
+          <th>Project</th>
+
+          <th>Manager</th>
+
+          <th>Visit Time</th>
+
+          <th>Status</th>
+
+        </tr>
+
+      </thead>
+
+      <tbody>
+
+        {todayVisits.length > 0 ? (
+
+          todayVisits.map((visit, index) => (
+
+            <tr key={visit._id}>
+
+              <td>{index + 1}</td>
+
+              <td>{visit.name}</td>
+
+              <td>{visit.phone}</td>
+
+              <td>{visit.project}</td>
+
+              <td>
+
+                {visit.assigned_to || "-"}
+
+              </td>
+
+              <td>
+
+                {visit.visitTime || "-"}
+
+              </td>
+
+              <td>
+
+                <span className="visit-status">
+
+                  {visit.status}
+
+                </span>
+
+              </td>
+
+            </tr>
+
+          ))
+
+        ) : (
+
+          <tr>
+
+            <td
+              colSpan="7"
+              style={{
+                textAlign: "center",
+                padding: "20px"
+              }}
+            >
+
+              No Visits Today
+
+            </td>
+
+          </tr>
+
+        )}
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</div>
 
           {/* WELCOME */}
 

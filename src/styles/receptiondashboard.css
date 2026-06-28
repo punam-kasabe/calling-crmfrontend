@@ -155,3 +155,79 @@
     font-size: 36px;
   }
 }
+
+.today-visits-section{
+
+background:#fff;
+
+padding:20px;
+
+margin-top:30px;
+
+border-radius:12px;
+
+box-shadow:0 2px 10px rgba(0,0,0,.08);
+
+}
+
+.today-visits-section h2{
+
+margin-bottom:20px;
+
+}
+
+.table-responsive{
+
+overflow-x:auto;
+
+}
+
+.today-table{
+
+width:100%;
+
+border-collapse:collapse;
+
+}
+
+.today-table th{
+
+background:#0d6efd;
+
+color:#fff;
+
+padding:12px;
+
+text-align:left;
+
+}
+
+.today-table td{
+
+padding:12px;
+
+border-bottom:1px solid #eee;
+
+}
+
+.today-table tr:hover{
+
+background:#f7f7f7;
+
+}
+
+.visit-status{
+
+padding:5px 12px;
+
+background:#198754;
+
+color:#fff;
+
+border-radius:20px;
+
+font-size:13px;
+
+font-weight:600;
+
+}
