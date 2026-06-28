@@ -444,6 +444,7 @@ const totalPages =
                <th>Client Name</th>
                <th>Phone</th>
                <th>Project</th>
+               <th>Lead Date</th>
                <th>Status</th>
 <th>Remark</th>
 <th>Followup Date</th>
@@ -475,7 +476,12 @@ const totalPages =
                       <td>
                         {c.project}
                       </td>
-                     
+                      <td>
+  {c.createdAt
+    ? new Date(c.createdAt)
+        .toLocaleDateString("en-IN")
+    : "-"}
+</td>
                      
 {/* STATUS */}
 <td>
@@ -524,7 +530,7 @@ const totalPages =
                   <tr>
 
                     <td
-                      colSpan="9"
+                      colSpan="10"
                       className="no-data"
                     >
 
