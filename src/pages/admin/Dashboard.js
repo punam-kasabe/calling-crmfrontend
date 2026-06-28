@@ -62,7 +62,8 @@ export default function Dashboard() {
     revenue: [],
     activities: [],
     weekly: [],
-    todayVisitList: []
+    todayVisitList: [],
+    receptionEntries: 0
   });
 
   /* =========================================
@@ -289,8 +290,14 @@ export default function Dashboard() {
                   title: "Not Interested",
                   value: dashboard.not_interested,
                   cls: "card-red"
-                }
-
+                },
+                ,
+{
+  title: "Reception Entries",
+  value: dashboard.receptionEntries,
+  cls: "card-purple"
+}
+               
               ].map((item) => (
 
                 <div
@@ -324,6 +331,9 @@ else if (item.title === "Pending") {
 
 else if (item.title === "Not Interested") {
   navigate("/reports/status/not-interested");
+}
+else if (item.title === "Reception Entries") {
+  navigate("/visit-entries");
 }
 
 }}
@@ -776,9 +786,9 @@ else if (item.title === "Not Interested") {
 
     </table>
 
-  </div>
+         </div>
 
-</div>
+          </div>
             {/* =========================================
                ROW 8 — RECENT ACTIVITIES
             ========================================= */}
