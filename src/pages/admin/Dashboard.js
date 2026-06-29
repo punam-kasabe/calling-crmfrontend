@@ -291,7 +291,7 @@ export default function Dashboard() {
                   value: dashboard.not_interested,
                   cls: "card-red"
                 },
-                
+                ,
 {
   title: "Reception Entries",
   value: dashboard.receptionEntries,
@@ -333,7 +333,7 @@ else if (item.title === "Not Interested") {
   navigate("/reports/status/not-interested");
 }
 else if (item.title === "Reception Entries") {
-  navigate("/admin/reception-entries");
+  navigate("/visit-entries");
 }
 
 }}
