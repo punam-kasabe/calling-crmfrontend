@@ -291,7 +291,7 @@ export default function Dashboard() {
                   value: dashboard.not_interested,
                   cls: "card-red"
                 },
-                ,
+                
 {
   title: "Reception Entries",
   value: dashboard.receptionEntries,
