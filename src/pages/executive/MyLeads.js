@@ -338,7 +338,6 @@ const cityDropdownOptions = [
   /* ================= FETCH EXECUTIVES ================= */
 
 const fetchExecutives = async () => {
-
   try {
 
     const res = await axios.get(
@@ -352,7 +351,8 @@ const fetchExecutives = async () => {
       "sreeniwas@zaminwale.com",
       "harsh@zaminwale.com",
       "avdhut@zaminwale.com",
-      "chaitanya@zaminwale.com"
+      "chaitanya@zaminwale.com",
+       "yash@zaminwale.com"
     ].includes(
       u.email?.toLowerCase()
     )
@@ -1750,7 +1750,10 @@ if (
       "Chaitanya",
 
     "harsh@zaminwale.com":
-      "Harsh"
+      "Harsh",
+
+      "yash@zaminwale.com":
+      "Yash"
 
   };
 

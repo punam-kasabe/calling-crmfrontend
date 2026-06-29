@@ -9,10 +9,8 @@ import "../../styles/reception.css";
 export default function VisitEntries() {
 
 const [isOpen, setIsOpen] = useState(true);
-
 const [visits, setVisits] = useState([]);
 const [showEditModal, setShowEditModal] = useState(false);
-
 const [editVisit, setEditVisit] = useState({
   _id: "",
   clientName: "",
@@ -25,66 +23,42 @@ const [editVisit, setEditVisit] = useState({
 });
 
 //const navigate = useNavigate();
-
 const handleEdit = (visit) => {
-
   setEditVisit(visit);
-
   setShowEditModal(true);
-
 };
 
 useEffect(() => {
-
   fetchVisits();
-
 }, []);
 
 
  const updateVisit = async () => {
-
   try {
-
     await axios.put(
-
 `https://calling-crm-backend-7w52.onrender.com/api/update-visit/${editVisit._id}`,
 
 {
 
   clientName: editVisit.clientName,
-
   mobile: editVisit.mobile,
-
   project: editVisit.project,
-
   visitStatus: editVisit.visitStatus,
-
- bookingStatus: editVisit.bookingStatus,
-
-remark: editVisit.remark,
-
-attendedManager:
+  bookingStatus: editVisit.bookingStatus,
+  remark: editVisit.remark,
+  attendedManager:
   editVisit.attendedManager?._id ||
   editVisit.attendedManager
-
 }
-
 );
 
     alert("Visit Updated Successfully");
-
     setShowEditModal(false);
-
     fetchVisits();
-
   }
-
   catch (err) {
-
     console.log(err);
-
   }
-
 };
 
 const handleChange = (e) => {
@@ -144,6 +118,7 @@ const handleChange = (e) => {
                 <th>Client</th>
                 <th>Mobile</th>
                 <th>Project</th>
+                <th>Client Type</th>
                 <th>Visit Status</th>
                 <th>Booking</th>
                 <th>Manager</th>
@@ -175,7 +150,9 @@ const handleChange = (e) => {
                     <td>
                       {v.project}
                     </td>
-
+<td>
+  {v.clientType === "Old" ? "🟠 Old Client" : "🟢 New Client"}
+</td>
                     <td>
   <span
     className={`status ${

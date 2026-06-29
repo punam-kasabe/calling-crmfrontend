@@ -37,6 +37,7 @@ export default function CreateVisit() {
     calling_by: [],
     remark: "",
     status: "New",
+    clientType: "New",
     department: "",
     source: "",
     assigned_to: ""
@@ -134,7 +135,8 @@ export default function CreateVisit() {
         bookingStatus: "PENDING",
         calling_by: [],
         remark: "",
-        status: "New"
+        status: "New",
+        clientType: "NEW"
       });
 
     } catch (err) {
@@ -191,6 +193,23 @@ export default function CreateVisit() {
                   required
                 />
               </div>
+
+               {/* CLIENT TYPE */}
+
+<div className="form-group">
+
+  <label>Client Type</label>
+
+  <select
+    name="clientType"
+    value={form.clientType}
+    onChange={handleChange}
+  >
+    <option value="New">New Client</option>
+    <option value="Old">Old Client</option>
+  </select>
+
+</div>
 
               {/* PROJECT */}
               <div className="form-group">

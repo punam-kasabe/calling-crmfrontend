@@ -21,6 +21,7 @@ export default function ReceptionEntries() {
       const res = await axios.get(
   `${API}/api/manager/reception-entries`,
   {
+    
     params: {
       email: user?.email
     }
