@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import Sidebar from "../../components/Sidebar";
-import "../../styles/dashboard.css";
+import "../../styles/dailyreport.css";
 
 const API = "https://calling-crm-backend-7w52.onrender.com/api";
 
@@ -108,20 +108,22 @@ export default function DailyReport() {
         }`}
       >
 
-        <div className="dashboard-container">
+<div className="dashboard-container daily-report-page">
+          <h2 className="daily-report-title">
+Daily Work Report
+</h2>
 
-          <h2>
-            Daily Work Report
-          </h2>
+<p className="daily-report-subtitle">
+Submit today's work summary.
+</p>
 
           <br />
 
-          <div className="card p-4">
+       <div className="report-card">
 
-            <div className="row">
+            <div className="report-grid">
 
-              <div className="col-md-6 mb-3">
-
+<div className="form-group">
                 <label>Total Calls</label>
 
                 <input
@@ -134,7 +136,7 @@ export default function DailyReport() {
 
               </div>
 
-              <div className="col-md-6 mb-3">
+              <div className="form-group">
 
                 <label>Followups</label>
 
@@ -148,7 +150,7 @@ export default function DailyReport() {
 
               </div>
 
-              <div className="col-md-6 mb-3">
+             <div className="form-group">
 
                 <label>Interested Leads</label>
 
@@ -162,7 +164,7 @@ export default function DailyReport() {
 
               </div>
 
-              <div className="col-md-6 mb-3">
+              <div className="form-group">
 
                 <label>Site Visits</label>
 
@@ -176,7 +178,7 @@ export default function DailyReport() {
 
               </div>
 
-              <div className="col-md-6 mb-3">
+              <div className="form-group">
 
                 <label>Bookings</label>
 
@@ -190,7 +192,7 @@ export default function DailyReport() {
 
               </div>
 
-              <div className="col-md-12 mb-3">
+             <div className="form-group full-width">
 
                 <label>Pending Work</label>
 
@@ -204,7 +206,7 @@ export default function DailyReport() {
 
               </div>
 
-              <div className="col-md-12 mb-3">
+             <div className="form-group full-width">
 
                 <label>Tomorrow Plan</label>
 
@@ -218,7 +220,7 @@ export default function DailyReport() {
 
               </div>
 
-              <div className="col-md-12 mb-3">
+             <div className="form-group full-width">
 
                 <label>Remarks</label>
 
@@ -232,10 +234,10 @@ export default function DailyReport() {
 
               </div>
 
-              <div className="col-md-12">
+              <div className="full-width">
 
-                <button
-                  className="btn btn-primary"
+<button
+className="save-btn"
                   onClick={saveReport}
                 >
                   Save Report
