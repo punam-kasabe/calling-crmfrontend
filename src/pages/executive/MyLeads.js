@@ -352,7 +352,7 @@ const fetchExecutives = async () => {
       "harsh@zaminwale.com",
       "avdhut@zaminwale.com",
       "chaitanya@zaminwale.com",
-       "yash@zaminwale.com"
+      "yash@zaminwale.com"
     ].includes(
       u.email?.toLowerCase()
     )
