@@ -20,6 +20,7 @@ import ExecutiveDashboard from "./pages/executive/ExecutiveDashboard";
 import MyLeads from "./pages/executive/MyLeads";
 import ExecutiveReports from "./pages/executive/ExecutiveReports";
 import Followups from "./pages/executive/Followups";
+import DailyReport from "./pages/executive/DailyReport";
 
 /* 👨‍💻 MANAGER */
 import AssignedClients from "./pages/manager/AssignedClients";
@@ -57,9 +58,9 @@ import Settings from "./pages/Settings";
 import Upload from "./pages/Upload";
 import SVPDashboard from "./pages/SVPDashboard";
 import Users from "./pages/Users";
-
 import "bootstrap-icons/font/bootstrap-icons.css";
 import MobileBlock from "./components/MobileBlock";
+
 /* =========================================
    🔓 PUBLIC ROUTE
 ========================================= */
@@ -248,6 +249,15 @@ export default function App() {
            </ProtectedRoute>
           }
               />
+
+              <Route
+  path="/daily-report"
+  element={
+    <ProtectedRoute>
+      <DailyReport />
+    </ProtectedRoute>
+  }
+/>
         
         {/* MANAGER */}
         <Route

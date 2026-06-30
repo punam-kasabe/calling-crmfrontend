@@ -30,7 +30,6 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
   const [openSettings, setOpenSettings] = useState(false);
   const [openTelephony, setOpenTelephony] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
-
   const user = JSON.parse(localStorage.getItem("user")) || {};
   const role = user.role?.toLowerCase();
 
@@ -365,6 +364,23 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
 
   </>
 )}
+
+<li>
+  <Link
+    to="/daily-report"
+    className={
+      location.pathname === "/daily-report"
+        ? "active"
+        : ""
+    }
+  >
+    <ClipboardList size={18} />
+
+    <span className="text">
+      Daily Work Report
+    </span>
+  </Link>
+</li>
 
           {/* ================= ADMIN ================= */}
           {isAdmin && (
