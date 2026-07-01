@@ -251,25 +251,20 @@ export default function DailyReport() {
           <h3 className="mt-5">
             My Reports
           </h3>
+         <div className="report-card mt-4">
 
+         
           <div className="table-responsive">
 
-            <table className="table table-bordered table-striped">
+           <table className="table table-bordered table-striped">
 
-              <thead>
-<tr>
-  <th>Date</th>
-  <th>Time</th>
-  <th>Total Calls</th>
-  <th>Followups</th>
-  <th>Interested</th>
-  <th>Site Visits</th>
-  <th>Bookings</th>
-  <th>Pending Work</th>
-  <th>Tomorrow Plan</th>
-  <th>Remarks</th>
-  <th>Action</th>
-</tr>
+<thead>
+  <tr>
+    <th>Date</th>
+    <th>Total Calls</th>
+    <th>Interested</th>
+    <th>View</th>
+  </tr>
 </thead>
 
              <tbody>
@@ -277,7 +272,7 @@ export default function DailyReport() {
 {reports.length === 0 ? (
 
 <tr>
-<td colSpan="11" className="text-center">
+<td colSpan="4" className="text-center">
 No Reports Found
 </td>
 </tr>
@@ -292,39 +287,22 @@ reports.map((item) => (
 {new Date(item.createdAt).toLocaleDateString("en-GB")}
 </td>
 
-<td>
-{new Date(item.createdAt).toLocaleTimeString([], {
-hour: "2-digit",
-minute: "2-digit",
-})}
-</td>
-
 <td>{item.totalCalls}</td>
 
-<td>{item.followups}</td>
-
 <td>{item.interested}</td>
-
-<td>{item.siteVisits}</td>
-
-<td>{item.bookings}</td>
-
-<td>{item.pendingWork}</td>
-
-<td>{item.tomorrowPlan}</td>
-
-<td>{item.remarks}</td>
 
 <td>
 
 <button
-className="btn btn-info btn-sm"
-onClick={() => {
+className="view-btn"
+onClick={()=>{
 setSelectedReport(item);
 setShowModal(true);
 }}
 >
-<Eye size={16} />
+
+<Eye size={18}/>
+
 </button>
 
 </td>
@@ -336,12 +314,13 @@ setShowModal(true);
 )}
 
 </tbody>
+
             </table>
 
           </div>
 
         </div>
-
+</div>
       </div>
 
       {
@@ -375,61 +354,67 @@ setShowModal(true);
 
                 </div>
 
-                <div className="modal-body">
+              <div className="modal-body">
 
-                  <p>
-                    <b>Date :</b>{" "}
-                    {
-                      selectedReport?.createdAt
-                        ? new Date(
-                            selectedReport.createdAt
-                          ).toLocaleDateString()
-                        : ""
-                    }
-                  </p>
+<div className="report-details">
 
-                  <p>
-                    <b>Total Calls :</b>{" "}
-                    {selectedReport?.totalCalls}
-                  </p>
+<div className="detail-row">
+<span>Date</span>
+<strong>
+{new Date(selectedReport?.createdAt).toLocaleDateString("en-GB")}
+</strong>
+</div>
 
-                  <p>
-                    <b>Followups :</b>{" "}
-                    {selectedReport?.followups}
-                  </p>
+<div className="detail-row">
+<span>Time</span>
+<strong>
+{new Date(selectedReport?.createdAt).toLocaleTimeString()}
+</strong>
+</div>
 
-                  <p>
-                    <b>Interested :</b>{" "}
-                    {selectedReport?.interested}
-                  </p>
+<div className="detail-row">
+<span>Total Calls</span>
+<strong>{selectedReport?.totalCalls}</strong>
+</div>
 
-                  <p>
-                    <b>Site Visits :</b>{" "}
-                    {selectedReport?.siteVisits}
-                  </p>
+<div className="detail-row">
+<span>Followups</span>
+<strong>{selectedReport?.followups}</strong>
+</div>
 
-                  <p>
-                    <b>Bookings :</b>{" "}
-                    {selectedReport?.bookings}
-                  </p>
+<div className="detail-row">
+<span>Interested</span>
+<strong>{selectedReport?.interested}</strong>
+</div>
 
-                  <p>
-                    <b>Pending Work :</b>{" "}
-                    {selectedReport?.pendingWork}
-                  </p>
+<div className="detail-row">
+<span>Site Visits</span>
+<strong>{selectedReport?.siteVisits}</strong>
+</div>
 
-                  <p>
-                    <b>Tomorrow Plan :</b>{" "}
-                    {selectedReport?.tomorrowPlan}
-                  </p>
+<div className="detail-row">
+<span>Bookings</span>
+<strong>{selectedReport?.bookings}</strong>
+</div>
 
-                  <p>
-                    <b>Remarks :</b>{" "}
-                    {selectedReport?.remarks}
-                  </p>
+<div className="detail-row">
+<span>Pending Work</span>
+<p>{selectedReport?.pendingWork}</p>
+</div>
 
-                </div>
+<div className="detail-row">
+<span>Tomorrow Plan</span>
+<p>{selectedReport?.tomorrowPlan}</p>
+</div>
 
+<div className="detail-row">
+<span>Remarks</span>
+<p>{selectedReport?.remarks}</p>
+</div>
+
+</div>
+
+</div>
               </div>
 
             </div>
