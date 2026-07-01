@@ -255,84 +255,85 @@ export default function DailyReport() {
             <table className="table table-bordered table-striped">
 
               <thead>
+<tr>
+  <th>Date</th>
+  <th>Time</th>
+  <th>Total Calls</th>
+  <th>Followups</th>
+  <th>Interested</th>
+  <th>Site Visits</th>
+  <th>Bookings</th>
+  <th>Pending Work</th>
+  <th>Tomorrow Plan</th>
+  <th>Remarks</th>
+  <th>Action</th>
+</tr>
+</thead>
 
-                <tr>
+             <tbody>
 
-                  <th>Date</th>
-                  <th>Calls</th>
-                  <th>Interested</th>
-                  <th>Visits</th>
-                  <th>Bookings</th>
-                  <th>Remarks</th>
-                  <th>Action</th>
+{reports.length === 0 ? (
 
-                </tr>
+<tr>
+<td colSpan="11" className="text-center">
+No Reports Found
+</td>
+</tr>
 
-              </thead>
+) : (
 
-              <tbody>
+reports.map((item) => (
 
-                {
-                  reports.length === 0 ?
+<tr key={item._id}>
 
-                  <tr>
+<td>
+{new Date(item.createdAt).toLocaleDateString("en-GB")}
+</td>
 
-                    <td
-                      colSpan="7"
-                      className="text-center"
-                    >
-                      No Reports Found
-                    </td>
+<td>
+{new Date(item.createdAt).toLocaleTimeString([], {
+hour: "2-digit",
+minute: "2-digit",
+})}
+</td>
 
-                  </tr>
+<td>{item.totalCalls}</td>
 
-                  :
+<td>{item.followups}</td>
 
-                  reports.map((item) => (
+<td>{item.interested}</td>
 
-                    <tr key={item._id}>
+<td>{item.siteVisits}</td>
 
-                      <td>
-                        {new Date(item.createdAt).toLocaleDateString()}
-                      </td>
+<td>{item.bookings}</td>
 
-                      <td>{item.totalCalls}</td>
+<td>{item.pendingWork}</td>
 
-                      <td>{item.interested}</td>
+<td>{item.tomorrowPlan}</td>
 
-                      <td>{item.siteVisits}</td>
+<td>{item.remarks}</td>
 
-                      <td>{item.bookings}</td>
+<td>
 
-                      <td>{item.remarks}</td>
+<button
+className="btn btn-info btn-sm"
+onClick={() => {
+setSelectedReport(item);
+setShowModal(true);
+}}
+>
+<Eye size={16} />
+</button>
 
-                      <td>
+</td>
 
-                        <button
-                          className="btn btn-info btn-sm"
-                          onClick={() => {
+</tr>
 
-                            setSelectedReport(item);
+))
 
-                            setShowModal(true);
+)}
 
-                          }}
-                        >
-
-                          <Eye size={16} />
-
-                        </button>
-
-                      </td>
-
-                    </tr>
-
-                  ))
-
-                }
-
-              </tbody>
-
+</tbody>
             </table>
 
           </div>
