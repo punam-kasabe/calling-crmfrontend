@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import Sidebar from "../../components/Sidebar";
 import "../../styles/dailyreport.css";
@@ -36,23 +36,25 @@ export default function DailyReport() {
     });
   };
 
-  const fetchReports = async () => {
-    try {
+  const fetchReports = useCallback(async () => {
 
-      const res = await axios.get(
-        `${API}/daily-report/${user.email}`
-      );
+  try {
 
-      setReports(res.data);
+    const res = await axios.get(
+      `${API}/daily-report/${user.email}`
+    );
 
-    } catch (err) {
-      console.log(err);
-    }
-  };
+    setReports(res.data);
+
+  } catch (err) {
+    console.log(err);
+  }
+
+}, [user.email]);
 
   useEffect(() => {
-    fetchReports();
-  }, []);
+  fetchReports();
+}, [fetchReports]);
 
   const saveReport = async () => {
 
