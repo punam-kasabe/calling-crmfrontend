@@ -92,9 +92,11 @@ const handleChange = (e) => {
     }
 
   };
-  const searchVisit = async () => {
+ const searchVisit = async () => {
 
-  if (!searchMobile.trim()) {
+  const search = searchMobile.trim();
+
+  if (!search) {
     fetchVisits();
     return;
   }
@@ -102,7 +104,7 @@ const handleChange = (e) => {
   try {
 
     const res = await axios.get(
-      `https://calling-crm-backend-7w52.onrender.com/api/search-client/${searchMobile}`
+      `https://calling-crm-backend-7w52.onrender.com/api/search-client/${search}`
     );
 
     setVisits([res.data]);
@@ -134,11 +136,16 @@ const handleChange = (e) => {
           <div className="search-box">
 
   <input
-    type="text"
-    placeholder="Search Mobile Number"
-    value={searchMobile}
-    onChange={(e) => setSearchMobile(e.target.value)}
-  />
+  type="text"
+  placeholder="Search by Mobile or Client Name"
+  value={searchMobile}
+  onChange={(e) => setSearchMobile(e.target.value)}
+  onKeyDown={(e) => {
+    if (e.key === "Enter") {
+      searchVisit();
+    }
+  }}
+   />
 
   <button onClick={searchVisit}>
     Search
