@@ -10,6 +10,7 @@ export default function VisitEntries() {
 
 const [isOpen, setIsOpen] = useState(true);
 const [visits, setVisits] = useState([]);
+const [searchMobile, setSearchMobile] = useState("");
 const [showEditModal, setShowEditModal] = useState(false);
 const [editVisit, setEditVisit] = useState({
   _id: "",
@@ -91,6 +92,28 @@ const handleChange = (e) => {
     }
 
   };
+  const searchVisit = async () => {
+
+  if (!searchMobile.trim()) {
+    fetchVisits();
+    return;
+  }
+
+  try {
+
+    const res = await axios.get(
+      `https://calling-crm-backend-7w52.onrender.com/api/search-client/${searchMobile}`
+    );
+
+    setVisits([res.data]);
+
+  } catch {
+
+    alert("Client not found");
+
+  }
+
+};
 
   return (
 
@@ -108,6 +131,29 @@ const handleChange = (e) => {
         <div className="reception-page">
 
           <h1>Visit Entries</h1>
+          <div className="search-box">
+
+  <input
+    type="text"
+    placeholder="Search Mobile Number"
+    value={searchMobile}
+    onChange={(e) => setSearchMobile(e.target.value)}
+  />
+
+  <button onClick={searchVisit}>
+    Search
+  </button>
+
+  <button
+    onClick={() => {
+      setSearchMobile("");
+      fetchVisits();
+    }}
+  >
+    Reset
+  </button>
+
+</div>
 
           <table className="visit-table">
 
