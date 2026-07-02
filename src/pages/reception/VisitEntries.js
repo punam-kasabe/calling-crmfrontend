@@ -97,20 +97,30 @@ const handleChange = (e) => {
   const search = searchMobile.trim();
 
   if (!search) {
+
     fetchVisits();
+
     return;
+
   }
 
   try {
 
-   const res = await axios.get(
-  `https://calling-crm-backend-7w52.onrender.com/api/search-client-details/${search}`
-);
+    const res = await axios.get(
 
-setVisits(Array.isArray(res.data) ? res.data : [res.data]);
-  } catch {
+      `https://calling-crm-backend-7w52.onrender.com/api/search-lead/${search}`
 
-    alert("Client not found");
+    );
+
+    setVisits(res.data);
+
+  }
+
+  catch (err) {
+
+    console.log(err);
+
+    alert("Client Not Found");
 
   }
 
@@ -192,18 +202,20 @@ setVisits(Array.isArray(res.data) ? res.data : [res.data]);
                   <tr key={v._id}>
 
                     <td>
-                      {v.clientName}
+                      {v.clientName || v.name}
                     </td>
 
                     <td>
-                      {v.mobile}
+                      {v.mobile || v.phone}
                     </td>
 
                     <td>
                       {v.project}
                     </td>
 <td>
-  {v.clientType === "Old" ? "🟠 Old Client" : "🟢 New Client"}
+  {(v.clientType || "") === "Old"
+    ? "🟠 Old Client"
+    : "🟢 New Client"}
 </td>
                     <td>
   <span
@@ -217,7 +229,7 @@ setVisits(Array.isArray(res.data) ? res.data : [res.data]);
         : "booked"
     }`}
   >
-    {v.visitStatus}
+    {v.visitStatus || v.status}
   </span>
 </td>
 
@@ -230,34 +242,36 @@ setVisits(Array.isArray(res.data) ? res.data : [res.data]);
         ? "booked"
         : "notbooked"
     }`}
-  >
-    {v.bookingStatus}
-  </span>
-</td>
+            >
+             {v.bookingStatus || "-"}
+            </span>
+                </td>
 
                     <td>
 
-                      {v.attendedManager?.name || "-"}
+                  {v.attendedManager?.name || v.assigned_manager || "-"}
 
                     </td>
 
-                    <td>
-  {Array.isArray(v.calling_by)
-    ? v.calling_by.join(", ")
-    : v.calling_by || "-"}
-</td>
+                   <td>
 
-<td className="remark-cell">
-  {v.remark || "-"}
-</td>
+                {Array.isArray(v.calling_by)
+
+               ? v.calling_by.join(", ")
+
+           : v.assignedTo || v.calling_by || "-"}
+
+           </td>
+
+          <td className="remark-cell">
+           {v.remark || "-"}
+           </td>
                 
-                    <td>
-
-                      {new Date(
-                        v.createdAt
-                      ).toLocaleDateString()}
-
-                    </td>
+                  <td>
+  {v.createdAt || v.created_date
+    ? new Date(v.createdAt || v.created_date).toLocaleDateString()
+    : "-"}
+      </td>
 
      <td>
   <button
