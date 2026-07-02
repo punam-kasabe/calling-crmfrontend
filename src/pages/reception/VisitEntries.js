@@ -106,14 +106,13 @@ const handleChange = (e) => {
 
   try {
 
-    const res = await axios.get(
+   const res = await axios.get(
+  `https://calling-crm-backend-7w52.onrender.com/api/search-lead/${search}`
+);
 
-      `https://calling-crm-backend-7w52.onrender.com/api/search-lead/${search}`
+console.log(res.data);
 
-    );
-
-    setVisits(res.data);
-
+setVisits(res.data);
   }
 
   catch (err) {
