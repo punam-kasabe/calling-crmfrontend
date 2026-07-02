@@ -61,30 +61,54 @@ export default function SearchClient() {
 
           {client && (
 
-            <div className="client-card">
+           <div className="client-card">
 
-              <h3>{client.name}</h3>
+<h2>{client.name}</h2>
 
-              <p>
-                <strong>Phone:</strong>
-                {" "}
-                {client.phone}
-              </p>
+<p>
+<strong>📞 Mobile :</strong> {client.phone}
+</p>
 
-              <p>
-                <strong>Status:</strong>
-                {" "}
-                {client.status}
-              </p>
+<p>
+<strong>📧 Email :</strong> {client.email || "-"}
+</p>
 
-              <p>
-                <strong>Assigned To:</strong>
-                {" "}
-                {client.assigned_to}
-              </p>
+<p>
+<strong>🏢 Project :</strong> {client.project || "-"}
+</p>
 
-            </div>
+<p>
+<strong>📍 Location :</strong> {client.location || "-"}
+</p>
 
+<p>
+<strong>💰 Budget :</strong> {client.budget || "-"}
+</p>
+
+<p>
+<strong>📌 Source :</strong> {client.source || "-"}
+</p>
+
+<p>
+<strong>👤 Status :</strong> {client.status}
+</p>
+
+<p>
+<strong>👨‍💼 Assigned To :</strong> {client.assigned_to}
+</p>
+
+<p>
+<strong>📝 Remark :</strong> {client.remark || "-"}
+</p>
+
+<p>
+<strong>📅 Created :</strong>{" "}
+{client.createdAt
+  ? new Date(client.createdAt).toLocaleString()
+  : "-"}
+</p>
+
+</div>
           )}
 
         </div>
