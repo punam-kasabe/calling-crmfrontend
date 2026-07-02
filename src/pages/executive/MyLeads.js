@@ -195,6 +195,8 @@ const statusOptions = [
   "Negotiation",
   "Payment Pending",
   "Booked",
+  "Already Booked But 7/12 Pending",
+  "Documents Pending",
   "Other Property Booked",
   "Token Received",
   "Cancelled",
