@@ -4,7 +4,7 @@ import axios from "axios";
 
 import Sidebar from "../../components/Sidebar";
 
-import "../../styles/reception.css";
+import "../../styles/visitentries.css";
 
 export default function VisitEntries() {
 
@@ -171,69 +171,75 @@ const handleChange = (e) => {
         <div className="reception-page">
 
           <h1>Visit Entries</h1>
-          <div className="search-box">
+        <div className="search-area">
 
-  <input
-  type="text"
-  placeholder="Search by Mobile or Client Name"
-  value={searchMobile}
-  onChange={handleSearchChange}
-  onKeyDown={(e) => {
-    if (e.key === "Enter") {
-      searchVisit();
-    }
-  }}
-   />
+  <div className="search-box">
 
-{suggestions.length > 0 && (
+    <input
+      type="text"
+      placeholder="Search by Mobile or Client Name"
+      value={searchMobile}
+      onChange={handleSearchChange}
+      onKeyDown={(e) => {
+        if (e.key === "Enter") {
+          searchVisit();
+        }
+      }}
+    />
 
-<div className="search-suggestions">
+    {suggestions.length > 0 && (
 
-{suggestions.map((item)=>(
+      <div className="search-suggestions">
 
-<div
-key={item._id}
-className="suggestion-item"
-onClick={()=>{
-setSearchMobile(item.name);
-setSuggestions([]);
-searchVisit(item.name);
-}}
->
+        {suggestions.map((item) => (
 
-<div className="s-name">
-{item.name}
-</div>
+          <div
+            key={item._id}
+            className="suggestion-item"
+            onClick={() => {
+              setSearchMobile(item.name);
+              setSuggestions([]);
+              searchVisit(item.name);
+            }}
+          >
 
-<div className="s-phone">
-{item.phone}
-</div>
+            <div className="s-name">
+              {item.name}
+            </div>
 
-</div>
+            <div className="s-phone">
+              {item.phone}
+            </div>
 
-))}
+          </div>
 
-</div>
+        ))}
 
-)}
+      </div>
 
+    )}
 
-  <button onClick={searchVisit}>
+  </div>
+
+  <button
+    className="search-btn"
+    onClick={searchVisit}
+  >
     Search
   </button>
 
   <button
+    className="reset-btn"
     onClick={() => {
-  setSearchMobile("");
-  setSuggestions([]);
-  fetchVisits();
-}}
+      setSearchMobile("");
+      setSuggestions([]);
+      fetchVisits();
+    }}
   >
     Reset
   </button>
 
 </div>
-
           <table className="visit-table">
 
             <thead>
