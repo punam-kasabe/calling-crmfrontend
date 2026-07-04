@@ -11,6 +11,7 @@ export default function VisitEntries() {
 const [isOpen, setIsOpen] = useState(true);
 const [visits, setVisits] = useState([]);
 const [searchMobile, setSearchMobile] = useState("");
+const [suggestions, setSuggestions] = useState([]);
 const [showEditModal, setShowEditModal] = useState(false);
 const [editVisit, setEditVisit] = useState({
   _id: "",
@@ -92,13 +93,16 @@ const handleChange = (e) => {
     }
 
   };
- const searchVisit = async () => {
 
-  const search = searchMobile.trim();
+  const handleSearchChange = async (e) => {
 
-  if (!search) {
+  const value = e.target.value;
 
-    fetchVisits();
+  setSearchMobile(value);
+
+  if (value.trim().length < 2) {
+
+    setSuggestions([]);
 
     return;
 
@@ -106,19 +110,45 @@ const handleChange = (e) => {
 
   try {
 
-   const res = await axios.get(
-  `https://calling-crm-backend-7w52.onrender.com/api/search-lead/${search}`
-);
+    const res = await axios.get(
 
-console.log(res.data);
+`https://calling-crm-backend-7w52.onrender.com/api/search-suggestions/${value}`
 
-setVisits(res.data);
+    );
+
+    setSuggestions(res.data);
+
   }
 
   catch (err) {
 
     console.log(err);
 
+  }
+
+};
+ const searchVisit = async (value = "") => {
+
+  const search = (value || searchMobile).trim();
+
+  if (!search) {
+    fetchVisits();
+    return;
+  }
+
+  try {
+
+    const res = await axios.get(
+      `https://calling-crm-backend-7w52.onrender.com/api/search-client-details/${search}`
+    );
+
+    setVisits([res.data]);
+    setSuggestions([]);
+    setSearchMobile(res.data.clientName);
+
+  } catch (err) {
+
+    console.log(err);
     alert("Client Not Found");
 
   }
@@ -147,7 +177,7 @@ setVisits(res.data);
   type="text"
   placeholder="Search by Mobile or Client Name"
   value={searchMobile}
-  onChange={(e) => setSearchMobile(e.target.value)}
+  onChange={handleSearchChange}
   onKeyDown={(e) => {
     if (e.key === "Enter") {
       searchVisit();
@@ -155,15 +185,49 @@ setVisits(res.data);
   }}
    />
 
+{suggestions.length > 0 && (
+
+<div className="search-suggestions">
+
+{suggestions.map((item)=>(
+
+<div
+key={item._id}
+className="suggestion-item"
+onClick={()=>{
+setSearchMobile(item.name);
+setSuggestions([]);
+searchVisit(item.name);
+}}
+>
+
+<div className="s-name">
+{item.name}
+</div>
+
+<div className="s-phone">
+{item.phone}
+</div>
+
+</div>
+
+))}
+
+</div>
+
+)}
+
+
   <button onClick={searchVisit}>
     Search
   </button>
 
   <button
     onClick={() => {
-      setSearchMobile("");
-      fetchVisits();
-    }}
+  setSearchMobile("");
+  setSuggestions([]);
+  fetchVisits();
+}}
   >
     Reset
   </button>
@@ -343,7 +407,7 @@ setVisits(res.data);
   />
 
 </div>
-
+ 
     <select
       name="visitStatus"
       value={editVisit.visitStatus}
