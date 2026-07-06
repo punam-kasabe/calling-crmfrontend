@@ -24,7 +24,11 @@ export default function CreateVisit() {
     "Rakhi",
     "Harsh",
     "Patham",
-    "Siddhesh"
+    "Siddhesh",
+    "Harsh",
+    "Yash",
+    "Chaitanya",
+    "Avdhut",
   ];
 
   const [form, setForm] = useState({
@@ -112,17 +116,24 @@ export default function CreateVisit() {
     setLoading(true);
 
     try {
-      const selectedManager = managers.find(
-        (m) => m._id === form.attendedManager
-      );
+     const selectedManager = managers.find(
+  (m) => m._id === form.attendedManager
+);
 
-      await axios.post(
-        "https://calling-crm-backend-7w52.onrender.com/api/create-visit",
-        {
-          ...form,
-          assigned_manager: selectedManager?.email || ""
-        }
-      );
+await axios.post(
+  "https://calling-crm-backend-7w52.onrender.com/api/create-visit",
+  {
+    ...form,
+
+    assigned_manager: selectedManager
+      ? selectedManager.email
+      : form.attendedManager, // Fixed names साठी
+
+    attendedManager: selectedManager
+      ? selectedManager._id
+      : form.attendedManager
+  }
+);
 
       alert("Visit Created Successfully ✅");
 
@@ -297,31 +308,63 @@ export default function CreateVisit() {
               <div className="form-group">
                 <label>Visit Status</label>
                 <select
-                  name="visitStatus"
-                  value={form.visitStatus}
-                  onChange={handleChange}
-                >
-                  <option value="IN_OFFICE">In Office</option>
-                  <option value="VISIT_DONE">Site Visit Done</option>
-                  <option value="VISIT_PENDING">Site Visit Pending</option>
-                  <option value="BOOKED">Booked</option>
-                  <option value="FOLLOWUP">Followup</option>
-                  <option value="NOT_BOOKED">Not Booked</option>
-                </select>
+  name="visitStatus"
+  value={form.visitStatus}
+  onChange={handleChange}
+>
+
+  <option value="IN_OFFICE">In Office</option>
+
+  <option value="VISIT_PENDING">Site Visit Pending</option>
+
+  <option value="VISIT_DONE">Site Visit Done</option>
+
+  <option value="DECISION_PENDING">Decision Pending</option>
+
+
+  <option value="FOLLOWUP">Follow Up</option>
+
+  <option value="BOOKED">Booked</option>
+
+  <option value="NOT_BOOKED">Not Booked</option>
+
+  <option value="CANCELLED">Cancelled</option>
+
+
+</select>
               </div>
 
               {/* BOOKING STATUS */}
               <div className="form-group">
                 <label>Booking Status</label>
                 <select
-                  name="bookingStatus"
-                  value={form.bookingStatus}
-                  onChange={handleChange}
-                >
-                  <option value="PENDING">Site visit Pending</option>
-                  <option value="BOOKED">Booked</option>
-                  <option value="NOT_BOOKED">Not Booked</option>
-                </select>
+  name="bookingStatus"
+  value={form.bookingStatus}
+  onChange={handleChange}
+>
+
+  <option value="PENDING">Pending</option>
+
+  <option value="DECISION_PENDING">Decision Pending</option>
+
+  <option value="NEGOTIATION">Negotiation</option>
+
+  <option value="BOOKED">Booked</option>
+
+  <option value="TOKEN_RECEIVED">Token Received</option>
+
+  <option value="LOAN_PROCESS">Loan Process</option>
+
+  <option value="REGISTRATION_PENDING">Registration Pending</option>
+
+  <option value="REGISTERED">Registered</option>
+
+  <option value="NOT_BOOKED">Not Booked</option>
+
+  <option value="CANCELLED">Cancelled</option>
+
+</select>
+
               </div>
 
                {/* 🔥 CALLING BY DROPDOWN */}
@@ -420,22 +463,35 @@ export default function CreateVisit() {
               </div>
 
               {/* MANAGER */}
-              <div className="form-group">
-                <label>Assign Manager</label>
-                <select
-                  name="attendedManager"
-                  value={form.attendedManager}
-                  onChange={handleChange}
-                  required
-                >
-                  <option value="">Select Manager</option>
-                  {managers.map((m) => (
-                    <option key={m._id} value={m._id}>
-                      {m.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
+<div className="form-group">
+  <label>Assign Manager</label>
+
+  <select
+    name="attendedManager"
+    value={form.attendedManager}
+    onChange={handleChange}
+    required
+  >
+    <option value="">Select Manager</option>
+
+    {/* Database Managers */}
+    {managers.map((m) => (
+      <option key={m._id} value={m._id}>
+        {m.name}
+      </option>
+    ))}
+
+    {/* Fixed Managers / Executives */}
+    <option value="Chaitanya">Chaitanya</option>
+    <option value="Siddhesh">Siddhesh</option>
+    <option value="Yash">Yash</option>
+    <option value="Harsh">Harsh</option>
+    <option value="Aasma Ma'am">Aasma Ma'am</option>
+    <option value="Nilesh Sir">Nilesh Sir</option>
+
+  </select>
+</div>
+
 
               <button
                 type="submit"
