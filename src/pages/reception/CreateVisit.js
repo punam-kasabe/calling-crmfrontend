@@ -298,35 +298,73 @@ export default function CreateVisit() {
   </select>
 </div>
               {/* VISIT STATUS */}
-              <div className="form-group">
-                <label>Visit Status</label>
-                <select
-                  name="visitStatus"
-                  value={form.visitStatus}
-                  onChange={handleChange}
-                >
-                  <option value="IN_OFFICE">In Office</option>
-                  <option value="VISIT_DONE">Site Visit Done</option>
-                  <option value="VISIT_PENDING">Site Visit Pending</option>
-                  <option value="BOOKED">Booked</option>
-                  <option value="FOLLOWUP">Followup</option>
-                  <option value="NOT_BOOKED">Not Booked</option>
-                </select>
-              </div>
+<div className="form-group">
+  <label>Visit Status</label>
+
+  <select
+    name="visitStatus"
+    value={form.visitStatus}
+    onChange={handleChange}
+  >
+    <option value="IN_OFFICE">In Office</option>
+
+    <option value="VISIT_PENDING">Site Visit Pending</option>
+
+    <option value="VISIT_DONE">Site Visit Done</option>
+
+    <option value="FOLLOWUP">Follow Up</option>
+
+    <option value="DECISION_PENDING">Decision Pending</option>
+
+    <option value="NEGOTIATION">Negotiation</option>
+
+    <option value="BOOKED">Booked</option>
+
+    <option value="TOKEN_RECEIVED">Token Received</option>
+
+    <option value="LOAN_PROCESS">Loan Process</option>
+
+    <option value="REGISTRATION_PENDING">Registration Pending</option>
+
+    <option value="REGISTERED">Registered</option>
+
+    <option value="NOT_BOOKED">Not Booked</option>
+
+    <option value="CANCELLED">Cancelled</option>
+  </select>
+</div>
+
 
               {/* BOOKING STATUS */}
-              <div className="form-group">
-                <label>Booking Status</label>
-                <select
-                  name="bookingStatus"
-                  value={form.bookingStatus}
-                  onChange={handleChange}
-                >
-                  <option value="PENDING">Site visit Pending</option>
-                  <option value="BOOKED">Booked</option>
-                  <option value="NOT_BOOKED">Not Booked</option>
-                </select>
-              </div>
+<div className="form-group">
+  <label>Booking Status</label>
+
+  <select
+    name="bookingStatus"
+    value={form.bookingStatus}
+    onChange={handleChange}
+  >
+    <option value="PENDING">Pending</option>
+
+    <option value="DECISION_PENDING">Decision Pending</option>
+
+    <option value="NEGOTIATION">Negotiation</option>
+
+    <option value="BOOKED">Booked</option>
+
+    <option value="TOKEN_RECEIVED">Token Received</option>
+
+    <option value="LOAN_PROCESS">Loan Process</option>
+
+    <option value="REGISTRATION_PENDING">Registration Pending</option>
+
+    <option value="REGISTERED">Registered</option>
+
+    <option value="NOT_BOOKED">Not Booked</option>
+
+    <option value="CANCELLED">Cancelled</option>
+  </select>
+</div>
 
                {/* 🔥 CALLING BY DROPDOWN */}
               <div className="form-group">
