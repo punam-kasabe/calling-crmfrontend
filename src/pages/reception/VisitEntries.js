@@ -139,21 +139,21 @@ const handleChange = (e) => {
   try {
 
     const res = await axios.get(
-      `https://calling-crm-backend-7w52.onrender.com/api/search-client-details/${search}`
+      `https://calling-crm-backend-7w52.onrender.com/api/search-client-details/${encodeURIComponent(search)}`
     );
 
     setVisits([res.data]);
     setSuggestions([]);
-    setSearchMobile(res.data.clientName);
 
   } catch (err) {
 
-    console.log(err);
     alert("Client Not Found");
 
   }
 
 };
+
+
 
   return (
 
@@ -197,10 +197,10 @@ const handleChange = (e) => {
             key={item._id}
             className="suggestion-item"
             onClick={() => {
-              setSearchMobile(item.name);
-              setSuggestions([]);
-              searchVisit(item.name);
-            }}
+  setSearchMobile(item.name);
+  setSuggestions([]);
+  searchVisit(item.phone || item.name);
+}}
           >
 
             <div className="s-name">
