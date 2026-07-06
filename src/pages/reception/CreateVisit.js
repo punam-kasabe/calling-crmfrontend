@@ -116,24 +116,17 @@ export default function CreateVisit() {
     setLoading(true);
 
     try {
-     const selectedManager = managers.find(
-  (m) => m._id === form.attendedManager
-);
+      const selectedManager = managers.find(
+        (m) => m._id === form.attendedManager
+      );
 
-await axios.post(
-  "https://calling-crm-backend-7w52.onrender.com/api/create-visit",
-  {
-    ...form,
-
-    assigned_manager: selectedManager
-      ? selectedManager.email
-      : form.attendedManager, // Fixed names साठी
-
-    attendedManager: selectedManager
-      ? selectedManager._id
-      : form.attendedManager
-  }
-);
+      await axios.post(
+        "https://calling-crm-backend-7w52.onrender.com/api/create-visit",
+        {
+          ...form,
+          assigned_manager: selectedManager?.email || ""
+        }
+      );
 
       alert("Visit Created Successfully ✅");
 
