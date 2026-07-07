@@ -583,7 +583,7 @@ color:"#888"
                   name="attendedManager"
                   value={form.attendedManager}
                   onChange={handleChange}
-                  required
+                  
                 >
                   <option value="">Select Manager</option>
                   {managers.map((m) => (

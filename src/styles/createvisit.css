@@ -1,192 +1,326 @@
-/* FILE: src/styles/createvisit.css */
+/* ===========================
+   PAGE
+=========================== */
 
-.create-visit-page {
-  min-height: 100vh;
-  padding: 40px;
-  background: #f4f7fc;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
+.create-visit-page{
+    padding:30px;
+    background:#f4f7fb;
+    min-height:100vh;
 }
 
-.create-visit-card {
-  width: 100%;
-  max-width: 700px;
-  background: #ffffff;
-  border-radius: 20px;
-  padding: 35px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+.create-visit-card{
+    background:#fff;
+    max-width:1200px;
+    margin:auto;
+    border-radius:15px;
+    box-shadow:0 8px 25px rgba(0,0,0,.08);
+    padding:35px;
 }
 
-.visit-header {
-  margin-bottom: 30px;
+/* ===========================
+   HEADER
+=========================== */
+
+.visit-header{
+    margin-bottom:30px;
+    border-bottom:1px solid #eee;
+    padding-bottom:20px;
 }
 
-.visit-header h1 {
-  font-size: 32px;
-  font-weight: 700;
-  color: #111827;
-  margin-bottom: 8px;
+.visit-header h1{
+    margin:0;
+    font-size:28px;
+    color:#1f2937;
 }
 
-.visit-header p {
-  color: #6b7280;
-  font-size: 15px;
+.visit-header p{
+    margin-top:8px;
+    color:#6b7280;
 }
 
-.create-visit-form {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 22px;
+/* ===========================
+   FORM
+=========================== */
+
+.create-visit-form{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+    gap:22px;
 }
 
-.form-group {
-  display: flex;
-  flex-direction: column;
-  position: relative;
+.form-group{
+    display:flex;
+    flex-direction:column;
 }
 
-.form-group label {
-  margin-bottom: 8px;
-  font-size: 14px;
-  font-weight: 600;
-  color: #374151;
+.form-group label{
+    margin-bottom:8px;
+    font-size:14px;
+    font-weight:600;
+    color:#374151;
 }
 
-/* INPUTS */
 .form-group input,
 .form-group select,
-.form-group textarea {
-  border: 1px solid #d1d5db;
-  border-radius: 12px;
-  padding: 0 16px;
-  font-size: 15px;
-  background: #fff;
-  transition: 0.3s;
+.form-group textarea{
+
+    width:100%;
+    padding:12px 15px;
+    border:1px solid #d1d5db;
+    border-radius:10px;
+    font-size:15px;
+    background:#fff;
+    transition:.25s;
+
 }
 
-/* HEIGHT */
-.form-group input,
-.form-group select {
-  height: 52px;
-}
-
-/* TEXTAREA */
-.form-group textarea {
-  min-height: 100px;
-  padding: 12px 16px;
-  resize: vertical;
-}
-
-/* FOCUS */
 .form-group input:focus,
 .form-group select:focus,
-.form-group textarea:focus {
-  outline: none;
-  border-color: #2563eb;
-  box-shadow: 0 0 0 4px rgba(37,99,235,0.12);
+.form-group textarea:focus{
+
+    outline:none;
+    border-color:#2563eb;
+    box-shadow:0 0 0 4px rgba(37,99,235,.12);
+
 }
 
-/* ================= MULTI SELECT DROPDOWN ================= */
+.form-group textarea{
 
-.multi-select {
-  position: relative;
+    resize:vertical;
+    min-height:110px;
+
 }
 
-/* SELECT BOX */
-.select-box {
-  height: 52px;
-  border: 1px solid #d1d5db;
-  border-radius: 12px;
-  padding: 0 16px;
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  background: #fff;
-  font-size: 14px;
-  color: #374151;
+/* ===========================
+   MULTI SELECT
+=========================== */
+
+.multi-select{
+
+    position:relative;
+
 }
 
-.select-box:hover {
-  border-color: #2563eb;
+.select-box{
+
+    min-height:48px;
+
+    border:1px solid #d1d5db;
+
+    border-radius:10px;
+
+    background:white;
+
+    display:flex;
+
+    align-items:center;
+
+    padding:12px 15px;
+
+    cursor:pointer;
+
+    transition:.25s;
+
 }
 
-/* DROPDOWN */
-.dropdown-list {
-  position: absolute;
-  top: 60px;
-  left: 0;
-  width: 100%;
-  background: #fff;
-  border: 1px solid #d1d5db;
-  border-radius: 12px;
-  max-height: 220px;
-  overflow-y: auto;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-  z-index: 100;
+.select-box:hover{
+
+    border-color:#2563eb;
+
 }
 
-/* ITEM */
-.dropdown-item {
-  padding: 10px 15px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-  font-size: 14px;
-  color: #374151;
+.dropdown-list{
+
+    position:absolute;
+
+    width:100%;
+
+    margin-top:6px;
+
+    background:white;
+
+    border:1px solid #ddd;
+
+    border-radius:10px;
+
+    box-shadow:0 10px 25px rgba(0,0,0,.15);
+
+    max-height:260px;
+
+    overflow-y:auto;
+
+    z-index:999;
+
 }
 
-.dropdown-item:hover {
-  background: #f3f4f6;
+.dropdown-item{
+
+    display:flex;
+
+    align-items:center;
+
+    padding:12px 14px;
+
+    cursor:pointer;
+
+    transition:.2s;
+
+    font-size:14px;
+
 }
 
-/* CHECKBOX */
-.dropdown-item input {
-  accent-color: #2563eb;
-  cursor: pointer;
+.dropdown-item:hover{
+
+    background:#eff6ff;
+
 }
 
-/* ================= BUTTON ================= */
-.save-btn {
-  grid-column: span 2;
-  height: 55px;
-  border: none;
-  border-radius: 14px;
-  background: linear-gradient(
-    135deg,
-    #2563eb,
-    #1d4ed8
-  );
-  color: white;
-  font-size: 16px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: 0.3s;
+.dropdown-item input{
+
+    margin-right:10px;
+
+    width:17px;
+
+    height:17px;
+
 }
 
-.save-btn:hover {
-  transform: translateY(-2px);
+/* Scroll */
+
+.dropdown-list::-webkit-scrollbar{
+
+    width:7px;
+
 }
 
-.save-btn:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
+.dropdown-list::-webkit-scrollbar-thumb{
+
+    background:#bdbdbd;
+
+    border-radius:20px;
+
 }
 
-/* ================= RESPONSIVE ================= */
-@media (max-width: 768px) {
+/* ===========================
+   BUTTON
+=========================== */
 
-  .create-visit-form {
-    grid-template-columns: 1fr;
-  }
+.save-btn{
 
-  .save-btn {
-    grid-column: span 1;
-  }
+    grid-column:1/-1;
 
-  .create-visit-page {
-    padding: 20px;
-  }
+    background:#2563eb;
+
+    color:white;
+
+    border:none;
+
+    padding:14px;
+
+    font-size:17px;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+    font-weight:600;
+
+}
+
+.save-btn:hover{
+
+    background:#1d4ed8;
+
+}
+
+.save-btn:disabled{
+
+    background:#9ca3af;
+
+    cursor:not-allowed;
+
+}
+
+/* ===========================
+   MAIN CONTENT
+=========================== */
+
+.main-content{
+
+    transition:.3s;
+
+    padding-top:70px;
+
+}
+
+.main-content.shifted{
+
+    margin-left:250px;
+
+}
+
+.main-content.full{
+
+    margin-left:80px;
+
+}
+
+/* ===========================
+   RESPONSIVE
+=========================== */
+
+@media(max-width:992px){
+
+.create-visit-form{
+
+grid-template-columns:1fr;
+
+}
+
+.main-content.shifted{
+
+margin-left:0;
+
+}
+
+.main-content.full{
+
+margin-left:0;
+
+}
+
+.create-visit-page{
+
+padding:15px;
+
+}
+
+.create-visit-card{
+
+padding:20px;
+
+}
+
+}
+
+/* ===========================
+   NICE BADGES INSIDE DROPDOWN
+=========================== */
+
+.dropdown-item span{
+
+    margin-left:auto;
+
+    font-size:12px;
+
+    color:#666;
+
+    background:#f3f4f6;
+
+    padding:3px 8px;
+
+    border-radius:20px;
 
 }
