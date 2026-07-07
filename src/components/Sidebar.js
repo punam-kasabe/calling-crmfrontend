@@ -365,22 +365,24 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
   </>
 )}
 
-<li>
-  <Link
-    to="/daily-report"
-    className={
-      location.pathname === "/daily-report"
-        ? "active"
-        : ""
-    }
-  >
-    <ClipboardList size={18} />
+{!isAdmin && (
+  <li>
+    <Link
+      to="/daily-report"
+      className={
+        location.pathname === "/daily-report"
+          ? "active"
+          : ""
+      }
+    >
+      <ClipboardList size={18} />
 
-    <span className="text">
-      Daily Work Report
-    </span>
-  </Link>
-</li>
+      <span className="text">
+        Daily Work Report
+      </span>
+    </Link>
+  </li>
+)}
 
           {/* ================= ADMIN ================= */}
           {isAdmin && (
