@@ -13,7 +13,7 @@ const [visits, setVisits] = useState([]);
 const [searchMobile, setSearchMobile] = useState("");
 const [suggestions, setSuggestions] = useState([]);
 const [showEditModal, setShowEditModal] = useState(false);
-const [users, setUsers] = useState([]);s
+const [users, setUsers] = useState([]);
 const [editVisit, setEditVisit] = useState({
   _id: "",
   clientName: "",
