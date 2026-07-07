@@ -85,6 +85,7 @@ const handleChange = (e) => {
   });
 
 };
+
   const fetchVisits = async () => {
 
     try {
@@ -186,11 +187,7 @@ const handleChange = (e) => {
   }
 
 };
-
-
-
   return (
-
     <div className="layout">
 
       <Sidebar
