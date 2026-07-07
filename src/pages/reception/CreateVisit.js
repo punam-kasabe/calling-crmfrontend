@@ -188,15 +188,14 @@ export default function CreateVisit() {
 
               {/* MOBILE */}
               <div className="form-group">
-                <label>Mobile Number</label>
-                <input
-                  type="text"
-                  name="mobile"
-                  value={form.mobile}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
+  <label>Mobile Number</label>
+  <input
+    type="text"
+    name="mobile"
+    value={form.mobile}
+    onChange={handleChange}
+  />
+</div>
 
                {/* CLIENT TYPE */}
 
@@ -365,6 +364,7 @@ export default function CreateVisit() {
     <option value="CANCELLED">Cancelled</option>
   </select>
 </div>
+
 
                {/* 🔥 CALLING BY DROPDOWN */}
               <div className="form-group">

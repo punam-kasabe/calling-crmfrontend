@@ -13,11 +13,17 @@ const [visits, setVisits] = useState([]);
 const [searchMobile, setSearchMobile] = useState("");
 const [suggestions, setSuggestions] = useState([]);
 const [showEditModal, setShowEditModal] = useState(false);
+const [users, setUsers] = useState([]);s
 const [editVisit, setEditVisit] = useState({
   _id: "",
   clientName: "",
   mobile: "",
   project: "",
+  clientType: "New",
+  department: "",
+  source: "",
+  status: "New",
+  assigned_to: "",
   attendedManager: null,
   visitStatus: "",
   bookingStatus: "",
@@ -32,6 +38,7 @@ const handleEdit = (visit) => {
 
 useEffect(() => {
   fetchVisits();
+  fetchUsers();
 }, []);
 
 
@@ -41,16 +48,20 @@ useEffect(() => {
 `https://calling-crm-backend-7w52.onrender.com/api/update-visit/${editVisit._id}`,
 
 {
-
   clientName: editVisit.clientName,
   mobile: editVisit.mobile,
   project: editVisit.project,
+  clientType: editVisit.clientType,
+  department: editVisit.department,
+  source: editVisit.source,
+  status: editVisit.status,
+  assigned_to: editVisit.assigned_to,
   visitStatus: editVisit.visitStatus,
   bookingStatus: editVisit.bookingStatus,
   remark: editVisit.remark,
   attendedManager:
-  editVisit.attendedManager?._id ||
-  editVisit.attendedManager
+    editVisit.attendedManager?._id ||
+    editVisit.attendedManager
 }
 );
 
@@ -384,57 +395,243 @@ const handleChange = (e) => {
     <h2>Edit Visit</h2>
 
     <input
-      name="clientName"
-      value={editVisit.clientName}
-      onChange={handleChange}
-      placeholder="Client Name"
-    />
+  value={editVisit.clientName}
+  readOnly
+/>
 
-    <input
-      name="mobile"
-      value={editVisit.mobile}
-      onChange={handleChange}
-      placeholder="Mobile"
-    />
+<input
+  value={editVisit.mobile}
+  readOnly
+/>
 
-    <input
-      name="project"
-      value={editVisit.project}
-      onChange={handleChange}
-      placeholder="Project"
-    />
+    <div className="form-group">
+  <label>Project</label>
+
+  <select
+    name="project"
+    value={editVisit.project}
+    onChange={handleChange}
+  >
+    <option value="99villa">99villa</option>
+    <option value="Karjat">Karjat</option>
+    <option value="Alibaug Plot">Alibaug</option>
+    <option value="Pen">Pen</option>
+    <option value="MahaMumbai">MahaMumbai</option>
+  </select>
+</div>
+
+    <div className="form-group">
+
+<label>Client Type</label>
+
+<select
+  name="clientType"
+  value={editVisit.clientType || "New"}
+  onChange={handleChange}
+>
+
+  <option value="New">New Client</option>
+  <option value="Old">Old Client</option>
+</select>
+
+</div>
+
     <div className="form-group">
 
   <label>Assigned Manager</label>
 
-  <input
-    value={editVisit.attendedManager?.name || "-"}
-    readOnly
-  />
+  <select
+name="attendedManager"
+value={
+editVisit.attendedManager?._id ||
+editVisit.attendedManager
+}
+onChange={handleChange}
+>
+
+<option value="">
+Select Manager
+</option>
+
+{users
+.filter(
+u =>
+u.role==="manager" ||
+u.role==="executive"
+)
+.map((u)=>(
+<option
+key={u._id}
+value={u._id}
+>
+{u.name}
+</option>
+))}
+
+</select>
+
+</div>
+
+<div className="form-group">
+
+<label>Department</label>
+
+<select
+name="department"
+value={editVisit.department || ""}
+onChange={handleChange}
+>
+
+<option value="">Select Department</option>
+
+<option value="Sales & Marketing">Sales & Marketing</option>
+
+<option value="HR/Admin">HR/Admin</option>
+
+<option value="TeleCaller">TeleCaller</option>
+
+<option value="Aasma Ma'am">Aasma Ma'am</option>
+
+<option value="Nilesh Sir">Nilesh Sir</option>
+
+</select>
+
+</div>
+
+<div className="form-group">
+
+<label>Source</label>
+
+<select
+  name="source"
+  value={editVisit.source || ""}
+  onChange={handleChange}
+>
+
+<option value="">Select Source</option>
+
+<option value="Facebook">Facebook</option>
+<option value="Instagram">Instagram</option>
+<option value="Google Ads">Google Ads</option>
+<option value="99acres">99acres</option>
+<option value="MagicBricks">MagicBricks</option>
+<option value="Housing">Housing</option>
+<option value="Website">Website</option>
+<option value="WhatsApp">WhatsApp</option>
+<option value="JustDial">JustDial</option>
+<option value="Reference">Reference</option>
+<option value="Hoarding">Hoarding</option>
+<option value="Newspaper">Newspaper</option>
+<option value="Walk-In">Walk-In</option>
+<option value="Call Center">Call Center</option>
+<option value="Property Expo">Property Expo</option>
+<option value="YouTube">YouTube</option>
+
+</select>
 
 </div>
  
-    <select
-      name="visitStatus"
-      value={editVisit.visitStatus}
-      onChange={handleChange}
+<div className="form-group">
+
+<label>Assign To</label>
+
+<select
+  name="assigned_to"
+  value={editVisit.assigned_to || ""}
+  onChange={handleChange}
+>
+
+<option value="">Select Executive</option>
+
+{users
+  .filter((u) => u.role === "executive")
+  .map((u) => (
+    <option
+      key={u._id}
+      value={u.email}
     >
-      <option value="IN_OFFICE">IN_OFFICE</option>
-      <option value="VISIT_DONE">VISIT_DONE</option>
-      <option value="FOLLOWUP">FOLLOWUP</option>
-      <option value="BOOKED">BOOKED</option>
-      <option value="NOT_BOOKED">NOT_BOOKED</option>
-    </select>
+      {u.name}
+    </option>
+))}
+
+</select>
+
+</div>
+
+<div className="form-group">
+
+<label>Lead Status</label>
+
+<select
+  name="status"
+  value={editVisit.status || "New"}
+  onChange={handleChange}
+>
+
+<option value="New">New</option>
+<option value="Fresh">Fresh</option>
+<option value="Interested">Interested</option>
+<option value="Followup">Followup</option>
+<option value="Not Interested">Not Interested</option>
+<option value="Visit Done">Visit Done</option>
+<option value="Booked">Booked</option>
+
+</select>
+
+</div>
+
+   <select
+name="visitStatus"
+value={editVisit.visitStatus}
+onChange={handleChange}
+>
+
+<option value="IN_OFFICE">In Office</option>
+
+<option value="VISIT_PENDING">Site Visit Pending</option>
+
+<option value="VISIT_DONE">Site Visit Done</option>
+
+<option value="DECISION_PENDING">Decision Pending</option>
+
+<option value="FOLLOWUP">Follow Up</option>
+
+<option value="BOOKED">Booked</option>
+
+<option value="NOT_BOOKED">Not Booked</option>
+
+<option value="CANCELLED">Cancelled</option>
+
+</select>
+
 
     <select
-      name="bookingStatus"
-      value={editVisit.bookingStatus}
-      onChange={handleChange}
-    >
-      <option value="PENDING">PENDING</option>
-      <option value="BOOKED">BOOKED</option>
-      <option value="NOT_BOOKED">NOT_BOOKED</option>
-    </select>
+name="bookingStatus"
+value={editVisit.bookingStatus}
+onChange={handleChange}
+>
+
+<option value="PENDING">Pending</option>
+
+<option value="DECISION_PENDING">Decision Pending</option>
+
+<option value="NEGOTIATION">Negotiation</option>
+
+<option value="BOOKED">Booked</option>
+
+<option value="TOKEN_RECEIVED">Token Received</option>
+
+<option value="LOAN_PROCESS">Loan Process</option>
+
+<option value="REGISTRATION_PENDING">Registration Pending</option>
+
+<option value="REGISTERED">Registered</option>
+
+<option value="NOT_BOOKED">Not Booked</option>
+
+<option value="CANCELLED">Cancelled</option>
+
+</select>
 
    <textarea
   name="remark"
