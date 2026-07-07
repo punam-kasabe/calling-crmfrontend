@@ -105,6 +105,29 @@ const handleChange = (e) => {
 
   };
 
+  const fetchUsers = async () => {
+
+  try {
+
+    const res = await axios.get(
+      "https://calling-crm-backend-7w52.onrender.com/api/all-users",
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`
+        }
+      }
+    );
+
+    setUsers(res.data || []);
+
+  } catch (err) {
+
+    console.log(err);
+
+  }
+
+};
+
   const handleSearchChange = async (e) => {
 
   const value = e.target.value;
