@@ -1,6 +1,6 @@
 // FILE: src/pages/reception/CreateVisit.jsx
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 
 import Sidebar from "../../components/Sidebar";
@@ -14,7 +14,8 @@ export default function CreateVisit() {
   const [users, setUsers] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false); // 🔥 NEW
   const [showAttendDropdown, setShowAttendDropdown] = useState(false);
-
+  const callingRef = useRef(null);
+  const attendRef = useRef(null);
   // 🔥 STATIC EXECUTIVE LIST
   const executivesList = [
     "Vrushali",
@@ -53,6 +54,41 @@ export default function CreateVisit() {
   fetchManagers();
   fetchUsers();
 }, []);
+
+useEffect(() => {
+
+  const handleClickOutside = (event) => {
+
+    if (
+      callingRef.current &&
+      !callingRef.current.contains(event.target)
+    ) {
+      setShowDropdown(false);
+    }
+
+    if (
+      attendRef.current &&
+      !attendRef.current.contains(event.target)
+    ) {
+      setShowAttendDropdown(false);
+    }
+
+  };
+
+  document.addEventListener(
+    "mousedown",
+    handleClickOutside
+  );
+
+  return () => {
+    document.removeEventListener(
+      "mousedown",
+      handleClickOutside
+    );
+  };
+
+}, []);
+
 
   const fetchUsers = async () => {
   try {
@@ -386,11 +422,19 @@ assigned_to:""
               <div className="form-group">
                 <label>Calling By</label>
 
-                <div className="multi-select">
+               <div
+  className="multi-select"
+  ref={callingRef}
+>
 
                   <div
                     className="select-box"
-                    onClick={() => setShowDropdown(!showDropdown)}
+                 onClick={() => {
+  setShowDropdown(!showDropdown);
+  setShowAttendDropdown(false);
+}}
+
+
                   >
                     {form.calling_by.length > 0
                       ? form.calling_by.join(", ")
@@ -470,13 +514,18 @@ assigned_to:""
 
 <label>Attended By</label>
 
-<div className="multi-select">
+<div
+  className="multi-select"
+  ref={attendRef}
+>
+
 
 <div
 className="select-box"
-onClick={() =>
-setShowAttendDropdown(!showAttendDropdown)
-}
+onClick={() => {
+  setShowAttendDropdown(!showAttendDropdown);
+  setShowDropdown(false);
+}}
 >
 
 {form.attended_by.length > 0
