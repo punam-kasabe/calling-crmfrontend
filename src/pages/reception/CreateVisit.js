@@ -13,6 +13,7 @@ export default function CreateVisit() {
   const [managers, setManagers] = useState([]);
   const [users, setUsers] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false); // 🔥 NEW
+  const [showAttendDropdown, setShowAttendDropdown] = useState(false);
 
   // 🔥 STATIC EXECUTIVE LIST
   const executivesList = [
@@ -39,6 +40,7 @@ export default function CreateVisit() {
     visitStatus: "IN_OFFICE",
     bookingStatus: "PENDING",
     calling_by: [],
+    attended_by: [],
     remark: "",
     status: "New",
     clientType: "New",
@@ -131,17 +133,31 @@ export default function CreateVisit() {
       alert("Visit Created Successfully ✅");
 
       setForm({
-        clientName: "",
-        mobile: "",
-        project: "",
-        attendedManager: "",
-        visitStatus: "IN_OFFICE",
-        bookingStatus: "PENDING",
-        calling_by: [],
-        remark: "",
-        status: "New",
-        clientType: "NEW"
-      });
+
+clientName:"",
+mobile:"",
+project:"",
+attendedManager:"",
+visitStatus:"IN_OFFICE",
+bookingStatus:"PENDING",
+
+calling_by:[],
+
+attended_by:[],
+
+remark:"",
+
+status:"New",
+
+clientType:"New",
+
+department:"",
+
+source:"",
+
+assigned_to:""
+
+});
 
     } catch (err) {
       console.log(err);
@@ -221,7 +237,7 @@ export default function CreateVisit() {
                   name="project"
                   value={form.project}
                   onChange={handleChange}
-                  required
+                  
                 >
                   <option value="">Select Project</option>
                   <option value="99villa">99villa</option>
@@ -450,6 +466,105 @@ export default function CreateVisit() {
   </select>
 </div>
              
+             <div className="form-group">
+
+<label>Attended By</label>
+
+<div className="multi-select">
+
+<div
+className="select-box"
+onClick={() =>
+setShowAttendDropdown(!showAttendDropdown)
+}
+>
+
+{form.attended_by.length > 0
+? form.attended_by.join(", ")
+: "Select Attended Users"}
+
+</div>
+
+{showAttendDropdown && (
+
+<div className="dropdown-list">
+
+{users.map((u) => (
+
+<label
+key={u._id}
+className="dropdown-item"
+>
+
+<input
+type="checkbox"
+
+checked={form.attended_by.includes(u.name)}
+
+onChange={() => {
+
+const exists =
+form.attended_by.includes(u.name);
+
+if (exists) {
+
+setForm({
+
+...form,
+
+attended_by:
+form.attended_by.filter(
+x => x !== u.name
+)
+
+});
+
+}
+
+else {
+
+setForm({
+
+...form,
+
+attended_by:[
+...form.attended_by,
+u.name
+]
+
+});
+
+}
+
+}}
+
+ />
+
+{u.name}
+
+<span
+style={{
+marginLeft:6,
+fontSize:12,
+color:"#888"
+}}
+>
+
+({u.role})
+
+</span>
+
+</label>
+
+))}
+
+</div>
+
+)}
+
+</div>
+
+</div>
 
               {/* REMARK */}
               <div className="form-group">
