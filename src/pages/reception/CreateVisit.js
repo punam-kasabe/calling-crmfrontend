@@ -169,29 +169,22 @@ useEffect(() => {
 
       alert("Visit Created Successfully ✅");
 
-      setForm({
+     setForm({
 
 clientName:"",
 mobile:"",
 project:"",
+visitDate:"",
 attendedManager:"",
 visitStatus:"IN_OFFICE",
 bookingStatus:"PENDING",
-
 calling_by:[],
-
 attended_by:[],
-
 remark:"",
-
 status:"New",
-
 clientType:"New",
-
 department:"",
-
 source:"",
-
 assigned_to:""
 
 });
@@ -287,9 +280,7 @@ assigned_to:""
 
 
               <div className="form-group">
-  <label>Department</label>
-
-<div className="form-group">
+                <div className="form-group">
 
   <label>Visit Date</label>
 
@@ -300,7 +291,10 @@ assigned_to:""
     onChange={handleChange}
   />
 
-</div>
+ </div>
+  <label>Department</label>
+
+  
   <select
     name="department"
     value={form.department}

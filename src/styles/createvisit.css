@@ -1,20 +1,21 @@
 /* ===========================
-   PAGE
+   CREATE VISIT PAGE
 =========================== */
 
 .create-visit-page{
-    padding:30px;
+    width:100%;
+    padding:25px;
     background:#f4f7fb;
     min-height:100vh;
 }
 
 .create-visit-card{
-    background:#fff;
     max-width:1200px;
     margin:auto;
-    border-radius:15px;
-    box-shadow:0 8px 25px rgba(0,0,0,.08);
-    padding:35px;
+    background:#fff;
+    border-radius:12px;
+    padding:30px;
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
 }
 
 /* ===========================
@@ -23,41 +24,41 @@
 
 .visit-header{
     margin-bottom:30px;
-    border-bottom:1px solid #eee;
-    padding-bottom:20px;
+    text-align:center;
 }
 
 .visit-header h1{
-    margin:0;
-    font-size:28px;
-    color:#1f2937;
+    font-size:30px;
+    color:#0d6efd;
+    margin-bottom:5px;
 }
 
 .visit-header p{
-    margin-top:8px;
-    color:#6b7280;
+    color:#666;
+    font-size:15px;
 }
 
 /* ===========================
-   FORM
+   FORM GRID
 =========================== */
 
 .create-visit-form{
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+    grid-template-columns:repeat(2,1fr);
     gap:22px;
 }
 
 .form-group{
     display:flex;
     flex-direction:column;
+    position:relative;
 }
 
 .form-group label{
     margin-bottom:8px;
     font-size:14px;
     font-weight:600;
-    color:#374151;
+    color:#444;
 }
 
 .form-group input,
@@ -65,29 +66,36 @@
 .form-group textarea{
 
     width:100%;
-    padding:12px 15px;
-    border:1px solid #d1d5db;
-    border-radius:10px;
-    font-size:15px;
-    background:#fff;
+    padding:12px 14px;
+    border:1px solid #d9d9d9;
+    border-radius:8px;
+    outline:none;
+    font-size:14px;
     transition:.25s;
+    background:#fff;
+}
 
+.form-group textarea{
+    resize:vertical;
+    min-height:110px;
 }
 
 .form-group input:focus,
 .form-group select:focus,
 .form-group textarea:focus{
 
-    outline:none;
-    border-color:#2563eb;
-    box-shadow:0 0 0 4px rgba(37,99,235,.12);
+    border-color:#0d6efd;
+    box-shadow:0 0 0 3px rgba(13,110,253,.15);
 
 }
 
-.form-group textarea{
+/* ===========================
+   DATE
+=========================== */
 
-    resize:vertical;
-    min-height:110px;
+input[type="date"]{
+
+    cursor:pointer;
 
 }
 
@@ -98,54 +106,50 @@
 .multi-select{
 
     position:relative;
+    width:100%;
 
 }
 
 .select-box{
 
-    min-height:48px;
-
-    border:1px solid #d1d5db;
-
-    border-radius:10px;
-
-    background:white;
-
-    display:flex;
-
-    align-items:center;
-
-    padding:12px 15px;
-
+    border:1px solid #d9d9d9;
+    padding:12px 14px;
+    border-radius:8px;
+    background:#fff;
     cursor:pointer;
-
+    min-height:46px;
+    display:flex;
+    align-items:center;
     transition:.25s;
 
 }
 
 .select-box:hover{
 
-    border-color:#2563eb;
+    border-color:#0d6efd;
 
 }
+
+/* ===========================
+   DROPDOWN
+=========================== */
 
 .dropdown-list{
 
     position:absolute;
+    left:0;
+    right:0;
+    top:105%;
 
-    width:100%;
-
-    margin-top:6px;
-
-    background:white;
+    background:#fff;
 
     border:1px solid #ddd;
 
-    border-radius:10px;
+    border-radius:8px;
 
-    box-shadow:0 10px 25px rgba(0,0,0,.15);
+    box-shadow:0 10px 20px rgba(0,0,0,.12);
 
-    max-height:260px;
+    max-height:230px;
 
     overflow-y:auto;
 
@@ -156,10 +160,11 @@
 .dropdown-item{
 
     display:flex;
-
     align-items:center;
 
-    padding:12px 14px;
+    gap:10px;
+
+    padding:10px 15px;
 
     cursor:pointer;
 
@@ -171,17 +176,15 @@
 
 .dropdown-item:hover{
 
-    background:#eff6ff;
+    background:#f1f6ff;
 
 }
 
 .dropdown-item input{
 
-    margin-right:10px;
-
     width:17px;
-
     height:17px;
+    cursor:pointer;
 
 }
 
@@ -195,9 +198,14 @@
 
 .dropdown-list::-webkit-scrollbar-thumb{
 
-    background:#bdbdbd;
+    background:#0d6efd;
+    border-radius:10px;
 
-    border-radius:20px;
+}
+
+.dropdown-list::-webkit-scrollbar-track{
+
+    background:#eee;
 
 }
 
@@ -209,61 +217,36 @@
 
     grid-column:1/-1;
 
-    background:#2563eb;
-
-    color:white;
+    padding:14px;
 
     border:none;
 
-    padding:14px;
+    border-radius:8px;
 
-    font-size:17px;
+    background:#0d6efd;
 
-    border-radius:10px;
+    color:#fff;
+
+    font-size:16px;
+
+    font-weight:600;
 
     cursor:pointer;
 
     transition:.3s;
 
-    font-weight:600;
-
 }
 
 .save-btn:hover{
 
-    background:#1d4ed8;
+    background:#0958d9;
 
 }
 
 .save-btn:disabled{
 
-    background:#9ca3af;
-
+    opacity:.7;
     cursor:not-allowed;
-
-}
-
-/* ===========================
-   MAIN CONTENT
-=========================== */
-
-.main-content{
-
-    transition:.3s;
-
-    padding-top:70px;
-
-}
-
-.main-content.shifted{
-
-    margin-left:250px;
-
-}
-
-.main-content.full{
-
-    margin-left:80px;
 
 }
 
@@ -279,17 +262,9 @@ grid-template-columns:1fr;
 
 }
 
-.main-content.shifted{
-
-margin-left:0;
-
 }
 
-.main-content.full{
-
-margin-left:0;
-
-}
+@media(max-width:768px){
 
 .create-visit-page{
 
@@ -303,24 +278,39 @@ padding:20px;
 
 }
 
+.visit-header h1{
+
+font-size:24px;
+
 }
 
-/* ===========================
-   NICE BADGES INSIDE DROPDOWN
-=========================== */
+}
 
-.dropdown-item span{
+@media(max-width:480px){
 
-    margin-left:auto;
+.create-visit-card{
 
-    font-size:12px;
+padding:15px;
 
-    color:#666;
+}
 
-    background:#f3f4f6;
+.form-group input,
+.form-group select,
+.form-group textarea,
+.select-box{
 
-    padding:3px 8px;
+font-size:13px;
 
-    border-radius:20px;
+padding:10px;
+
+}
+
+.save-btn{
+
+font-size:14px;
+
+padding:12px;
+
+}
 
 }
