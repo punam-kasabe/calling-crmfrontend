@@ -33,7 +33,16 @@ const [editVisit, setEditVisit] = useState({
 
 //const navigate = useNavigate();
 const handleEdit = (visit) => {
-  setEditVisit(visit);
+  setEditVisit({
+    ...visit,
+
+    visitDate: visit.visitDate
+      ? new Date(visit.visitDate)
+          .toISOString()
+          .split("T")[0]
+      : ""
+  });
+
   setShowEditModal(true);
 };
 
@@ -66,7 +75,6 @@ useEffect(() => {
     editVisit.attendedManager
 }
 );
-
     alert("Visit Updated Successfully");
     setShowEditModal(false);
     fetchVisits();
@@ -467,6 +475,16 @@ const handleChange = (e) => {
 
 </div>
 
+<div className="form-group">
+  <label>Visit Date</label>
+
+  <input
+    type="date"
+    name="visitDate"
+    value={editVisit.visitDate || ""}
+    onChange={handleChange}
+  />
+</div>
     <div className="form-group">
 
   <label>Assigned Manager</label>
