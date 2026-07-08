@@ -37,6 +37,7 @@ export default function CreateVisit() {
     clientName: "",
     mobile: "",
     project: "",
+    visitDate: "",
     attendedManager: "",
     visitStatus: "IN_OFFICE",
     bookingStatus: "PENDING",
@@ -288,6 +289,18 @@ assigned_to:""
               <div className="form-group">
   <label>Department</label>
 
+<div className="form-group">
+
+  <label>Visit Date</label>
+
+  <input
+    type="date"
+    name="visitDate"
+    value={form.visitDate}
+    onChange={handleChange}
+  />
+
+</div>
   <select
     name="department"
     value={form.department}
