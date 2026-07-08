@@ -19,6 +19,7 @@ const [editVisit, setEditVisit] = useState({
   clientName: "",
   mobile: "",
   project: "",
+  visitDate: "",   
   clientType: "New",
   department: "",
   source: "",
@@ -51,6 +52,7 @@ useEffect(() => {
   clientName: editVisit.clientName,
   mobile: editVisit.mobile,
   project: editVisit.project,
+  visitDate: editVisit.visitDate,
   clientType: editVisit.clientType,
   department: editVisit.department,
   source: editVisit.source,
@@ -374,6 +376,7 @@ const handleChange = (e) => {
     ? new Date(v.visitDate).toLocaleDateString("en-GB")
     : "-"}
 </td>
+
 
 <td>
   {v.createdAt || v.created_date
