@@ -224,12 +224,11 @@ assigned_to:""
               <div className="form-group">
                 <label>Client Name</label>
                 <input
-                  type="text"
-                  name="clientName"
-                  value={form.clientName}
-                  onChange={handleChange}
-                  required
-                />
+  type="text"
+  name="clientName"
+  value={form.clientName}
+  onChange={handleChange}
+/>
               </div>
 
               {/* MOBILE */}
