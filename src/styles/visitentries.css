@@ -1,519 +1,227 @@
 /* ==========================================
-   PAGE
-========================================== */
-
-.reception-page {
-    padding: 25px;
-    width: 100%;
-}
-
-.reception-page h1 {
-    margin-bottom: 20px;
-    font-size: 38px;
-    font-weight: 700;
-    color: #222;
-}
-
-
-/* ==========================================
-   SEARCH AREA
-========================================== */
-
-.search-area {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    margin-bottom: 25px;
-    position: relative;
-    flex-wrap: wrap;
-}
-
-.search-box {
-    position: relative;
-    width: 340px;
-}
-
-.search-box input {
-    width: 100%;
-    height: 46px;
-    padding: 0 14px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    outline: none;
-    font-size: 14px;
-    background: #fff;
-    transition: .3s;
-    box-sizing: border-box;
-}
-
-.search-box input:focus {
-    border-color: #6c4cff;
-    box-shadow: 0 0 6px rgba(108,76,255,.25);
-}
-
-
-/* ==========================================
-   BUTTONS
-========================================== */
-
-.search-btn,
-.reset-btn {
-
-    height: 46px;
-    padding: 0 24px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 600;
-    color: white;
-    transition: .3s;
-}
-
-.search-btn {
-    background: #6c4cff;
-}
-
-.search-btn:hover {
-    background: #5638e8;
-}
-
-.reset-btn {
-    background: #ff5252;
-}
-
-.reset-btn:hover {
-    background: #e53935;
-}
-
-
-/* ==========================================
-   SEARCH DROPDOWN
-========================================== */
-
-.search-suggestions {
-
-    position: absolute;
-
-    top: calc(100% + 5px);
-
-    left: 0;
-
-    width: 100%;
-
-    background: #fff;
-
-    border: 1px solid #ddd;
-
-    border-radius: 8px;
-
-    box-shadow: 0 10px 25px rgba(0,0,0,.15);
-
-    max-height: 250px;
-
-    overflow-y: auto;
-
-    z-index: 99999;
-}
-
-.suggestion-item {
-
-    padding: 10px 14px;
-
-    cursor: pointer;
-
-    transition: .2s;
-
-    border-bottom: 1px solid #eee;
-
-}
-
-.suggestion-item:last-child {
-
-    border-bottom: none;
-
-}
-
-.suggestion-item:hover {
-
-    background: #f5f3ff;
-
-}
-
-.s-name {
-
-    font-size: 14px;
-
-    font-weight: 600;
-
-    color: #222;
-
-}
-
-.s-phone {
-
-    font-size: 12px;
-
-    color: #777;
-
-    margin-top: 3px;
-
-}
-
-
-/* ==========================================
-   TABLE
-========================================== */
-
-.visit-table {
-
-    width: 100%;
-
-    border-collapse: collapse;
-
-    background: white;
-
-    border-radius: 12px;
-
-    overflow: hidden;
-
-    box-shadow: 0 5px 18px rgba(0,0,0,.08);
-
-}
-
-.visit-table thead {
-
-    background: #6c4cff;
-
-}
-
-.visit-table th {
-
-    color: white;
-
-    padding: 14px;
-
-    font-size: 14px;
-
-    text-align: center;
-
-}
-
-.visit-table td {
-
-    padding: 12px;
-
-    border-bottom: 1px solid #eee;
-
-    text-align: center;
-
-    font-size: 14px;
-
-}
-
-.visit-table tbody tr:hover {
-
-    background: #faf9ff;
-
-}
-
-
-/* ==========================================
-   STATUS
-========================================== */
-
-.status {
-
-    display: inline-block;
-
-    padding: 6px 14px;
-
-    border-radius: 30px;
-
-    font-size: 12px;
-
-    font-weight: 600;
-
-}
-
-.inoffice {
-
-    background: #e6f0ff;
-
-    color: #0066ff;
-
-}
-
-.done {
-
-    background: #dff7e6;
-
-    color: #1b8d43;
-
-}
-
-.follow {
-
-    background: #fff5d7;
-
-    color: #d28a00;
-
-}
-
-.booked {
-
-    background: #dff7e6;
-
-    color: #1b8d43;
-
-}
-
-
-/* ==========================================
-   BOOKING
-========================================== */
-
-.booking {
-
-    display: inline-block;
-
-    padding: 6px 14px;
-
-    border-radius: 30px;
-
-    font-size: 12px;
-
-    font-weight: 600;
-
-}
-
-.pending {
-
-    background: #fff2d5;
-
-    color: #d88900;
-
-}
-
-.notbooked {
-
-    background: #ffe3e3;
-
-    color: #d70022;
-
-}
-
-
-/* ==========================================
-   REMARK
-========================================== */
-
-.remark-cell {
-
-    max-width: 220px;
-
-    word-break: break-word;
-
-}
-
-
-/* ==========================================
-   EDIT BUTTON
-========================================== */
-
-.edit-btn {
-
-    border: none;
-
-    background: #16a34a;
-
-    color: white;
-
-    padding: 8px 18px;
-
-    border-radius: 6px;
-
-    cursor: pointer;
-
-    transition: .3s;
-
-}
-
-.edit-btn:hover {
-
-    background: #13803b;
-
-}
-
-
-/* ==========================================
    MODAL
 ========================================== */
 
-.modal-overlay {
-
-    position: fixed;
-
-    inset: 0;
-
-    background: rgba(0,0,0,.45);
-
-    display: flex;
-
-    justify-content: center;
-
-    align-items: center;
-
-    z-index: 999999;
-
+.modal-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.55);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    z-index:999999;
+    padding:20px;
 }
 
-.edit-modal {
-
-    width: 470px;
-
-    background: white;
-
-    border-radius: 12px;
-
-    padding: 25px;
-
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 14px;
-
+.edit-modal{
+    width:900px;
+    max-width:95%;
+    max-height:90vh;
+    overflow-y:auto;
+    background:#fff;
+    border-radius:16px;
+    padding:25px;
+    box-shadow:0 20px 50px rgba(0,0,0,.25);
 }
 
-.edit-modal h2 {
+.edit-modal h2{
+    margin:0 0 20px;
+    text-align:center;
+    font-size:26px;
+    font-weight:700;
+    color:#333;
+    border-bottom:1px solid #eee;
+    padding-bottom:12px;
+}
 
-    margin: 0;
 
-    margin-bottom: 10px;
+/* ==========================
+   FORM GRID
+========================== */
 
+.edit-modal form,
+.modal-form{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:18px;
+}
+
+.form-group{
+    display:flex;
+    flex-direction:column;
+}
+
+.form-group label{
+    font-size:14px;
+    font-weight:600;
+    margin-bottom:6px;
+    color:#444;
 }
 
 .edit-modal input,
 .edit-modal select,
-.edit-modal textarea {
+.edit-modal textarea{
 
-    width: 100%;
+    width:100%;
+    height:45px;
 
-    padding: 11px;
+    border:1px solid #d9d9d9;
+    border-radius:8px;
 
-    border: 1px solid #ddd;
+    padding:0 12px;
 
-    border-radius: 6px;
+    font-size:14px;
 
-    outline: none;
+    outline:none;
 
-    box-sizing: border-box;
+    transition:.3s;
+
+    box-sizing:border-box;
+
+    background:#fff;
+}
+
+.edit-modal input:focus,
+.edit-modal select:focus,
+.edit-modal textarea:focus{
+
+    border-color:#6c4cff;
+
+    box-shadow:0 0 0 3px rgba(108,76,255,.12);
 
 }
 
-.edit-modal textarea {
+.edit-modal textarea{
 
-    resize: vertical;
+    min-height:110px;
 
-    min-height: 90px;
+    resize:vertical;
 
-}
-
-.form-group {
-
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 6px;
-
-}
-
-.modal-buttons {
-
-    display: flex;
-
-    justify-content: flex-end;
-
-    gap: 10px;
-
-    margin-top: 10px;
-
-}
-
-.save-btn {
-
-    background: #16a34a;
-
-    color: white;
-
-    border: none;
-
-    padding: 10px 22px;
-
-    border-radius: 6px;
-
-    cursor: pointer;
-
-}
-
-.cancel-btn {
-
-    background: #ef4444;
-
-    color: white;
-
-    border: none;
-
-    padding: 10px 22px;
-
-    border-radius: 6px;
-
-    cursor: pointer;
+    padding:12px;
 
 }
 
 
-/* ==========================================
-   RESPONSIVE
-========================================== */
+/* Client Name */
+.edit-modal input[readonly]{
 
-@media(max-width:900px){
+    background:#f6f7fb;
 
-.search-area{
-
-flex-direction:column;
-
-align-items:stretch;
+    color:#555;
 
 }
 
-.search-box{
 
-width:100%;
+/* Remark Full Width */
 
-}
+.edit-modal textarea,
+.full-width{
 
-.search-btn,
-.reset-btn{
-
-width:100%;
+    grid-column:1/3;
 
 }
 
-.visit-table{
 
-display:block;
+/* Buttons */
 
-overflow-x:auto;
+.modal-buttons{
 
-white-space:nowrap;
+    grid-column:1/3;
+
+    display:flex;
+
+    justify-content:flex-end;
+
+    gap:12px;
+
+    margin-top:10px;
 
 }
+
+.save-btn{
+
+    background:#16a34a;
+
+    color:#fff;
+
+    border:none;
+
+    padding:11px 28px;
+
+    border-radius:8px;
+
+    font-size:15px;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+.save-btn:hover{
+
+    background:#13803b;
+
+}
+
+.cancel-btn{
+
+    background:#ef4444;
+
+    color:#fff;
+
+    border:none;
+
+    padding:11px 28px;
+
+    border-radius:8px;
+
+    font-size:15px;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+.cancel-btn:hover{
+
+    background:#dc2626;
+
+}
+
+
+/* Responsive */
+
+@media(max-width:768px){
 
 .edit-modal{
 
-width:95%;
+width:98%;
+
+padding:18px;
 
 }
+
+.edit-modal form,
+.modal-form{
+
+grid-template-columns:1fr;
+
+}
+
+.full-width,
+.edit-modal textarea,
+.modal-buttons{
+
+grid-column:1;
+
+}
+
+.modal-buttons{
+
+justify-content:center;
+
+}
+
 }
