@@ -186,7 +186,7 @@ const handleChange = (e) => {
 
   }
 
-};
+   };
   return (
     <div className="layout">
 
@@ -286,7 +286,8 @@ const handleChange = (e) => {
                 <th>Manager</th>
                 <th>Calling By</th>
                 <th>Remark</th>
-                <th>Date</th>
+                <th>Visit Date</th>
+                <th>Created Date</th>
                 <th>Action</th>
 
               </tr>
@@ -366,12 +367,19 @@ const handleChange = (e) => {
           <td className="remark-cell">
            {v.remark || "-"}
            </td>
-                
-                  <td>
-  {v.createdAt || v.created_date
-    ? new Date(v.createdAt || v.created_date).toLocaleDateString()
+
+
+               <td>
+  {v.visitDate
+    ? new Date(v.visitDate).toLocaleDateString("en-GB")
     : "-"}
-      </td>
+</td>
+
+<td>
+  {v.createdAt || v.created_date
+    ? new Date(v.createdAt || v.created_date).toLocaleDateString("en-GB")
+    : "-"}
+</td>
 
      <td>
   <button
