@@ -146,24 +146,21 @@ fetchProjects();
     return;
   }
 
-  axios
-    .get(`${API}/all-users`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
+ axios
+  .get(`${API}/all-users`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+  .then((res) => {
+    console.log("ALL USERS =", res.data);
+    console.log("TOTAL USERS =", res.data.length);
 
-    .then((res) => {
-      console.log("✅ Users Loaded:", res.data);
-      setUsers(Array.isArray(res.data) ? res.data : []);
-    })
-
-    .catch((err) => {
-      console.log(
-        "❌ Fetch Users Error:",
-        err.response?.data || err.message
-      );
-    });
+    setUsers(Array.isArray(res.data) ? res.data : []);
+  })
+  .catch((err) => {
+    console.log("ERROR =", err.response?.data || err.message);
+  });
 
 }, [fetchLeads]);
 
@@ -479,7 +476,7 @@ onChange={(e) => {
     })
   }
 >
-  
+
   <option value="">Assigned To</option>
 
   {users
