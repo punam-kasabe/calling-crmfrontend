@@ -57,13 +57,7 @@ export default function Pipeline() {
     return JSON.parse(localStorage.getItem("user")) || {};
   }, []);
 
-   const assignedUsers = [
-  ...new Set(
-    leads
-      .map((l) => l.assigned_to)
-      .filter(Boolean)
-  )
-];
+ 
 
 const closingExecutives = [
   ...new Set(
@@ -475,33 +469,30 @@ onChange={(e) => {
 
     <div className="col-md-2">
 
-      <select
-        className="form-select"
-        value={filters.assigned}
-        onChange={(e) =>
-          setFilters({
-            ...filters,
-            assigned: e.target.value
-          })
-        }
+     <select
+  className="form-select"
+  value={filters.assigned}
+  onChange={(e) =>
+    setFilters({
+      ...filters,
+      assigned: e.target.value
+    })
+  }
+>
+  
+  <option value="">Assigned To</option>
+
+  {users
+    .filter((u) => u.role === "executive")
+    .map((u) => (
+      <option
+        key={u._id}
+        value={u.email}   
       >
-
-        <option value="">
-          Assigned To
-        </option>
-
-        {assignedUsers.map((u, i) => (
-
-          <option
-            key={i}
-            value={u}
-          >
-            {u}
-          </option>
-
-        ))}
-
-      </select>
+        {u.name}          
+      </option>
+    ))}
+</select>
 
     </div>
 
