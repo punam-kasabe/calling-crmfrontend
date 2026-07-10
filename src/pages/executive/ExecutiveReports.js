@@ -163,7 +163,7 @@ const totalPages =
     (lead) =>
       lead.createdAt?.split("T")[0] ===
       filterDate
-  );
+  ); 
 
   const statusCount = {};
 
