@@ -407,6 +407,8 @@ else if (item.title === "Reception Entries") {
                     <tr>
 
                       <th>Name</th>
+                      
+                      <th>Today's Assigned</th>
 
                       <th>Total Leads</th>
 
@@ -433,6 +435,8 @@ else if (item.title === "Reception Entries") {
                     ? e.name.split("@")[0]
                    : e.name}
                   </td>
+
+                          <td>{e.todayAssigned}</td>
 
                           <td>{e.total}</td>
 
