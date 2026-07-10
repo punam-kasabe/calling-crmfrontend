@@ -1,4 +1,9 @@
-import { useState, useEffect, useMemo } from "react";
+import {
+  useState,
+  useEffect,
+  useMemo,
+  useCallback
+} from "react";
 import axios from "axios";
 import * as XLSX from "xlsx";
 import Sidebar from "../../components/Sidebar";
@@ -50,55 +55,40 @@ export default function ProjectsReport() {
         FETCH REPORT
   =========================== */
 
-  const fetchReport =
-    async () => {
+const fetchReport = useCallback(async () => {
 
-      try {
+  try {
 
-        setLoading(true);
+    setLoading(true);
 
-        const res =
-          await axios.post(
-
-`${API}/projects-report`,
-
-{
-
-email: user.email,
-
-role: user.role,
-
-filters
-
-}
-
-);
-
-        setReport(
-          res.data || []
-        );
-
+    const res = await axios.post(
+      `${API}/projects-report`,
+      {
+        email: user.email,
+        role: user.role,
+        filters
       }
+    );
 
-      catch (err) {
+    setReport(res.data || []);
 
-        console.log(err);
+  } catch (err) {
 
-      }
+    console.log(err);
 
-      finally {
+  } finally {
 
-        setLoading(false);
+    setLoading(false);
 
-      }
+  }
 
-    };
 
-  useEffect(() => {
+}, [user.email, user.role, filters]);
 
-    fetchReport();
+      useEffect(() => {
+  fetchReport();
+}, [fetchReport]);
 
-  }, []);
 
   /* ===========================
         PERIOD BUTTON
@@ -118,11 +108,8 @@ filters
     };
 
   useEffect(() => {
-
-    fetchReport();
-
-  }, [filters.period]);
-
+  fetchReport();
+}, [fetchReport]);
   /* ===========================
         DATE FILTER
   =========================== */
