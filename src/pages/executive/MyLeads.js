@@ -397,15 +397,16 @@ useEffect(() => {
     ) => {
 
       try {
-        
+
        await axios.put(
   `${API}/update-status/${leadId}`,
-  {
+     {
     status,
 
-    executive_email: user.email
-  }
-);
+         executive_email:
+      JSON.parse(localStorage.getItem("user")).email
+      }
+         );
 
         setLeads((prev) =>
 
@@ -438,29 +439,27 @@ useEffect(() => {
 
     };
 
-
-
-  /* ================= UPDATE LEAD ================= */
+   /* ================= UPDATE LEAD ================= */
 
   const handleUpdateLead =
     async () => {
 
       try {
 
-         let assignedOfficer =
+        let assignedOfficer =
         selectedLead.assignedTo;
 
         let assignedEmail =
         selectedLead.assigned_to_email;
 
-/* INTERESTED AUTO ASSIGN */
+      /* INTERESTED AUTO ASSIGN */
 
 
   const updatedData = {
- executive_email:
+  executive_email:
   selectedLead.executive_email ||
   user.email,
-    name: selectedLead.name,
+  name: selectedLead.name,
   phone: selectedLead.phone,
   email: selectedLead.email,
 
@@ -550,7 +549,7 @@ useEffect(() => {
 
     };
 
-    const startCall = async (lead) => {
+  const startCall = async (lead) => {
 
   setActiveCall(lead);
 
