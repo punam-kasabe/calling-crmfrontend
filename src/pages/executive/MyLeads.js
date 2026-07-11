@@ -397,14 +397,15 @@ useEffect(() => {
     ) => {
 
       try {
+        
+       await axios.put(
+  `${API}/update-status/${leadId}`,
+  {
+    status,
 
-        await axios.put(
-
-          `${API}/update-status/${leadId}`,
-
-          { status }
-
-        );
+    executive_email: user.email
+  }
+);
 
         setLeads((prev) =>
 

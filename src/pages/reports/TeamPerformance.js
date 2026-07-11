@@ -450,7 +450,7 @@ Loading...
 <th>Name</th>
 
 <th>Assigned</th>
-
+<th>Completed Today</th>
 <th>Total</th>
 
 <th>New</th>
@@ -496,6 +496,7 @@ report.map((row,index)=>(
 <td>{row.name}</td>
 
 <td>{row.assigned}</td>
+<td>{row.completedToday}</td>
 
 <td>{row.total}</td>
 
