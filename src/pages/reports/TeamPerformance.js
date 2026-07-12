@@ -29,9 +29,7 @@ useState(false);
 const [report,setReport]=
 useState([]);
 
-const [showAdvanced,
-setShowAdvanced]=
-useState(false);
+
 
 const today = new Date().toISOString().split("T")[0];
 
