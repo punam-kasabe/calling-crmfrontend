@@ -496,7 +496,7 @@ report.map((row,index)=>(
 <td>{row.name}</td>
 
 <td>{row.assigned}</td>
-<td>{row.completedToday}</td>
+<td>{row.completed}</td>
 
 <td>{row.total}</td>
 
