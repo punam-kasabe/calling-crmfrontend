@@ -33,15 +33,10 @@ const [showAdvanced,
 setShowAdvanced]=
 useState(false);
 
-const [filters,setFilters]=
-useState({
+const today = new Date().toISOString().split("T")[0];
 
-period:"today",
-
-from:"",
-
-to:""
-
+const [filters, setFilters] = useState({
+  date: today
 });
 
 const fetchReport=
@@ -305,48 +300,44 @@ onClick={exportExcel}
 >
 Export
 </button>
+<div
+style={{
+display:"flex",
+gap:"10px",
+alignItems:"center",
+marginBottom:"20px"
+}}
+>
+
+<label>
+<b>Select Date :</b>
+</label>
+
+<input
+type="date"
+value={filters.date}
+onChange={(e)=>
+setFilters({
+date:e.target.value
+})
+}
+/>
 
 <button
-className="btn dark"
-onClick={()=>changePeriod("today")}
+className="btn btn-primary"
+onClick={fetchReport}
 >
-Today
+Search
 </button>
 
 <button
-className="btn blue"
-onClick={()=>changePeriod("last7")}
+className="btn export"
+onClick={exportExcel}
 >
-Last 7 Days
+Export
 </button>
 
-<button
-className="btn green"
-onClick={()=>changePeriod("last30")}
->
-Last 30 Days
-</button>
-
-<button
-className="btn teal"
-onClick={()=>changePeriod("thisMonth")}
->
-This Month
-</button>
-
-<button
-className="btn yellow"
-onClick={()=>changePeriod("lastMonth")}
->
-Last Month
-</button>
-
-<button
-className="btn light"
-onClick={()=>changePeriod("all")}
->
-Till Date
-</button>
+</div>
 
 <button
 className="btn advanced"
