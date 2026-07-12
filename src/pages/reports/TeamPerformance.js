@@ -35,7 +35,11 @@ const today = new Date().toISOString().split("T")[0];
 const [filters, setFilters] = useState({
   date: today
 });
+const [showModal,setShowModal]=useState(false);
 
+const [selectedLeads,setSelectedLeads]=useState([]);
+
+const [modalTitle,setModalTitle]=useState("");
 const fetchReport=
 useCallback(async()=>{
 
@@ -132,6 +136,33 @@ Pending:r.pending
 
 );
 
+
+const openLeads = async (email, title, type) => {
+
+  try{
+
+    const res = await axios.post(
+      `${API}/team-performance-details`,
+      {
+        executive: email,
+        type,
+        filters
+      }
+    );
+
+    setSelectedLeads(res.data);
+
+    setModalTitle(title);
+
+    setShowModal(true);
+
+  }catch(err){
+
+    console.log(err);
+
+  }
+
+};
 const wb=
 XLSX.utils.book_new();
 
@@ -391,34 +422,218 @@ report.map((row,index)=>(
 
 <td>{row.name}</td>
 
-<td>{row.assigned}</td>
-<td>{row.completed}</td>
+<td>
+
+<span
+className="count-link"
+onClick={()=>
+openLeads(
+row.email,
+`${row.name} Assigned Leads`,
+"assigned"
+)
+}
+>
+
+{row.assigned}
+
+</span>
+
+</td>
+
+<td>
+
+<span
+className="count-link"
+onClick={()=>
+openLeads(
+row.email,
+`${row.name} Completed`,
+"completed"
+)
+}
+>
+
+{row.completed}
+
+</span>
+
+</td>
 
 <td>{row.total}</td>
 
-<td>{row.newLead}</td>
+<td>
 
-<td>{row.interested}</td>
+<span
+className="count-link"
+onClick={()=>
+openLeads(
+row.email,
+`${row.name} Interested`,
+"interested"
+)
+}
+>
 
-<td>{row.followup}</td>
+{row.interested}
 
-<td>{row.booked}</td>
+</span>
 
-<td>{row.notInterested}</td>
+</td>
 
-<td>{row.ringing}</td>
+<td>
+  <span
+    className="count-link"
+    onClick={() =>
+      openLeads(
+        row.email,
+        `${row.name} Followup`,
+        "followup"
+      )
+    }
+  >
+    {row.followup}
+  </span>
+</td>
 
-<td>{row.callBack}</td>
+<td>
 
-<td>{row.callCut}</td>
+<span
+className="count-link"
+onClick={()=>
+openLeads(
+row.email,
+`${row.name} Booked`,
+"booked"
+)
+}
+>
 
-<td>{row.busy}</td>
+{row.booked}
 
-<td>{row.switchOff}</td>
+</span>
 
-<td>{row.visitDone}</td>
+</td>
 
-<td>{row.pending}</td>
+<td>
+  <span
+    className="count-link"
+    onClick={() =>
+      openLeads(
+        row.email,
+        `${row.name} Not Interested`,
+        "notInterested"
+      )
+    }
+  >
+    {row.notInterested}
+  </span>
+</td>
+
+<td>
+  <span
+    className="count-link"
+    onClick={() =>
+      openLeads(
+        row.email,
+        `${row.name} Ringing`,
+        "ringing"
+      )
+    }
+  >
+    {row.ringing}
+  </span>
+</td>
+
+<td>
+  <span
+    className="count-link"
+    onClick={() =>
+      openLeads(
+        row.email,
+        `${row.name} Call Back`,
+        "callBack"
+      )
+    }
+  >
+    {row.callBack}
+  </span>
+</td>
+
+<td>
+  <span
+    className="count-link"
+    onClick={() =>
+      openLeads(
+        row.email,
+        `${row.name} Call Cut`,
+        "callCut"
+      )
+    }
+  >
+    {row.callCut}
+  </span>
+</td>
+
+<td>
+  <span
+    className="count-link"
+    onClick={() =>
+      openLeads(
+        row.email,
+        `${row.name} Busy`,
+        "busy"
+      )
+    }
+  >
+    {row.busy}
+  </span>
+</td>
+
+<td>
+  <span
+    className="count-link"
+    onClick={() =>
+      openLeads(
+        row.email,
+        `${row.name} Switch Off`,
+        "switchOff"
+      )
+    }
+  >
+    {row.switchOff}
+  </span>
+</td>
+
+<td>
+  <span
+    className="count-link"
+    onClick={() =>
+      openLeads(
+        row.email,
+        `${row.name} Visit Done`,
+        "visitDone"
+      )
+    }
+  >
+    {row.visitDone}
+  </span>
+</td>
+
+<td>
+  <span
+    className="count-link"
+    onClick={() =>
+      openLeads(
+        row.email,
+        `${row.name} Pending`,
+        "pending"
+      )
+    }
+  >
+    {row.pending}
+  </span>
+</td>
 
 </tr>
 
