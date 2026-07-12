@@ -87,17 +87,6 @@ fetchReport();
 
 },[fetchReport]);
 
-const changePeriod=(period)=>{
-
-setFilters(prev=>({
-
-...prev,
-
-period
-
-}));
-
-};
 
 const handleSearch=()=>{
 
@@ -168,6 +157,7 @@ report.reduce(
 (acc,row)=>{
 
 acc.assigned+=row.assigned;
+acc.completed += row.completed || 0;
 
 acc.total+=row.total;
 
@@ -202,7 +192,7 @@ return acc;
 {
 
 assigned:0,
-
+completed:0,
 total:0,
 
 newLead:0,
@@ -317,8 +307,13 @@ marginBottom:"20px"
 type="date"
 value={filters.date}
 onChange={(e)=>
+
 setFilters({
+
+...filters,
+
 date:e.target.value
+
 })
 }
 />
@@ -345,72 +340,48 @@ onClick={()=>setShowAdvanced(
 !showAdvanced
 )}
 >
+
 Advanced Search
 </button>
 
 </div>
 
-{
-showAdvanced&&(
+<div className="filters">
 
-<div className="advanced-box">
+  <label
+    style={{
+      fontWeight: "bold"
+    }}
+  >
+    Select Date :
+  </label>
 
-<input
+  <input
+    type="date"
+    value={filters.date}
+    onChange={(e) =>
+      setFilters({
+        ...filters,
+        date: e.target.value
+      })
+    }
+  />
 
-type="date"
+  <button
+    className="btn btn-primary"
+    onClick={fetchReport}
+  >
+    Search
+  </button>
 
-value={filters.from}
-
-onChange={(e)=>
-
-setFilters({
-
-...filters,
-
-from:e.target.value
-
-})
-
-}
-
-/>
-
-<input
-
-type="date"
-
-value={filters.to}
-
-onChange={(e)=>
-
-setFilters({
-
-...filters,
-
-to:e.target.value
-
-})
-
-}
-
-/>
-
-<button
-
-className="btn btn-primary"
-
-onClick={handleSearch}
-
->
-
-Search
-
-</button>
+  <button
+    className="btn export"
+    onClick={exportExcel}
+  >
+    Export
+  </button>
 
 </div>
-
-)
-}
 {/* TABLE */}
 
 <div className="table-container">
@@ -524,7 +495,7 @@ report.map((row,index)=>(
 <tr>
 
 <td
-colSpan="16"
+colSpan="17"
 style={{
 textAlign:"center"
 }}
@@ -547,6 +518,8 @@ No Data Found
 </td>
 
 <td>{totals.assigned}</td>
+
+<td>{totals.completed}</td>
 
 <td>{totals.total}</td>
 
