@@ -104,7 +104,7 @@ report.map(r=>({
 Name:r.name,
 
 Assigned:r.assigned,
-
+Completed: r.completed,
 Total:r.total,
 
 New:r.newLead,
@@ -282,69 +282,6 @@ isOpen?"shifted":"full"
 Team Performance Report
 </h2>
 
-<div className="filters">
-
-<button
-className="btn export"
-onClick={exportExcel}
->
-Export
-</button>
-<div
-style={{
-display:"flex",
-gap:"10px",
-alignItems:"center",
-marginBottom:"20px"
-}}
->
-
-<label>
-<b>Select Date :</b>
-</label>
-
-<input
-type="date"
-value={filters.date}
-onChange={(e)=>
-
-setFilters({
-
-...filters,
-
-date:e.target.value
-
-})
-}
-/>
-
-<button
-className="btn btn-primary"
-onClick={fetchReport}
->
-Search
-</button>
-
-<button
-className="btn export"
-onClick={exportExcel}
->
-Export
-</button>
-
-</div>
-
-<button
-className="btn advanced"
-onClick={()=>setShowAdvanced(
-!showAdvanced
-)}
->
-
-Advanced Search
-</button>
-
-</div>
 
 <div className="filters">
 
@@ -368,11 +305,11 @@ Advanced Search
   />
 
   <button
-    className="btn btn-primary"
-    onClick={fetchReport}
-  >
-    Search
-  </button>
+className="btn btn-primary"
+onClick={handleSearch}
+>
+Search
+</button>
 
   <button
     className="btn export"
