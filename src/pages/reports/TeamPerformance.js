@@ -95,6 +95,33 @@ fetchReport();
 
 };
 
+const openLeads = async (email, title, type) => {
+
+  try{
+
+    const res = await axios.post(
+      `${API}/team-performance-details`,
+      {
+        executive: email,
+        type,
+        filters
+      }
+    );
+
+    setSelectedLeads(res.data);
+
+    setModalTitle(title);
+
+    setShowModal(true);
+
+  }catch(err){
+
+    console.log(err);
+
+  }
+
+};
+
 const exportExcel=()=>{
 
 const ws=
@@ -137,32 +164,7 @@ Pending:r.pending
 );
 
 
-const openLeads = async (email, title, type) => {
 
-  try{
-
-    const res = await axios.post(
-      `${API}/team-performance-details`,
-      {
-        executive: email,
-        type,
-        filters
-      }
-    );
-
-    setSelectedLeads(res.data);
-
-    setModalTitle(title);
-
-    setShowModal(true);
-
-  }catch(err){
-
-    console.log(err);
-
-  }
-
-};
 const wb=
 XLSX.utils.book_new();
 
@@ -460,8 +462,33 @@ row.email,
 
 </td>
 
-<td>{row.total}</td>
-
+<td>
+  <span
+    className="count-link"
+    onClick={() =>
+      openLeads(
+        row.email,
+        `${row.name} Total Leads`,
+        "total"
+      )
+    }
+  >
+    {row.total}
+  </span>
+</td><td>
+  <span
+    className="count-link"
+    onClick={() =>
+      openLeads(
+        row.email,
+        `${row.name} New Leads`,
+        "new"
+      )
+    }
+  >
+    {row.newLead}
+  </span>
+</td>
 <td>
 
 <span
