@@ -1,51 +1,209 @@
-.container {
-  padding: 20px;
-  background: #f5f7fa;
+/* ==========================================
+   TEAM PERFORMANCE
+========================================== */
+
+.layout{
+  display:flex;
+  background:#f5f7fb;
+  min-height:100vh;
 }
 
-h2 {
-  margin-bottom: 20px;
+.main-content{
+  flex:1;
+  padding:25px;
+  transition:.3s;
 }
 
-/* Buttons */
-.filters {
-  margin-bottom: 15px;
+.main-content.shifted{
+  margin-left:240px;
 }
 
-.filters button {
-  margin-right: 10px;
-  padding: 8px 15px;
-  border: none;
-  background: #e0e0e0;
-  cursor: pointer;
-  border-radius: 5px;
+.main-content.full{
+  margin-left:70px;
 }
 
-.filters button.active {
-  background: #4e73df;
-  color: white;
+.page-title{
+  font-size:30px;
+  font-weight:700;
+  margin-bottom:25px;
+  color:#222;
 }
 
-/* Table */
-table {
-  width: 100%;
-  border-collapse: collapse;
-  background: white;
+/* ==========================================
+   FILTER
+========================================== */
+
+.filters{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  flex-wrap:wrap;
+  background:#fff;
+  padding:18px;
+  border-radius:12px;
+  margin-bottom:20px;
+  box-shadow:0 2px 10px rgba(0,0,0,.08);
 }
 
-th, td {
-  padding: 10px;
-  border: 1px solid #ddd;
-  text-align: center;
+.filters label{
+  font-size:15px;
 }
 
-th {
-  background: #4e73df;
-  color: white;
+.filters input[type="date"]{
+  padding:10px 15px;
+  border:1px solid #ddd;
+  border-radius:8px;
+  font-size:15px;
 }
 
-/* Chart */
-.chart {
-  width: 400px;
-  margin: 30px auto;
+.btn{
+  border:none;
+  outline:none;
+  cursor:pointer;
+  border-radius:8px;
+  padding:10px 22px;
+  color:#fff;
+  font-weight:600;
+  transition:.3s;
+}
+
+.btn:hover{
+  transform:translateY(-2px);
+}
+
+.btn-primary{
+  background:#0d6efd;
+}
+
+.export{
+  background:#28a745;
+}
+
+/* ==========================================
+   TABLE
+========================================== */
+
+.table-container{
+  background:#fff;
+  padding:18px;
+  border-radius:12px;
+  box-shadow:0 2px 10px rgba(0,0,0,.08);
+  overflow-x:auto;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:1600px;
+}
+
+thead{
+  background:linear-gradient(90deg,#6f42c1,#7b3fe4);
+  color:#fff;
+}
+
+thead th{
+  padding:12px;
+  font-size:14px;
+  text-align:center;
+  white-space:nowrap;
+}
+
+tbody td{
+  padding:11px;
+  border-bottom:1px solid #ececec;
+  text-align:center;
+  font-size:14px;
+  white-space:nowrap;
+}
+
+tbody tr:nth-child(even){
+  background:#fafafa;
+}
+
+tbody tr:hover{
+  background:#eef5ff;
+}
+
+.total-row{
+  background:#ececec;
+  font-weight:700;
+}
+
+.total-row td{
+  color:#111;
+}
+
+/* ==========================================
+   CHARTS
+========================================== */
+
+.chart-wrapper{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:25px;
+  margin-top:35px;
+}
+
+.chart-box{
+  background:#fff;
+  border-radius:12px;
+  padding:20px;
+  box-shadow:0 2px 10px rgba(0,0,0,.08);
+}
+
+.chart-box h3{
+  text-align:center;
+  margin-bottom:20px;
+  color:#444;
+}
+
+/* ==========================================
+   SCROLLBAR
+========================================== */
+
+.table-container::-webkit-scrollbar{
+  height:10px;
+}
+
+.table-container::-webkit-scrollbar-track{
+  background:#eee;
+}
+
+.table-container::-webkit-scrollbar-thumb{
+  background:#7b3fe4;
+  border-radius:20px;
+}
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media(max-width:992px){
+
+.main-content.shifted{
+margin-left:0;
+}
+
+.main-content.full{
+margin-left:0;
+}
+
+.chart-wrapper{
+grid-template-columns:1fr;
+}
+
+.filters{
+flex-direction:column;
+align-items:flex-start;
+}
+
+.filters input{
+width:100%;
+}
+
+.filters button{
+width:100%;
+}
+
 }
