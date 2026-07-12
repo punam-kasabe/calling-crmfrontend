@@ -475,7 +475,9 @@ row.email,
   >
     {row.total}
   </span>
-</td><td>
+</td>
+
+<td>
   <span
     className="count-link"
     onClick={() =>
@@ -730,6 +732,92 @@ No Data Found
 </table>
 
 <div className="chart-wrapper">
+  {showModal && (
+
+<div className="modal-overlay">
+
+<div className="modal-box">
+
+<div className="modal-header">
+
+<h3>{modalTitle}</h3>
+
+<button
+onClick={()=>setShowModal(false)}
+>
+✖
+</button>
+
+</div>
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Name</th>
+
+<th>Phone</th>
+
+<th>Project</th>
+
+<th>Status</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+{
+
+selectedLeads.length>0 ? (
+
+selectedLeads.map((lead,index)=>(
+
+<tr key={index}>
+
+<td>{lead.name}</td>
+
+<td>{lead.phone}</td>
+
+<td>{lead.project}</td>
+
+<td>{lead.status}</td>
+
+</tr>
+
+))
+
+):(
+
+<tr>
+
+<td
+colSpan="4"
+style={{textAlign:"center"}}
+>
+
+No Leads Found
+
+</td>
+
+</tr>
+
+)
+
+}
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+)}
 
 <div className="chart-box">
 
