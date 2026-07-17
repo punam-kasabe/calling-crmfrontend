@@ -18,8 +18,11 @@ import {
   Clock3,
   Bell,
   MapPinned,
+  ArrowUpRight,
+  Activity,
+  TrendingUp,
+  Sparkles,
 } from "lucide-react";
-
 
 import { useNavigate } from "react-router-dom";
 
@@ -368,173 +371,239 @@ export default function ExecutiveDashboard() {
         }`}
       >
 
-        {/* HEADER */}
+        {/* ================= HEADER ================= */}
 
-        <div className="executive-header">
+<div className="dashboard-header">
 
-          <div>
+<div>
 
-            <h1>
-              Dashboard
-            </h1>
+<h1>
 
-            <p className="welcome-text">
-             Welcome back, <strong>{user.name}</strong>
-               </p>
+Executive Dashboard
 
-          </div>
-          
+</h1>
 
-        </div>
+<p>
+
+Welcome Back,
+
+<strong>
+
+{" "}
+
+{user.name}
+
+</strong>
+
+👋
+
+</p>
+
+</div>
+
+<div className="header-right">
+
+<div className="date-box">
+
+{new Date().toLocaleDateString(
+
+"en-IN",
+
+{
+
+weekday:"long",
+
+day:"numeric",
+
+month:"long",
+
+year:"numeric"
+
+}
+
+)}
+
+</div>
+
+</div>
+
+</div>
 
         {/* ===================================== */}
         {/* STATS */}
         {/* ===================================== */}
 
-        <div className="stats-grid">
+       <div className="dashboard-cards">
 
-          <div className="stat-card">
+<div className="dashboard-card blue">
 
-            <div className="stat-icon">
-              <Users size={28} />
-            </div>
+<div className="card-icon">
 
-            <div>
+<Users size={34}/>
 
-              <h2>
-                {stats.totalLeads}
-              </h2>
+</div>
 
-              <p>
-                Total Leads
-              </p>
+<div>
 
-            </div>
+<h2>
 
-          </div>
+{stats.totalLeads}
 
-          <div className="stat-card">
+</h2>
 
-            <div className="stat-icon">
-              <ClipboardList size={28} />
-            </div>
+<p>Total Leads</p>
 
-            <div>
+</div>
 
-              <h2>
-                {stats.followups}
-              </h2>
+<ArrowUpRight/>
 
-              <p>
-                Followups
-              </p>
+</div>
 
-            </div>
+<div className="dashboard-card green">
 
-          </div>
+<div className="card-icon">
 
-          <div className="stat-card">
+<ClipboardList size={34}/>
 
-            <div className="stat-icon">
-              <PhoneCall size={28} />
-            </div>
+</div>
 
-            <div>
+<div>
 
-              <h2>
-                {stats.calls}
-              </h2>
+<h2>
 
-              <p>
-                Calls Done
-              </p>
+{stats.followups}
 
-            </div>
+</h2>
 
-          </div>
+<p>Followups</p>
 
-          <div className="stat-card">
+</div>
 
-            <div className="stat-icon">
-              <CheckCircle size={28} />
-            </div>
+<Activity/>
 
-            <div>
+</div>
 
-              <h2>
-                {stats.converted}
-              </h2>
+<div className="dashboard-card orange">
 
-              <p>
-                Converted Leads
-              </p>
+<div className="card-icon">
 
-            </div>
+<PhoneCall size={34}/>
 
-          </div>
+</div>
 
-          <div className="stat-card">
+<div>
 
-            <div className="stat-icon">
-              <CalendarCheck size={28} />
-            </div>
+<h2>
 
-            <div>
+{stats.calls}
 
-              <h2>
-                {stats.todayFollowups}
-              </h2>
+</h2>
 
-              <p>
-                Today's Followups
-              </p>
+<p>Calls Done</p>
 
-            </div>
+</div>
 
-          </div>
+<TrendingUp/>
 
-          <div className="stat-card">
+</div>
 
-            <div className="stat-icon">
-              <Flame size={28} />
-            </div>
+<div className="dashboard-card purple">
 
-            <div>
+<div className="card-icon">
 
-              <h2>
-                {stats.hotLeads}
-              </h2>
+<CheckCircle size={34}/>
 
-              <p>
-                Hot Leads
-              </p>
+</div>
 
-            </div>
+<div>
 
-          </div>
+<h2>
 
-          <div className="stat-card">
+{stats.converted}
 
-            <div className="stat-icon">
-              <Clock3 size={28} />
-            </div>
+</h2>
 
-            <div>
+<p>Converted</p>
 
-              <h2>
-                {stats.pendingCalls}
-              </h2>
+</div>
 
-              <p>
-                Pending Calls
-              </p>
+<Sparkles/>
 
-            </div>
+</div>
 
-          </div>
+<div className="dashboard-card red">
 
-        </div>
+<div className="card-icon">
 
+<CalendarCheck size={34}/>
+
+</div>
+
+<div>
+
+<h2>
+
+{stats.todayFollowups}
+
+</h2>
+
+<p>Today's Followups</p>
+
+</div>
+
+<Activity/>
+
+</div>
+
+<div className="dashboard-card yellow">
+
+<div className="card-icon">
+
+<Flame size={34}/>
+
+</div>
+
+<div>
+
+<h2>
+
+{stats.hotLeads}
+
+</h2>
+
+<p>Hot Leads</p>
+
+</div>
+
+<TrendingUp/>
+
+</div>
+
+<div className="dashboard-card dark">
+
+<div className="card-icon">
+
+<Clock3 size={34}/>
+
+</div>
+
+<div>
+
+<h2>
+
+{stats.pendingCalls}
+
+</h2>
+
+<p>Pending Calls</p>
+
+</div>
+
+<Activity/>
+
+</div>
+
+</div>
         {/* ===================================== */}
         {/* QUICK ACTIONS */}
         {/* ===================================== */}
