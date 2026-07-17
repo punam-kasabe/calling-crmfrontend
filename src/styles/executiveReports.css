@@ -245,3 +245,17 @@ table{
   }
 
 }
+.stats-card.today{
+  background:#0d6efd;
+  color:#fff;
+}
+
+.stats-card.week{
+  background:#198754;
+  color:#fff;
+}
+
+.stats-card.month{
+  background:#fd7e14;
+  color:#fff;
+}

@@ -93,52 +93,90 @@ const totalPages =
   );
 
   const stats = useMemo(() => {
-    return {
-      total: filteredLeads.length,
-      new: filteredLeads.filter(
-        (l) => l.status === "New"
-      ).length,
 
-     interested: filteredLeads.filter(
-        (l) =>
-          l.status === "Interested" ||
-          l.status === "Very Interested"
-      ).length,
+  const today =
+    new Date().toISOString().split("T")[0];
 
-      followup: filteredLeads.filter(
-        (l) => l.status === "Followup"
-      ).length,
+  const weekStart = new Date();
+  weekStart.setDate(
+    weekStart.getDate() - 6
+  );
 
-      booked: filteredLeads.filter(
-        (l) => l.status === "Booked"
-      ).length,
+  const currentMonth =
+    new Date().getMonth();
 
-      siteVisit: filteredLeads.filter(
-        (l) =>
-          l.status === "Site Visit"
-      ).length,
+  const currentYear =
+    new Date().getFullYear();
 
-      notInterested: filteredLeads.filter(
-        (l) =>
-          l.status === "Not Interested"
-      ).length,
+  return {
 
-      callback: filteredLeads.filter(
-        (l) =>
-          l.status === "Call Back"
-      ).length,
+    total: filteredLeads.length,
 
-      meeting: filteredLeads.filter(
-        (l) =>
-          l.status ===
-          "Meeting Scheduled"
-      ).length,
+    today: leads.filter(
+      (lead) =>
+        lead.createdAt?.split("T")[0] === today
+    ).length,
 
-    
+    week: leads.filter((lead) => {
 
-     
-    };
-  }, [filteredLeads]);
+      const d =
+        new Date(lead.createdAt);
+
+      return d >= weekStart;
+
+    }).length,
+
+    month: leads.filter((lead) => {
+
+      const d =
+        new Date(lead.createdAt);
+
+      return (
+        d.getMonth() === currentMonth &&
+        d.getFullYear() === currentYear
+      );
+
+    }).length,
+
+    new: filteredLeads.filter(
+      (l) => l.status === "New"
+    ).length,
+
+    interested: filteredLeads.filter(
+      (l) =>
+        l.status === "Interested" ||
+        l.status === "Very Interested"
+    ).length,
+
+    followup: filteredLeads.filter(
+      (l) => l.status === "Followup"
+    ).length,
+
+    booked: filteredLeads.filter(
+      (l) => l.status === "Booked"
+    ).length,
+
+    siteVisit: filteredLeads.filter(
+      (l) => l.status === "Site Visit"
+    ).length,
+
+    notInterested: filteredLeads.filter(
+      (l) =>
+        l.status === "Not Interested"
+    ).length,
+
+    callback: filteredLeads.filter(
+      (l) => l.status === "Call Back"
+    ).length,
+
+    meeting: filteredLeads.filter(
+      (l) =>
+        l.status === "Meeting Scheduled"
+    ).length
+
+  };
+
+}, [filteredLeads, leads]);
 
   const todayFollowups = useMemo(() => {
   const filterDate =
