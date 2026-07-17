@@ -639,7 +639,7 @@ year:"numeric"
         {/* ===================================== */}
         {/* RECENT LEADS */}
         {/* ===================================== */}
-
+      <div className="dashboard-tables">
         <div className="recent-section">
 
           <h3>
@@ -791,7 +791,7 @@ year:"numeric"
         </div>
 
       </div>
-
+</div>
     </div>
   );
 }
