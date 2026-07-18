@@ -294,29 +294,31 @@ fetchProjects();
 
     }
 
-    const exportData = filteredLeads.map((l) => ({
+   const handleExport = async () => {
+  try {
+    const res = await axios.post(
+      `${API}/export-leads`,
+      {
+        email: user.email,
+        role: user.role,
+        filters,
+        search,
+      }
+    );
 
+    const exportData = res.data.map((l) => ({
       Name: l.name,
-
       Mobile: l.phone,
-
       Status: l.status,
-
       Project: l.project,
-      Remark: l.remark || "-",
-    "Created Date": l.createdAt
-  ? new Date(l.createdAt).toLocaleDateString("en-GB")
-  : "-",
-
-
       Assigned: l.assigned_to,
       "Closing Officer": l.assigned_manager || "-",
-
+      "Created Date": l.createdAt
+        ? new Date(l.createdAt).toLocaleDateString("en-GB")
+        : "-",
       "Next Call": l.next_call_date
-  ? new Date(l.next_call_date)
-      .toLocaleDateString("en-GB")
-  : "-"
-
+        ? new Date(l.next_call_date).toLocaleDateString("en-GB")
+        : "-",
     }));
 
     const worksheet =
@@ -337,9 +339,11 @@ fetchProjects();
     );
 
     toast.success("Excel Exported ✅");
-
-  };
-
+  } catch (err) {
+    console.log(err);
+    toast.error("Export Failed ❌");
+  }}
+};
   /* ================= CARDS ================= */
 
 const stats = {
