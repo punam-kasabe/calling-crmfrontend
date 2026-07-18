@@ -462,11 +462,12 @@ onChange={(e) => {
 
     </div>
 
+
     {/* ASSIGNED TO */}
 
     <div className="col-md-2">
 
-    <select
+   <select
   className="form-select"
   value={filters.assigned}
   onChange={(e) =>
@@ -479,13 +480,15 @@ onChange={(e) => {
   <option value="">Assigned To</option>
 
   {users
-    .filter((u) => u.role?.trim().toLowerCase() === "executive")
+    .filter(
+      (u) => u.role?.trim().toLowerCase() === "executive"
+    )
     .map((u) => (
       <option
         key={u._id}
-        value={u.email}
+        value={u.email}   // Backend साठी Email
       >
-        {u.name}
+        {u.name}          {/* User ला फक्त Name दिसेल */}
       </option>
     ))}
 </select>
