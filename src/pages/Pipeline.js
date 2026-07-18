@@ -284,18 +284,10 @@ fetchProjects();
 
     /* ================= EXPORT EXCEL ================= */
 
-  const handleExport = () => {
+ const handleExport = async () => {
 
-    if (filteredLeads.length === 0) {
-
-      toast.error("No Leads To Export ❌");
-
-      return;
-
-    }
-
-   const handleExport = async () => {
   try {
+
     const res = await axios.post(
       `${API}/export-leads`,
       {
@@ -306,6 +298,11 @@ fetchProjects();
       }
     );
 
+    if (!res.data || res.data.length === 0) {
+      toast.error("No Leads To Export ❌");
+      return;
+    }
+
     const exportData = res.data.map((l) => ({
       Name: l.name,
       Mobile: l.phone,
@@ -313,19 +310,18 @@ fetchProjects();
       Project: l.project,
       Assigned: l.assigned_to,
       "Closing Officer": l.assigned_manager || "-",
+      Remark: l.remark || "-",
       "Created Date": l.createdAt
-        ? new Date(l.createdAt).toLocaleDateString("en-GB")
+        ? new Date(l.createdAt).toLocaleString("en-IN")
         : "-",
       "Next Call": l.next_call_date
         ? new Date(l.next_call_date).toLocaleDateString("en-GB")
         : "-",
     }));
 
-    const worksheet =
-      XLSX.utils.json_to_sheet(exportData);
+    const worksheet = XLSX.utils.json_to_sheet(exportData);
 
-    const workbook =
-      XLSX.utils.book_new();
+    const workbook = XLSX.utils.book_new();
 
     XLSX.utils.book_append_sheet(
       workbook,
@@ -339,11 +335,18 @@ fetchProjects();
     );
 
     toast.success("Excel Exported ✅");
+
   } catch (err) {
+
     console.log(err);
+
     toast.error("Export Failed ❌");
-  }}
+
+  }
+
 };
+
+   
   /* ================= CARDS ================= */
 
 const stats = {
