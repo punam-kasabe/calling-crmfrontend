@@ -956,67 +956,46 @@ const handlePrevPage = () => {
 
 };
 
-  /* ================= STATS ================= */
 
  /* ================= MONTHLY STATS ================= */
 
+/* ================= FILTERED STATS ================= */
+
 const stats = useMemo(() => {
-
-  const now = new Date();
-
-  const currentMonth = now.getMonth();
-
-  const currentYear = now.getFullYear();
-
-  const monthlyLeads = leads.filter((lead) => {
-
-    if (!lead.createdAt) return false;
-
-    const created = new Date(lead.createdAt);
-
-    return (
-      created.getMonth() === currentMonth &&
-      created.getFullYear() === currentYear
-    );
-
-  });
 
   return {
 
-    total: monthlyLeads.length,
+    total: filteredLeads.length,
 
-    new: monthlyLeads.filter(
+    new: filteredLeads.filter(
       (l) => l.status === "New"
     ).length,
 
-    interested: monthlyLeads.filter(
+    interested: filteredLeads.filter(
       (l) =>
         l.status === "Interested" ||
         l.status === "Very Interested"
     ).length,
 
-    booked: monthlyLeads.filter(
+    booked: filteredLeads.filter(
       (l) => l.status === "Booked"
     ).length,
 
-    followup: monthlyLeads.filter(
+    followup: filteredLeads.filter(
       (l) => l.status === "Follow Up"
     ).length,
 
-    notInterested: monthlyLeads.filter(
+    notInterested: filteredLeads.filter(
       (l) => l.status === "Not Interested"
     ).length,
 
-    siteVisitDone: monthlyLeads.filter(
+    siteVisitDone: filteredLeads.filter(
       (l) => l.status === "Site Visit Done"
     ).length,
 
   };
 
-}, [leads]);
-
-
-  return (
+}, [filteredLeads]);  return (
 
     <div className="layout">
 
@@ -1095,7 +1074,7 @@ const stats = useMemo(() => {
           <p>{stats.siteVisitDone}</p>
          </div>
          
-</div> 
+     </div> 
 
          {/* ================= SINGLE SEARCH ================= */}
 
