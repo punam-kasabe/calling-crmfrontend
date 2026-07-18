@@ -833,6 +833,7 @@ const matchesDescription =
         )
     : true;
 
+
 const createdDate =
   lead.createdAt
     ? new Date(lead.createdAt)
@@ -957,59 +958,63 @@ const handlePrevPage = () => {
 
   /* ================= STATS ================= */
 
-  const stats = useMemo(() => {
+ /* ================= MONTHLY STATS ================= */
 
-    return {
+const stats = useMemo(() => {
 
-      total:
-        leads.length,
+  const now = new Date();
 
-      new:
-        leads.filter(
-          (l) =>
-            l.status ===
-            "New"
-        ).length,
+  const currentMonth = now.getMonth();
 
-        interested:
-        leads.filter(
+  const currentYear = now.getFullYear();
+
+  const monthlyLeads = leads.filter((lead) => {
+
+    if (!lead.createdAt) return false;
+
+    const created = new Date(lead.createdAt);
+
+    return (
+      created.getMonth() === currentMonth &&
+      created.getFullYear() === currentYear
+    );
+
+  });
+
+  return {
+
+    total: monthlyLeads.length,
+
+    new: monthlyLeads.filter(
+      (l) => l.status === "New"
+    ).length,
+
+    interested: monthlyLeads.filter(
       (l) =>
-       l.status === "Interested" ||
-       l.status === "Very Interested"
-      ).length,
+        l.status === "Interested" ||
+        l.status === "Very Interested"
+    ).length,
 
-      booked:
-        leads.filter(
-          (l) =>
-            l.status ===
-            "Booked"
-        ).length,
+    booked: monthlyLeads.filter(
+      (l) => l.status === "Booked"
+    ).length,
 
-     followup:
-  leads.filter(
-    (l) =>
-      l.status ===
-      "Follow Up"
-  ).length,
+    followup: monthlyLeads.filter(
+      (l) => l.status === "Follow Up"
+    ).length,
 
-      notInterested:
-        leads.filter(
-          (l) =>
-            l.status ===
-            "Not Interested"
-        ).length,
+    notInterested: monthlyLeads.filter(
+      (l) => l.status === "Not Interested"
+    ).length,
 
-        siteVisitDone:
-        leads.filter(
-        (l) =>
-        l.status ===
-        "Site Visit Done"
-  ).length,
+    siteVisitDone: monthlyLeads.filter(
+      (l) => l.status === "Site Visit Done"
+    ).length,
 
-         
-    };
+  };
 
-  }, [leads]);
+}, [leads]);
+
 
   return (
 
