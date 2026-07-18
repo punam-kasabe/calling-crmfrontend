@@ -466,27 +466,26 @@ onChange={(e) => {
 
     <div className="col-md-2">
 
-     <select
+    <select
   className="form-select"
   value={filters.assigned}
   onChange={(e) =>
     setFilters({
       ...filters,
-      assigned: e.target.value
+      assigned: e.target.value,
     })
   }
 >
-
   <option value="">Assigned To</option>
 
   {users
-    .filter((u) => u.role === "executive")
+    .filter((u) => u.role?.trim().toLowerCase() === "executive")
     .map((u) => (
       <option
         key={u._id}
-        value={u.email}   
+        value={u.email}
       >
-        {u.name}          
+        {u.name}
       </option>
     ))}
 </select>
