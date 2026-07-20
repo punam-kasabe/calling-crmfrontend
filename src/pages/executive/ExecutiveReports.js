@@ -243,11 +243,11 @@ const totalPages =
   const filterDate =
     selectedDate ||
     new Date().toISOString().split("T")[0];
+
   const dateLeads = leads.filter(
-    (lead) =>
-      lead.createdAt?.split("T")[0] ===
-      filterDate
-  ); 
+  (lead) =>
+    lead.createdAt?.split("T")[0] === filterDate
+);
 
   const statusCount = {};
 
@@ -270,30 +270,17 @@ const totalPages =
 
 }, [leads, selectedDate]);
      
-
 const statusWiseLeads = useMemo(() => {
 
   if (!selectedStatus) return [];
 
-  const filterDate =
-    selectedDate ||
-    new Date().toISOString().split("T")[0];
-
-  return leads.filter((lead) => {
-
-    const leadDate =
-      lead.createdAt?.split("T")[0];
-
-    return (
-      leadDate === filterDate &&
+  return filteredLeads.filter(
+    (lead) =>
       (lead.status || "No Status") === selectedStatus
-    );
-
-  });
+  );
 
 }, [
-  leads,
-  selectedDate,
+  filteredLeads,
   selectedStatus
 ]);
 
@@ -327,38 +314,7 @@ const COLORS = [
 };
   
 
-   const downloadReport = () => {
-   const today = new Date()
-    .toISOString()
-    .split("T")[0];
-
-  let csv =
-    "Name,Phone,Project,Status,Next Call Date\n";
-
-   filteredLeads.forEach((lead) => {
-        csv += `"${lead.name || ""}","${lead.phone || ""}","${lead.project || ""}","${lead.status || ""}","${lead.next_call_date || ""}"\n`;
-  });
-
-  const blob = new Blob([csv], {
-    type: "text/csv;charset=utf-8;"
-  });
-
-  const url =
-    window.URL.createObjectURL(blob);
-
-  const link =
-    document.createElement("a");
-
-  link.href = url;
-  link.download =
-    `Executive_Report_${today}.csv`;
-
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-
-  window.URL.revokeObjectURL(url);
-  };
+  
 
   return (
     <div className="layout">
@@ -432,18 +388,21 @@ Monthly Report
     <input
       type="date"
       value={selectedDate}
-      onChange={(e) => {
-        setSelectedDate(e.target.value);
-        setCurrentPage(1);
-      }}
+     onChange={(e) => {
+  setSelectedDate(e.target.value);
+  setSelectedStatus("");
+  setCurrentPage(1);
+}}
+
     />
 
     <button
       className="clear-btn"
       onClick={() => {
-        setSelectedDate("");
-        setCurrentPage(1);
-      }}
+  setSelectedDate("");
+  setSelectedStatus("");
+  setCurrentPage(1);
+}}
     >
       Clear
     </button>

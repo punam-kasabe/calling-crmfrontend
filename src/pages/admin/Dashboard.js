@@ -424,17 +424,23 @@ else if (item.title === "Reception Entries") {
 
                   <tbody>
 
-                    {dashboard.executives?.length > 0 ? (
+                  {dashboard.executives?.length > 0 ? (
 
-                      dashboard.executives.map((e, i) => (
+  dashboard.executives
+    .filter(
+      (e) =>
+        e.name &&
+        e.name.trim() !== ""
+    )
+    .map((e, i) => (
 
-                        <tr key={i}>
+      <tr key={i}>
 
-                          <td>
-                  {e.name?.includes("@")
-                    ? e.name.split("@")[0]
-                   : e.name}
-                  </td>
+                        <td>
+  {(e.name || "").includes("@")
+    ? e.name.split("@")[0]
+    : e.name || "-"}
+</td>
 
                           <td>{e.todayAssigned}</td>
 
@@ -524,7 +530,7 @@ else if (item.title === "Reception Entries") {
 
   l.name?.includes("@")
     ? l.name.split("@")[0]
-    : l.name
+    : l.name || "-"
 
 }
                           </span>
