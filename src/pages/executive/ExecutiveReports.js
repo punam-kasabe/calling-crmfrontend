@@ -19,6 +19,8 @@ export default function ExecutiveReports() {
   const [leads, setLeads] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedDate, setSelectedDate] = useState("");
+  const [reportType, setReportType] = useState("daily");
+  const [selectedMonth, setSelectedMonth] = useState(""); 
   const [currentPage, setCurrentPage] =
   useState(1);
   const [selectedStatus, setSelectedStatus] =
@@ -57,20 +59,64 @@ const leadsPerPage = 20;
 
 const filteredLeads = useMemo(() => {
 
-  if (!selectedDate) {
+  if (reportType === "overall")
     return leads;
+
+  if (reportType === "daily") {
+
+    if (!selectedDate)
+      return leads;
+
+    return leads.filter(
+      lead =>
+        lead.createdAt?.split("T")[0] === selectedDate
+    );
+
   }
 
-  return leads.filter((lead) => {
+  if (reportType === "weekly") {
 
-    const leadDate =
-      lead.createdAt?.split("T")[0];
+    const today = new Date();
 
-    return leadDate === selectedDate;
+    const start = new Date();
 
-  });
+    start.setDate(today.getDate() - 6);
 
-}, [leads, selectedDate]);
+    return leads.filter(lead => {
+
+      const d = new Date(lead.createdAt);
+
+      return d >= start && d <= today;
+
+    });
+
+  }
+
+  if (reportType === "monthly") {
+
+    if (!selectedMonth)
+      return leads;
+
+    return leads.filter(lead => {
+
+      const d = new Date(lead.createdAt);
+
+      return `${d.getFullYear()}-${String(
+        d.getMonth() + 1
+      ).padStart(2, "0")}` === selectedMonth;
+
+    });
+
+  }
+
+  return leads;
+
+}, [
+  leads,
+  reportType,
+  selectedDate,
+  selectedMonth
+]);
 
 /* PAGINATION */
 
@@ -265,6 +311,22 @@ const COLORS = [
   "#546E7A"
 ];
    
+  const reportTitle = () => {
+
+  if (reportType === "daily")
+    return "Daily Report";
+
+  if (reportType === "weekly")
+    return "Weekly Report";
+
+  if (reportType === "monthly")
+    return "Monthly Report";
+
+  return "Overall Report";
+
+};
+  
+
    const downloadReport = () => {
    const today = new Date()
     .toISOString()
@@ -296,7 +358,7 @@ const COLORS = [
   document.body.removeChild(link);
 
   window.URL.revokeObjectURL(url);
-};
+  };
 
   return (
     <div className="layout">
@@ -311,7 +373,8 @@ const COLORS = [
         }`}
       >
        <div className="page-header">
-        <h2>Executive Reports</h2>
+        <h2>{reportTitle()}</h2>
+
 
         <p>
             Welcome,
@@ -321,83 +384,99 @@ const COLORS = [
                   </strong>
             </p>
 
+
   <div
-    style={{
-      marginTop: "15px",
-      marginBottom: "20px"
-    }}
-  >
+className="report-filter"
+style={{
+display:"flex",
+gap:"15px",
+alignItems:"center",
+marginBottom:"20px",
+flexWrap:"wrap"
+}}
+>
+
+<select
+
+value={reportType}
+
+onChange={(e)=>{
+
+setReportType(e.target.value);
+
+setCurrentPage(1);
+
+}}
+
+>
+
+<option value="overall">
+Overall Report
+</option>
+
+<option value="daily">
+Daily Report
+</option>
+
+<option value="weekly">
+Weekly Report
+</option>
+
+<option value="monthly">
+Monthly Report
+</option>
+
+</select>
+{reportType === "daily" && (
+  <>
+    <input
+      type="date"
+      value={selectedDate}
+      onChange={(e) => {
+        setSelectedDate(e.target.value);
+        setCurrentPage(1);
+      }}
+    />
+
     <button
-      onClick={downloadReport}
-      style={{
-        background: "#198754",
-        color: "#fff",
-        border: "none",
-        padding: "10px 18px",
-        borderRadius: "6px",
-        cursor: "pointer",
-        fontWeight: "600"
+      className="clear-btn"
+      onClick={() => {
+        setSelectedDate("");
+        setCurrentPage(1);
       }}
     >
-      Download Daily Report
+      Clear
     </button>
-  </div>
+  </>
+)}
+
+{reportType === "monthly" && (
+  <>
+    <input
+      type="month"
+      value={selectedMonth}
+      onChange={(e) => {
+        setSelectedMonth(e.target.value);
+        setCurrentPage(1);
+      }}
+    />
+
+    <button
+      className="clear-btn"
+      onClick={() => {
+        setSelectedMonth("");
+        setCurrentPage(1);
+      }}
+    >
+      Clear
+    </button>
+  </>
+)}
+
+</div>
 </div>
 
 
- <div
-  style={{
-    marginTop: "15px",
-    marginBottom: "20px",
-    display: "flex",
-    gap: "10px",
-    alignItems: "center"
-  }}
->
-  <label
-    style={{
-      fontWeight: "600"
-    }}
-  >
-    Select Date:
-  </label>
-
-  <input
-  className="date-input"
-  type="date"
-    value={selectedDate}
-    onChange={(e) => {
-  setSelectedDate(
-    e.target.value
-  );
-  setCurrentPage(1);
-}}
-    style={{
-      padding: "10px",
-      border: "1px solid #ddd",
-      borderRadius: "8px"
-    }}
-  />
-
-  <button
-  className="clear-btn"
-  onClick={() => {
-  setSelectedDate("");
-  setCurrentPage(1);
-}}
-
-    style={{
-      background: "#dc3545",
-      color: "#fff",
-      border: "none",
-      padding: "10px 15px",
-      borderRadius: "8px",
-      cursor: "pointer"
-    }}
-  >
-    Clear
-  </button>
-</div>
 
         {loading ? (
           <div className="loader">
