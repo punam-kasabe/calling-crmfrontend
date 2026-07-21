@@ -403,6 +403,7 @@ Monthly Report
   setSelectedStatus("");
   setCurrentPage(1);
 }}
+
     >
       Clear
     </button>

@@ -1,10 +1,9 @@
-/* ===========================
-   CREATE VISIT PAGE
-=========================== */
+/* ========================================
+   PAGE
+======================================== */
 
 .create-visit-page{
-    width:100%;
-    padding:25px;
+    padding:30px;
     background:#f4f7fb;
     min-height:100vh;
 }
@@ -13,52 +12,57 @@
     max-width:1200px;
     margin:auto;
     background:#fff;
-    border-radius:12px;
-    padding:30px;
-    box-shadow:0 8px 20px rgba(0,0,0,.08);
+    border-radius:18px;
+    padding:35px;
+    box-shadow:0 10px 35px rgba(0,0,0,.08);
 }
 
-/* ===========================
+/* ========================================
    HEADER
-=========================== */
+======================================== */
 
 .visit-header{
-    margin-bottom:30px;
     text-align:center;
+    margin-bottom:30px;
 }
 
 .visit-header h1{
-    font-size:30px;
-    color:#0d6efd;
-    margin-bottom:5px;
+    margin:0;
+    font-size:34px;
+    color:#1565c0;
+    font-weight:700;
 }
 
 .visit-header p{
-    color:#666;
+    margin-top:8px;
+    color:#777;
     font-size:15px;
 }
 
-/* ===========================
+/* ========================================
    FORM GRID
-=========================== */
+======================================== */
 
 .create-visit-form{
     display:grid;
-    grid-template-columns:repeat(2,1fr);
+    grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
     gap:22px;
 }
+
+/* ========================================
+   FORM GROUP
+======================================== */
 
 .form-group{
     display:flex;
     flex-direction:column;
-    position:relative;
 }
 
 .form-group label{
-    margin-bottom:8px;
     font-size:14px;
     font-weight:600;
     color:#444;
+    margin-bottom:8px;
 }
 
 .form-group input,
@@ -66,42 +70,35 @@
 .form-group textarea{
 
     width:100%;
-    padding:12px 14px;
+    padding:13px 15px;
     border:1px solid #d9d9d9;
-    border-radius:8px;
+    border-radius:10px;
     outline:none;
-    font-size:14px;
+    font-size:15px;
     transition:.25s;
-    background:#fff;
+    background:white;
+
 }
 
 .form-group textarea{
-    resize:vertical;
+
     min-height:110px;
+    resize:vertical;
+
 }
 
 .form-group input:focus,
 .form-group select:focus,
 .form-group textarea:focus{
 
-    border-color:#0d6efd;
-    box-shadow:0 0 0 3px rgba(13,110,253,.15);
+    border-color:#1976d2;
+    box-shadow:0 0 0 3px rgba(25,118,210,.15);
 
 }
 
-/* ===========================
-   DATE
-=========================== */
-
-input[type="date"]{
-
-    cursor:pointer;
-
-}
-
-/* ===========================
+/* ========================================
    MULTI SELECT
-=========================== */
+======================================== */
 
 .multi-select{
 
@@ -113,43 +110,48 @@ input[type="date"]{
 .select-box{
 
     border:1px solid #d9d9d9;
-    padding:12px 14px;
-    border-radius:8px;
+    border-radius:10px;
+    padding:13px 15px;
     background:#fff;
     cursor:pointer;
-    min-height:46px;
+    min-height:48px;
+
     display:flex;
     align-items:center;
+
     transition:.25s;
 
 }
 
 .select-box:hover{
 
-    border-color:#0d6efd;
+    border-color:#1976d2;
 
 }
 
-/* ===========================
+/* ========================================
    DROPDOWN
-=========================== */
+======================================== */
 
 .dropdown-list{
 
     position:absolute;
-    left:0;
-    right:0;
+
     top:105%;
+
+    left:0;
+
+    right:0;
 
     background:#fff;
 
     border:1px solid #ddd;
 
-    border-radius:8px;
+    border-radius:12px;
 
-    box-shadow:0 10px 20px rgba(0,0,0,.12);
+    box-shadow:0 10px 25px rgba(0,0,0,.15);
 
-    max-height:230px;
+    max-height:260px;
 
     overflow-y:auto;
 
@@ -160,31 +162,30 @@ input[type="date"]{
 .dropdown-item{
 
     display:flex;
+
     align-items:center;
 
     gap:10px;
 
-    padding:10px 15px;
+    padding:12px 15px;
 
     cursor:pointer;
 
-    transition:.2s;
-
-    font-size:14px;
+    transition:.25s;
 
 }
 
 .dropdown-item:hover{
 
-    background:#f1f6ff;
+    background:#f2f7ff;
 
 }
 
 .dropdown-item input{
 
-    width:17px;
-    height:17px;
-    cursor:pointer;
+    width:18px;
+
+    height:18px;
 
 }
 
@@ -198,36 +199,33 @@ input[type="date"]{
 
 .dropdown-list::-webkit-scrollbar-thumb{
 
-    background:#0d6efd;
-    border-radius:10px;
+    background:#bbb;
+
+    border-radius:20px;
 
 }
 
-.dropdown-list::-webkit-scrollbar-track{
-
-    background:#eee;
-
-}
-
-/* ===========================
+/* ========================================
    BUTTON
-=========================== */
+======================================== */
 
 .save-btn{
 
-    grid-column:1/-1;
+    margin-top:10px;
 
-    padding:14px;
+    width:100%;
+
+    padding:15px;
 
     border:none;
 
-    border-radius:8px;
+    border-radius:12px;
 
-    background:#0d6efd;
+    background:#1976d2;
 
-    color:#fff;
+    color:white;
 
-    font-size:16px;
+    font-size:17px;
 
     font-weight:600;
 
@@ -239,20 +237,55 @@ input[type="date"]{
 
 .save-btn:hover{
 
-    background:#0958d9;
+    background:#1259a7;
+
+    transform:translateY(-2px);
 
 }
 
 .save-btn:disabled{
 
     opacity:.7;
+
     cursor:not-allowed;
 
 }
 
-/* ===========================
-   RESPONSIVE
-=========================== */
+/* ========================================
+   SIDEBAR LAYOUT
+======================================== */
+
+.layout{
+
+    display:flex;
+
+}
+
+.main-content{
+
+    flex:1;
+
+    transition:.3s;
+
+    padding:20px;
+
+}
+
+.shifted{
+
+    margin-left:250px;
+
+}
+
+.full{
+
+    margin-left:80px;
+
+}
+
+/* ========================================
+   MOBILE
+======================================== */
 
 @media(max-width:992px){
 
@@ -262,54 +295,51 @@ grid-template-columns:1fr;
 
 }
 
-}
-
-@media(max-width:768px){
-
-.create-visit-page{
-
-padding:15px;
-
-}
-
 .create-visit-card{
 
 padding:20px;
 
 }
 
+.shifted{
+
+margin-left:0;
+
+}
+
+.full{
+
+margin-left:0;
+
+}
+
+}
+
+@media(max-width:600px){
+
 .visit-header h1{
 
-font-size:24px;
+font-size:26px;
 
 }
 
-}
+.select-box{
 
-@media(max-width:480px){
-
-.create-visit-card{
-
-padding:15px;
+font-size:14px;
 
 }
 
 .form-group input,
 .form-group select,
-.form-group textarea,
-.select-box{
+.form-group textarea{
 
-font-size:13px;
-
-padding:10px;
+font-size:14px;
 
 }
 
 .save-btn{
 
-font-size:14px;
-
-padding:12px;
+font-size:15px;
 
 }
 
