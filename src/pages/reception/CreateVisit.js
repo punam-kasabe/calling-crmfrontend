@@ -220,11 +220,16 @@ assigned_to:""
               onSubmit={handleSubmit}
             >
 
+              <div className="form-section-title">
+         Client Information
+               </div>
+
               {/* CLIENT */}
               <div className="form-group">
                 <label>Client Name</label>
                 <input
-  type="text"
+
+      type="text"
   name="clientName"
   value={form.clientName}
   onChange={handleChange}
@@ -353,6 +358,10 @@ assigned_to:""
     <option value="YouTube">YouTube</option>
 
   </select>
+</div>
+
+<div className="form-section-title">
+  Visit Information
 </div>
               {/* VISIT STATUS */}
 <div className="form-group">
@@ -620,7 +629,9 @@ color:"#888"
 </div>
 
 </div>
-
+ <div className="form-section-title">
+  Assignment Details
+</div>
               {/* REMARK */}
               <div className="form-group">
                 <label>Remark</label>

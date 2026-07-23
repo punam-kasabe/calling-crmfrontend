@@ -292,7 +292,7 @@ const handleChange = (e) => {
                 <th>Project</th>
                 <th>Client Type</th>
                 <th>Visit Status</th>
-                <th>Booking</th>
+              
                 <th>Manager</th>
                 <th>Calling By</th>
                 <th>Remark</th>
@@ -344,19 +344,7 @@ const handleChange = (e) => {
   </span>
 </td>
 
-                  <td>
-  <span
-    className={`booking ${
-      v.bookingStatus === "PENDING"
-        ? "pending"
-        : v.bookingStatus === "BOOKED"
-        ? "booked"
-        : "notbooked"
-    }`}
-            >
-             {v.bookingStatus || "-"}
-            </span>
-                </td>
+                 
 
                     <td>
 
