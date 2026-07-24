@@ -26,20 +26,27 @@
 =================================================== */
 
 .executive-main {
-  flex: 1;
-  min-height: 100vh;
-  padding: 18px;
-  transition: all 0.3s ease;
-  width: 100%;
+    flex: 1;
+    min-height: 100vh;
+    padding: 18px;
+    padding-top: 28px;
+    transition: all .3s ease;
+
+    width: calc(100% - 70px);
+    margin-left: 70px;
+
+    overflow-x: hidden;
+    box-sizing: border-box;
 }
 
 .executive-main.sidebar-open {
   margin-left: 250px;
-  padding-left: 28px;
+  width: calc(100% - 250px);
 }
 
 .executive-main.sidebar-close {
-  margin-left: 90px;
+  margin-left: 70px;
+  width: calc(100% - 70px);
 }
 
 /* ===================================================
@@ -697,15 +704,8 @@
     min-width: 600px;
   }
 }
-.executive-main {
-  flex: 1;
-  min-height: 100vh;
-  padding: 18px;
-  padding-top: 28px;
-  transition: all 0.3s ease;
-  width: 100%;
-  overflow-x: hidden;
-}
+
+
 .welcome-text {
   display: flex;
   align-items: center;
