@@ -12,7 +12,6 @@ import {
 } from "react-chartjs-2";
 
 import CountUp from "react-countup";
-
 import "chart.js/auto";
 
 const API = "https://calling-crm-backend-7w52.onrender.com/api";
@@ -20,7 +19,6 @@ const API = "https://calling-crm-backend-7w52.onrender.com/api";
 export default function Dashboard() {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(true);
-
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
   };

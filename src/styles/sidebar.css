@@ -22,7 +22,6 @@
   border-right: 1px solid rgba(255,255,255,0.06);
 }
 
-
 /* ================= TOP NAVBAR ================= */
 
 .top-navbar {
@@ -30,16 +29,18 @@
   top: 0;
   left: 240px;
   right: 0;
-  width: auto;   /* calc(...) काढून टाक */
+  width: auto;   
   height: 70px;
   background: #fff;
   border-bottom: 1px solid #e5e7eb;
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
   padding: 0 20px;
+  overflow: hidden;
   z-index: 1100;
 }
+
 
 .top-navbar.collapsed {
   left: 80px;
@@ -53,16 +54,18 @@
   width: auto;
 }
 
-.nav-left {
-  display: flex;
-  align-items: center;
-  gap: 15px;
+.nav-left{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    height:70px;
 }
 
-.logo {
-  width: 40px;
-  height: 40px;
-  object-fit: contain;
+.logo{
+    width:32px;
+    height:32px;
+    object-fit:contain;
+    display:block;
 }
 
 .menu-btn {
@@ -72,10 +75,9 @@
   cursor: pointer;
 }
 
-.title {
-  font-size: 18px;
-  font-weight: 600;
-  color: #111827;
+.title{
+    margin:0;
+    line-height:1;
 }
 
 /* ================= PROFILE ================= */
