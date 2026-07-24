@@ -329,13 +329,7 @@ const cityDropdownOptions = [
 
     }, [user]);
 
-  useEffect(() => {
 
-    fetchMyLeads();
-
-  }, [fetchMyLeads]);
-
-  
 
   /* ================= FETCH EXECUTIVES ================= */
 
