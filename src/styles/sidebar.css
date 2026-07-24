@@ -27,25 +27,31 @@
 /* ================= TOP NAVBAR ================= */
 
 .top-navbar {
-  height: 70px;
-  background: white;
-  border-bottom: 1px solid #e5e7eb;
   position: fixed;
   top: 0;
-  right: 0;
   left: 240px;
+  right: 0;
+  width: auto;   /* calc(...) काढून टाक */
+  height: 70px;
+  background: #fff;
+  border-bottom: 1px solid #e5e7eb;
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
   padding: 0 20px;
   z-index: 1100;
-  transition: 0.3s ease;
-  width: calc(100% - 240px);
-
 }
 
 .top-navbar.collapsed {
   left: 80px;
+  right: 0;
+  width: auto;
+}
+
+.top-navbar.shifted {
+  left: 240px;
+  right: 0;
+  width: auto;
 }
 
 .nav-left {
