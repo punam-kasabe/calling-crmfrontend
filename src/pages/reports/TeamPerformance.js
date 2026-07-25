@@ -421,6 +421,8 @@ Loading...
 <th>Name</th>
 
 <th>Assigned</th>
+<th>Pending</th>
+
 <th>Completed Today</th>
 <th>Total</th>
 
@@ -446,7 +448,6 @@ Loading...
 
 <th>Visit Done</th>
 
-<th>Pending</th>
 
 </tr>
 
@@ -483,6 +484,21 @@ row.email,
 
 </span>
 
+</td>
+
+<td>
+  <span
+    className="count-link"
+    onClick={() =>
+      openLeads(
+        row.email,
+        `${row.name} Pending`,
+        "pending"
+      )
+    }
+  >
+    {row.pending}
+  </span>
 </td>
 
 <td>
@@ -691,20 +707,7 @@ row.email,
   </span>
 </td>
 
-<td>
-  <span
-    className="count-link"
-    onClick={() =>
-      openLeads(
-        row.email,
-        `${row.name} Pending`,
-        "pending"
-      )
-    }
-  >
-    {row.pending}
-  </span>
-</td>
+
 
 </tr>
 
