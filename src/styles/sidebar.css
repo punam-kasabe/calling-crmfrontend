@@ -37,7 +37,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 0 20px;
-  overflow: hidden;
+  overflow: visible;
   z-index: 1100;
 }
 
@@ -105,14 +105,23 @@
 
 .profile-dropdown {
   position: absolute;
+
+  top: 60px;
   right: 0;
-  top: 55px;
-  width: 220px;
-  background: white;
-  border-radius: 10px;
+
+  width: 230px;
+
+  background: #fff;
+
+  border-radius: 12px;
+
   padding: 15px;
-  box-shadow: 0 5px 20px rgba(0,0,0,0.15);
-  color: black;
+
+  box-shadow: 0 10px 30px rgba(0,0,0,.20);
+
+  z-index: 999999;
+
+  overflow: visible;
 }
 
 .profile-dropdown p {
