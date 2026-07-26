@@ -108,8 +108,7 @@ export default function Dashboard() {
         {
           params: {
             email: user.email,
-            role: user.role,
-            month: selectedMonth
+            role: user.role
           }
         }
       );
@@ -126,7 +125,7 @@ export default function Dashboard() {
 
     }
 
- }, [user, selectedMonth]);
+  }, [user]);
 
   useEffect(() => {
     fetchDashboard();
@@ -405,49 +404,6 @@ else if (item.title === "Reception Entries") {
 
             </div>
 
-                 <div className="chart-card mt-4">
-
-    <div
-        style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginBottom: 20
-        }}
-    >
-
-        <h5>
-            Monthly Executive Performance
-        </h5>
-
-        <select
-            value={selectedMonth}
-            onChange={(e) =>
-                setSelectedMonth(Number(e.target.value))
-            }
-            style={{
-                width: 220,
-                padding: 10,
-                borderRadius: 8
-            }}
-        >
-
-            {months.map((m, index) => (
-
-                <option
-                    key={index}
-                    value={index + 1}
-                >
-                    {m}
-                </option>
-
-            ))}
-
-        </select>
-
-    </div>
-
-</div>
             {/* =========================================
                ROW 3 — EXECUTIVE PERFORMANCE
             ========================================= */}
@@ -464,19 +420,18 @@ else if (item.title === "Reception Entries") {
 
                     <tr>
 
-                     <th>Executive</th>
+                      <th>Name</th>
+                      
+                      <th>Today's Assigned</th>
 
-<th>Total Assigned</th>
+                      <th>Total Leads</th>
 
-<th>Interested</th>
+                      <th>Interested</th>
 
-<th>Calling</th>
+                      <th>Booked</th>
 
-<th>Ringing</th>
+                      <th>Pending</th>
 
-<th>Booked</th>
-
-<th>Pending</th>
                     </tr>
 
                   </thead>
@@ -501,17 +456,15 @@ else if (item.title === "Reception Entries") {
     : e.name || "-"}
 </td>
 
-                        <td>{e.total}</td>
+                          <td>{e.todayAssigned}</td>
 
-<td>{e.interested}</td>
+                          <td>{e.total}</td>
 
-<td>{e.calling}</td>
+                          <td>{e.interested}</td>
 
-<td>{e.ringing}</td>
+                          <td>{e.booked}</td>
 
-<td>{e.booked}</td>
-
-<td>{e.pending}</td>
+                          <td>{e.pending}</td>
 
                         </tr>
 
