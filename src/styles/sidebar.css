@@ -80,6 +80,9 @@
     line-height:1;
 }
 
+.sidebar.collapsed{
+    width:70px;
+}
 /* ================= PROFILE ================= */
 
 .nav-right {

@@ -205,8 +205,8 @@ assigned_to:""
         toggleSidebar={() => setIsOpen(!isOpen)}
       />
 
-      <div className={`main-content ${isOpen ? "shifted" : "full"}`}>
-
+<div className={`main-content ${isOpen ? "expanded" : "collapsed"}`}>
+  
         <div className="create-visit-page">
           <div className="create-visit-card">
 

@@ -253,36 +253,30 @@ SCROLLBAR
     border-radius:20px;
 
 }
-
 /* ===========================
 LAYOUT
 =========================== */
 
 .layout{
-
     display:flex;
-
 }
 
 .main-content{
-
     width:100%;
-    transition:.3s;
-    margin-top:60px;
+    margin-top:70px;
     padding:20px;
-
+    transition:all .3s ease;
+    box-sizing:border-box;
 }
 
-.shifted{
-
+.main-content.expanded{
     margin-left:240px;
-
+    width:calc(100% - 240px);
 }
 
-.full{
-
+.main-content.collapsed{
     margin-left:70px;
-
+    width:calc(100% - 70px);
 }
 
 /* ===========================

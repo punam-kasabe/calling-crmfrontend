@@ -375,8 +375,8 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
           : ""
       }
     >
-      <ClipboardList size={18} />
 
+      <ClipboardList size={18} />
       <span className="text">
         Daily Work Report
       </span>

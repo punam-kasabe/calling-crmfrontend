@@ -4,10 +4,11 @@
 
 /* MAIN CONTENT */
 .main-content {
-  margin-top: 60px; /* navbar height */
+  margin-top: 70px; /* navbar height */
   padding: 20px;
   width: 100%;
-  transition: 0.3s;
+ transition:.3s ease;
+
 }
 
 /* SIDEBAR OPEN */
