@@ -93,23 +93,16 @@ body,
 
 .compact-card {
   border-radius: 16px;
-
   padding: 18px;
-
   min-height: 110px;
-
   color: #fff;
-
   position: relative;
   z-index:2;
   overflow: hidden;
-
   display: flex;
   flex-direction: column;
   justify-content: center;
-
   transition: 0.3s ease;
-
   box-shadow: 0 5px 16px rgba(0,0,0,0.08);
 }
 
@@ -154,17 +147,18 @@ body,
    ROW LAYOUT
 ========================================= */
 
-.dashboard-row {
-  display: flex;
-  gap: 20px;
-  width: 100%;
-  margin-bottom: 20px;
-  align-items: stretch;
+.dashboard-row{
+    display:flex;
+    gap:20px;
+    width:100%;
+    margin:25px 0;
+    align-items:stretch;
+    flex-wrap:wrap;
 }
 
 .chart-large {
   flex: 2;
-  min-width: 0;
+  min-width: 500px;
 }
 
 .chart-small {
@@ -186,7 +180,7 @@ body,
 
   background: #fff;
 
-  border-radius: 18px;
+  border-radius: 15px;
 
   padding: 20px;
 
