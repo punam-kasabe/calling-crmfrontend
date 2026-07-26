@@ -219,12 +219,10 @@ export default function Dashboard() {
       ========================================= */}
 
       <div
-        className="dashboard-container"
-        style={{
-          marginLeft: isOpen ? "240px" : "70px"
-        }}
-      >
-
+  className={`dashboard-container ${
+    isOpen ? "sidebar-open" : "sidebar-close"
+  }`}
+>
       
         {/* =========================================
            LOADING
