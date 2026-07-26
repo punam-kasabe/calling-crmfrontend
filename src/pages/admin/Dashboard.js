@@ -14,6 +14,25 @@ import {
 import CountUp from "react-countup";
 import "chart.js/auto";
 
+/* ===========================
+   MONTH FILTER
+=========================== */
+
+const months = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December"
+];
+
 const API = "https://calling-crm-backend-7w52.onrender.com/api";
 
 export default function Dashboard() {
@@ -40,6 +59,11 @@ export default function Dashboard() {
   ========================================= */
 
   const [loading, setLoading] = useState(true);
+
+  const [selectedMonth, setSelectedMonth] = useState(
+  new Date().getMonth() + 1
+  );
+
 
   const [dashboard, setDashboard] = useState({
     total: 0,
@@ -84,7 +108,8 @@ export default function Dashboard() {
         {
           params: {
             email: user.email,
-            role: user.role
+            role: user.role,
+            month: selectedMonth
           }
         }
       );
@@ -101,7 +126,7 @@ export default function Dashboard() {
 
     }
 
-  }, [user]);
+ }, [user, selectedMonth]);
 
   useEffect(() => {
     fetchDashboard();
@@ -380,6 +405,49 @@ else if (item.title === "Reception Entries") {
 
             </div>
 
+                 <div className="chart-card mt-4">
+
+    <div
+        style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginBottom: 20
+        }}
+    >
+
+        <h5>
+            Monthly Executive Performance
+        </h5>
+
+        <select
+            value={selectedMonth}
+            onChange={(e) =>
+                setSelectedMonth(Number(e.target.value))
+            }
+            style={{
+                width: 220,
+                padding: 10,
+                borderRadius: 8
+            }}
+        >
+
+            {months.map((m, index) => (
+
+                <option
+                    key={index}
+                    value={index + 1}
+                >
+                    {m}
+                </option>
+
+            ))}
+
+        </select>
+
+    </div>
+
+</div>
             {/* =========================================
                ROW 3 — EXECUTIVE PERFORMANCE
             ========================================= */}
@@ -396,18 +464,19 @@ else if (item.title === "Reception Entries") {
 
                     <tr>
 
-                      <th>Name</th>
-                      
-                      <th>Today's Assigned</th>
+                     <th>Executive</th>
 
-                      <th>Total Leads</th>
+<th>Total Assigned</th>
 
-                      <th>Interested</th>
+<th>Interested</th>
 
-                      <th>Booked</th>
+<th>Calling</th>
 
-                      <th>Pending</th>
+<th>Ringing</th>
 
+<th>Booked</th>
+
+<th>Pending</th>
                     </tr>
 
                   </thead>
@@ -432,15 +501,17 @@ else if (item.title === "Reception Entries") {
     : e.name || "-"}
 </td>
 
-                          <td>{e.todayAssigned}</td>
+                        <td>{e.total}</td>
 
-                          <td>{e.total}</td>
+<td>{e.interested}</td>
 
-                          <td>{e.interested}</td>
+<td>{e.calling}</td>
 
-                          <td>{e.booked}</td>
+<td>{e.ringing}</td>
 
-                          <td>{e.pending}</td>
+<td>{e.booked}</td>
+
+<td>{e.pending}</td>
 
                         </tr>
 
@@ -469,6 +540,7 @@ else if (item.title === "Reception Entries") {
             ========================================= */}
 
             <div className="dashboard-row mt-4">
+
 
               {/* ASSIGNMENT */}
 
