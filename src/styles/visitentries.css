@@ -254,17 +254,22 @@ Booking
 }
 
 
-/* ==========================================
-Remark
-========================================== */
+/* ======================================
+   REMARK COLUMN
+====================================== */
 
-.remark-cell{
+.remark-cell {
+    width: 280px;
+    min-width: 280px;
+    max-width: 280px;
 
-    max-width:220px;
-    word-break:break-word;
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 
+    line-height: 22px;
+    text-align: left;
 }
-
 
 /* ==========================================
 BUTTON
