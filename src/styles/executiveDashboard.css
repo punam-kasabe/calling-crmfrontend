@@ -28,13 +28,21 @@
 .executive-main {
     flex: 1;
     min-height: 100vh;
-    margin-top: 70px;      
+
+    margin-top: 70px;
     padding: 20px;
-    transition: all .3s ease;
+
     overflow-x: hidden;
     box-sizing: border-box;
+
     width: calc(100% - 70px);
+
     margin-left: 70px;
+
+    transition:
+        margin-left .35s ease,
+        width .35s ease,
+        padding .35s ease;
 }
 
 .executive-main.sidebar-open {
@@ -43,10 +51,9 @@
 }
 
 .executive-main.sidebar-close {
-  margin-left: 70px;
-  width: calc(100% - 70px);
+    margin-left: 70px;
+    width: calc(100% - 70px);
 }
-
 /* ===================================================
    HEADER
 =================================================== */
@@ -635,7 +642,7 @@
       margin-left: 0;
       width: 100%;
   }
-  
+
   .executive-header {
     flex-direction: column;
     align-items: flex-start;
