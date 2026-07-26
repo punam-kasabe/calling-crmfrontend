@@ -1,25 +1,27 @@
-/* ========================================
+/* ===========================
    PAGE
-======================================== */
+=========================== */
 
 .create-visit-page{
-    padding:30px;
+    width:100%;
+    display:flex;
+    justify-content:center;
+    padding:25px;
     background:#f4f7fb;
-    min-height:100vh;
 }
 
 .create-visit-card{
+    width:100%;
     max-width:1200px;
-    margin:auto;
     background:#fff;
-    border-radius:18px;
-    padding:35px;
-    box-shadow:0 10px 35px rgba(0,0,0,.08);
+    border-radius:12px;
+    padding:30px;
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
 }
 
-/* ========================================
+/* ===========================
    HEADER
-======================================== */
+=========================== */
 
 .visit-header{
     text-align:center;
@@ -27,31 +29,26 @@
 }
 
 .visit-header h1{
-    margin:0;
-    font-size:34px;
-    color:#1565c0;
+    font-size:30px;
+    color:#0d6efd;
+    margin-bottom:5px;
     font-weight:700;
 }
 
 .visit-header p{
-    margin-top:8px;
-    color:#777;
+    color:#666;
     font-size:15px;
 }
 
-/* ========================================
-   FORM GRID
-======================================== */
+/* ===========================
+   FORM
+=========================== */
 
 .create-visit-form{
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
-    gap:22px;
+    grid-template-columns:repeat(2,1fr);
+    gap:18px;
 }
-
-/* ========================================
-   FORM GROUP
-======================================== */
 
 .form-group{
     display:flex;
@@ -61,8 +58,8 @@
 .form-group label{
     font-size:14px;
     font-weight:600;
-    color:#444;
-    margin-bottom:8px;
+    margin-bottom:6px;
+    color:#333;
 }
 
 .form-group input,
@@ -70,35 +67,84 @@
 .form-group textarea{
 
     width:100%;
-    padding:13px 15px;
-    border:1px solid #d9d9d9;
-    border-radius:10px;
+    padding:11px 14px;
+    border:1px solid #d6d6d6;
+    border-radius:8px;
     outline:none;
-    font-size:15px;
-    transition:.25s;
-    background:white;
+    transition:.3s;
+    font-size:14px;
+    background:#fff;
 
 }
 
 .form-group textarea{
-
     min-height:110px;
     resize:vertical;
-
 }
 
 .form-group input:focus,
 .form-group select:focus,
 .form-group textarea:focus{
 
-    border-color:#1976d2;
-    box-shadow:0 0 0 3px rgba(25,118,210,.15);
+    border-color:#0d6efd;
+    box-shadow:0 0 0 3px rgba(13,110,253,.15);
 
 }
 
-/* ========================================
-   MULTI SELECT
-======================================== */
+/* ===========================
+SECTION TITLE
+=========================== */
+
+.form-section-title{
+
+    grid-column:1/-1;
+
+    background:#0d6efd;
+    color:#fff;
+    padding:10px 15px;
+    border-radius:8px;
+    font-size:16px;
+    font-weight:600;
+    margin-top:10px;
+
+}
+
+/* ===========================
+BUTTON
+=========================== */
+
+.save-btn{
+
+    grid-column:1/-1;
+
+    padding:14px;
+    background:#0d6efd;
+    color:#fff;
+    border:none;
+    border-radius:8px;
+    font-size:16px;
+    font-weight:600;
+    cursor:pointer;
+    transition:.3s;
+
+}
+
+.save-btn:hover{
+
+    background:#0b5ed7;
+
+}
+
+.save-btn:disabled{
+
+    opacity:.7;
+    cursor:not-allowed;
+
+}
+
+/* ===========================
+MULTI SELECT
+=========================== */
 
 .multi-select{
 
@@ -109,51 +155,53 @@
 
 .select-box{
 
-    border:1px solid #d9d9d9;
-    border-radius:10px;
-    padding:13px 15px;
-    background:#fff;
-    cursor:pointer;
-    min-height:48px;
+    width:100%;
+    min-height:46px;
+
+    border:1px solid #d6d6d6;
+    border-radius:8px;
+
+    padding:11px 14px;
 
     display:flex;
     align-items:center;
 
-    transition:.25s;
+    cursor:pointer;
+
+    background:#fff;
+
+    transition:.3s;
+
+    overflow:hidden;
 
 }
 
 .select-box:hover{
 
-    border-color:#1976d2;
+    border-color:#0d6efd;
 
 }
-
-/* ========================================
-   DROPDOWN
-======================================== */
 
 .dropdown-list{
 
     position:absolute;
 
     top:105%;
-
     left:0;
 
-    right:0;
+    width:100%;
+
+    max-height:260px;
+
+    overflow-y:auto;
 
     background:#fff;
 
     border:1px solid #ddd;
 
-    border-radius:12px;
+    border-radius:8px;
 
-    box-shadow:0 10px 25px rgba(0,0,0,.15);
-
-    max-height:260px;
-
-    overflow-y:auto;
+    box-shadow:0 6px 18px rgba(0,0,0,.15);
 
     z-index:999;
 
@@ -162,98 +210,53 @@
 .dropdown-item{
 
     display:flex;
-
     align-items:center;
 
     gap:10px;
 
-    padding:12px 15px;
+    padding:10px 15px;
 
     cursor:pointer;
 
-    transition:.25s;
+    transition:.2s;
+
+    font-size:14px;
 
 }
 
 .dropdown-item:hover{
 
-    background:#f2f7ff;
+    background:#f1f7ff;
 
 }
 
 .dropdown-item input{
 
-    width:18px;
-
-    height:18px;
+    width:16px;
+    height:16px;
 
 }
 
-/* Scroll */
+/* ===========================
+SCROLLBAR
+=========================== */
 
 .dropdown-list::-webkit-scrollbar{
 
-    width:7px;
+    width:6px;
 
 }
 
 .dropdown-list::-webkit-scrollbar-thumb{
 
-    background:#bbb;
-
+    background:#0d6efd;
     border-radius:20px;
 
 }
 
-/* ========================================
-   BUTTON
-======================================== */
-
-.save-btn{
-
-    margin-top:10px;
-
-    width:100%;
-
-    padding:15px;
-
-    border:none;
-
-    border-radius:12px;
-
-    background:#1976d2;
-
-    color:white;
-
-    font-size:17px;
-
-    font-weight:600;
-
-    cursor:pointer;
-
-    transition:.3s;
-
-}
-
-.save-btn:hover{
-
-    background:#1259a7;
-
-    transform:translateY(-2px);
-
-}
-
-.save-btn:disabled{
-
-    opacity:.7;
-
-    cursor:not-allowed;
-
-}
-
-/* ========================================
-   SIDEBAR LAYOUT
-======================================== */
+/* ===========================
+LAYOUT
+=========================== */
 
 .layout{
 
@@ -263,29 +266,28 @@
 
 .main-content{
 
-    flex:1;
-
+    width:100%;
     transition:.3s;
-
+    margin-top:60px;
     padding:20px;
 
 }
 
 .shifted{
 
-    margin-left:250px;
+    margin-left:240px;
 
 }
 
 .full{
 
-    margin-left:80px;
+    margin-left:70px;
 
 }
 
-/* ========================================
-   MOBILE
-======================================== */
+/* ===========================
+RESPONSIVE
+=========================== */
 
 @media(max-width:992px){
 
@@ -295,51 +297,47 @@ grid-template-columns:1fr;
 
 }
 
+}
+
+@media(max-width:768px){
+
 .create-visit-card{
 
-padding:20px;
+padding:18px;
 
 }
-
-.shifted{
-
-margin-left:0;
-
-}
-
-.full{
-
-margin-left:0;
-
-}
-
-}
-
-@media(max-width:600px){
 
 .visit-header h1{
 
-font-size:26px;
+font-size:24px;
 
 }
 
-.select-box{
+.form-section-title{
 
-font-size:14px;
-
-}
-
-.form-group input,
-.form-group select,
-.form-group textarea{
-
-font-size:14px;
+font-size:15px;
 
 }
 
 .save-btn{
 
 font-size:15px;
+
+}
+
+}
+
+@media(max-width:500px){
+
+.main-content{
+
+padding:10px;
+
+}
+
+.create-visit-card{
+
+padding:15px;
 
 }
 
