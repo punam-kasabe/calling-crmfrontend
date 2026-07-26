@@ -20,6 +20,7 @@ body,
 
   font-size: 18px; 
 }
+
 /* =========================================
    PAGE
 ========================================= */
@@ -45,8 +46,9 @@ body,
   overflow-y: auto;
 
   padding: 20px;
-  padding-top: 150px;   
-
+  padding-top: 90px;
+  position: relative;
+  z-index: 1;
   transition:
     margin-left .35s ease,
     width .35s ease;
@@ -62,6 +64,9 @@ body,
     width:calc(100% - 70px);
 }
 
+.dashboard-content{
+    margin-top:35px;
+}
 
 /* =========================================
    TITLE
@@ -82,7 +87,7 @@ body,
   display: grid;
   grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
   gap: 20px;
-
+  margin-top:30px;
   margin-bottom: 24px;
 }
 
@@ -96,6 +101,7 @@ body,
   color: #fff;
 
   position: relative;
+  z-index:2;
   overflow: hidden;
 
   display: flex;
