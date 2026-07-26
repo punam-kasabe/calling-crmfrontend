@@ -223,7 +223,8 @@ export default function Dashboard() {
     isOpen ? "sidebar-open" : "sidebar-close"
   }`}
 >
-      
+      <div className="dashboard-content">
+
         {/* =========================================
            LOADING
         ========================================= */}
@@ -835,6 +836,7 @@ else if (item.title === "Reception Entries") {
 
       </div>
 
+    </div>
     </div>
   );
 }
