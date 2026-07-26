@@ -14,25 +14,6 @@ import {
 import CountUp from "react-countup";
 import "chart.js/auto";
 
-/* ===========================
-   MONTH FILTER
-=========================== */
-
-const months = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December"
-];
-
 const API = "https://calling-crm-backend-7w52.onrender.com/api";
 
 export default function Dashboard() {
@@ -59,11 +40,6 @@ export default function Dashboard() {
   ========================================= */
 
   const [loading, setLoading] = useState(true);
-
-  const [selectedMonth, setSelectedMonth] = useState(
-  new Date().getMonth() + 1
-  );
-
 
   const [dashboard, setDashboard] = useState({
     total: 0,
