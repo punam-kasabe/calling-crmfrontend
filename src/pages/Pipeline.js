@@ -396,7 +396,11 @@ const stats = {
 
   { title: "Today's Follow-ups", value: stats.todayFollowups, color: "#007bff" },
 
-  { title: "Backlogs", value: stats.backlog, color: "#007bff" },
+  {
+  title: "Interested",
+  value: stats.interested,
+  color: "#007bff"
+},
 
   { title: "Hot Leads", value: stats.hot, color: "#007bff" },
 
@@ -404,7 +408,11 @@ const stats = {
 
   { title: "Booked Leads", value: stats.booked, color: "#28a745" },
 
-  { title: "Inactive Leads", value: stats.inactive, color: "#ffc107" },
+  {
+  title: "Site Visit Done",
+  value: stats.siteVisitDone,
+  color: "#ffc107"
+},
 ].map((card, i) => (
 
 <div
