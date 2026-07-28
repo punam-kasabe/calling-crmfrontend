@@ -193,9 +193,11 @@ color:#fff;
 
 thead th{
 
-padding:14px;
+padding:18px;
 
-font-size:14px;
+font-size:18px;
+
+font-weight:700;
 
 text-align:center;
 
@@ -203,13 +205,16 @@ white-space:nowrap;
 
 }
 
+
 tbody td{
 
-padding:12px;
+padding:16px;
 
 text-align:center;
 
-font-size:14px;
+font-size:17px;
+
+font-weight:600;
 
 border-bottom:1px solid #eee;
 
@@ -699,6 +704,8 @@ padding:4px 10px;
 
 border-radius:20px;
 
+font-size:18px;
+
 font-weight:700;
 
 transition:.3s;
@@ -1009,7 +1016,9 @@ box-shadow:0 3px 10px rgba(0,0,0,.12);
 
 .total-row{
 
-font-size:15px;
+font-size:18px;
+
+font-weight:700;
 
 letter-spacing:.4px;
 

@@ -30,17 +30,11 @@ const [report,setReport]=
 useState([]);
 
 
-
-const today = new Date();
+const today = new Date().toISOString().split("T")[0];
 
 const [filters, setFilters] = useState({
-  reportType: "daily",
-  date: today.toISOString().split("T")[0],
-  month: `${today.getFullYear()}-${String(
-    today.getMonth() + 1
-  ).padStart(2, "0")}`
+  date: today
 });
-
 const [showModal,setShowModal]=useState(false);
 
 const [selectedLeads,setSelectedLeads]=useState([]);
@@ -321,77 +315,41 @@ Team Performance Report
 
 <div className="filters">
 
- <label>Report Type :</label>
+  <label
+    style={{
+      fontWeight: "bold"
+    }}
+  >
+    Select Date :
+  </label>
 
-<select
-value={filters.reportType}
-onChange={(e)=>
-setFilters({
-...filters,
-reportType:e.target.value
-})
-}
->
+  <input
+    type="date"
+    value={filters.date}
+    onChange={(e) =>
+      setFilters({
+        ...filters,
+        date: e.target.value
+      })
+    }
+  />
 
-<option value="daily">
-Daily
-</option>
-
-<option value="monthly">
-Monthly
-</option>
-
-</select>
-
-{
-
-filters.reportType==="daily"
-
-?
-
-<input
-type="date"
-value={filters.date}
-onChange={(e)=>
-setFilters({
-...filters,
-date:e.target.value
-})
-}
-/>
-
-:
-
-<input
-type="month"
-value={filters.month}
-onChange={(e)=>
-setFilters({
-...filters,
-month:e.target.value
-})
-}
-/>
-
-}
-
-<button
+  <button
 className="btn btn-primary"
 onClick={handleSearch}
 >
 Search
 </button>
 
-<button
-className="btn export"
-onClick={exportExcel}
->
-Export
-</button>
+  <button
+    className="btn export"
+    onClick={exportExcel}
+  >
+    Export
+  </button>
+
 </div>
-
 {/* TABLE */}
-
 
 <div className="table-container">
 
