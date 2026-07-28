@@ -111,39 +111,6 @@ export default function Dashboard() {
      CHARTS
   ========================================= */
 
-  const statusChart = {
-    labels:
-      dashboard.statusData?.length > 0
-        ? dashboard.statusData.map(i => i._id)
-        : ["No Data"],
-
-    datasets: [
-      {
-        data:
-          dashboard.statusData?.length > 0
-            ? dashboard.statusData.map(i => i.count)
-            : [1]
-      }
-    ]
-  };
-
-  const weeklyChart = {
-    labels:
-      dashboard.weekly?.length > 0
-        ? dashboard.weekly.map(i => i.day)
-        : [],
-
-    datasets: [
-      {
-        label: "Leads",
-        data:
-          dashboard.weekly?.length > 0
-            ? dashboard.weekly.map(i => i.count)
-            : [],
-        fill: true
-      }
-    ]
-  };
 
   const projectChart = {
     labels:
