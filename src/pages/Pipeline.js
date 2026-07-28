@@ -24,7 +24,7 @@ export default function Pipeline() {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
- const [totalLeadsCount, setTotalLeadsCount] = useState(0);
+  const [totalLeadsCount, setTotalLeadsCount] = useState(0);
   const [showModal, setShowModal] = useState(false);
   const [selectedLead, setSelectedLead] = useState(null);
   const [selectedLeads, setSelectedLeads] = useState([]);
@@ -102,6 +102,8 @@ const statusOptions = [
   newLeads: res.data.newLeads || 0,
   bookedLeads: res.data.bookedLeads || 0,
   inactiveLeads: res.data.inactiveLeads || 0,
+  interestedLeads: res.data.interestedLeads || 0,
+  siteVisitDone: res.data.siteVisitDone || 0,
   todayFollowups: res.data.todayFollowups || 0,
   backlog: res.data.backlog || 0
 });
@@ -382,6 +384,7 @@ const stats = {
    <h6 className="total-count">
   Total Leads: {totalLeadsCount}
 </h6>
+
         {/* 🔥 CARDS */}
        <div className="stats-wrapper"
   style={{
