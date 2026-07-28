@@ -33,14 +33,15 @@ export default function Pipeline() {
   useEffect(() => {
   console.log("PROJECTS STATE =", projects);
   }, [projects]);
-  const [statsData, setStatsData] = useState({
+
+  
+ const [statsData, setStatsData] = useState({
   totalLeads: 0,
+  todayFollowups: 0,
   hotLeads: 0,
   newLeads: 0,
   bookedLeads: 0,
-  inactiveLeads: 0,
-  todayFollowups: 0,
-  backlog: 0
+  siteVisitDone: 0
 });
 
   // 🔥 FILTER STATE
@@ -504,9 +505,9 @@ onChange={(e) => {
     .map((u) => (
       <option
         key={u._id}
-        value={u.email}   // Backend साठी Email
+        value={u.email}   
       >
-        {u.name}          {/* User ला फक्त Name दिसेल */}
+        {u.name}          
       </option>
     ))}
 </select>
