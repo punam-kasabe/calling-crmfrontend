@@ -24,7 +24,7 @@ export default function Pipeline() {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [totalLeadsCount, setTotalLeadsCount] = useState(0);
+ const [totalLeadsCount, setTotalLeadsCount] = useState(0);
   const [showModal, setShowModal] = useState(false);
   const [selectedLead, setSelectedLead] = useState(null);
   const [selectedLeads, setSelectedLeads] = useState([]);
@@ -33,15 +33,14 @@ export default function Pipeline() {
   useEffect(() => {
   console.log("PROJECTS STATE =", projects);
   }, [projects]);
-
-  
- const [statsData, setStatsData] = useState({
+  const [statsData, setStatsData] = useState({
   totalLeads: 0,
-  todayFollowups: 0,
   hotLeads: 0,
   newLeads: 0,
   bookedLeads: 0,
-  siteVisitDone: 0
+  inactiveLeads: 0,
+  todayFollowups: 0,
+  backlog: 0
 });
 
   // 🔥 FILTER STATE
@@ -103,8 +102,6 @@ const statusOptions = [
   newLeads: res.data.newLeads || 0,
   bookedLeads: res.data.bookedLeads || 0,
   inactiveLeads: res.data.inactiveLeads || 0,
-  interestedLeads: res.data.interestedLeads || 0,
-  siteVisitDone: res.data.siteVisitDone || 0,
   todayFollowups: res.data.todayFollowups || 0,
   backlog: res.data.backlog || 0
 });
@@ -385,7 +382,6 @@ const stats = {
    <h6 className="total-count">
   Total Leads: {totalLeadsCount}
 </h6>
-
         {/* 🔥 CARDS */}
        <div className="stats-wrapper"
   style={{
@@ -400,11 +396,7 @@ const stats = {
 
   { title: "Today's Follow-ups", value: stats.todayFollowups, color: "#007bff" },
 
-  {
-  title: "Interested",
-  value: stats.interested,
-  color: "#007bff"
-},
+  { title: "Backlogs", value: stats.backlog, color: "#007bff" },
 
   { title: "Hot Leads", value: stats.hot, color: "#007bff" },
 
@@ -412,11 +404,7 @@ const stats = {
 
   { title: "Booked Leads", value: stats.booked, color: "#28a745" },
 
-  {
-  title: "Site Visit Done",
-  value: stats.siteVisitDone,
-  color: "#ffc107"
-},
+  { title: "Inactive Leads", value: stats.inactive, color: "#ffc107" },
 ].map((card, i) => (
 
 <div
@@ -505,9 +493,9 @@ onChange={(e) => {
     .map((u) => (
       <option
         key={u._id}
-        value={u.email}   
+        value={u.email}   // Backend साठी Email
       >
-        {u.name}          
+        {u.name}          {/* User ला फक्त Name दिसेल */}
       </option>
     ))}
 </select>
