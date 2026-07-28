@@ -626,54 +626,6 @@ background:#eee;
 }
 
 /* ==========================================
-            CHART SECTION
-========================================== */
-
-.chart-wrapper{
-
-display:block;
-
-margin-top:30px;
-
-}
-
-.chart-box{
-
-background:#fff;
-
-padding:25px;
-
-border-radius:18px;
-
-box-shadow:0 10px 30px rgba(0,0,0,.08);
-
-transition:.35s;
-
-}
-
-.chart-box:hover{
-
-transform:translateY(-6px);
-
-box-shadow:0 18px 45px rgba(0,0,0,.15);
-
-}
-
-.chart-box h3{
-
-margin-bottom:20px;
-
-text-align:center;
-
-font-size:22px;
-
-font-weight:700;
-
-color:#1e293b;
-
-}
-
-/* ==========================================
             TABLE HOVER
 ========================================== */
 
@@ -778,16 +730,6 @@ opacity:1;
 transform:translateY(0);
 
 }
-
-}
-
-/* ==========================================
-            PIE & BAR
-========================================== */
-
-canvas{
-
-max-height:380px !important;
 
 }
 
