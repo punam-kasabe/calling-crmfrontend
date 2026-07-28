@@ -344,42 +344,7 @@ else if (item.title === "Reception Entries") {
 
             </div>
 
-            {/* =========================================
-               ROW 2 — WEEKLY + STATUS
-            ========================================= */}
-
-            <div className="dashboard-row">
-
-              {/* LEFT */}
-
-              <div className="chart-large">
-
-                <div className="chart-card">
-
-                  <h5>Weekly Trends</h5>
-
-                  <Line data={weeklyChart} />
-
-                </div>
-
-              </div>
-
-              {/* RIGHT */}
-
-              <div className="chart-small">
-
-                <div className="chart-card">
-
-                  <h5>Status Distribution</h5>
-
-                  <Pie data={statusChart} />
-
-                </div>
-
-              </div>
-
-            </div>
-
+           
             {/* =========================================
                ROW 3 — EXECUTIVE PERFORMANCE
             ========================================= */}
