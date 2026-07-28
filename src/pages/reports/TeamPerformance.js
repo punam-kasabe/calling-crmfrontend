@@ -2,6 +2,8 @@ import { useState, useEffect, useMemo, useCallback } from "react";
 import axios from "axios";
 import * as XLSX from "xlsx";
 import Sidebar from "../../components/Sidebar";
+import { Pie, Bar } from "react-chartjs-2";
+import "chart.js/auto";
 import "../../styles/TeamPerformance.css";
 
 const API =
@@ -251,7 +253,45 @@ pending:0
 
 );
 
+const pieData={
 
+labels:report.map(r=>r.name),
+
+datasets:[{
+
+label:"Total Leads",
+
+data:report.map(r=>r.total)
+
+}]
+
+};
+
+const barData={
+
+labels:report.map(r=>r.name),
+
+datasets:[
+
+{
+
+label:"Interested",
+
+data:report.map(r=>r.interested)
+
+},
+
+{
+
+label:"Booked",
+
+data:report.map(r=>r.booked)
+
+}
+
+]
+
+};
 
 return(
 
@@ -691,7 +731,8 @@ No Data Found
 
 </table>
 
-{showModal && (
+<div className="chart-wrapper">
+  {showModal && (
 
 <div className="modal-overlay">
 
@@ -778,7 +819,23 @@ No Leads Found
 
 )}
 
+<div className="chart-box">
 
+<h3>Total Leads</h3>
+
+<Pie data={pieData}/>
+
+</div>
+
+<div className="chart-box">
+
+<h3>Interested vs Booked</h3>
+
+<Bar data={barData}/>
+
+</div>
+
+</div>
 
 </>
 
