@@ -33,8 +33,13 @@ useState([]);
 const today = new Date().toISOString().split("T")[0];
 
 const [filters, setFilters] = useState({
-  date: today
+  reportType: "daily",
+  date: today,
+  month: "",
+  from: "",
+  to: ""
 });
+
 const [showModal,setShowModal]=useState(false);
 
 const [selectedLeads,setSelectedLeads]=useState([]);
@@ -315,24 +320,128 @@ Team Performance Report
 
 <div className="filters">
 
-  <label
-    style={{
-      fontWeight: "bold"
-    }}
-  >
-    Select Date :
-  </label>
+  <label style={{ fontWeight: "bold" }}>
+Report :
+</label>
 
-  <input
-    type="date"
-    value={filters.date}
-    onChange={(e) =>
-      setFilters({
-        ...filters,
-        date: e.target.value
-      })
-    }
-  />
+<select
+value={filters.reportType}
+onChange={(e)=>
+setFilters({
+...filters,
+reportType:e.target.value
+})
+}
+>
+
+<option value="daily">
+Daily
+</option>
+
+<option value="last7">
+Last 7 Days
+</option>
+
+<option value="monthly">
+Monthly
+</option>
+
+<option value="custom">
+Custom
+</option>
+
+</select>
+
+ {
+
+filters.reportType==="daily" && (
+
+<>
+
+<label style={{fontWeight:"bold"}}>
+Date :
+</label>
+
+<input
+type="date"
+value={filters.date}
+onChange={(e)=>
+setFilters({
+...filters,
+date:e.target.value
+})
+}
+/>
+
+</>
+
+)
+
+}
+
+{
+
+filters.reportType==="monthly" && (
+
+<>
+
+<label style={{fontWeight:"bold"}}>
+Month :
+</label>
+
+<input
+type="month"
+value={filters.month}
+onChange={(e)=>
+setFilters({
+...filters,
+month:e.target.value
+})
+}
+/>
+
+</>
+
+)
+
+}
+
+{
+
+filters.reportType==="custom" && (
+
+<>
+
+<label>From</label>
+
+<input
+type="date"
+value={filters.from}
+onChange={(e)=>
+setFilters({
+...filters,
+from:e.target.value
+})
+}
+/>
+
+<label>To</label>
+
+<input
+type="date"
+value={filters.to}
+onChange={(e)=>
+setFilters({
+...filters,
+to:e.target.value
+})
+}
+/>
+
+</>
+
+)
+}
 
   <button
 className="btn btn-primary"
