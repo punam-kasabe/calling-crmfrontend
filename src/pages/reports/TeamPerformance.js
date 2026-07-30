@@ -100,6 +100,8 @@ fetchReport();
 
 };
 
+
+
 const openLeads = async (email, title, type) => {
 
   try{
