@@ -109,16 +109,13 @@ const [callModal, setCallModal] = useState(false);
 const [activeCall, setActiveCall] = useState(null);
 
 const [callStartTime, setCallStartTime] = useState(null);
-
 const [callDuration, setCallDuration] = useState("");
 
 
 /* ================= PAGINATION ================= */
 
 const [currentPage, setCurrentPage] = useState(1);
-
 const leadsPerPage = 10;
-
 
      /* ================= NEW LEAD MODAL ================= */
 
@@ -2591,7 +2588,7 @@ Save Booking
   setActiveCall(null);
 }}
       >
-        
+
         Close
       </button>
 

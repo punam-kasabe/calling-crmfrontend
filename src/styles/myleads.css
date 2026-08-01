@@ -219,10 +219,53 @@
   display: block;
 }
 
+/* Mobile */
+.leads-table th:nth-child(3),
+.leads-table td:nth-child(3){
+
+    width:110px;
+    min-width:110px;
+    max-width:110px;
+
+    white-space:nowrap;
+    word-break:keep-all;
+    overflow-wrap:normal;
+    text-align:center;
+}
+.leads-table th:nth-child(4),
+.leads-table td:nth-child(4){
+
+    width:120px;
+
+    white-space:nowrap;
+}
+.leads-table th:nth-child(4),
+.leads-table td:nth-child(4){
+
+    width:120px;
+    white-space:nowrap;
+}
+
+.leads-table th:nth-child(6),
+.leads-table td:nth-child(6){
+
+    width:90px;
+    white-space:nowrap;
+    word-break:keep-all;
+    overflow-wrap:normal;
+}
+
+.leads-table th:nth-child(7),
+.leads-table td:nth-child(7){
+
+    width:130px;
+}
+
 .leads-table {
   min-width: 2500px !important;
   width: 2500px !important;
   border-collapse: collapse;
+  table-layout: fixed;
 }
 
 .table-wrapper::-webkit-scrollbar {
@@ -240,15 +283,18 @@
 
 /* Description Column */
 
-.leads-table td:nth-child(7) {
-  max-width: 250px;
-  min-width: 250px;
+/* Description */
 
-  white-space: normal;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
+.leads-table th:nth-child(8),
+.leads-table td:nth-child(8){
 
-  line-height: 1.5;
+    width:260px;
+    min-width:260px;
+    max-width:260px;
+
+    white-space:normal;
+    word-break:break-word;
+    line-height:1.4;
 }
 /* ===============================
    STATUS BADGES
@@ -512,7 +558,6 @@ textarea {
   .table-wrapper {
     overflow-x: auto;
   }
-
 }
 
 @media (max-width: 576px) {
