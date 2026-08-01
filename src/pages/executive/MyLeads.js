@@ -2591,6 +2591,7 @@ Save Booking
   setActiveCall(null);
 }}
       >
+        
         Close
       </button>
 
