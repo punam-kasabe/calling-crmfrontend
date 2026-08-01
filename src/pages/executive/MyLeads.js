@@ -1250,9 +1250,7 @@ const stats = useMemo(() => {
       { value: "7871", label: "Sheetal Campaign." },
       { value: "7912", label: "Maha-Mumbaai" },
       { value: "7929", label: "THANE...( VIRENDRAA)" },
-      { value: "7930", label: "Maha-Mumbaii" },
       { value: "7941", label: "Gudipadwa plot in 5 Lacs." },
-      { value: "7950", label: "Mmahamumbai." }
     ]}
 
     isSearchable
@@ -1506,17 +1504,16 @@ const stats = useMemo(() => {
 
                   <th>Call / Mobile</th>
 
-                  <th>Assigned To</th>
-
-                  
+                  <th>Assigned To</th>                  
 
                   <th>Status</th>
+
+                  <th>Source</th>
 
                   <th>Project</th>
 
                   <th>Description</th>
              
-
                   <th>Next Call Date</th>
 
                   <th>Sub Source</th>
@@ -1567,25 +1564,25 @@ const stats = useMemo(() => {
 
                     
 
-                      <td>
+                     <td>
 
-                        <span
-                          className={`status-badge ${lead.status
-                            ?.toLowerCase()
-                           .replace(/\s+/g, "-")
-                          }`}
-                        >
+  <span
+    className={`status-badge ${lead.status
+      ?.toLowerCase()
+      .replace(/\s+/g, "-")}`}
+  >
+    {lead.status || "New"}
+  </span>
 
-                          {lead.status ||
-                            "New"}
+</td>
 
-                        </span>
+<td>
+  {lead.source || "-"}
+</td>
 
-                      </td>
-
-                      <td>
-                        {lead.project || "-"}
-                      </td>
+<td>
+  {lead.project || "-"}
+</td>
 
                      <td className="description-cell">
                      {lead.description || "-"}
