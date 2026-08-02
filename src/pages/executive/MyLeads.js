@@ -988,7 +988,21 @@ const stats = useMemo(() => {
 
   };
 
-}, [filteredLeads]);  return (
+}, [filteredLeads]); 
+
+/* ================= CARD CLICK FILTER ================= */
+
+const handleCardClick = (status) => {
+
+  if (status === "TOTAL") {
+    setStatusFilter("");
+    return;
+  }
+
+  setStatusFilter(status);
+};
+
+ return (
 
     <div className="layout">
 
@@ -1030,39 +1044,67 @@ const stats = useMemo(() => {
 
         {/* ================= SMALL STATS ================= */}
 
-        <div className="stats-grid">
+      <div
+  className="stats-card"
+  onClick={() => handleCardClick("TOTAL")}
+  style={{ cursor: "pointer" }}
+>
 
           <div className="stats-card">
             <h5>Total</h5>
             <p>{stats.total}</p>
           </div>
 
-          <div className="stats-card new">
+          <div
+  className="stats-card new"
+  onClick={() => handleCardClick("New")}
+  style={{ cursor: "pointer" }}
+>
             <h5>New</h5>
             <p>{stats.new}</p>
           </div>
 
-          <div className="stats-card interested">
+         <div
+  className="stats-card interested"
+  onClick={() => handleCardClick("Interested")}
+  style={{ cursor: "pointer" }}
+>
             <h5>Interested</h5>
             <p>{stats.interested}</p>
           </div>
 
-          <div className="stats-card booked">
+          <div
+  className="stats-card booked"
+  onClick={() => handleCardClick("Booked")}
+  style={{ cursor: "pointer" }}
+>
             <h5>Booked</h5>
             <p>{stats.booked}</p>
           </div>
 
-          <div className="stats-card followup">
+          <div
+  className="stats-card followup"
+  onClick={() => handleCardClick("Follow Up")}
+  style={{ cursor: "pointer" }}
+>
             <h5>Followup</h5>
             <p>{stats.followup}</p>
           </div>
 
-          <div className="stats-card not">
+          <div
+  className="stats-card not"
+  onClick={() => handleCardClick("Not Interested")}
+  style={{ cursor: "pointer" }}
+>
             <h5>Not Interested</h5>
             <p>{stats.notInterested}</p>
           </div>
          
-          <div className="stats-card sitevisit">
+         <div
+  className="stats-card sitevisit"
+  onClick={() => handleCardClick("Site Visit Done")}
+  style={{ cursor: "pointer" }}
+>
          <h5>Site Visit Done</h5>
           <p>{stats.siteVisitDone}</p>
          </div>
