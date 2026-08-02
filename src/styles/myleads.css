@@ -281,8 +281,6 @@
   border-radius: 10px;
 }
 
-/* Description Column */
-
 /* Description */
 
 .leads-table th:nth-child(8),
@@ -574,4 +572,26 @@ textarea {
     font-size: 26px;
   }
 
+}
+/* ================= ACTIVE CARD ================= */
+
+.stats-card {
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.stats-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 18px rgba(0,0,0,.12);
+}
+
+.active-card {
+  border: 2px solid #2563eb !important;
+  background: #eff6ff !important;
+  box-shadow: 0 8px 20px rgba(37,99,235,.25);
+}
+
+.active-card h5,
+.active-card p {
+  color: #2563eb;
 }

@@ -1050,68 +1050,61 @@ const handleCardClick = (status) => {
 
         </div>
 
-        {/* ================= SMALL STATS ================= */}
+       {/* ================= SMALL STATS ================= */}
 
 <div className="stats-grid">
 
   <div
-    className="stats-card"
+    className={`stats-card ${statusFilter === "" ? "active-card" : ""}`}
     onClick={() => handleCardClick("TOTAL")}
-    style={{ cursor: "pointer" }}
   >
     <h5>Total</h5>
     <p>{stats.total}</p>
   </div>
 
   <div
-    className="stats-card new"
+    className={`stats-card new ${statusFilter === "New" ? "active-card" : ""}`}
     onClick={() => handleCardClick("New")}
-    style={{ cursor: "pointer" }}
   >
     <h5>New</h5>
     <p>{stats.new}</p>
   </div>
 
   <div
-    className="stats-card interested"
+    className={`stats-card interested ${statusFilter === "Interested" ? "active-card" : ""}`}
     onClick={() => handleCardClick("Interested")}
-    style={{ cursor: "pointer" }}
   >
     <h5>Interested</h5>
     <p>{stats.interested}</p>
   </div>
 
   <div
-    className="stats-card booked"
+    className={`stats-card booked ${statusFilter === "Booked" ? "active-card" : ""}`}
     onClick={() => handleCardClick("Booked")}
-    style={{ cursor: "pointer" }}
   >
     <h5>Booked</h5>
     <p>{stats.booked}</p>
   </div>
 
   <div
-    className="stats-card followup"
+    className={`stats-card followup ${statusFilter === "Follow Up" ? "active-card" : ""}`}
     onClick={() => handleCardClick("Follow Up")}
-    style={{ cursor: "pointer" }}
   >
     <h5>Followup</h5>
     <p>{stats.followup}</p>
   </div>
 
   <div
-    className="stats-card not"
+    className={`stats-card not ${statusFilter === "Not Interested" ? "active-card" : ""}`}
     onClick={() => handleCardClick("Not Interested")}
-    style={{ cursor: "pointer" }}
   >
     <h5>Not Interested</h5>
     <p>{stats.notInterested}</p>
   </div>
 
   <div
-    className="stats-card sitevisit"
+    className={`stats-card sitevisit ${statusFilter === "Site Visit Done" ? "active-card" : ""}`}
     onClick={() => handleCardClick("Site Visit Done")}
-    style={{ cursor: "pointer" }}
   >
     <h5>Site Visit Done</h5>
     <p>{stats.siteVisitDone}</p>
