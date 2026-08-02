@@ -763,12 +763,20 @@ useEffect(() => {
                 search.toLowerCase()
               );
 
-         const matchesStatus =
+       const matchesStatus = (() => {
 
-  statusFilter
-    ? lead.status ===
-      statusFilter
-    : true;
+  if (!statusFilter) return true;
+
+  if (statusFilter === "Interested") {
+    return (
+      lead.status === "Interested" ||
+      lead.status === "Very Interested"
+    );
+  }
+
+  return lead.status === statusFilter;
+
+})();
 
 const matchesProject =
   selectedProjects
@@ -996,12 +1004,12 @@ const handleCardClick = (status) => {
 
   if (status === "TOTAL") {
     setStatusFilter("");
-    return;
+  } else {
+    setStatusFilter(status);
   }
 
-  setStatusFilter(status);
+  setCurrentPage(1);
 };
-
  return (
 
     <div className="layout">
@@ -1044,73 +1052,72 @@ const handleCardClick = (status) => {
 
         {/* ================= SMALL STATS ================= */}
 
-      <div
-  className="stats-card"
-  onClick={() => handleCardClick("TOTAL")}
-  style={{ cursor: "pointer" }}
->
+<div className="stats-grid">
 
-          <div className="stats-card">
-            <h5>Total</h5>
-            <p>{stats.total}</p>
-          </div>
+  <div
+    className="stats-card"
+    onClick={() => handleCardClick("TOTAL")}
+    style={{ cursor: "pointer" }}
+  >
+    <h5>Total</h5>
+    <p>{stats.total}</p>
+  </div>
 
-          <div
-  className="stats-card new"
-  onClick={() => handleCardClick("New")}
-  style={{ cursor: "pointer" }}
->
-            <h5>New</h5>
-            <p>{stats.new}</p>
-          </div>
+  <div
+    className="stats-card new"
+    onClick={() => handleCardClick("New")}
+    style={{ cursor: "pointer" }}
+  >
+    <h5>New</h5>
+    <p>{stats.new}</p>
+  </div>
 
-         <div
-  className="stats-card interested"
-  onClick={() => handleCardClick("Interested")}
-  style={{ cursor: "pointer" }}
->
-            <h5>Interested</h5>
-            <p>{stats.interested}</p>
-          </div>
+  <div
+    className="stats-card interested"
+    onClick={() => handleCardClick("Interested")}
+    style={{ cursor: "pointer" }}
+  >
+    <h5>Interested</h5>
+    <p>{stats.interested}</p>
+  </div>
 
-          <div
-  className="stats-card booked"
-  onClick={() => handleCardClick("Booked")}
-  style={{ cursor: "pointer" }}
->
-            <h5>Booked</h5>
-            <p>{stats.booked}</p>
-          </div>
+  <div
+    className="stats-card booked"
+    onClick={() => handleCardClick("Booked")}
+    style={{ cursor: "pointer" }}
+  >
+    <h5>Booked</h5>
+    <p>{stats.booked}</p>
+  </div>
 
-          <div
-  className="stats-card followup"
-  onClick={() => handleCardClick("Follow Up")}
-  style={{ cursor: "pointer" }}
->
-            <h5>Followup</h5>
-            <p>{stats.followup}</p>
-          </div>
+  <div
+    className="stats-card followup"
+    onClick={() => handleCardClick("Follow Up")}
+    style={{ cursor: "pointer" }}
+  >
+    <h5>Followup</h5>
+    <p>{stats.followup}</p>
+  </div>
 
-          <div
-  className="stats-card not"
-  onClick={() => handleCardClick("Not Interested")}
-  style={{ cursor: "pointer" }}
->
-            <h5>Not Interested</h5>
-            <p>{stats.notInterested}</p>
-          </div>
-         
-         <div
-  className="stats-card sitevisit"
-  onClick={() => handleCardClick("Site Visit Done")}
-  style={{ cursor: "pointer" }}
->
-         <h5>Site Visit Done</h5>
-          <p>{stats.siteVisitDone}</p>
-         </div>
-         
-     </div> 
+  <div
+    className="stats-card not"
+    onClick={() => handleCardClick("Not Interested")}
+    style={{ cursor: "pointer" }}
+  >
+    <h5>Not Interested</h5>
+    <p>{stats.notInterested}</p>
+  </div>
 
+  <div
+    className="stats-card sitevisit"
+    onClick={() => handleCardClick("Site Visit Done")}
+    style={{ cursor: "pointer" }}
+  >
+    <h5>Site Visit Done</h5>
+    <p>{stats.siteVisitDone}</p>
+  </div>
+
+</div>
          {/* ================= SINGLE SEARCH ================= */}
 
          <div className="filter-bar">
