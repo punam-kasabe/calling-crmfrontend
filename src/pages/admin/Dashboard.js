@@ -3,14 +3,6 @@ import "../../styles/dashboard.css";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState, useMemo, useCallback } from "react";
 import axios from "axios";
-
-import {
-  Pie,
-  Line,
-  Bar,
-  Doughnut
-} from "react-chartjs-2";
-
 import CountUp from "react-countup";
 import "chart.js/auto";
 
@@ -107,63 +99,7 @@ export default function Dashboard() {
     fetchDashboard();
   }, [fetchDashboard]);
 
-  /* =========================================
-     CHARTS
-  ========================================= */
-
-
-  const projectChart = {
-    labels:
-      dashboard.projects?.length > 0
-        ? dashboard.projects.map(i => i._id)
-        : [],
-
-    datasets: [
-      {
-        label: "Projects",
-        data:
-          dashboard.projects?.length > 0
-            ? dashboard.projects.map(i => i.count)
-            : []
-      }
-    ]
-  };
-
-  const sourceChart = {
-    labels:
-      dashboard.sources?.length > 0
-        ? dashboard.sources.map(i => i._id)
-        : [],
-
-    datasets: [
-      {
-        label: "Sources",
-        data:
-          dashboard.sources?.length > 0
-            ? dashboard.sources.map(i => i.count)
-            : []
-      }
-    ]
-  };
-
-  const revenueChart = {
-    labels:
-      dashboard.revenue?.length > 0
-        ? dashboard.revenue.map(i => i.month)
-        : [],
-
-    datasets: [
-      {
-        label: "Revenue",
-        data:
-          dashboard.revenue?.length > 0
-            ? dashboard.revenue.map(i => i.amount)
-            : [],
-        fill: true
-      }
-    ]
-  };
-
+ 
   /* =========================================
      UI
   ========================================= */
@@ -574,55 +510,8 @@ else if (item.title === "Reception Entries") {
 
             </div>
 
-            {/* =========================================
-               ROW 6
-            ========================================= */}
-
-            <div className="dashboard-row mt-4">
-
-              {/* PROJECT */}
-
-              <div className="chart-half">
-
-                <div className="chart-card">
-
-                  <h5>Project Performance</h5>
-
-                  <Bar data={projectChart} />
-
-                </div>
-
-              </div>
-
-              {/* SOURCE */}
-
-              <div className="chart-half">
-
-                <div className="chart-card">
-
-                  <h5>Source Analysis</h5>
-
-                  <Pie data={sourceChart} />
-
-                </div>
-
-              </div>
-
-            </div>
-
-            {/* =========================================
-               ROW 7 — REVENUE
-            ========================================= */}
-
-            <div className="chart-card mt-4">
-
-              <h5>Revenue Chart</h5>
-
-              <Line data={revenueChart} />
-
-            </div>
-
-              {/* =========================================
+           
+{/* =========================================
    TODAY'S VISITS
 ========================================= */}
 
