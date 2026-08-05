@@ -3,6 +3,9 @@ import "../../styles/dashboard.css";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState, useMemo, useCallback } from "react";
 import axios from "axios";
+import {
+  Doughnut
+} from "react-chartjs-2";
 import CountUp from "react-countup";
 import "chart.js/auto";
 
