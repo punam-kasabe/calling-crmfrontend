@@ -472,35 +472,37 @@ onChange={(e) => {
 
     {/* ASSIGNED TO */}
 
-    <div className="col-md-2">
+<div className="col-md-2">
 
-   <select
-  className="form-select"
-  value={filters.assigned}
-  onChange={(e) =>
-    setFilters({
-      ...filters,
-      assigned: e.target.value,
-    })
-  }
->
-  <option value="">Assigned To</option>
+<Select
+    isMulti
+    closeMenuOnSelect={false}
+    placeholder="Assigned To"
 
-  {users
-    .filter(
-      (u) => u.role?.trim().toLowerCase() === "executive"
-    )
-    .map((u) => (
-      <option
-        key={u._id}
-        value={u.email}   // Backend साठी Email
-      >
-        {u.name}          {/* User ला फक्त Name दिसेल */}
-      </option>
-    ))}
-</select>
+    options={
+      users
+        .filter(
+          (u) =>
+            u.role?.trim().toLowerCase() === "executive"
+        )
+        .map((u) => ({
+          value: u.email,
+          label: u.name
+        }))
+    }
 
-    </div>
+    value={filters.assigned}
+
+    onChange={(selected) =>
+      setFilters({
+        ...filters,
+        assigned: selected || []
+      })
+    }
+/>
+
+</div>
+
 
     {/* CLOSING EXECUTIVE */}
 

@@ -43,7 +43,6 @@ export default function Dashboard() {
     booked: 0,
     not_interested: 0,
     pending: 0,
-
     statusData: [],
     executives: [],
     assignments: [],
