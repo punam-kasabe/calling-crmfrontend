@@ -60,6 +60,7 @@ import SVPDashboard from "./pages/SVPDashboard";
 import Users from "./pages/Users";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import MobileBlock from "./components/MobileBlock";
+import LeadListPage from "./pages/LeadListPage";
 
 /* =========================================
    🔓 PUBLIC ROUTE
@@ -388,6 +389,10 @@ export default function App() {
         <Route path="/outgoing-calls" element={<ProtectedRoute><OutgoingCalls /></ProtectedRoute>} />
         <Route path="/personalised-report" element={<ProtectedRoute><PersonalisedReport /></ProtectedRoute>} />
         <Route path="/pipeline" element={<ProtectedRoute><Pipeline /></ProtectedRoute>} />
+        <Route
+  path="/lead-list"
+  element={<LeadListPage />}
+/>
        <Route path="/request" element={<ProtectedRoute><Requests /></ProtectedRoute>} />
        <Route path="/setting" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
       <Route path="/svp-dashboard" element={<ProtectedRoute><SVPDashboard /></ProtectedRoute>} />
