@@ -2204,66 +2204,6 @@ Booking
       <h2>Edit Lead</h2>
 
       <div className="lead-form-grid">
-
-
-
-      {(
-  selectedLead.status === "Interested" ||
-  selectedLead.status === "Very Interested"
-) && (
-
-<div>
-
-<label>
-Assign To Attending Officer
-</label>
-
-<select
-  value={selectedLead.assignedTo || ""}
-
-  onChange={(e) => {
-
-    const selectedOfficer =
-      attendingOfficers.find(
-        (officer) =>
-          officer.name === e.target.value
-      );
-
-    setSelectedLead({
-
-      ...selectedLead,
-
-      assignedTo:
-        selectedOfficer?.name || "",
-
-      assigned_to_email:
-        selectedOfficer?.email || ""
-
-    });
-
-  }}
->
-
-<option value="">
-Select Attending Officer
-</option>
-
-{attendingOfficers.map((officer) => (
-
-<option
-  key={officer._id}
-  value={officer.name}
->
-  {officer.name}
-</option>
-
-))}
-
-</select>
-
-</div>
-
-)}
       
         {/* STATUS */}
 
