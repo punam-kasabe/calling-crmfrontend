@@ -14,6 +14,9 @@ const [searchMobile, setSearchMobile] = useState("");
 const [suggestions, setSuggestions] = useState([]);
 const [showEditModal, setShowEditModal] = useState(false);
 const [users, setUsers] = useState([]);
+const [dateFilter, setDateFilter] = useState("thisMonth");
+const [fromDate, setFromDate] = useState("");
+const [toDate, setToDate] = useState("");
 const [editVisit, setEditVisit] = useState({
   _id: "",
   clientName: "",
@@ -47,8 +50,15 @@ const handleEdit = (visit) => {
 };
 
 useEffect(() => {
-  fetchVisits();
-  fetchUsers();
+
+fetchVisits();
+
+}, [dateFilter,fromDate,toDate]);
+
+useEffect(() => {
+
+fetchUsers();
+
 }, []);
 
 
@@ -100,9 +110,25 @@ const handleChange = (e) => {
 
     try {
 
-      const res = await axios.get(
-        "https://calling-crm-backend-7w52.onrender.com/api/visits"
-      );
+    const res = await axios.get(
+
+"https://calling-crm-backend-7w52.onrender.com/api/visits",
+
+{
+
+params:{
+
+dateFilter,
+
+fromDate,
+
+toDate
+
+}
+
+}
+
+);
 
       setVisits(res.data);
 
@@ -281,6 +307,68 @@ const handleChange = (e) => {
   </button>
 
 </div>
+
+<div className="date-filter-bar">
+
+<select
+value={dateFilter}
+onChange={(e)=>setDateFilter(e.target.value)}
+>
+
+<option value="all">All</option>
+
+<option value="today">Today</option>
+
+<option value="yesterday">Yesterday</option>
+
+<option value="last7">Last 7 Days</option>
+
+<option value="last15">Last 15 Days</option>
+
+<option value="last30">Last 30 Days</option>
+
+<option value="thisMonth">This Month</option>
+
+<option value="lastMonth">Last Month</option>
+
+<option value="custom">Custom Range</option>
+
+</select>
+
+{
+dateFilter==="custom" && (
+
+<>
+
+<input
+type="date"
+value={fromDate}
+onChange={(e)=>setFromDate(e.target.value)}
+/>
+
+<input
+type="date"
+value={toDate}
+onChange={(e)=>setToDate(e.target.value)}
+/>
+
+</>
+
+)
+
+}
+
+<button
+className="search-btn"
+onClick={fetchVisits}
+>
+
+Apply
+
+</button>
+
+</div>
+
           <table className="visit-table">
 
             <thead>
@@ -344,8 +432,7 @@ const handleChange = (e) => {
   </span>
 </td>
 
-                 
-
+                
                     <td>
 
                   {v.attendedManager?.name || v.assigned_manager || "-"}

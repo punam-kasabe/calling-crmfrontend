@@ -534,3 +534,19 @@ width:100%;
 }
 
 }
+.date-filter-bar{
+display:flex;
+gap:10px;
+margin-bottom:20px;
+align-items:center;
+flex-wrap:wrap;
+
+}
+
+.date-filter-bar select,
+.date-filter-bar input{
+padding:10px;
+border-radius:8px;
+border:1px solid #ddd;
+min-width:170px;
+}

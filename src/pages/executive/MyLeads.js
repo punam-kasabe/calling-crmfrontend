@@ -386,9 +386,8 @@ selectedLead.assigned_to_email,
 assigned_to:
 selectedLead.assigned_to_email,
 
-
    closingExecutive:
-    selectedLead.closingExecutive,
+  selectedLead.closingExecutive,
 
    status:
     selectedLead.status,
