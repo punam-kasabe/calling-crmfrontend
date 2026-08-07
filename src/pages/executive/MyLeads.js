@@ -75,33 +75,6 @@ const [selectedSources, setSelectedSources] = useState([]);
 const [selectedDepartments, setSelectedDepartments] = useState([]);
 const [selectedExecutives, setSelectedExecutives] = useState([]);
 const [selectedCities, setSelectedCities] = useState([]);
-const [attendingOfficers, setAttendingOfficers] = useState([]);
-
-useEffect(() => {
-
-  const fetchAttendingOfficers = async () => {
-
-    try {
-
-      const res = await axios.get(
-        `${API}/attending-officers`
-      );
-
-      setAttendingOfficers(
-        res.data || []
-      );
-
-    } catch (err) {
-
-      console.log("Attending Officer Load Error:", err);
-
-    }
-
-  };
-
-  fetchAttendingOfficers();
-
-}, []);
 
 
 const [callModal, setCallModal] = useState(false);
@@ -332,54 +305,11 @@ const cityDropdownOptions = [
 
   /* ================= FETCH EXECUTIVES ================= */
 
-const fetchExecutives = async () => {
-  try {
-
-    const res = await axios.get(
-      `${API}/users`
-    );
-
-  const attendingUsers = res.data.filter(
-  (u) =>
-    [
-      "suvarna@zaminwale.com",
-      "sreeniwas@zaminwale.com",
-      "harsh@zaminwale.com",
-      "avdhut@zaminwale.com",
-      "chaitanya@zaminwale.com",
-      "yash@zaminwale.com"
-    ].includes(
-      u.email?.toLowerCase()
-    )
-);
-
-console.log(
-  "Attending Officers:",
-  attendingUsers
-);
-
-setAttendingOfficers(attendingUsers);
-  }
-
-  catch (err) {
-
-    console.error(
-      "Error fetching attending officers",
-      err
-    );
-
-  }
-
-};
-
 useEffect(() => {
 
   fetchMyLeads();
 
-  fetchExecutives();
-
 }, [fetchMyLeads]);
-
 
   /* ================= UPDATE STATUS ================= */
 
@@ -457,12 +387,14 @@ useEffect(() => {
   email: selectedLead.email,
 
   assignedTo:
-  assignedOfficer,
+selectedLead.assignedTo,
 
-  assigned_to_email:
-  assignedEmail,
+assigned_to_email:
+selectedLead.assigned_to_email,
 
-   assigned_to: assignedEmail,
+assigned_to:
+selectedLead.assigned_to_email,
+
 
    closingExecutive:
     selectedLead.closingExecutive,
@@ -1739,48 +1671,6 @@ const handleCardClick = (status) => {
 
    onClick={() => {
 
-  let defaultOfficer =
-    lead.assignedTo || "";
-
-  defaultOfficer =
-  lead.assignedTo || "";
-
-if (
-  !defaultOfficer &&
-  (
-    lead.status === "Interested" ||
-    lead.status === "Very Interested"
-  )
-) {
-
-  const officerMap = {
-
-    "suvarna@zaminwale.com":
-      "Suvarna Khaire(Attending Officer)",
-
-    "sreeniwas@zaminwale.com":
-      "Sreeniwas (Attending Officer)",
-
-    "avdhut@zaminwale.com":
-      "Avdhut",
-
-    "chaitanya@zaminwale.com":
-      "Chaitanya",
-
-    "harsh@zaminwale.com":
-      "Harsh",
-
-      "yash@zaminwale.com":
-      "Yash"
-
-  };
-
-  defaultOfficer =
-    officerMap[
-      lead.assigned_to_email
-    ] || "";
-
-}
   setSelectedLead({
 
     ...lead,
@@ -1789,8 +1679,7 @@ if (
     lead.executive_email ||
     user.email,
 
-    assignedTo: defaultOfficer,
-
+    assignedTo: lead.assignedTo,
     assigned_to_email:
       lead.assigned_to_email ||
       user.email ||
