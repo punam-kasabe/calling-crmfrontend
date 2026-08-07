@@ -369,15 +369,6 @@ useEffect(() => {
 
       try {
 
-        let assignedOfficer =
-        selectedLead.assignedTo;
-
-        let assignedEmail =
-        selectedLead.assigned_to_email;
-
-      /* INTERESTED AUTO ASSIGN */
-
-
   const updatedData = {
   executive_email:
   selectedLead.executive_email ||
