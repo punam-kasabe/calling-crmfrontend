@@ -284,39 +284,63 @@ fetchProjects();
 
     /* ================= EXPORT EXCEL ================= */
 
- const handleExport = async () => {
-
+const handleExport = async () => {
   try {
+
+    // Multiple Assigned To मधून फक्त emails काढा
+    const exportFilters = {
+      ...filters,
+
+      assigned: Array.isArray(filters.assigned)
+        ? filters.assigned.map((item) => item.value)
+        : []
+    };
+
+    console.log("EXPORT FILTERS =", exportFilters);
 
     const res = await axios.post(
       `${API}/export-leads`,
       {
         email: user.email,
         role: user.role,
-        filters,
-        search,
+        filters: exportFilters,
+        search
       }
     );
 
-    if (!res.data || res.data.length === 0) {
+    console.log("EXPORT RESPONSE =", res.data);
+
+    if (!Array.isArray(res.data) || res.data.length === 0) {
       toast.error("No Leads To Export ❌");
       return;
     }
 
     const exportData = res.data.map((l) => ({
-      Name: l.name,
-      Mobile: l.phone,
-      Status: l.status,
-      Project: l.project,
-      Assigned: l.assigned_to,
+      Name: l.name || "-",
+      Mobile: l.phone || "-",
+      Source: l.source || "-",
+      Status: l.status || "-",
+      Project: l.project || "-",
+      Assigned: l.assigned_to || "-",
       "Closing Officer": l.assigned_manager || "-",
-      Remark: l.remark || "-",
+
+      Remark:
+        l.remark ||
+        l.description ||
+        (
+          Array.isArray(l.followups) &&
+          l.followups.length > 0
+        )
+          ? l.followups[l.followups.length - 1]?.note || "-"
+          : "-",
+
       "Created Date": l.createdAt
         ? new Date(l.createdAt).toLocaleString("en-IN")
         : "-",
+
       "Next Call": l.next_call_date
         ? new Date(l.next_call_date).toLocaleDateString("en-GB")
-        : "-",
+        : "-"
     }));
 
     const worksheet = XLSX.utils.json_to_sheet(exportData);
@@ -334,19 +358,23 @@ fetchProjects();
       "Pipeline_Leads.xlsx"
     );
 
-    toast.success("Excel Exported ✅");
+    toast.success(
+      `${exportData.length} Leads Exported Successfully ✅`
+    );
 
   } catch (err) {
 
-    console.log(err);
+    console.error(
+      "EXPORT ERROR =",
+      err.response?.data || err
+    );
 
-    toast.error("Export Failed ❌");
-
+    toast.error(
+      err.response?.data?.message ||
+      "Export Failed ❌"
+    );
   }
-
-};
-
-   
+};   
   /* ================= CARDS ================= */
 
 const stats = {
