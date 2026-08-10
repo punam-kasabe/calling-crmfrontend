@@ -275,7 +275,7 @@ else if (item.title === "Reception Entries") {
                       <th>Interested</th>
 
                       <th>Booked</th>
-
+                      <th>Site Visits Done</th>
                       <th>Pending</th>
 
                     </tr>
@@ -309,6 +309,8 @@ else if (item.title === "Reception Entries") {
                           <td>{e.interested}</td>
 
                           <td>{e.booked}</td>
+
+                          <td>{e.siteVisitsDone}</td>
 
                           <td>{e.pending}</td>
 
