@@ -1,102 +1,118 @@
-/* =====================================================
-   FILE: src/styles/monthlyReport.css
+/* =========================================================
    MONTHLY REPORT
-===================================================== */
+   ========================================================= */
+
+:root {
+  --monthly-sidebar-open: 185px;
+  --monthly-sidebar-closed: 65px;
+  --monthly-page-bg: #f5f6fc;
+  --monthly-purple: #7c00e8;
+  --monthly-purple-dark: #6800c9;
+  --monthly-border: #e5e7eb;
+  --monthly-text: #151528;
+  --monthly-muted: #6b7280;
+}
 
 
-/* =====================================================
-   ROOT PAGE
-===================================================== */
+/* =========================================================
+   PAGE MAIN CONTAINER
+   IMPORTANT:
+   Sidebar fixed असल्यामुळे content त्याच्या मागे जाणार नाही.
+   ========================================================= */
 
 .monthly-report-page {
+  position: relative;
+
   min-height: 100vh;
+
   box-sizing: border-box;
 
-  padding: 24px 28px 40px;
+  background: var(--monthly-page-bg);
 
-  background: #f5f6fb;
+  padding: 28px;
+
+  padding-top: 28px;
+
+  transition:
+    margin-left 0.25s ease,
+    width 0.25s ease;
 
   overflow-x: hidden;
 
-  transition:
-    margin-left 0.28s ease,
-    width 0.28s ease,
-    padding 0.28s ease;
+  z-index: 1;
 }
 
 
-/* =====================================================
-   SIDEBAR OPEN / CLOSED
-===================================================== */
-
-/*
-  Sidebar width:
-  Main sidebar साधारण 240px ते 250px असतो.
-
-  Safe side म्हणून 250px ठेवले आहे.
-*/
+/* =========================================================
+   SIDEBAR OPEN
+   ========================================================= */
 
 .monthly-report-page.sidebar-open {
-  margin-left: 165px;
-  width: calc(100% - 165px);
-  max-width: calc(100% - 165px);
+  margin-left: var(--monthly-sidebar-open);
+
+  width: calc(100% - var(--monthly-sidebar-open));
 }
 
-/*
-  Sidebar बंद असेल तर page full width.
-*/
+
+/* =========================================================
+   SIDEBAR CLOSED
+   ========================================================= */
 
 .monthly-report-page.sidebar-closed {
-  margin-left: 0;
-  width: 100%;
-  max-width: 100%;
+  margin-left: var(--monthly-sidebar-closed);
+
+  width: calc(100% - var(--monthly-sidebar-closed));
 }
 
 
-/* =====================================================
-   IMPORTANT:
-   PAGE CONTENT SIDEBAR च्या खाली/मागे जाऊ नये
-===================================================== */
+/* =========================================================
+   IMPORTANT FIX
+   Prevent every child from extending underneath sidebar
+   ========================================================= */
 
-.monthly-report-page,
-.monthly-report-page * {
+.monthly-report-page *,
+.monthly-report-page *::before,
+.monthly-report-page *::after {
   box-sizing: border-box;
 }
 
 
-/* =====================================================
+/* =========================================================
    HEADER
-===================================================== */
+   ========================================================= */
 
 .monthly-report-header {
   width: 100%;
 
-  min-height: 72px;
+  min-height: 88px;
 
   display: flex;
 
-  align-items: center;
+  align-items: flex-start;
 
   justify-content: space-between;
 
-  gap: 24px;
+  gap: 25px;
 
-  margin-bottom: 14px;
+  padding: 8px 0 20px;
 }
 
 
-/* =====================================================
-   HEADER TITLE
-===================================================== */
+/* =========================================================
+   HEADER LEFT
+   ========================================================= */
 
 .monthly-report-header > div:first-child {
   min-width: 0;
+
+  flex: 1;
 }
+
 
 .monthly-report-header h1 {
   margin: 0;
 
-  color: #171725;
+  color: var(--monthly-text);
 
   font-size: 28px;
 
@@ -104,35 +120,35 @@
 
   line-height: 1.2;
 
-  letter-spacing: -0.4px;
+  letter-spacing: -0.5px;
 }
+
 
 .monthly-report-header p {
   margin: 7px 0 0;
 
-  color: #777b8b;
+  color: var(--monthly-muted);
 
   font-size: 13px;
 
-  font-weight: 500;
+  line-height: 1.5;
 }
 
 
-/* =====================================================
+/* =========================================================
    FILTERS
-===================================================== */
+   ========================================================= */
 
 .monthly-filters {
+  flex-shrink: 0;
+
   display: flex;
 
   align-items: flex-end;
 
-  justify-content: flex-end;
-
-  gap: 14px;
-
-  flex-shrink: 0;
+  gap: 12px;
 }
+
 
 .filter-group {
   display: flex;
@@ -140,30 +156,34 @@
   flex-direction: column;
 
   gap: 6px;
+
+  min-width: 110px;
 }
 
+
 .filter-group label {
-  color: #5f6373;
+  color: #555b6e;
 
   font-size: 11px;
 
   font-weight: 600;
 }
 
+
 .filter-group select {
-  width: 120px;
+  width: 110px;
 
   height: 38px;
 
-  padding: 0 34px 0 13px;
+  padding: 0 30px 0 12px;
 
-  border: 1px solid #dfe2ec;
+  border: 1px solid #dfe2eb;
 
-  border-radius: 9px;
+  border-radius: 8px;
 
   background: #ffffff;
 
-  color: #292b38;
+  color: #202033;
 
   font-size: 13px;
 
@@ -173,29 +193,29 @@
 
   cursor: pointer;
 
-  box-shadow:
-    0 2px 6px rgba(30, 34, 50, 0.04);
+  box-shadow: 0 2px 7px rgba(0, 0, 0, 0.04);
 
   transition:
     border-color 0.2s ease,
     box-shadow 0.2s ease;
 }
 
+
 .filter-group select:hover {
-  border-color: #b9a1ff;
+  border-color: #b8a5ff;
 }
+
 
 .filter-group select:focus {
-  border-color: #7625e8;
+  border-color: var(--monthly-purple);
 
-  box-shadow:
-    0 0 0 3px rgba(118, 37, 232, 0.10);
+  box-shadow: 0 0 0 3px rgba(124, 0, 232, 0.08);
 }
 
 
-/* =====================================================
-   SELECTED MONTH
-===================================================== */
+/* =========================================================
+   SELECTED MONTH TITLE
+   ========================================================= */
 
 .selected-month-title {
   width: 100%;
@@ -204,44 +224,48 @@
 
   align-items: center;
 
-  gap: 8px;
+  gap: 7px;
 
-  margin-bottom: 18px;
+  margin: 0 0 18px;
 
-  color: #5f6373;
+  color: #686d7c;
 
-  font-size: 13px;
+  font-size: 12px;
 
+  line-height: 1.4;
+}
+
+
+.selected-month-title span {
   font-weight: 500;
 }
 
-.selected-month-title strong {
-  color: #7625e8;
 
-  font-size: 14px;
+.selected-month-title strong {
+  color: var(--monthly-purple);
 
   font-weight: 800;
 }
 
 
-/* =====================================================
+/* =========================================================
    ERROR
-===================================================== */
+   ========================================================= */
 
 .monthly-error {
   width: 100%;
 
-  margin-bottom: 16px;
+  margin-bottom: 18px;
 
   padding: 12px 16px;
 
-  border: 1px solid #ffc9c9;
+  border: 1px solid #fecaca;
 
   border-radius: 9px;
 
-  background: #fff3f3;
+  background: #fff1f2;
 
-  color: #d92929;
+  color: #b91c1c;
 
   font-size: 13px;
 
@@ -249,9 +273,9 @@
 }
 
 
-/* =====================================================
+/* =========================================================
    SUMMARY GRID
-===================================================== */
+   ========================================================= */
 
 .monthly-summary-grid {
   width: 100%;
@@ -261,61 +285,62 @@
   grid-template-columns:
     repeat(5, minmax(0, 1fr));
 
-  gap: 14px;
+  gap: 12px;
 
   margin-bottom: 20px;
 }
 
 
-/* =====================================================
+/* =========================================================
    SUMMARY CARD
-===================================================== */
+   ========================================================= */
 
 .monthly-summary-card {
   min-width: 0;
 
-  min-height: 88px;
+  min-height: 80px;
 
   display: flex;
 
   align-items: center;
 
-  gap: 13px;
+  gap: 12px;
 
-  padding: 16px 18px;
+  padding: 14px 16px;
 
-  border: 1px solid #e5e6ef;
+  border: 1px solid #e5e7ef;
 
   border-radius: 12px;
 
   background: #ffffff;
 
   box-shadow:
-    0 3px 12px rgba(29, 31, 50, 0.05);
+    0 3px 12px rgba(27, 31, 59, 0.05);
 
   transition:
     transform 0.2s ease,
     box-shadow 0.2s ease;
 }
 
+
 .monthly-summary-card:hover {
   transform: translateY(-2px);
 
   box-shadow:
-    0 7px 18px rgba(29, 31, 50, 0.08);
+    0 7px 18px rgba(27, 31, 59, 0.08);
 }
 
 
-/* =====================================================
+/* =========================================================
    SUMMARY ICON
-===================================================== */
+   ========================================================= */
 
 .summary-icon {
-  width: 38px;
+  width: 36px;
 
-  min-width: 38px;
+  min-width: 36px;
 
-  height: 38px;
+  height: 36px;
 
   display: flex;
 
@@ -323,40 +348,40 @@
 
   justify-content: center;
 
-  border-radius: 10px;
+  border-radius: 9px;
 
-  font-size: 19px;
+  font-size: 18px;
 }
 
-
-/* =====================================================
-   CARD COLORS
-===================================================== */
 
 .assigned-card .summary-icon {
-  background: #eee7ff;
+  background: #f0e7ff;
 }
+
 
 .ringing-card .summary-icon {
   background: #e8f0ff;
 }
 
+
 .interested-card .summary-icon {
-  background: #fff5d7;
+  background: #fff5d9;
 }
+
 
 .visit-card .summary-icon {
-  background: #e1f7ef;
+  background: #def8f1;
 }
+
 
 .booking-card .summary-icon {
-  background: #ffe8ee;
+  background: #ffe9ee;
 }
 
 
-/* =====================================================
+/* =========================================================
    SUMMARY TEXT
-===================================================== */
+   ========================================================= */
 
 .monthly-summary-card > div:last-child {
   min-width: 0;
@@ -365,59 +390,55 @@
 
   flex-direction: column;
 
-  gap: 5px;
+  gap: 3px;
 }
+
 
 .monthly-summary-card span {
-  color: #777b8b;
+  color: #727789;
 
-  font-size: 11px;
+  font-size: 10px;
 
-  font-weight: 600;
-
-  white-space: nowrap;
-
-  overflow: hidden;
-
-  text-overflow: ellipsis;
+  font-weight: 500;
 }
+
 
 .monthly-summary-card strong {
-  color: #171725;
+  color: #111827;
 
-  font-size: 21px;
-
-  line-height: 1;
+  font-size: 19px;
 
   font-weight: 800;
+
+  line-height: 1;
 }
 
 
-/* =====================================================
+/* =========================================================
    TABLE CARD
-===================================================== */
+   ========================================================= */
 
 .monthly-table-card {
   width: 100%;
 
   min-width: 0;
 
-  border: 1px solid #e3e4ed;
+  background: #ffffff;
+
+  border: 1px solid #e4e6ee;
 
   border-radius: 14px;
 
-  background: #ffffff;
-
   box-shadow:
-    0 4px 18px rgba(29, 31, 50, 0.06);
+    0 4px 15px rgba(25, 30, 60, 0.05);
 
   overflow: hidden;
 }
 
 
-/* =====================================================
+/* =========================================================
    TABLE HEADER
-===================================================== */
+   ========================================================= */
 
 .table-header {
   width: 100%;
@@ -432,52 +453,55 @@
 
   gap: 20px;
 
-  padding: 17px 20px;
+  padding: 16px 20px;
 
-  border-bottom: 1px solid #e7e8ef;
+  border-bottom: 1px solid #eeeeF3;
 
   background: #ffffff;
 }
 
+
+.table-header > div {
+  min-width: 0;
+}
+
+
 .table-header h2 {
   margin: 0;
 
-  color: #202132;
+  color: #16162a;
 
-  font-size: 17px;
+  font-size: 15px;
 
   font-weight: 800;
 }
 
+
 .table-header p {
-  margin: 5px 0 0;
+  margin: 4px 0 0;
 
-  color: #8a8d9b;
+  color: #858999;
 
-  font-size: 11px;
-
-  font-weight: 500;
+  font-size: 10px;
 }
 
 
-/* =====================================================
+/* =========================================================
    REFRESH BUTTON
-===================================================== */
+   ========================================================= */
 
 .refresh-btn {
-  height: 38px;
+  flex-shrink: 0;
 
-  padding: 0 17px;
+  height: 34px;
+
+  padding: 0 15px;
 
   border: none;
 
-  border-radius: 8px;
+  border-radius: 7px;
 
-  background: linear-gradient(
-    135deg,
-    #7625e8,
-    #8e32ef
-  );
+  background: var(--monthly-purple);
 
   color: #ffffff;
 
@@ -487,23 +511,22 @@
 
   cursor: pointer;
 
-  white-space: nowrap;
-
-  box-shadow:
-    0 4px 10px rgba(118, 37, 232, 0.20);
-
   transition:
+    background 0.2s ease,
     transform 0.2s ease,
-    box-shadow 0.2s ease,
-    opacity 0.2s ease;
+    box-shadow 0.2s ease;
 }
 
+
 .refresh-btn:hover:not(:disabled) {
+  background: var(--monthly-purple-dark);
+
   transform: translateY(-1px);
 
   box-shadow:
-    0 6px 14px rgba(118, 37, 232, 0.27);
+    0 4px 10px rgba(124, 0, 232, 0.25);
 }
+
 
 .refresh-btn:disabled {
   opacity: 0.6;
@@ -512,9 +535,9 @@
 }
 
 
-/* =====================================================
+/* =========================================================
    TABLE WRAPPER
-===================================================== */
+   ========================================================= */
 
 .table-wrapper {
   width: 100%;
@@ -523,51 +546,51 @@
 
   overflow-x: auto;
 
-  overflow-y: hidden;
+  overflow-y: visible;
 
   -webkit-overflow-scrolling: touch;
 }
 
 
-/* =====================================================
+/* =========================================================
    TABLE
-===================================================== */
+   ========================================================= */
 
 .monthly-report-table {
   width: 100%;
 
   min-width: 760px;
 
-  border-collapse: separate;
-
-  border-spacing: 0;
+  border-collapse: collapse;
 
   table-layout: fixed;
+
+  background: #ffffff;
 }
 
 
-/* =====================================================
-   TABLE HEAD
-===================================================== */
+/* =========================================================
+   TABLE HEADER
+   ========================================================= */
 
 .monthly-report-table thead th {
-  height: 42px;
+  height: 38px;
 
-  padding: 0 12px;
+  padding: 0 10px;
 
   border: none;
 
   background: linear-gradient(
     90deg,
-    #7625e8,
-    #7f20e7
+    #7600dc,
+    #8500ed
   );
 
   color: #ffffff;
 
   font-size: 11px;
 
-  font-weight: 700;
+  font-weight: 800;
 
   text-align: center;
 
@@ -575,15 +598,10 @@
 }
 
 
-/*
-  First two columns alignment
-*/
-
-.monthly-report-table thead th:first-child {
-  width: 55px;
-
-  border-top-left-radius: 9px;
+.monthly-report-table thead th:nth-child(1) {
+  width: 42px;
 }
+
 
 .monthly-report-table thead th:nth-child(2) {
   width: 27%;
@@ -591,93 +609,80 @@
   text-align: left;
 }
 
-.monthly-report-table thead th:last-child {
-  border-top-right-radius: 9px;
+
+.monthly-report-table thead th:nth-child(n + 3) {
+  width: auto;
 }
 
 
-/* =====================================================
+/* =========================================================
    TABLE BODY
-===================================================== */
+   ========================================================= */
 
 .monthly-report-table tbody tr {
-  background: #ffffff;
+  height: 40px;
 
-  transition:
-    background 0.15s ease;
+  border-bottom: 1px solid #ececf2;
+
+  transition: background 0.15s ease;
 }
+
 
 .monthly-report-table tbody tr:hover {
   background: #faf8ff;
 }
 
+
 .monthly-report-table tbody td {
-  height: 44px;
+  padding: 7px 10px;
 
-  padding: 5px 12px;
-
-  border-bottom: 1px solid #ececf2;
-
-  color: #353747;
+  color: #303246;
 
   font-size: 11px;
-
-  font-weight: 500;
 
   text-align: center;
 
   vertical-align: middle;
+
+  white-space: nowrap;
 }
 
 
-/* =====================================================
-   EXECUTIVE CELL
-===================================================== */
+.monthly-report-table tbody td:first-child {
+  color: #596074;
+
+  font-weight: 600;
+}
+
 
 .monthly-report-table tbody td:nth-child(2) {
   text-align: left;
 }
 
 
-/* =====================================================
+/* =========================================================
    EXECUTIVE NAME
-===================================================== */
+   ========================================================= */
 
 .executive-name {
   display: flex;
 
   align-items: center;
 
-  gap: 9px;
+  gap: 8px;
 
   min-width: 0;
-}
-
-.executive-name span {
-  color: #252638;
-
-  font-size: 12px;
-
-  font-weight: 600;
-
-  white-space: nowrap;
 
   overflow: hidden;
-
-  text-overflow: ellipsis;
 }
 
 
-/* =====================================================
-   EXECUTIVE AVATAR
-===================================================== */
-
 .executive-avatar {
-  width: 26px;
+  width: 23px;
 
-  min-width: 26px;
+  min-width: 23px;
 
-  height: 26px;
+  height: 23px;
 
   display: flex;
 
@@ -689,31 +694,39 @@
 
   background: linear-gradient(
     135deg,
-    #7625e8,
-    #8d2fea
+    #6d00d9,
+    #9b2dff
   );
 
   color: #ffffff;
 
-  font-size: 11px;
+  font-size: 10px;
 
   font-weight: 800;
-
-  text-transform: uppercase;
-
-  box-shadow:
-    0 2px 5px rgba(118, 37, 232, 0.18);
 }
 
 
-/* =====================================================
+.executive-name span {
+  min-width: 0;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+  color: #20233b;
+
+  font-size: 11px;
+
+  font-weight: 600;
+}
+
+
+/* =========================================================
    NUMBER BADGES
-===================================================== */
+   ========================================================= */
 
 .number-badge {
-  min-width: 28px;
-
-  height: 21px;
+  min-width: 27px;
 
   display: inline-flex;
 
@@ -721,109 +734,114 @@
 
   justify-content: center;
 
-  padding: 0 7px;
+  padding: 4px 7px;
 
-  border-radius: 6px;
+  border-radius: 5px;
 
-  font-size: 10px;
+  font-size: 9px;
 
-  font-weight: 700;
+  font-weight: 800;
 }
 
-
-/* =====================================================
-   BADGE COLORS
-===================================================== */
 
 .number-badge.assigned {
-  background: #f0e7ff;
+  background: #f0e5ff;
 
-  color: #7625e8;
+  color: #7a12d9;
 }
+
 
 .number-badge.ringing {
-  background: #edf4ff;
+  background: #eaf2ff;
 
-  color: #3e72cf;
+  color: #3868c7;
 }
+
 
 .number-badge.interested {
-  background: #fff4d9;
+  position: relative;
 
-  color: #a96a00;
+  background: #fff4d8;
 
-  border-left: 3px solid #0a985b;
+  color: #a56b00;
 }
+
+
+.number-badge.interested::before {
+  content: "";
+
+  width: 3px;
+
+  position: absolute;
+
+  left: 0;
+
+  top: 0;
+
+  bottom: 0;
+
+  border-radius: 5px 0 0 5px;
+
+  background: #0b9b60;
+}
+
 
 .number-badge.visit {
-  background: #e2f7ef;
+  background: #ddf6ee;
 
-  color: #148c68;
+  color: #128363;
 }
+
 
 .number-badge.booking {
-  background: #ffe7ed;
+  background: #ffe5eb;
 
-  color: #e14d69;
+  color: #e03b65;
 }
 
 
-/* =====================================================
+/* =========================================================
    TABLE FOOTER
-===================================================== */
+   ========================================================= */
 
 .monthly-report-table tfoot tr {
-  background: #f5edff;
+  background: #f4edff;
 }
 
+
 .monthly-report-table tfoot td {
-  height: 46px;
+  height: 42px;
 
-  padding: 6px 12px;
+  padding: 8px 10px;
 
-  border-top: 1px solid #e5d7f8;
+  color: #7100d4;
 
-  color: #7625e8;
-
-  font-size: 12px;
+  font-size: 11px;
 
   font-weight: 800;
 
   text-align: center;
+
+  border: none;
 }
+
 
 .monthly-report-table tfoot td:nth-child(2) {
   text-align: left;
 }
 
 
-/* =====================================================
-   LOADING
-===================================================== */
+/* =========================================================
+   LOADING / EMPTY
+   ========================================================= */
 
-.loading-row {
-  height: 160px !important;
-
-  color: #7625e8 !important;
-
-  font-size: 13px !important;
-
-  font-weight: 700 !important;
-
-  text-align: center !important;
-}
-
-
-/* =====================================================
-   EMPTY
-===================================================== */
-
+.loading-row,
 .empty-row {
-  height: 160px !important;
+  height: 120px !important;
 
-  color: #8a8d9b !important;
+  color: #7a7f90 !important;
 
-  font-size: 13px !important;
+  font-size: 12px !important;
 
   font-weight: 600 !important;
 
@@ -831,198 +849,168 @@
 }
 
 
-/* =====================================================
-   SCROLLBAR
-===================================================== */
-
-.table-wrapper::-webkit-scrollbar {
-  height: 7px;
-}
-
-.table-wrapper::-webkit-scrollbar-track {
-  background: #f1f1f5;
-
-  border-radius: 10px;
-}
-
-.table-wrapper::-webkit-scrollbar-thumb {
-  background: #c9b2f2;
-
-  border-radius: 10px;
-}
-
-.table-wrapper::-webkit-scrollbar-thumb:hover {
-  background: #a980df;
-}
-
-
-/* =====================================================
-   LARGE DESKTOP
-===================================================== */
-
-@media (min-width: 1400px) {
-  .monthly-report-page {
-    padding-left: 30px;
-
-    padding-right: 30px;
-  }
-
-  .monthly-report-table tbody td {
-    height: 46px;
-  }
-
-  .monthly-report-table thead th {
-    height: 44px;
-  }
-}
-
-
-/* =====================================================
-   MEDIUM DESKTOP / LAPTOP
-===================================================== */
+/* =========================================================
+   RESPONSIVE - LAPTOP
+   ========================================================= */
 
 @media (max-width: 1200px) {
-  .monthly-report-page.sidebar-open {
-    margin-left: 250px;
 
-    width: calc(100% - 250px);
+  :root {
+    --monthly-sidebar-open: 185px;
+    --monthly-sidebar-closed: 65px;
+  }
 
-    max-width: calc(100% - 250px);
+  .monthly-report-page {
+    padding: 22px;
   }
 
   .monthly-summary-grid {
     grid-template-columns:
-      repeat(3, minmax(0, 1fr));
+      repeat(5, minmax(145px, 1fr));
+
+    overflow-x: auto;
+
+    padding-bottom: 3px;
   }
 
   .monthly-summary-card {
-    min-height: 82px;
+    min-width: 145px;
+  }
+}
+
+
+/* =========================================================
+   RESPONSIVE - TABLET
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+  .monthly-report-page.sidebar-open {
+    margin-left: var(--monthly-sidebar-open);
+
+    width: calc(100% - var(--monthly-sidebar-open));
   }
 
   .monthly-report-header {
-    align-items: flex-start;
-
     flex-direction: column;
+
+    align-items: stretch;
   }
+
+  .monthly-filters {
+    align-items: center;
+
+    justify-content: flex-end;
+  }
+
+  .monthly-summary-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+
+    overflow-x: visible;
+  }
+
+  .monthly-summary-card {
+    min-width: 0;
+  }
+}
+
+
+/* =========================================================
+   RESPONSIVE - MOBILE
+   ========================================================= */
+
+@media (max-width: 650px) {
+
+  :root {
+    --monthly-sidebar-open: 0px;
+    --monthly-sidebar-closed: 0px;
+  }
+
+
+  .monthly-report-page,
+  .monthly-report-page.sidebar-open,
+  .monthly-report-page.sidebar-closed {
+    width: 100%;
+
+    margin-left: 0;
+
+    padding: 16px;
+  }
+
+
+  .monthly-report-header {
+    padding-top: 5px;
+  }
+
+
+  .monthly-report-header h1 {
+    font-size: 23px;
+  }
+
 
   .monthly-filters {
     width: 100%;
 
     justify-content: flex-start;
   }
-}
 
 
-/* =====================================================
-   TABLET
-===================================================== */
-
-@media (max-width: 900px) {
-  .monthly-report-page.sidebar-open {
-    margin-left: 165px;
-    width: calc(100% - 165px);
-    max-width: calc(100% - 165px);
-    padding-left: 18px;
-    padding-right: 18px;
+  .filter-group {
+    flex: 1;
   }
 
-  .monthly-report-page.sidebar-closed {
-    padding-left: 18px;
-
-    padding-right: 18px;
-  }
-
-  .monthly-summary-grid {
-    grid-template-columns:
-      repeat(2, minmax(0, 1fr));
-  }
-
-  .table-header {
-    padding: 15px;
-  }
-}
-
-
-/* =====================================================
-   MOBILE
-===================================================== */
-
-@media (max-width: 700px) {
-  /*
-    Mobile वर Sidebar बहुतेक overlay असेल,
-    त्यामुळे content ला मोठा margin देऊ नये.
-  */
-
-  .monthly-report-page.sidebar-open {
-    margin-left: 0;
-
-    width: 100%;
-
-    max-width: 100%;
-
-    padding: 18px 12px 30px;
-  }
-
-  .monthly-report-page.sidebar-closed {
-    margin-left: 0;
-
-    width: 100%;
-
-    max-width: 100%;
-
-    padding: 18px 12px 30px;
-  }
-
-  .monthly-report-header {
-    gap: 15px;
-  }
-
-  .monthly-report-header h1 {
-    font-size: 23px;
-  }
-
-  .monthly-filters {
-    width: 100%;
-
-    display: grid;
-
-    grid-template-columns:
-      1fr 1fr;
-
-    gap: 10px;
-  }
 
   .filter-group select {
     width: 100%;
   }
 
-  .monthly-summary-grid {
-    grid-template-columns: 1fr;
 
-    gap: 10px;
+  .monthly-summary-grid {
+    grid-template-columns: 1fr 1fr;
+
+    gap: 9px;
   }
+
 
   .monthly-summary-card {
-    min-height: 76px;
+    padding: 11px;
+
+    min-height: 70px;
+
+    gap: 8px;
   }
+
+
+  .summary-icon {
+    width: 31px;
+
+    min-width: 31px;
+
+    height: 31px;
+
+    font-size: 15px;
+  }
+
+
+  .monthly-summary-card strong {
+    font-size: 16px;
+  }
+
 
   .table-header {
+    padding: 13px;
+
     align-items: flex-start;
-
-    flex-direction: column;
-
-    gap: 12px;
-
-    padding: 15px;
   }
+
 
   .refresh-btn {
-    width: 100%;
+    height: 32px;
+
+    padding: 0 10px;
   }
 
-  .selected-month-title {
-    flex-wrap: wrap;
-  }
 
   .monthly-report-table {
     min-width: 760px;
@@ -1030,41 +1018,46 @@
 }
 
 
-/* =====================================================
-   SMALL MOBILE
-===================================================== */
+/* =========================================================
+   VERY IMPORTANT SIDEBAR Z-INDEX
+   ========================================================= */
 
-@media (max-width: 480px) {
-  .monthly-report-page.sidebar-open,
-  .monthly-report-page.sidebar-closed {
-    padding: 14px 10px 25px;
-  }
+/*
+   जर Sidebar fixed आहे तर तो नेहमी page च्या वर असला पाहिजे.
+   Monthly page त्याच्या खाली राहील.
+*/
 
-  .monthly-report-header h1 {
-    font-size: 21px;
-  }
+.sidebar,
+.sidebar-container,
+.crm-sidebar,
+[class*="sidebar"] {
+  z-index: 9999;
+}
 
-  .monthly-report-header p {
-    font-size: 12px;
-  }
 
-  .monthly-summary-card {
-    padding: 13px;
+/*
+   Monthly page ला sidebar पेक्षा कमी z-index.
+*/
 
-    gap: 10px;
-  }
+.monthly-report-page {
+  z-index: 1;
+}
 
-  .summary-icon {
-    width: 34px;
 
-    min-width: 34px;
+/* =========================================================
+   BODY / ROOT SAFETY
+   ========================================================= */
 
-    height: 34px;
+html,
+body,
+#root {
+  width: 100%;
 
-    font-size: 17px;
-  }
+  min-height: 100%;
 
-  .monthly-summary-card strong {
-    font-size: 19px;
-  }
+  margin: 0;
+
+  padding: 0;
+
+  overflow-x: hidden;
 }
