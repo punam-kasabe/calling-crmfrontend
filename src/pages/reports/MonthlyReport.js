@@ -254,9 +254,7 @@ export default function MonthlyReport() {
       ? "sidebar-open"
       : "sidebar-closed"
   }`}
->
-        
-    
+  >           
       
         {/* =================================================
             HEADER

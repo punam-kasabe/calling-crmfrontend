@@ -1,486 +1,807 @@
-/* =====================================================
+/* =========================================================
    MONTHLY REPORT
-===================================================== */
+   FULL SIDEBAR SAFE LAYOUT
+   ========================================================= */
+
+/* =========================================================
+   MAIN PAGE
+   ========================================================= */
 
 .monthly-report-page {
-  min-height: 100vh;
-  padding: 28px 32px 50px;
-  background: #f5f7ff;
-  font-family: "Poppins", sans-serif;
-  margin-left:100px;
+  position: relative;
+
+  /* Sidebar open default */
+  margin-left: 165px;
+
+  width: calc(100% - 165px);
+
+  min-height: calc(100vh - 70px);
+
+  padding: 30px 24px 40px 24px;
+
+  box-sizing: border-box;
+
+  background: #f5f6fb;
+
+  overflow-x: hidden;
+
+  transition:
+    margin-left 0.25s ease,
+    width 0.25s ease;
 }
 
-/* =====================================================
+
+/* =========================================================
+   SIDEBAR OPEN
+   ========================================================= */
+
+.monthly-report-page.sidebar-open {
+  margin-left: 165px;
+
+  width: calc(100% - 165px);
+}
+
+
+/* =========================================================
+   SIDEBAR CLOSED
+   ========================================================= */
+
+.monthly-report-page.sidebar-closed {
+  margin-left: 0;
+
+  width: 100%;
+}
+
+
+/* =========================================================
    HEADER
-===================================================== */
+   ========================================================= */
 
 .monthly-report-header {
+  width: 100%;
+
   display: flex;
-  align-items: flex-end;
+
   justify-content: space-between;
+
+  align-items: flex-start;
+
   gap: 25px;
-  margin-bottom: 22px;
+
+  margin-bottom: 12px;
 }
+
+
+/* =========================================================
+   HEADER TITLE
+   ========================================================= */
 
 .monthly-report-header h1 {
   margin: 0;
-  font-size: 30px;
+
+  font-size: 26px;
+
   font-weight: 700;
-  color: #15162b;
+
+  color: #111827;
+
+  line-height: 1.2;
 }
+
 
 .monthly-report-header p {
   margin: 6px 0 0;
-  color: #7b7f95;
-  font-size: 14px;
+
+  font-size: 13px;
+
+  color: #7b8494;
 }
 
-/* =====================================================
+
+/* =========================================================
    FILTERS
-===================================================== */
+   ========================================================= */
 
 .monthly-filters {
   display: flex;
-  gap: 12px;
+
   align-items: flex-end;
+
+  gap: 10px;
+
+  flex-shrink: 0;
 }
+
 
 .filter-group {
   display: flex;
+
   flex-direction: column;
-  gap: 6px;
+
+  gap: 5px;
 }
+
 
 .filter-group label {
-  font-size: 12px;
-  font-weight: 600;
-  color: #555a72;
+  font-size: 11px;
+
+  color: #687386;
+
+  font-weight: 500;
 }
+
 
 .filter-group select {
-  min-width: 145px;
-  height: 44px;
-  padding: 0 38px 0 14px;
+  min-width: 100px;
 
-  border: 1px solid #dddff0;
-  border-radius: 10px;
+  height: 40px;
 
-  background: white;
-  color: #25263b;
+  padding: 0 12px;
 
-  font-size: 14px;
-  font-weight: 500;
+  border: 1px solid #dce1eb;
+
+  border-radius: 7px;
+
+  background: #ffffff;
+
+  color: #1f2937;
+
+  font-size: 13px;
 
   outline: none;
-  cursor: pointer;
 
-  box-shadow: 0 3px 10px rgba(41, 43, 90, 0.05);
+  cursor: pointer;
 }
+
 
 .filter-group select:focus {
-  border-color: #6941e8;
-  box-shadow: 0 0 0 3px rgba(105, 65, 232, 0.12);
+  border-color: #7c3aed;
+
+  box-shadow:
+    0 0 0 2px rgba(124, 58, 237, 0.08);
 }
 
-/* =====================================================
-   SELECTED MONTH
-===================================================== */
+
+/* =========================================================
+   SELECTED MONTH TITLE
+   ========================================================= */
 
 .selected-month-title {
   display: flex;
+
   align-items: center;
-  gap: 8px;
 
-  margin-bottom: 18px;
+  gap: 7px;
 
-  color: #74798f;
-  font-size: 14px;
+  margin: 12px 0 14px;
+
+  font-size: 12px;
+
+  color: #7b8494;
 }
+
 
 .selected-month-title strong {
-  color: #6941e8;
-  font-size: 15px;
+  color: #5b21b6;
+
+  font-weight: 700;
 }
 
-/* =====================================================
-   SUMMARY CARDS
-===================================================== */
+
+/* =========================================================
+   ERROR
+   ========================================================= */
+
+.monthly-error {
+  width: 100%;
+
+  padding: 12px 15px;
+
+  margin-bottom: 15px;
+
+  border-radius: 8px;
+
+  background: #fff1f2;
+
+  border: 1px solid #fecdd3;
+
+  color: #be123c;
+
+  font-size: 13px;
+
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   SUMMARY GRID
+   ========================================================= */
 
 .monthly-summary-grid {
+  width: 100%;
+
   display: grid;
 
   grid-template-columns:
     repeat(5, minmax(0, 1fr));
 
-  gap: 16px;
+  gap: 12px;
 
-  margin-bottom: 24px;
+  margin-bottom: 18px;
 }
+
+
+/* =========================================================
+   SUMMARY CARD
+   ========================================================= */
 
 .monthly-summary-card {
-  min-height: 108px;
+  min-width: 0;
 
-  background: white;
-
-  border-radius: 16px;
-
-  padding: 20px;
+  min-height: 74px;
 
   display: flex;
+
   align-items: center;
 
-  gap: 15px;
+  gap: 12px;
 
-  border: 1px solid #e8e9f2;
+  padding: 14px 16px;
 
-  box-shadow:
-    0 7px 25px rgba(45, 47, 95, 0.06);
+  background: #ffffff;
 
-  transition: 0.25s ease;
-}
+  border: 1px solid #e7e9f0;
 
-.monthly-summary-card:hover {
-  transform: translateY(-3px);
+  border-radius: 11px;
 
   box-shadow:
-    0 12px 30px rgba(45, 47, 95, 0.1);
+    0 2px 8px rgba(20, 25, 40, 0.04);
+
+  box-sizing: border-box;
 }
+
+
+/* =========================================================
+   SUMMARY ICON
+   ========================================================= */
 
 .summary-icon {
-  width: 48px;
-  height: 48px;
+  width: 34px;
 
-  border-radius: 13px;
+  height: 34px;
+
+  min-width: 34px;
 
   display: flex;
+
   align-items: center;
+
   justify-content: center;
 
-  font-size: 21px;
+  border-radius: 9px;
 
-  background: #f0ebff;
+  font-size: 17px;
+
+  background: #f1f3f8;
 }
+
+
+/* =========================================================
+   SUMMARY TEXT
+   ========================================================= */
 
 .monthly-summary-card span {
   display: block;
 
-  color: #7d8196;
+  margin-bottom: 3px;
 
-  font-size: 12px;
+  font-size: 10px;
+
+  color: #6b7280;
+
   font-weight: 500;
-
-  margin-bottom: 5px;
 }
+
 
 .monthly-summary-card strong {
   display: block;
 
-  color: #17182c;
+  font-size: 20px;
 
-  font-size: 25px;
+  line-height: 1;
+
+  color: #111827;
+
   font-weight: 700;
 }
 
+
+/* =========================================================
+   CARD ICON BACKGROUNDS
+   ========================================================= */
+
 .assigned-card .summary-icon {
-  background: #ede8ff;
+  background: #eee8ff;
 }
+
 
 .ringing-card .summary-icon {
-  background: #e6f0ff;
+  background: #e8f1ff;
 }
+
 
 .interested-card .summary-icon {
-  background: #fff4d8;
+  background: #fff5d8;
 }
 
+
 .visit-card .summary-icon {
-  background: #e3f8f1;
+  background: #dff7ef;
 }
+
 
 .booking-card .summary-icon {
   background: #ffe8ee;
 }
 
-/* =====================================================
-   ERROR
-===================================================== */
 
-.monthly-error {
-  background: #fff0f0;
-
-  border: 1px solid #ffcaca;
-
-  color: #d32f2f;
-
-  padding: 13px 16px;
-
-  border-radius: 10px;
-
-  margin-bottom: 18px;
-
-  font-size: 14px;
-}
-
-/* =====================================================
+/* =========================================================
    TABLE CARD
-===================================================== */
+   ========================================================= */
 
 .monthly-table-card {
-  background: white;
+  width: 100%;
 
-  border-radius: 18px;
+  max-width: 100%;
 
-  border: 1px solid #e7e8f0;
+  background: #ffffff;
+
+  border: 1px solid #e6e8ef;
+
+  border-radius: 12px;
 
   box-shadow:
-    0 8px 30px rgba(40, 42, 90, 0.06);
+    0 2px 10px rgba(20, 25, 40, 0.04);
 
   overflow: hidden;
+
+  box-sizing: border-box;
 }
 
-/* =====================================================
+
+/* =========================================================
    TABLE HEADER
-===================================================== */
+   ========================================================= */
 
 .table-header {
-  padding: 22px 24px;
+  min-height: 64px;
+
+  padding: 14px 16px;
 
   display: flex;
+
   align-items: center;
+
   justify-content: space-between;
 
-  border-bottom: 1px solid #eeeeF4;
+  gap: 15px;
+
+  border-bottom: 1px solid #e7e9ef;
+
+  box-sizing: border-box;
 }
+
 
 .table-header h2 {
   margin: 0;
 
-  color: #18192c;
+  font-size: 14px;
 
-  font-size: 18px;
+  color: #111827;
+
   font-weight: 700;
 }
 
+
 .table-header p {
-  margin: 5px 0 0;
+  margin: 4px 0 0;
 
-  color: #85899e;
+  font-size: 10px;
 
-  font-size: 12px;
+  color: #7b8494;
 }
 
+
+/* =========================================================
+   REFRESH BUTTON
+   ========================================================= */
+
 .refresh-btn {
+  height: 32px;
+
+  padding: 0 13px;
+
   border: none;
 
-  background: #6941e8;
+  border-radius: 7px;
 
-  color: white;
+  background: #7c2ae8;
 
-  padding: 10px 17px;
+  color: #ffffff;
 
-  border-radius: 9px;
+  font-size: 11px;
 
-  font-size: 13px;
   font-weight: 600;
 
   cursor: pointer;
 
-  transition: 0.2s;
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
 }
 
-.refresh-btn:hover {
-  background: #5730d5;
+
+.refresh-btn:hover:not(:disabled) {
+  background: #6920ca;
+
+  transform: translateY(-1px);
 }
+
 
 .refresh-btn:disabled {
-  opacity: 0.6;
+  opacity: 0.65;
+
   cursor: not-allowed;
 }
 
-/* =====================================================
-   TABLE
-===================================================== */
+
+/* =========================================================
+   TABLE WRAPPER
+   ========================================================= */
 
 .table-wrapper {
   width: 100%;
+
+  max-width: 100%;
+
   overflow-x: auto;
+
+  overflow-y: hidden;
+
+  box-sizing: border-box;
 }
+
+
+/* =========================================================
+   TABLE
+   ========================================================= */
 
 .monthly-report-table {
   width: 100%;
+
+  min-width: 760px;
+
   border-collapse: collapse;
 
-  min-width: 900px;
+  table-layout: fixed;
+
+  font-size: 11px;
 }
 
+
+/* =========================================================
+   TABLE HEAD
+   ========================================================= */
+
 .monthly-report-table thead th {
-  background: #6941e8;
+  height: 38px;
 
-  color: white;
+  padding: 8px 10px;
 
-  padding: 15px 18px;
+  background: #7928df;
 
-  font-size: 12px;
+  color: #ffffff;
+
+  font-size: 10px;
 
   font-weight: 600;
 
-  text-align: left;
+  text-align: center;
+
+  border: none;
 
   white-space: nowrap;
 }
 
-.monthly-report-table thead th:first-child {
+
+/* =========================================================
+   COLUMN WIDTHS
+   ========================================================= */
+
+.monthly-report-table th:nth-child(1),
+.monthly-report-table td:nth-child(1) {
+  width: 45px;
+}
+
+
+.monthly-report-table th:nth-child(2),
+.monthly-report-table td:nth-child(2) {
+  width: 29%;
+
+  text-align: left;
+}
+
+
+.monthly-report-table th:nth-child(3),
+.monthly-report-table td:nth-child(3),
+.monthly-report-table th:nth-child(4),
+.monthly-report-table td:nth-child(4),
+.monthly-report-table th:nth-child(5),
+.monthly-report-table td:nth-child(5),
+.monthly-report-table th:nth-child(6),
+.monthly-report-table td:nth-child(6),
+.monthly-report-table th:nth-child(7),
+.monthly-report-table td:nth-child(7) {
   text-align: center;
-  width: 60px;
 }
 
-.monthly-report-table tbody td {
-  padding: 15px 18px;
 
-  border-bottom: 1px solid #eeeeF4;
-
-  color: #4d5268;
-
-  font-size: 13px;
-
-  background: white;
-}
+/* =========================================================
+   TABLE BODY
+   ========================================================= */
 
 .monthly-report-table tbody tr {
-  transition: 0.18s;
+  height: 43px;
+
+  border-bottom: 1px solid #eceef3;
 }
 
-.monthly-report-table tbody tr:hover td {
+
+.monthly-report-table tbody tr:hover {
   background: #faf9ff;
 }
 
-/* =====================================================
+
+.monthly-report-table tbody td {
+  padding: 8px 10px;
+
+  color: #263044;
+
+  vertical-align: middle;
+
+  white-space: nowrap;
+}
+
+
+/* =========================================================
    EXECUTIVE
-===================================================== */
+   ========================================================= */
 
 .executive-name {
   display: flex;
 
   align-items: center;
 
-  gap: 10px;
+  gap: 9px;
 
-  font-weight: 600;
-
-  color: #25263a;
+  min-width: 0;
 }
 
+
 .executive-avatar {
-  width: 34px;
-  height: 34px;
+  width: 25px;
+
+  height: 25px;
+
+  min-width: 25px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
 
   border-radius: 50%;
 
-  background: linear-gradient(
-    135deg,
-    #7b4df1,
-    #5d35d4
-  );
+  background: #7828df;
 
-  color: white;
+  color: #ffffff;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  font-size: 13px;
+  font-size: 10px;
 
   font-weight: 700;
-
-  flex-shrink: 0;
 }
 
-/* =====================================================
+
+.executive-name span {
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+
+  color: #172033;
+
+  font-weight: 500;
+}
+
+
+/* =========================================================
    NUMBER BADGES
-===================================================== */
+   ========================================================= */
 
 .number-badge {
   display: inline-flex;
 
-  min-width: 40px;
-
-  height: 28px;
-
-  padding: 0 10px;
-
   align-items: center;
+
   justify-content: center;
 
-  border-radius: 8px;
+  min-width: 28px;
 
-  font-size: 12px;
+  height: 21px;
+
+  padding: 0 7px;
+
+  border-radius: 6px;
+
+  font-size: 9px;
 
   font-weight: 700;
 }
 
+
+/* ASSIGNED */
+
 .number-badge.assigned {
-  background: #eeeaff;
-  color: #6841e7;
+  color: #7427d9;
+
+  background: #f0e7ff;
 }
+
+
+/* RINGING */
 
 .number-badge.ringing {
-  background: #eaf3ff;
-  color: #2674d9;
+  color: #2563eb;
+
+  background: #eaf2ff;
 }
+
+
+/* INTERESTED */
 
 .number-badge.interested {
-  background: #fff5dc;
-  color: #bd7a00;
+  color: #a16207;
+
+  background: #fff3d6;
+
+  border-left: 3px solid #059669;
 }
+
+
+/* VISIT */
 
 .number-badge.visit {
-  background: #e6f8f1;
-  color: #12966e;
+  color: #059669;
+
+  background: #e2f7f0;
 }
+
+
+/* BOOKING */
 
 .number-badge.booking {
-  background: #ffe9ef;
-  color: #e33d67;
+  color: #e11d48;
+
+  background: #ffe7ed;
 }
 
-/* =====================================================
-   TOTAL
-===================================================== */
+
+/* =========================================================
+   TABLE FOOTER
+   ========================================================= */
+
+.monthly-report-table tfoot tr {
+  background: #f5efff;
+
+  height: 43px;
+}
+
 
 .monthly-report-table tfoot td {
-  padding: 17px 18px;
+  padding: 9px 10px;
 
-  background: #f6f3ff;
+  color: #641dc4;
 
-  border-top: 2px solid #e2dafd;
+  text-align: center;
 
-  color: #29213f;
+  font-size: 11px;
 
-  font-size: 13px;
+  border: none;
 }
 
-.monthly-report-table tfoot td strong {
-  color: #4d2ca8;
+
+.monthly-report-table tfoot td:nth-child(2) {
+  text-align: left;
 }
 
-/* =====================================================
-   LOADING / EMPTY
-===================================================== */
 
-.loading-row,
-.empty-row {
+/* =========================================================
+   LOADING
+   ========================================================= */
+
+.loading-row {
+  height: 100px;
+
   text-align: center !important;
 
-  padding: 50px !important;
+  color: #6b7280 !important;
 
-  color: #85899e !important;
-
-  font-size: 14px !important;
+  font-size: 12px;
 }
 
-/* =====================================================
-   RESPONSIVE
-===================================================== */
+
+/* =========================================================
+   EMPTY
+   ========================================================= */
+
+.empty-row {
+  height: 100px;
+
+  text-align: center !important;
+
+  color: #6b7280 !important;
+
+  font-size: 12px;
+}
+
+
+/* =========================================================
+   SCROLLBAR
+   ========================================================= */
+
+.table-wrapper::-webkit-scrollbar {
+  height: 6px;
+}
+
+
+.table-wrapper::-webkit-scrollbar-track {
+  background: #f1f2f5;
+}
+
+
+.table-wrapper::-webkit-scrollbar-thumb {
+  background: #c9cbd3;
+
+  border-radius: 10px;
+}
+
+
+/* =========================================================
+   LARGE SCREEN
+   ========================================================= */
+
+@media (min-width: 1400px) {
+  .monthly-report-page {
+    padding-left: 24px;
+
+    padding-right: 24px;
+  }
+
+  .monthly-report-table {
+    font-size: 12px;
+  }
+
+  .monthly-report-table thead th {
+    font-size: 11px;
+  }
+}
+
+
+/* =========================================================
+   MEDIUM SCREEN
+   ========================================================= */
 
 @media (max-width: 1200px) {
   .monthly-summary-grid {
@@ -489,28 +810,34 @@
   }
 }
 
-@media (max-width: 800px) {
-  .monthly-report-page {
-    padding: 20px 15px 40px;
+
+/* =========================================================
+   SMALL LAPTOP
+   ========================================================= */
+
+@media (max-width: 900px) {
+  .monthly-report-page.sidebar-open {
+    margin-left: 165px;
+
+    width: calc(100% - 165px);
+
+    padding-left: 15px;
+
+    padding-right: 15px;
   }
+
 
   .monthly-report-header {
     flex-direction: column;
+
     align-items: stretch;
   }
 
+
   .monthly-filters {
-    width: 100%;
+    justify-content: flex-start;
   }
 
-  .filter-group {
-    flex: 1;
-  }
-
-  .filter-group select {
-    width: 100%;
-    min-width: 0;
-  }
 
   .monthly-summary-grid {
     grid-template-columns:
@@ -518,56 +845,81 @@
   }
 }
 
-@media (max-width: 500px) {
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 600px) {
+  .monthly-report-page {
+    padding: 20px 12px 30px;
+  }
+
+
+  .monthly-report-page.sidebar-open {
+    margin-left: 0;
+
+    width: 100%;
+  }
+
+
+  .monthly-report-page.sidebar-closed {
+    margin-left: 0;
+
+    width: 100%;
+  }
+
+
+  .monthly-report-header h1 {
+    font-size: 22px;
+  }
+
+
+  .monthly-filters {
+    width: 100%;
+  }
+
+
+  .filter-group {
+    flex: 1;
+  }
+
+
+  .filter-group select {
+    width: 100%;
+  }
+
+
   .monthly-summary-grid {
     grid-template-columns: 1fr;
   }
 
-  .monthly-filters {
-    flex-direction: column;
+
+  .monthly-summary-card {
+    min-height: 68px;
   }
 
-  .filter-group {
-    width: 100%;
-  }
 
   .table-header {
     align-items: flex-start;
-    gap: 12px;
-    flex-direction: column;
   }
 }
 
-/* =====================================================
-   MONTHLY REPORT - SIDEBAR LAYOUT
-===================================================== */
+
+/* =========================================================
+   VERY IMPORTANT
+   KEEP MONTHLY REPORT ABOVE PAGE BACKGROUND
+   BUT BELOW SIDEBAR
+   ========================================================= */
 
 .monthly-report-page {
-  padding-top: 72px;
-  min-height: 100vh;
-  box-sizing: border-box;
-  transition:
-    margin-left 0.25s ease,
-    width 0.25s ease;
+  z-index: 1;
 }
 
-/* SIDEBAR OPEN */
 
-.monthly-report-page.sidebar-open {
-  margin-left: 165px;
-  width: calc(100% - 165px);
-}
-
-/* SIDEBAR CLOSED */
-
-.monthly-report-page.sidebar-closed {
-  margin-left: 0;
-  width: 100%;
-}
-
-/* CONTENT ABOVE BACKGROUND */
-
-.monthly-report-page > * {
+.monthly-report-page .monthly-table-card,
+.monthly-report-page .monthly-summary-card {
   position: relative;
+
   z-index: 1;
 }
