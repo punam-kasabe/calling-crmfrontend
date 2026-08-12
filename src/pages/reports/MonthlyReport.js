@@ -228,23 +228,7 @@ export default function MonthlyReport() {
     );
   };
 
-  /* =====================================================
-     SIDEBAR WIDTH
-  ===================================================== */
-
-  const contentStyle = {
-    marginLeft: isSidebarOpen
-      ? "165px"
-      : "0px",
-
-    paddingTop: "72px",
-
-    minHeight: "100vh",
-
-    transition:
-      "margin-left 0.25s ease",
-  };
-
+ 
   /* =====================================================
      RENDER
   ===================================================== */
@@ -264,10 +248,16 @@ export default function MonthlyReport() {
           MAIN CONTENT
       ================================================= */}
 
-      <div
-        className="monthly-report-page"
-        style={contentStyle}
-      >
+     <div
+  className={`monthly-report-page ${
+    isSidebarOpen
+      ? "sidebar-open"
+      : "sidebar-closed"
+  }`}
+>
+        
+    
+      
         {/* =================================================
             HEADER
         ================================================= */}

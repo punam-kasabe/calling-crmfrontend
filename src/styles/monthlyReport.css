@@ -536,3 +536,40 @@
     flex-direction: column;
   }
 }
+/* =====================================================
+   MONTHLY REPORT - SIDEBAR LAYOUT FIX
+===================================================== */
+
+/* =====================================================
+   MONTHLY REPORT - SIDEBAR LAYOUT
+===================================================== */
+
+.monthly-report-page {
+  padding-top: 72px;
+  min-height: 100vh;
+  box-sizing: border-box;
+  transition:
+    margin-left 0.25s ease,
+    width 0.25s ease;
+}
+
+/* SIDEBAR OPEN */
+
+.monthly-report-page.sidebar-open {
+  margin-left: 165px;
+  width: calc(100% - 165px);
+}
+
+/* SIDEBAR CLOSED */
+
+.monthly-report-page.sidebar-closed {
+  margin-left: 0;
+  width: 100%;
+}
+
+/* CONTENT ABOVE BACKGROUND */
+
+.monthly-report-page > * {
+  position: relative;
+  z-index: 1;
+}
