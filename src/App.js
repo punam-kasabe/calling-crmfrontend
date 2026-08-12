@@ -43,6 +43,7 @@ import SourcesReport from "./pages/reports/SourcesReport";
 import TeamPerformance from "./pages/reports/TeamPerformance";
 import TotalLeads from "./pages/reports/TotalLeads";
 import StatusLeads from "./pages/reports/StatusLeads";
+import MonthlyReport from "./pages/reports/MonthlyReport";
 
 /* 📄 NORMAL PAGES */
 import BulkUpdate from "./pages/BulkUpdate";
@@ -345,6 +346,14 @@ export default function App() {
 />
         {/* REPORTS */}
         <Route
+          path="/monthly-report"
+          element={
+            <ProtectedRoute>
+              <MonthlyReport />
+            </ProtectedRoute>
+          }
+        />
+        <Route
           path="/projects-report"
           element={
             <ProtectedRoute>
@@ -380,6 +389,7 @@ export default function App() {
           }
         />
 
+        
         {/* GENERAL */}
         <Route path="/bulk-update" element={<ProtectedRoute><BulkUpdate /></ProtectedRoute>} />
         <Route path="/channel-partner" element={<ProtectedRoute><ChannelPartner /></ProtectedRoute>} />
@@ -390,9 +400,9 @@ export default function App() {
         <Route path="/personalised-report" element={<ProtectedRoute><PersonalisedReport /></ProtectedRoute>} />
         <Route path="/pipeline" element={<ProtectedRoute><Pipeline /></ProtectedRoute>} />
         <Route
-  path="/lead-list"
-  element={<LeadListPage />}
-/>
+               path="/lead-list"
+                    element={<LeadListPage />}
+                   />
        <Route path="/request" element={<ProtectedRoute><Requests /></ProtectedRoute>} />
        <Route path="/setting" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
       <Route path="/svp-dashboard" element={<ProtectedRoute><SVPDashboard /></ProtectedRoute>} />
