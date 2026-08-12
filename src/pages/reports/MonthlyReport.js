@@ -64,7 +64,7 @@ export default function MonthlyReport() {
   );
 
   /* =====================================================
-     DATA
+     REPORT DATA
   ===================================================== */
 
   const [reportData, setReportData] = useState([]);
@@ -84,7 +84,11 @@ export default function MonthlyReport() {
   const years = useMemo(() => {
     const arr = [];
 
-    for (let year = currentYear; year >= 2024; year--) {
+    for (
+      let year = currentYear;
+      year >= 2024;
+      year--
+    ) {
       arr.push(year);
     }
 
@@ -93,14 +97,12 @@ export default function MonthlyReport() {
 
   /* =====================================================
      FETCH MONTHLY REPORT
-
-     useCallback added so ESLint does not complain
-     about useEffect dependency.
   ===================================================== */
 
   const fetchMonthlyReport = useCallback(async () => {
     try {
       setLoading(true);
+
       setError("");
 
       const response = await axios.get(
@@ -124,11 +126,6 @@ export default function MonthlyReport() {
         setReportData([]);
 
         setTotals(DEFAULT_TOTALS);
-
-        setError(
-          response.data?.message ||
-            "No monthly report data found"
-        );
       }
     } catch (err) {
       console.error(
@@ -546,7 +543,7 @@ export default function MonthlyReport() {
                       }
                     >
 
-                      {/* INDEX */}
+                      {/* NUMBER */}
 
                       <td>
                         {index + 1}
