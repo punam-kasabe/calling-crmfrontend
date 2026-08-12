@@ -235,6 +235,7 @@ export default function MonthlyReport() {
 
   return (
     <>
+
       {/* =================================================
           SIDEBAR
       ================================================= */}
@@ -249,12 +250,12 @@ export default function MonthlyReport() {
       ================================================= */}
 
      <div
-  className={`monthly-report-page ${
-    isSidebarOpen
+     className={`monthly-report-page ${
+     isSidebarOpen
       ? "sidebar-open"
       : "sidebar-closed"
-  }`}
-  >           
+            }`}
+       >           
       
         {/* =================================================
             HEADER
