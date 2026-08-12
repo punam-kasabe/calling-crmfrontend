@@ -19,7 +19,7 @@ import {
   LogOut,
   UserCheck,
   ClipboardList,
-
+  CalendarDays,
 } from "lucide-react";
 
 export default function Sidebar({ isOpen, toggleSidebar }) {
@@ -590,6 +590,12 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
                     </Link>
                   </li>
 
+                   <li>
+  <Link to="/monthly-report">
+    <CalendarDays size={14} />
+    Monthly Report
+  </Link>
+</li>
                 </ul>
 
               </li>
