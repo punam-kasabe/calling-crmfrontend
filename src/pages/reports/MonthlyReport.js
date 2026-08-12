@@ -9,7 +9,13 @@ import React, {
 
 import axios from "axios";
 
+import Sidebar from "../../components/Sidebar";
+
 import "../../styles/monthlyReport.css";
+
+/* =====================================================
+   API
+===================================================== */
 
 const API =
   "https://calling-crm-backend-7w52.onrender.com/api";
@@ -50,9 +56,24 @@ const DEFAULT_TOTALS = {
 ===================================================== */
 
 export default function MonthlyReport() {
+  /* =====================================================
+     SIDEBAR
+  ===================================================== */
+
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen((prev) => !prev);
+  };
+
+  /* =====================================================
+     CURRENT DATE
+  ===================================================== */
+
   const today = new Date();
 
   const currentYear = today.getFullYear();
+
   const currentMonth = today.getMonth() + 1;
 
   /* =====================================================
@@ -60,7 +81,10 @@ export default function MonthlyReport() {
   ===================================================== */
 
   const [selectedMonth, setSelectedMonth] = useState(
-    `${currentYear}-${String(currentMonth).padStart(2, "0")}`
+    `${currentYear}-${String(currentMonth).padStart(
+      2,
+      "0"
+    )}`
   );
 
   /* =====================================================
@@ -126,6 +150,11 @@ export default function MonthlyReport() {
         setReportData([]);
 
         setTotals(DEFAULT_TOTALS);
+
+        setError(
+          response.data?.message ||
+            "No monthly report data found"
+        );
       }
     } catch (err) {
       console.error(
@@ -200,512 +229,490 @@ export default function MonthlyReport() {
   };
 
   /* =====================================================
+     SIDEBAR WIDTH
+  ===================================================== */
+
+  const contentStyle = {
+    marginLeft: isSidebarOpen
+      ? "165px"
+      : "0px",
+
+    paddingTop: "72px",
+
+    minHeight: "100vh",
+
+    transition:
+      "margin-left 0.25s ease",
+  };
+
+  /* =====================================================
      RENDER
   ===================================================== */
 
   return (
-    <div className="monthly-report-page">
-
+    <>
       {/* =================================================
-          HEADER
+          SIDEBAR
       ================================================= */}
 
-      <div className="monthly-report-header">
+      <Sidebar
+        isOpen={isSidebarOpen}
+        toggleSidebar={toggleSidebar}
+      />
 
-        <div>
-          <h1>
-            Monthly Report
-          </h1>
+      {/* =================================================
+          MAIN CONTENT
+      ================================================= */}
 
-          <p>
-            Executive-wise monthly performance
-          </p>
+      <div
+        className="monthly-report-page"
+        style={contentStyle}
+      >
+        {/* =================================================
+            HEADER
+        ================================================= */}
+
+        <div className="monthly-report-header">
+          <div>
+            <h1>
+              Monthly Report
+            </h1>
+
+            <p>
+              Executive-wise monthly performance
+            </p>
+          </div>
+
+          {/* =================================================
+              FILTERS
+          ================================================= */}
+
+          <div className="monthly-filters">
+            {/* YEAR */}
+
+            <div className="filter-group">
+              <label>
+                Year
+              </label>
+
+              <select
+                value={
+                  selectedMonth.split("-")[0]
+                }
+                onChange={
+                  handleYearChange
+                }
+              >
+                {years.map((year) => (
+                  <option
+                    key={year}
+                    value={year}
+                  >
+                    {year}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* MONTH */}
+
+            <div className="filter-group">
+              <label>
+                Month
+              </label>
+
+              <select
+                value={
+                  selectedMonth.split("-")[1]
+                }
+                onChange={
+                  handleMonthChange
+                }
+              >
+                {MONTHS.map((month) => (
+                  <option
+                    key={month.value}
+                    value={month.value}
+                  >
+                    {month.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
         </div>
 
         {/* =================================================
-            FILTERS
+            SELECTED MONTH
         ================================================= */}
 
-        <div className="monthly-filters">
+        <div className="selected-month-title">
+          <span>
+            Monthly Performance
+          </span>
 
-          {/* YEAR */}
+          <strong>
+            {selectedMonthName}
+          </strong>
+        </div>
 
-          <div className="filter-group">
+        {/* =================================================
+            ERROR
+        ================================================= */}
 
-            <label>
-              Year
-            </label>
+        {error && (
+          <div className="monthly-error">
+            {error}
+          </div>
+        )}
 
-            <select
-              value={
-                selectedMonth.split("-")[0]
+        {/* =================================================
+            SUMMARY CARDS
+        ================================================= */}
+
+        <div className="monthly-summary-grid">
+          {/* ASSIGNED */}
+
+          <div className="monthly-summary-card assigned-card">
+            <div className="summary-icon">
+              👥
+            </div>
+
+            <div>
+              <span>
+                Assigned Leads
+              </span>
+
+              <strong>
+                {totals.assigned || 0}
+              </strong>
+            </div>
+          </div>
+
+          {/* RINGING */}
+
+          <div className="monthly-summary-card ringing-card">
+            <div className="summary-icon">
+              📞
+            </div>
+
+            <div>
+              <span>
+                Call Ringing
+              </span>
+
+              <strong>
+                {totals.ringing || 0}
+              </strong>
+            </div>
+          </div>
+
+          {/* INTERESTED */}
+
+          <div className="monthly-summary-card interested-card">
+            <div className="summary-icon">
+              ⭐
+            </div>
+
+            <div>
+              <span>
+                Interested
+              </span>
+
+              <strong>
+                {totals.interested || 0}
+              </strong>
+            </div>
+          </div>
+
+          {/* SITE VISIT */}
+
+          <div className="monthly-summary-card visit-card">
+            <div className="summary-icon">
+              📍
+            </div>
+
+            <div>
+              <span>
+                Site Visits
+              </span>
+
+              <strong>
+                {totals.siteVisit || 0}
+              </strong>
+            </div>
+          </div>
+
+          {/* BOOKING */}
+
+          <div className="monthly-summary-card booking-card">
+            <div className="summary-icon">
+              🏆
+            </div>
+
+            <div>
+              <span>
+                Bookings
+              </span>
+
+              <strong>
+                {totals.booking || 0}
+              </strong>
+            </div>
+          </div>
+        </div>
+
+        {/* =================================================
+            TABLE CARD
+        ================================================= */}
+
+        <div className="monthly-table-card">
+          {/* TABLE HEADER */}
+
+          <div className="table-header">
+            <div>
+              <h2>
+                Executive Performance
+              </h2>
+
+              <p>
+                Performance for{" "}
+                {selectedMonthName}
+              </p>
+            </div>
+
+            {/* REFRESH */}
+
+            <button
+              type="button"
+              className="refresh-btn"
+              onClick={
+                fetchMonthlyReport
               }
-              onChange={handleYearChange}
+              disabled={loading}
             >
-              {years.map((year) => (
-                <option
-                  key={year}
-                  value={year}
-                >
-                  {year}
-                </option>
-              ))}
-            </select>
-
+              {loading
+                ? "Loading..."
+                : "↻ Refresh"}
+            </button>
           </div>
 
-          {/* MONTH */}
-
-          <div className="filter-group">
-
-            <label>
-              Month
-            </label>
-
-            <select
-              value={
-                selectedMonth.split("-")[1]
-              }
-              onChange={handleMonthChange}
-            >
-              {MONTHS.map((month) => (
-                <option
-                  key={month.value}
-                  value={month.value}
-                >
-                  {month.label}
-                </option>
-              ))}
-            </select>
-
-          </div>
-
-        </div>
-
-      </div>
-
-      {/* =================================================
-          SELECTED MONTH
-      ================================================= */}
-
-      <div className="selected-month-title">
-
-        <span>
-          Monthly Performance
-        </span>
-
-        <strong>
-          {selectedMonthName}
-        </strong>
-
-      </div>
-
-      {/* =================================================
-          ERROR
-      ================================================= */}
-
-      {error && (
-        <div className="monthly-error">
-          {error}
-        </div>
-      )}
-
-      {/* =================================================
-          SUMMARY CARDS
-      ================================================= */}
-
-      <div className="monthly-summary-grid">
-
-        {/* ASSIGNED */}
-
-        <div className="monthly-summary-card assigned-card">
-
-          <div className="summary-icon">
-            👥
-          </div>
-
-          <div>
-            <span>
-              Assigned Leads
-            </span>
-
-            <strong>
-              {totals.assigned || 0}
-            </strong>
-          </div>
-
-        </div>
-
-        {/* RINGING */}
-
-        <div className="monthly-summary-card ringing-card">
-
-          <div className="summary-icon">
-            📞
-          </div>
-
-          <div>
-            <span>
-              Call Ringing
-            </span>
-
-            <strong>
-              {totals.ringing || 0}
-            </strong>
-          </div>
-
-        </div>
-
-        {/* INTERESTED */}
-
-        <div className="monthly-summary-card interested-card">
-
-          <div className="summary-icon">
-            ⭐
-          </div>
-
-          <div>
-            <span>
-              Interested
-            </span>
-
-            <strong>
-              {totals.interested || 0}
-            </strong>
-          </div>
-
-        </div>
-
-        {/* SITE VISIT */}
-
-        <div className="monthly-summary-card visit-card">
-
-          <div className="summary-icon">
-            📍
-          </div>
-
-          <div>
-            <span>
-              Site Visits
-            </span>
-
-            <strong>
-              {totals.siteVisit || 0}
-            </strong>
-          </div>
-
-        </div>
-
-        {/* BOOKING */}
-
-        <div className="monthly-summary-card booking-card">
-
-          <div className="summary-icon">
-            🏆
-          </div>
-
-          <div>
-            <span>
-              Bookings
-            </span>
-
-            <strong>
-              {totals.booking || 0}
-            </strong>
-          </div>
-
-        </div>
-
-      </div>
-
-      {/* =================================================
-          TABLE
-      ================================================= */}
-
-      <div className="monthly-table-card">
-
-        {/* TABLE HEADER */}
-
-        <div className="table-header">
-
-          <div>
-
-            <h2>
-              Executive Performance
-            </h2>
-
-            <p>
-              Performance for{" "}
-              {selectedMonthName}
-            </p>
-
-          </div>
-
-          <button
-            type="button"
-            className="refresh-btn"
-            onClick={fetchMonthlyReport}
-            disabled={loading}
-          >
-            {loading
-              ? "Loading..."
-              : "↻ Refresh"}
-          </button>
-
-        </div>
-
-        {/* TABLE */}
-
-        <div className="table-wrapper">
-
-          <table className="monthly-report-table">
-
-            <thead>
-
-              <tr>
-
-                <th>
-                  #
-                </th>
-
-                <th>
-                  Executive
-                </th>
-
-                <th>
-                  Assigned Leads
-                </th>
-
-                <th>
-                  Call Ringing
-                </th>
-
-                <th>
-                  Interested
-                </th>
-
-                <th>
-                  Site Visits
-                </th>
-
-                <th>
-                  Bookings
-                </th>
-
-              </tr>
-
-            </thead>
-
-            <tbody>
-
-              {/* LOADING */}
-
-              {loading ? (
-
+          {/* =================================================
+              TABLE
+          ================================================= */}
+
+          <div className="table-wrapper">
+            <table className="monthly-report-table">
+              {/* =================================================
+                  TABLE HEAD
+              ================================================= */}
+
+              <thead>
                 <tr>
+                  <th>
+                    #
+                  </th>
 
-                  <td
-                    colSpan="7"
-                    className="loading-row"
-                  >
-                    Loading monthly report...
-                  </td>
+                  <th>
+                    Executive
+                  </th>
 
+                  <th>
+                    Assigned Leads
+                  </th>
+
+                  <th>
+                    Call Ringing
+                  </th>
+
+                  <th>
+                    Interested
+                  </th>
+
+                  <th>
+                    Site Visits
+                  </th>
+
+                  <th>
+                    Bookings
+                  </th>
                 </tr>
+              </thead>
 
-              ) : reportData.length === 0 ? (
+              {/* =================================================
+                  TABLE BODY
+              ================================================= */}
 
-                /* NO DATA */
+              <tbody>
+                {/* LOADING */}
 
-                <tr>
-
-                  <td
-                    colSpan="7"
-                    className="empty-row"
-                  >
-                    No data available for{" "}
-                    {selectedMonthName}
-                  </td>
-
-                </tr>
-
-              ) : (
-
-                /* DATA */
-
-                reportData.map(
-                  (item, index) => (
-
-                    <tr
-                      key={
-                        item.executive ||
-                        index
-                      }
+                {loading ? (
+                  <tr>
+                    <td
+                      colSpan="7"
+                      className="loading-row"
                     >
-
-                      {/* NUMBER */}
-
-                      <td>
-                        {index + 1}
-                      </td>
-
-                      {/* EXECUTIVE */}
-
-                      <td>
-
-                        <div className="executive-name">
-
-                          <div className="executive-avatar">
-
-                            {(
-                              item.executive ||
-                              "E"
-                            )
-                              .charAt(0)
-                              .toUpperCase()}
-
-                          </div>
-
-                          <span>
-                            {item.executive ||
-                              "Unknown"}
-                          </span>
-
-                        </div>
-
-                      </td>
-
-                      {/* ASSIGNED */}
-
-                      <td>
-
-                        <span className="number-badge assigned">
-
-                          {item.assigned || 0}
-
-                        </span>
-
-                      </td>
-
-                      {/* RINGING */}
-
-                      <td>
-
-                        <span className="number-badge ringing">
-
-                          {item.ringing || 0}
-
-                        </span>
-
-                      </td>
-
-                      {/* INTERESTED */}
-
-                      <td>
-
-                        <span className="number-badge interested">
-
-                          {item.interested || 0}
-
-                        </span>
-
-                      </td>
-
-                      {/* SITE VISIT */}
-
-                      <td>
-
-                        <span className="number-badge visit">
-
-                          {item.siteVisit || 0}
-
-                        </span>
-
-                      </td>
-
-                      {/* BOOKING */}
-
-                      <td>
-
-                        <span className="number-badge booking">
-
-                          {item.booking || 0}
-
-                        </span>
-
-                      </td>
-
-                    </tr>
-
-                  )
-                )
-
-              )}
-
-            </tbody>
-
-            {/* =================================================
-                TOTAL
-            ================================================= */}
-
-            {!loading &&
-              reportData.length > 0 && (
-
-                <tfoot>
+                      Loading monthly report...
+                    </td>
+                  </tr>
+                ) : reportData.length ===
+                  0 ? (
+                  /* NO DATA */
 
                   <tr>
-
-                    <td>
+                    <td
+                      colSpan="7"
+                      className="empty-row"
+                    >
+                      No data available for{" "}
+                      {selectedMonthName}
                     </td>
-
-                    <td>
-                      <strong>
-                        TOTAL
-                      </strong>
-                    </td>
-
-                    <td>
-                      <strong>
-                        {totals.assigned || 0}
-                      </strong>
-                    </td>
-
-                    <td>
-                      <strong>
-                        {totals.ringing || 0}
-                      </strong>
-                    </td>
-
-                    <td>
-                      <strong>
-                        {totals.interested || 0}
-                      </strong>
-                    </td>
-
-                    <td>
-                      <strong>
-                        {totals.siteVisit || 0}
-                      </strong>
-                    </td>
-
-                    <td>
-                      <strong>
-                        {totals.booking || 0}
-                      </strong>
-                    </td>
-
                   </tr>
+                ) : (
+                  /* DATA */
 
-                </tfoot>
+                  reportData.map(
+                    (item, index) => (
+                      <tr
+                        key={
+                          item.executive ||
+                          index
+                        }
+                      >
+                        {/* NUMBER */}
 
-              )}
+                        <td>
+                          {index + 1}
+                        </td>
 
-          </table>
+                        {/* EXECUTIVE */}
 
+                        <td>
+                          <div className="executive-name">
+                            <div className="executive-avatar">
+                              {(
+                                item.executive ||
+                                "E"
+                              )
+                                .charAt(0)
+                                .toUpperCase()}
+                            </div>
+
+                            <span>
+                              {item.executive ||
+                                "Unknown"}
+                            </span>
+                          </div>
+                        </td>
+
+                        {/* ASSIGNED */}
+
+                        <td>
+                          <span className="number-badge assigned">
+                            {item.assigned ||
+                              0}
+                          </span>
+                        </td>
+
+                        {/* RINGING */}
+
+                        <td>
+                          <span className="number-badge ringing">
+                            {item.ringing ||
+                              0}
+                          </span>
+                        </td>
+
+                        {/* INTERESTED */}
+
+                        <td>
+                          <span className="number-badge interested">
+                            {item.interested ||
+                              0}
+                          </span>
+                        </td>
+
+                        {/* SITE VISIT */}
+
+                        <td>
+                          <span className="number-badge visit">
+                            {item.siteVisit ||
+                              0}
+                          </span>
+                        </td>
+
+                        {/* BOOKING */}
+
+                        <td>
+                          <span className="number-badge booking">
+                            {item.booking ||
+                              0}
+                          </span>
+                        </td>
+                      </tr>
+                    )
+                  )
+                )}
+              </tbody>
+
+              {/* =================================================
+                  TOTAL
+              ================================================= */}
+
+              {!loading &&
+                reportData.length >
+                  0 && (
+                  <tfoot>
+                    <tr>
+                      <td></td>
+
+                      <td>
+                        <strong>
+                          TOTAL
+                        </strong>
+                      </td>
+
+                      <td>
+                        <strong>
+                          {totals.assigned ||
+                            0}
+                        </strong>
+                      </td>
+
+                      <td>
+                        <strong>
+                          {totals.ringing ||
+                            0}
+                        </strong>
+                      </td>
+
+                      <td>
+                        <strong>
+                          {totals.interested ||
+                            0}
+                        </strong>
+                      </td>
+
+                      <td>
+                        <strong>
+                          {totals.siteVisit ||
+                            0}
+                        </strong>
+                      </td>
+
+                      <td>
+                        <strong>
+                          {totals.booking ||
+                            0}
+                        </strong>
+                      </td>
+                    </tr>
+                  </tfoot>
+                )}
+            </table>
+          </div>
         </div>
-
       </div>
-
-    </div>
+    </>
   );
 }
