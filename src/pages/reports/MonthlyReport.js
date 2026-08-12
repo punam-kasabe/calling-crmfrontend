@@ -1,11 +1,53 @@
 // FILE: src/pages/reports/MonthlyReport.js
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+
 import axios from "axios";
+
 import "../../styles/monthlyReport.css";
 
 const API =
   "https://calling-crm-backend-7w52.onrender.com/api";
+
+/* =====================================================
+   MONTH LIST
+===================================================== */
+
+const MONTHS = [
+  { value: "01", label: "January" },
+  { value: "02", label: "February" },
+  { value: "03", label: "March" },
+  { value: "04", label: "April" },
+  { value: "05", label: "May" },
+  { value: "06", label: "June" },
+  { value: "07", label: "July" },
+  { value: "08", label: "August" },
+  { value: "09", label: "September" },
+  { value: "10", label: "October" },
+  { value: "11", label: "November" },
+  { value: "12", label: "December" },
+];
+
+/* =====================================================
+   DEFAULT TOTALS
+===================================================== */
+
+const DEFAULT_TOTALS = {
+  assigned: 0,
+  ringing: 0,
+  interested: 0,
+  siteVisit: 0,
+  booking: 0,
+};
+
+/* =====================================================
+   MONTHLY REPORT
+===================================================== */
 
 export default function MonthlyReport() {
   const today = new Date();
@@ -13,40 +55,27 @@ export default function MonthlyReport() {
   const currentYear = today.getFullYear();
   const currentMonth = today.getMonth() + 1;
 
+  /* =====================================================
+     SELECTED MONTH
+  ===================================================== */
+
   const [selectedMonth, setSelectedMonth] = useState(
     `${currentYear}-${String(currentMonth).padStart(2, "0")}`
   );
 
-  const [reportData, setReportData] = useState([]);
-  const [totals, setTotals] = useState({
-    assigned: 0,
-    ringing: 0,
-    interested: 0,
-    siteVisit: 0,
-    booking: 0,
-  });
-
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-
   /* =====================================================
-     MONTH LIST
+     DATA
   ===================================================== */
 
-  const months = [
-    { value: "01", label: "January" },
-    { value: "02", label: "February" },
-    { value: "03", label: "March" },
-    { value: "04", label: "April" },
-    { value: "05", label: "May" },
-    { value: "06", label: "June" },
-    { value: "07", label: "July" },
-    { value: "08", label: "August" },
-    { value: "09", label: "September" },
-    { value: "10", label: "October" },
-    { value: "11", label: "November" },
-    { value: "12", label: "December" },
-  ];
+  const [reportData, setReportData] = useState([]);
+
+  const [totals, setTotals] = useState(
+    DEFAULT_TOTALS
+  );
+
+  const [loading, setLoading] = useState(false);
+
+  const [error, setError] = useState("");
 
   /* =====================================================
      YEAR LIST
@@ -63,21 +92,16 @@ export default function MonthlyReport() {
   }, [currentYear]);
 
   /* =====================================================
-     FETCH REPORT
+     FETCH MONTHLY REPORT
+
+     useCallback added so ESLint does not complain
+     about useEffect dependency.
   ===================================================== */
 
-  const fetchMonthlyReport = async () => {
+  const fetchMonthlyReport = useCallback(async () => {
     try {
       setLoading(true);
       setError("");
-
-      /*
-        Backend API
-
-        Example:
-
-        /api/monthly-report?month=2026-08
-      */
 
       const response = await axios.get(
         `${API}/monthly-report`,
@@ -89,19 +113,22 @@ export default function MonthlyReport() {
       );
 
       if (response.data?.success) {
-        setReportData(response.data.data || []);
+        setReportData(
+          response.data.data || []
+        );
 
         setTotals(
-          response.data.totals || {
-            assigned: 0,
-            ringing: 0,
-            interested: 0,
-            siteVisit: 0,
-            booking: 0,
-          }
+          response.data.totals || DEFAULT_TOTALS
         );
       } else {
         setReportData([]);
+
+        setTotals(DEFAULT_TOTALS);
+
+        setError(
+          response.data?.message ||
+            "No monthly report data found"
+        );
       }
     } catch (err) {
       console.error(
@@ -115,18 +142,20 @@ export default function MonthlyReport() {
       );
 
       setReportData([]);
+
+      setTotals(DEFAULT_TOTALS);
     } finally {
       setLoading(false);
     }
-  };
+  }, [selectedMonth]);
 
   /* =====================================================
-     LOAD WHEN MONTH CHANGES
+     LOAD REPORT WHEN MONTH CHANGES
   ===================================================== */
 
   useEffect(() => {
     fetchMonthlyReport();
-  }, [selectedMonth]);
+  }, [fetchMonthlyReport]);
 
   /* =====================================================
      SELECTED MONTH NAME
@@ -136,7 +165,7 @@ export default function MonthlyReport() {
     const [year, month] =
       selectedMonth.split("-");
 
-    const monthObj = months.find(
+    const monthObj = MONTHS.find(
       (item) => item.value === month
     );
 
@@ -202,6 +231,8 @@ export default function MonthlyReport() {
 
         <div className="monthly-filters">
 
+          {/* YEAR */}
+
           <div className="filter-group">
 
             <label>
@@ -226,6 +257,8 @@ export default function MonthlyReport() {
 
           </div>
 
+          {/* MONTH */}
+
           <div className="filter-group">
 
             <label>
@@ -238,7 +271,7 @@ export default function MonthlyReport() {
               }
               onChange={handleMonthChange}
             >
-              {months.map((month) => (
+              {MONTHS.map((month) => (
                 <option
                   key={month.value}
                   value={month.value}
@@ -286,6 +319,8 @@ export default function MonthlyReport() {
 
       <div className="monthly-summary-grid">
 
+        {/* ASSIGNED */}
+
         <div className="monthly-summary-card assigned-card">
 
           <div className="summary-icon">
@@ -303,6 +338,8 @@ export default function MonthlyReport() {
           </div>
 
         </div>
+
+        {/* RINGING */}
 
         <div className="monthly-summary-card ringing-card">
 
@@ -322,6 +359,8 @@ export default function MonthlyReport() {
 
         </div>
 
+        {/* INTERESTED */}
+
         <div className="monthly-summary-card interested-card">
 
           <div className="summary-icon">
@@ -340,6 +379,8 @@ export default function MonthlyReport() {
 
         </div>
 
+        {/* SITE VISIT */}
+
         <div className="monthly-summary-card visit-card">
 
           <div className="summary-icon">
@@ -357,6 +398,8 @@ export default function MonthlyReport() {
           </div>
 
         </div>
+
+        {/* BOOKING */}
 
         <div className="monthly-summary-card booking-card">
 
@@ -384,19 +427,25 @@ export default function MonthlyReport() {
 
       <div className="monthly-table-card">
 
+        {/* TABLE HEADER */}
+
         <div className="table-header">
 
           <div>
+
             <h2>
               Executive Performance
             </h2>
 
             <p>
-              Performance for {selectedMonthName}
+              Performance for{" "}
+              {selectedMonthName}
             </p>
+
           </div>
 
           <button
+            type="button"
             className="refresh-btn"
             onClick={fetchMonthlyReport}
             disabled={loading}
@@ -407,6 +456,8 @@ export default function MonthlyReport() {
           </button>
 
         </div>
+
+        {/* TABLE */}
 
         <div className="table-wrapper">
 
@@ -450,6 +501,8 @@ export default function MonthlyReport() {
 
             <tbody>
 
+              {/* LOADING */}
+
               {loading ? (
 
                 <tr>
@@ -465,6 +518,8 @@ export default function MonthlyReport() {
 
               ) : reportData.length === 0 ? (
 
+                /* NO DATA */
+
                 <tr>
 
                   <td
@@ -479,6 +534,8 @@ export default function MonthlyReport() {
 
               ) : (
 
+                /* DATA */
+
                 reportData.map(
                   (item, index) => (
 
@@ -489,21 +546,27 @@ export default function MonthlyReport() {
                       }
                     >
 
+                      {/* INDEX */}
+
                       <td>
                         {index + 1}
                       </td>
+
+                      {/* EXECUTIVE */}
 
                       <td>
 
                         <div className="executive-name">
 
                           <div className="executive-avatar">
+
                             {(
                               item.executive ||
                               "E"
                             )
                               .charAt(0)
                               .toUpperCase()}
+
                           </div>
 
                           <span>
@@ -515,34 +578,64 @@ export default function MonthlyReport() {
 
                       </td>
 
+                      {/* ASSIGNED */}
+
                       <td>
+
                         <span className="number-badge assigned">
+
                           {item.assigned || 0}
+
                         </span>
+
                       </td>
 
+                      {/* RINGING */}
+
                       <td>
+
                         <span className="number-badge ringing">
+
                           {item.ringing || 0}
+
                         </span>
+
                       </td>
 
+                      {/* INTERESTED */}
+
                       <td>
+
                         <span className="number-badge interested">
+
                           {item.interested || 0}
+
                         </span>
+
                       </td>
 
+                      {/* SITE VISIT */}
+
                       <td>
+
                         <span className="number-badge visit">
+
                           {item.siteVisit || 0}
+
                         </span>
+
                       </td>
 
+                      {/* BOOKING */}
+
                       <td>
+
                         <span className="number-badge booking">
+
                           {item.booking || 0}
+
                         </span>
+
                       </td>
 
                     </tr>
@@ -565,7 +658,8 @@ export default function MonthlyReport() {
 
                   <tr>
 
-                    <td></td>
+                    <td>
+                    </td>
 
                     <td>
                       <strong>
