@@ -52,6 +52,79 @@ const DEFAULT_TOTALS = {
 };
 
 /* =====================================================
+   HELPER
+   EMAIL -> CLEAN NAME FALLBACK
+===================================================== */
+
+const formatEmailAsName = (email = "") => {
+  if (!email) {
+    return "Unknown";
+  }
+
+  const username = String(email)
+    .split("@")[0]
+    .replace(/[._-]+/g, " ")
+    .trim();
+
+  if (!username) {
+    return "Unknown";
+  }
+
+  return username
+    .split(" ")
+    .filter(Boolean)
+    .map(
+      (word) =>
+        word.charAt(0).toUpperCase() +
+        word.slice(1).toLowerCase()
+    )
+    .join(" ");
+};
+
+/* =====================================================
+   GET USER NAME
+===================================================== */
+
+const getUserName = (email, users = []) => {
+  if (!email) {
+    return "Unknown";
+  }
+
+  const normalizedEmail = String(email)
+    .trim()
+    .toLowerCase();
+
+  const matchedUser = users.find((user) => {
+    const userEmail = String(
+      user?.email ||
+        user?.Email ||
+        user?.userEmail ||
+        ""
+    )
+      .trim()
+      .toLowerCase();
+
+    return userEmail === normalizedEmail;
+  });
+
+  if (matchedUser) {
+    const dbName =
+      matchedUser.name ||
+      matchedUser.fullName ||
+      matchedUser.full_name ||
+      matchedUser.username ||
+      matchedUser.userName ||
+      matchedUser.displayName;
+
+    if (dbName) {
+      return String(dbName).trim();
+    }
+  }
+
+  return formatEmailAsName(email);
+};
+
+/* =====================================================
    MONTHLY REPORT
 ===================================================== */
 
@@ -60,7 +133,8 @@ export default function MonthlyReport() {
      SIDEBAR
   ===================================================== */
 
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] =
+    useState(true);
 
   const toggleSidebar = () => {
     setIsSidebarOpen((prev) => !prev);
@@ -74,32 +148,42 @@ export default function MonthlyReport() {
 
   const currentYear = today.getFullYear();
 
-  const currentMonth = today.getMonth() + 1;
+  const currentMonth =
+    today.getMonth() + 1;
 
   /* =====================================================
      SELECTED MONTH
   ===================================================== */
 
-  const [selectedMonth, setSelectedMonth] = useState(
-    `${currentYear}-${String(currentMonth).padStart(
-      2,
-      "0"
-    )}`
-  );
+  const [selectedMonth, setSelectedMonth] =
+    useState(
+      `${currentYear}-${String(
+        currentMonth
+      ).padStart(2, "0")}`
+    );
 
   /* =====================================================
      REPORT DATA
   ===================================================== */
 
-  const [reportData, setReportData] = useState([]);
+  const [reportData, setReportData] =
+    useState([]);
 
-  const [totals, setTotals] = useState(
-    DEFAULT_TOTALS
-  );
+  const [totals, setTotals] =
+    useState(DEFAULT_TOTALS);
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] =
+    useState(false);
 
-  const [error, setError] = useState("");
+  const [error, setError] =
+    useState("");
+
+  /* =====================================================
+     USERS
+  ===================================================== */
+
+  const [users, setUsers] =
+    useState([]);
 
   /* =====================================================
      YEAR LIST
@@ -120,60 +204,112 @@ export default function MonthlyReport() {
   }, [currentYear]);
 
   /* =====================================================
-     FETCH MONTHLY REPORT
+     FETCH USERS
   ===================================================== */
 
-  const fetchMonthlyReport = useCallback(async () => {
+  const fetchUsers = useCallback(async () => {
     try {
-      setLoading(true);
-
-      setError("");
-
       const response = await axios.get(
-        `${API}/monthly-report`,
-        {
-          params: {
-            month: selectedMonth,
-          },
-        }
+        `${API}/users`
       );
 
-      if (response.data?.success) {
-        setReportData(
-          response.data.data || []
-        );
+      let usersData = [];
 
-        setTotals(
-          response.data.totals || DEFAULT_TOTALS
-        );
-      } else {
-        setReportData([]);
-
-        setTotals(DEFAULT_TOTALS);
-
-        setError(
-          response.data?.message ||
-            "No monthly report data found"
-        );
+      if (Array.isArray(response.data)) {
+        usersData = response.data;
+      } else if (
+        Array.isArray(response.data?.users)
+      ) {
+        usersData = response.data.users;
+      } else if (
+        Array.isArray(response.data?.data)
+      ) {
+        usersData = response.data.data;
       }
+
+      setUsers(usersData);
     } catch (err) {
       console.error(
-        "MONTHLY REPORT ERROR:",
+        "USERS FETCH ERROR:",
         err
       );
 
-      setError(
-        err.response?.data?.message ||
-          "Unable to load monthly report"
-      );
+      /*
+        Users API fail झाला तरी report बंद होऊ नये.
+        खाली email मधून clean name fallback होईल.
+      */
 
-      setReportData([]);
-
-      setTotals(DEFAULT_TOTALS);
-    } finally {
-      setLoading(false);
+      setUsers([]);
     }
-  }, [selectedMonth]);
+  }, []);
+
+  /* =====================================================
+     FETCH MONTHLY REPORT
+  ===================================================== */
+
+  const fetchMonthlyReport = useCallback(
+    async () => {
+      try {
+        setLoading(true);
+
+        setError("");
+
+        const response = await axios.get(
+          `${API}/monthly-report`,
+          {
+            params: {
+              month: selectedMonth,
+            },
+          }
+        );
+
+        if (response.data?.success) {
+          setReportData(
+            response.data.data || []
+          );
+
+          setTotals(
+            response.data.totals ||
+              DEFAULT_TOTALS
+          );
+        } else {
+          setReportData([]);
+
+          setTotals(DEFAULT_TOTALS);
+
+          setError(
+            response.data?.message ||
+              "No monthly report data found"
+          );
+        }
+      } catch (err) {
+        console.error(
+          "MONTHLY REPORT ERROR:",
+          err
+        );
+
+        setError(
+          err.response?.data?.message ||
+            "Unable to load monthly report"
+        );
+
+        setReportData([]);
+
+        setTotals(DEFAULT_TOTALS);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [selectedMonth]
+  );
+
+  /* =====================================================
+     INITIAL USERS LOAD
+  ===================================================== */
+
+  useEffect(() => {
+    fetchUsers();
+  }, [fetchUsers]);
 
   /* =====================================================
      LOAD REPORT WHEN MONTH CHANGES
@@ -228,14 +364,12 @@ export default function MonthlyReport() {
     );
   };
 
- 
   /* =====================================================
      RENDER
   ===================================================== */
 
   return (
     <>
-
       {/* =================================================
           SIDEBAR
       ================================================= */}
@@ -249,14 +383,13 @@ export default function MonthlyReport() {
           MAIN CONTENT
       ================================================= */}
 
-     <div
-     className={`monthly-report-page ${
-     isSidebarOpen
-      ? "sidebar-open"
-      : "sidebar-closed"
-            }`}
-       >           
-      
+      <main
+        className={`monthly-report-page ${
+          isSidebarOpen
+            ? "sidebar-open"
+            : "sidebar-closed"
+        }`}
+      >
         {/* =================================================
             HEADER
         ================================================= */}
@@ -268,7 +401,8 @@ export default function MonthlyReport() {
             </h1>
 
             <p>
-              Executive-wise monthly performance
+              Executive-wise monthly
+              performance
             </p>
           </div>
 
@@ -286,7 +420,9 @@ export default function MonthlyReport() {
 
               <select
                 value={
-                  selectedMonth.split("-")[0]
+                  selectedMonth.split(
+                    "-"
+                  )[0]
                 }
                 onChange={
                   handleYearChange
@@ -312,7 +448,9 @@ export default function MonthlyReport() {
 
               <select
                 value={
-                  selectedMonth.split("-")[1]
+                  selectedMonth.split(
+                    "-"
+                  )[1]
                 }
                 onChange={
                   handleMonthChange
@@ -541,7 +679,8 @@ export default function MonthlyReport() {
                       colSpan="7"
                       className="loading-row"
                     >
-                      Loading monthly report...
+                      Loading monthly
+                      report...
                     </td>
                   </tr>
                 ) : reportData.length ===
@@ -553,93 +692,149 @@ export default function MonthlyReport() {
                       colSpan="7"
                       className="empty-row"
                     >
-                      No data available for{" "}
-                      {selectedMonthName}
+                      No data available
+                      for{" "}
+                      {
+                        selectedMonthName
+                      }
                     </td>
                   </tr>
                 ) : (
                   /* DATA */
 
                   reportData.map(
-                    (item, index) => (
-                      <tr
-                        key={
-                          item.executive ||
-                          index
+                    (
+                      item,
+                      index
+                    ) => {
+                      /*
+                        Backend कडून item.executive
+                        मध्ये email येत आहे.
+
+                        Example:
+                        harsh@zaminwale.com
+
+                        users API मधून:
+                        {
+                          email:
+                            "harsh@zaminwale.com",
+                          name: "Harsh"
                         }
-                      >
-                        {/* NUMBER */}
 
-                        <td>
-                          {index + 1}
-                        </td>
+                        त्यामुळे table मध्ये:
+                        Harsh
+                        दाखवले जाईल.
+                      */
 
-                        {/* EXECUTIVE */}
+                      const executiveEmail =
+                        item.executive ||
+                        item.email ||
+                        item.assigned_to ||
+                        item.assignedTo ||
+                        "";
 
-                        <td>
-                          <div className="executive-name">
-                            <div className="executive-avatar">
-                              {(
-                                item.executive ||
-                                "E"
-                              )
-                                .charAt(0)
-                                .toUpperCase()}
+                      const executiveName =
+                        item.name ||
+                        item.executive_name ||
+                        item.executiveName ||
+                        getUserName(
+                          executiveEmail,
+                          users
+                        );
+
+                      return (
+                        <tr
+                          key={
+                            executiveEmail ||
+                            index
+                          }
+                        >
+                          {/* NUMBER */}
+
+                          <td>
+                            {index + 1}
+                          </td>
+
+                          {/* EXECUTIVE NAME */}
+
+                          <td>
+                            <div className="executive-name">
+                              <div className="executive-avatar">
+                                {(
+                                  executiveName ||
+                                  "E"
+                                )
+                                  .charAt(
+                                    0
+                                  )
+                                  .toUpperCase()}
+                              </div>
+
+                              <span>
+                                {
+                                  executiveName
+                                }
+                              </span>
                             </div>
+                          </td>
 
-                            <span>
-                              {item.executive ||
-                                "Unknown"}
+                          {/* ASSIGNED */}
+
+                          <td>
+                            <span className="number-badge assigned">
+                              {
+                                item.assigned ||
+                                0
+                              }
                             </span>
-                          </div>
-                        </td>
+                          </td>
 
-                        {/* ASSIGNED */}
+                          {/* RINGING */}
 
-                        <td>
-                          <span className="number-badge assigned">
-                            {item.assigned ||
-                              0}
-                          </span>
-                        </td>
+                          <td>
+                            <span className="number-badge ringing">
+                              {
+                                item.ringing ||
+                                0
+                              }
+                            </span>
+                          </td>
 
-                        {/* RINGING */}
+                          {/* INTERESTED */}
 
-                        <td>
-                          <span className="number-badge ringing">
-                            {item.ringing ||
-                              0}
-                          </span>
-                        </td>
+                          <td>
+                            <span className="number-badge interested">
+                              {
+                                item.interested ||
+                                0
+                              }
+                            </span>
+                          </td>
 
-                        {/* INTERESTED */}
+                          {/* SITE VISIT */}
 
-                        <td>
-                          <span className="number-badge interested">
-                            {item.interested ||
-                              0}
-                          </span>
-                        </td>
+                          <td>
+                            <span className="number-badge visit">
+                              {
+                                item.siteVisit ||
+                                0
+                              }
+                            </span>
+                          </td>
 
-                        {/* SITE VISIT */}
+                          {/* BOOKING */}
 
-                        <td>
-                          <span className="number-badge visit">
-                            {item.siteVisit ||
-                              0}
-                          </span>
-                        </td>
-
-                        {/* BOOKING */}
-
-                        <td>
-                          <span className="number-badge booking">
-                            {item.booking ||
-                              0}
-                          </span>
-                        </td>
-                      </tr>
-                    )
+                          <td>
+                            <span className="number-badge booking">
+                              {
+                                item.booking ||
+                                0
+                              }
+                            </span>
+                          </td>
+                        </tr>
+                      );
+                    }
                   )
                 )}
               </tbody>
@@ -663,36 +858,46 @@ export default function MonthlyReport() {
 
                       <td>
                         <strong>
-                          {totals.assigned ||
-                            0}
+                          {
+                            totals.assigned ||
+                            0
+                          }
                         </strong>
                       </td>
 
                       <td>
                         <strong>
-                          {totals.ringing ||
-                            0}
+                          {
+                            totals.ringing ||
+                            0
+                          }
                         </strong>
                       </td>
 
                       <td>
                         <strong>
-                          {totals.interested ||
-                            0}
+                          {
+                            totals.interested ||
+                            0
+                          }
                         </strong>
                       </td>
 
                       <td>
                         <strong>
-                          {totals.siteVisit ||
-                            0}
+                          {
+                            totals.siteVisit ||
+                            0
+                          }
                         </strong>
                       </td>
 
                       <td>
                         <strong>
-                          {totals.booking ||
-                            0}
+                          {
+                            totals.booking ||
+                            0
+                          }
                         </strong>
                       </td>
                     </tr>
@@ -701,7 +906,7 @@ export default function MonthlyReport() {
             </table>
           </div>
         </div>
-      </div>
+      </main>
     </>
   );
 }
