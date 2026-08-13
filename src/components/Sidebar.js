@@ -596,6 +596,16 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
     Monthly Report
   </Link>
 </li>
+
+<NavLink
+  to="/pending-leads"
+  className={({ isActive }) =>
+    isActive ? "active" : ""
+  }
+>
+  <i className="bi bi-hourglass-split"></i>
+  <span>Pending Leads</span>
+</NavLink>
                 </ul>
 
               </li>

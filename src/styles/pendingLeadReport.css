@@ -1,0 +1,2247 @@
+/* =========================================================
+   PENDING LEAD REPORT
+   ========================================================= */
+
+:root {
+  --pending-purple: #7200df;
+  --pending-purple-dark: #5e00bd;
+  --pending-purple-light: #f3e8ff;
+
+  --pending-bg: #f5f6fc;
+  --pending-white: #ffffff;
+
+  --pending-text: #171729;
+  --pending-muted: #70758a;
+
+  --pending-border: #e3e5ee;
+
+  --pending-green: #059669;
+  --pending-green-bg: #dcfce7;
+
+  --pending-blue: #2563eb;
+  --pending-blue-bg: #dbeafe;
+
+  --pending-yellow: #b77900;
+  --pending-yellow-bg: #fef3c7;
+
+  --pending-orange: #ea580c;
+  --pending-orange-bg: #ffedd5;
+
+  --pending-red: #dc2626;
+  --pending-red-bg: #fee2e2;
+
+  --pending-sidebar-open: 185px;
+  --pending-sidebar-closed: 65px;
+}
+
+
+/* =========================================================
+   PAGE
+   ========================================================= */
+
+.pending-report-page {
+  position: relative;
+
+  min-height: 100vh;
+
+  width: calc(
+    100% - var(--pending-sidebar-open)
+  );
+
+  margin-left: var(--pending-sidebar-open);
+
+  padding: 28px;
+
+  box-sizing: border-box;
+
+  background: var(--pending-bg);
+
+  color: var(--pending-text);
+
+  overflow-x: hidden;
+
+  transition:
+    margin-left 0.25s ease,
+    width 0.25s ease;
+
+  z-index: 1;
+}
+
+
+/* =========================================================
+   SIDEBAR OPEN
+   ========================================================= */
+
+.pending-report-page.sidebar-open {
+  margin-left: var(--pending-sidebar-open);
+
+  width: calc(
+    100% - var(--pending-sidebar-open)
+  );
+}
+
+
+/* =========================================================
+   SIDEBAR CLOSED
+   ========================================================= */
+
+.pending-report-page.sidebar-closed {
+  margin-left: var(--pending-sidebar-closed);
+
+  width: calc(
+    100% - var(--pending-sidebar-closed)
+  );
+}
+
+
+/* =========================================================
+   BOX SIZING
+   ========================================================= */
+
+.pending-report-page *,
+.pending-report-page *::before,
+.pending-report-page *::after {
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.pending-report-header {
+  width: 100%;
+
+  min-height: 70px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 25px;
+
+  margin-bottom: 22px;
+}
+
+
+/* =========================================================
+   TITLE
+   ========================================================= */
+
+.pending-report-title {
+  min-width: 0;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 14px;
+}
+
+
+.pending-title-icon {
+  width: 48px;
+
+  min-width: 48px;
+
+  height: 48px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius: 13px;
+
+  background: linear-gradient(
+    135deg,
+    #7200df,
+    #a52cff
+  );
+
+  color: #ffffff;
+
+  font-size: 23px;
+
+  box-shadow:
+    0 7px 18px
+    rgba(114, 0, 223, 0.22);
+}
+
+
+.pending-report-title h1 {
+  margin: 0;
+
+  font-size: 27px;
+
+  line-height: 1.2;
+
+  font-weight: 800;
+
+  letter-spacing: -0.5px;
+
+  color: #151528;
+}
+
+
+.pending-report-title p {
+  margin: 6px 0 0;
+
+  color: var(--pending-muted);
+
+  font-size: 13px;
+
+  font-weight: 500;
+}
+
+
+/* =========================================================
+   HEADER ACTIONS
+   ========================================================= */
+
+.pending-header-actions {
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  flex-shrink: 0;
+}
+
+
+.pending-refresh-btn,
+.pending-export-btn {
+  height: 38px;
+
+  padding: 0 16px;
+
+  border-radius: 8px;
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    all 0.2s ease;
+}
+
+
+.pending-refresh-btn {
+  border: 1px solid #d9dce7;
+
+  background: #ffffff;
+
+  color: #393c4f;
+}
+
+
+.pending-refresh-btn:hover:not(:disabled) {
+  border-color: #b994ff;
+
+  background: #faf7ff;
+
+  transform: translateY(-1px);
+}
+
+
+.pending-export-btn {
+  border: none;
+
+  background: var(--pending-purple);
+
+  color: #ffffff;
+
+  box-shadow:
+    0 4px 12px
+    rgba(114, 0, 223, 0.18);
+}
+
+
+.pending-export-btn:hover:not(:disabled) {
+  background: var(--pending-purple-dark);
+
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 6px 16px
+    rgba(114, 0, 223, 0.25);
+}
+
+
+.pending-refresh-btn:disabled,
+.pending-export-btn:disabled {
+  opacity: 0.55;
+
+  cursor: not-allowed;
+}
+
+
+/* =========================================================
+   ERROR
+   ========================================================= */
+
+.pending-error {
+  width: 100%;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 13px;
+
+  margin-bottom: 20px;
+
+  padding: 14px 16px;
+
+  border: 1px solid #fecaca;
+
+  border-radius: 10px;
+
+  background: #fff1f2;
+
+  color: #991b1b;
+}
+
+
+.pending-error > span {
+  font-size: 21px;
+}
+
+
+.pending-error div {
+  flex: 1;
+
+  min-width: 0;
+}
+
+
+.pending-error strong {
+  display: block;
+
+  font-size: 13px;
+
+  font-weight: 800;
+}
+
+
+.pending-error p {
+  margin: 3px 0 0;
+
+  font-size: 11px;
+
+  color: #b91c1c;
+}
+
+
+.pending-error button {
+  height: 32px;
+
+  padding: 0 13px;
+
+  border: none;
+
+  border-radius: 6px;
+
+  background: #dc2626;
+
+  color: #ffffff;
+
+  font-size: 11px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+
+/* =========================================================
+   SUMMARY GRID
+   ========================================================= */
+
+.pending-summary-grid {
+  width: 100%;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(5, minmax(0, 1fr));
+
+  gap: 13px;
+
+  margin-bottom: 20px;
+}
+
+
+/* =========================================================
+   SUMMARY CARD
+   ========================================================= */
+
+.pending-summary-card {
+  min-width: 0;
+
+  min-height: 92px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 13px;
+
+  padding: 15px 17px;
+
+  border: 1px solid var(--pending-border);
+
+  border-radius: 13px;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 3px 13px
+    rgba(25, 30, 60, 0.055);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+
+.pending-summary-card:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 7px 20px
+    rgba(25, 30, 60, 0.09);
+}
+
+
+.pending-summary-icon {
+  width: 42px;
+
+  min-width: 42px;
+
+  height: 42px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius: 11px;
+
+  font-size: 20px;
+}
+
+
+.total-card
+.pending-summary-icon {
+  background: #f0e7ff;
+}
+
+
+.today-card
+.pending-summary-icon {
+  background: #dcfce7;
+}
+
+
+.warning-card
+.pending-summary-icon {
+  background: #fef3c7;
+}
+
+
+.danger-card
+.pending-summary-icon {
+  background: #ffedd5;
+}
+
+
+.critical-card
+.pending-summary-icon {
+  background: #fee2e2;
+}
+
+
+.pending-summary-card > div:last-child {
+  min-width: 0;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 5px;
+}
+
+
+.pending-summary-card span {
+  color: #777c90;
+
+  font-size: 11px;
+
+  font-weight: 600;
+
+  white-space: nowrap;
+}
+
+
+.pending-summary-card strong {
+  color: #161729;
+
+  font-size: 23px;
+
+  line-height: 1;
+
+  font-weight: 800;
+}
+
+
+/* =========================================================
+   FILTER CARD
+   ========================================================= */
+
+.pending-filter-card {
+  width: 100%;
+
+  margin-bottom: 20px;
+
+  padding: 19px 20px;
+
+  border: 1px solid var(--pending-border);
+
+  border-radius: 13px;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 3px 13px
+    rgba(25, 30, 60, 0.045);
+}
+
+
+/* =========================================================
+   FILTER HEADING
+   ========================================================= */
+
+.pending-filter-heading {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 15px;
+
+  margin-bottom: 17px;
+}
+
+
+.pending-filter-heading h2 {
+  margin: 0;
+
+  font-size: 15px;
+
+  font-weight: 800;
+
+  color: #171729;
+}
+
+
+.pending-filter-heading p {
+  margin: 4px 0 0;
+
+  color: #858999;
+
+  font-size: 11px;
+}
+
+
+.pending-reset-btn {
+  flex-shrink: 0;
+
+  height: 32px;
+
+  padding: 0 13px;
+
+  border: 1px solid #dddfea;
+
+  border-radius: 7px;
+
+  background: #ffffff;
+
+  color: #55596c;
+
+  font-size: 11px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+
+.pending-reset-btn:hover {
+  border-color: #b894ff;
+
+  color: var(--pending-purple);
+
+  background: #faf7ff;
+}
+
+
+/* =========================================================
+   FILTER GRID
+   ========================================================= */
+
+.pending-filter-grid {
+  width: 100%;
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(250px, 1.5fr)
+    repeat(3, minmax(150px, 1fr));
+
+  gap: 13px;
+}
+
+
+.pending-filter-group {
+  min-width: 0;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 6px;
+}
+
+
+.pending-filter-group label {
+  color: #555a6d;
+
+  font-size: 11px;
+
+  font-weight: 700;
+}
+
+
+/* =========================================================
+   SEARCH
+   ========================================================= */
+
+.pending-search-box {
+  width: 100%;
+
+  height: 39px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  padding: 0 11px;
+
+  border: 1px solid #dfe2eb;
+
+  border-radius: 8px;
+
+  background: #ffffff;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+
+.pending-search-box:focus-within {
+  border-color: var(--pending-purple);
+
+  box-shadow:
+    0 0 0 3px
+    rgba(114, 0, 223, 0.08);
+}
+
+
+.pending-search-box span {
+  font-size: 14px;
+
+  color: #777b8c;
+}
+
+
+.pending-search-box input {
+  width: 100%;
+
+  min-width: 0;
+
+  height: 100%;
+
+  border: none;
+
+  outline: none;
+
+  background: transparent;
+
+  color: #222438;
+
+  font-size: 12px;
+
+  font-weight: 500;
+}
+
+
+.pending-search-box input::placeholder {
+  color: #a0a4b2;
+}
+
+
+/* =========================================================
+   SELECT
+   ========================================================= */
+
+.pending-filter-group select {
+  width: 100%;
+
+  height: 39px;
+
+  padding: 0 32px 0 11px;
+
+  border: 1px solid #dfe2eb;
+
+  border-radius: 8px;
+
+  background: #ffffff;
+
+  color: #25283a;
+
+  font-size: 12px;
+
+  font-weight: 600;
+
+  outline: none;
+
+  cursor: pointer;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+
+.pending-filter-group select:hover {
+  border-color: #baa0ff;
+}
+
+
+.pending-filter-group select:focus {
+  border-color: var(--pending-purple);
+
+  box-shadow:
+    0 0 0 3px
+    rgba(114, 0, 223, 0.08);
+}
+
+
+/* =========================================================
+   TABLE CARD
+   ========================================================= */
+
+.pending-table-card {
+  width: 100%;
+
+  min-width: 0;
+
+  margin-bottom: 20px;
+
+  border: 1px solid var(--pending-border);
+
+  border-radius: 13px;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 3px 14px
+    rgba(25, 30, 60, 0.05);
+
+  overflow: hidden;
+}
+
+
+/* =========================================================
+   TABLE HEADER
+   ========================================================= */
+
+.pending-table-header {
+  min-height: 74px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 15px;
+
+  padding: 15px 19px;
+
+  border-bottom: 1px solid #ececf2;
+
+  background: #ffffff;
+}
+
+
+.pending-table-header h2 {
+  margin: 0;
+
+  color: #171729;
+
+  font-size: 15px;
+
+  font-weight: 800;
+}
+
+
+.pending-table-header p {
+  margin: 4px 0 0;
+
+  color: #858999;
+
+  font-size: 11px;
+}
+
+
+.pending-result-count {
+  flex-shrink: 0;
+
+  padding: 7px 11px;
+
+  border-radius: 7px;
+
+  background: #f3e8ff;
+
+  color: var(--pending-purple);
+
+  font-size: 10px;
+
+  font-weight: 800;
+}
+
+
+/* =========================================================
+   SORT BUTTON
+   ========================================================= */
+
+.pending-sort-btn {
+  height: 33px;
+
+  padding: 0 12px;
+
+  border: 1px solid #dedfea;
+
+  border-radius: 7px;
+
+  background: #ffffff;
+
+  color: #55596b;
+
+  font-size: 11px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+
+.pending-sort-btn:hover {
+  border-color: #b893ff;
+
+  color: var(--pending-purple);
+
+  background: #faf7ff;
+}
+
+
+/* =========================================================
+   TABLE WRAPPER
+   ========================================================= */
+
+.pending-table-wrapper {
+  width: 100%;
+
+  max-width: 100%;
+
+  overflow-x: auto;
+
+  overflow-y: visible;
+
+  -webkit-overflow-scrolling: touch;
+}
+
+
+/* =========================================================
+   TABLE
+   ========================================================= */
+
+.pending-executive-table,
+.pending-leads-table {
+  width: 100%;
+
+  border-collapse: collapse;
+
+  background: #ffffff;
+
+  table-layout: fixed;
+}
+
+
+/* =========================================================
+   EXECUTIVE TABLE MIN WIDTH
+   ========================================================= */
+
+.pending-executive-table {
+  min-width: 850px;
+}
+
+
+/* =========================================================
+   LEADS TABLE MIN WIDTH
+   ========================================================= */
+
+.pending-leads-table {
+  min-width: 1050px;
+}
+
+
+/* =========================================================
+   TABLE HEAD
+   ========================================================= */
+
+.pending-executive-table thead th,
+.pending-leads-table thead th {
+  height: 42px;
+
+  padding: 0 9px;
+
+  border: none;
+
+  background: linear-gradient(
+    90deg,
+    #7100d8,
+    #8500ed
+  );
+
+  color: #ffffff;
+
+  font-size: 11px;
+
+  font-weight: 800;
+
+  text-align: center;
+
+  white-space: nowrap;
+}
+
+
+.pending-executive-table thead th.left,
+.pending-leads-table thead th.left {
+  text-align: left;
+}
+
+
+/* =========================================================
+   EXECUTIVE TABLE COLUMN WIDTHS
+   ========================================================= */
+
+.pending-executive-table th:nth-child(1) {
+  width: 45px;
+}
+
+
+.pending-executive-table th:nth-child(2) {
+  width: 27%;
+}
+
+
+.pending-executive-table th:nth-child(n + 3) {
+  width: auto;
+}
+
+
+/* =========================================================
+   LEAD TABLE COLUMN WIDTHS
+   ========================================================= */
+
+.pending-leads-table th:nth-child(1) {
+  width: 42px;
+}
+
+
+.pending-leads-table th:nth-child(2) {
+  width: 18%;
+}
+
+
+.pending-leads-table th:nth-child(3) {
+  width: 11%;
+}
+
+
+.pending-leads-table th:nth-child(4) {
+  width: 16%;
+}
+
+
+.pending-leads-table th:nth-child(5) {
+  width: 11%;
+}
+
+
+.pending-leads-table th:nth-child(6) {
+  width: 11%;
+}
+
+
+.pending-leads-table th:nth-child(7) {
+  width: 12%;
+}
+
+
+.pending-leads-table th:nth-child(8) {
+  width: 10%;
+}
+
+
+.pending-leads-table th:nth-child(9) {
+  width: 11%;
+}
+
+
+/* =========================================================
+   TABLE BODY
+   ========================================================= */
+
+.pending-executive-table tbody tr,
+.pending-leads-table tbody tr {
+  min-height: 51px;
+
+  border-bottom: 1px solid #ececf2;
+
+  transition:
+    background 0.15s ease;
+}
+
+
+.pending-executive-row {
+  cursor: pointer;
+}
+
+
+.pending-executive-table tbody tr:hover,
+.pending-leads-table tbody tr:hover {
+  background: #faf8ff;
+}
+
+
+.pending-executive-table tbody td,
+.pending-leads-table tbody td {
+  padding: 9px 9px;
+
+  color: #36394c;
+
+  font-size: 11px;
+
+  font-weight: 500;
+
+  text-align: center;
+
+  vertical-align: middle;
+
+  white-space: nowrap;
+}
+
+
+.pending-executive-table tbody td.left,
+.pending-leads-table tbody td.left {
+  text-align: left;
+}
+
+
+/* =========================================================
+   RANK
+   ========================================================= */
+
+.pending-rank {
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  width: 25px;
+
+  height: 25px;
+
+  border-radius: 7px;
+
+  background: #f2f3f7;
+
+  color: #62677a;
+
+  font-size: 10px;
+
+  font-weight: 800;
+}
+
+
+/* =========================================================
+   EXECUTIVE NAME
+   ========================================================= */
+
+.pending-executive-name {
+  display: flex;
+
+  align-items: center;
+
+  gap: 9px;
+
+  min-width: 0;
+}
+
+
+.pending-avatar {
+  width: 31px;
+
+  min-width: 31px;
+
+  height: 31px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: linear-gradient(
+    135deg,
+    #6900d1,
+    #a52dff
+  );
+
+  color: #ffffff;
+
+  font-size: 11px;
+
+  font-weight: 800;
+}
+
+
+.pending-executive-name > div:last-child {
+  min-width: 0;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 2px;
+}
+
+
+.pending-executive-name strong {
+  max-width: 210px;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+  color: #202237;
+
+  font-size: 12px;
+
+  font-weight: 800;
+}
+
+
+.pending-executive-name small {
+  max-width: 210px;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+  color: #858999;
+
+  font-size: 9px;
+
+  font-weight: 500;
+}
+
+
+/* =========================================================
+   COUNT BADGES
+   ========================================================= */
+
+.pending-count-badge {
+  min-width: 31px;
+
+  height: 25px;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding: 0 7px;
+
+  border-radius: 6px;
+
+  font-size: 10px;
+
+  font-weight: 800;
+}
+
+
+.pending-count-badge.total {
+  background: #f3e8ff;
+
+  color: #7100d8;
+}
+
+
+.pending-count-badge.green {
+  background: var(--pending-green-bg);
+
+  color: var(--pending-green);
+}
+
+
+.pending-count-badge.blue {
+  background: var(--pending-blue-bg);
+
+  color: var(--pending-blue);
+}
+
+
+.pending-count-badge.yellow {
+  background: var(--pending-yellow-bg);
+
+  color: var(--pending-yellow);
+}
+
+
+.pending-count-badge.orange {
+  background: var(--pending-orange-bg);
+
+  color: var(--pending-orange);
+}
+
+
+.pending-count-badge.red {
+  background: var(--pending-red-bg);
+
+  color: var(--pending-red);
+}
+
+
+/* =========================================================
+   LEAD NAME
+   ========================================================= */
+
+.pending-lead-name {
+  min-width: 0;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 3px;
+}
+
+
+.pending-lead-name strong {
+  max-width: 220px;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+  color: #202237;
+
+  font-size: 11px;
+
+  font-weight: 800;
+}
+
+
+.pending-lead-name small {
+  max-width: 220px;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+  color: #8b8f9e;
+
+  font-size: 9px;
+}
+
+
+/* =========================================================
+   SMALL EXECUTIVE
+   ========================================================= */
+
+.small-executive {
+  display: flex;
+
+  align-items: center;
+
+  gap: 7px;
+
+  overflow: hidden;
+
+  color: #33374a;
+
+  font-size: 10px;
+
+  font-weight: 700;
+}
+
+
+.small-executive span {
+  width: 24px;
+
+  min-width: 24px;
+
+  height: 24px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #f0e7ff;
+
+  color: var(--pending-purple);
+
+  font-size: 9px;
+
+  font-weight: 800;
+}
+
+
+/* =========================================================
+   STATUS BADGE
+   ========================================================= */
+
+.pending-status {
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  min-height: 24px;
+
+  padding: 4px 8px;
+
+  border-radius: 6px;
+
+  background: #f3f4f6;
+
+  color: #555a6b;
+
+  font-size: 9px;
+
+  font-weight: 800;
+}
+
+
+/* Common statuses */
+
+.pending-status.new {
+  background: #f3e8ff;
+
+  color: #7200df;
+}
+
+
+.pending-status.ringing {
+  background: #dbeafe;
+
+  color: #2563eb;
+}
+
+
+.pending-status.interested {
+  background: #fef3c7;
+
+  color: #a16207;
+}
+
+
+.pending-status.very-interested {
+  background: #dcfce7;
+
+  color: #15803d;
+}
+
+
+.pending-status.follow-up {
+  background: #ffedd5;
+
+  color: #c2410c;
+}
+
+
+.pending-status.call-back {
+  background: #e0e7ff;
+
+  color: #4338ca;
+}
+
+
+.pending-status.meeting-scheduled {
+  background: #cffafe;
+
+  color: #0e7490;
+}
+
+
+.pending-status.negotiation {
+  background: #fce7f3;
+
+  color: #be185d;
+}
+
+
+/* =========================================================
+   PENDING DAYS
+   ========================================================= */
+
+.days-normal {
+  color: #16a34a;
+}
+
+
+.days-warning {
+  color: #ca8a04;
+}
+
+
+.days-danger {
+  color: #ea580c;
+}
+
+
+.days-critical {
+  color: #dc2626;
+}
+
+
+.pending-leads-table td strong small {
+  font-size: 8px;
+
+  font-weight: 600;
+}
+
+
+/* =========================================================
+   AGE BADGE
+   ========================================================= */
+
+.pending-age-badge {
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  min-height: 24px;
+
+  padding: 4px 8px;
+
+  border-radius: 6px;
+
+  font-size: 9px;
+
+  font-weight: 800;
+}
+
+
+.pending-age-badge.zero-1-day {
+  background: #dcfce7;
+
+  color: #15803d;
+}
+
+
+.pending-age-badge.two-3-days {
+  background: #dbeafe;
+
+  color: #1d4ed8;
+}
+
+
+.pending-age-badge.four-7-days {
+  background: #fef3c7;
+
+  color: #a16207;
+}
+
+
+.pending-age-badge.eight-15-days {
+  background: #ffedd5;
+
+  color: #c2410c;
+}
+
+
+
+
+/* =========================================================
+   LOADING
+   ========================================================= */
+
+.pending-loading {
+  height: 130px;
+
+  text-align: center !important;
+
+  color: #777c8e !important;
+
+  font-size: 12px !important;
+
+  font-weight: 600 !important;
+}
+
+
+.pending-loader {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 5px;
+
+  margin-bottom: 8px;
+}
+
+
+.pending-loader span {
+  width: 7px;
+
+  height: 7px;
+
+  border-radius: 50%;
+
+  background: var(--pending-purple);
+
+  animation:
+    pending-loader-animation
+    1s infinite ease-in-out;
+}
+
+
+.pending-loader span:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+
+.pending-loader span:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+
+@keyframes pending-loader-animation {
+
+  0%,
+  80%,
+  100% {
+    opacity: 0.35;
+
+    transform: translateY(0);
+  }
+
+  40% {
+    opacity: 1;
+
+    transform: translateY(-4px);
+  }
+}
+
+
+/* =========================================================
+   EMPTY
+   ========================================================= */
+
+.pending-empty {
+  height: 150px;
+
+  text-align: center !important;
+
+  color: #858999 !important;
+}
+
+
+.pending-empty > div {
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+}
+
+
+.empty-icon {
+  margin-bottom: 7px;
+
+  font-size: 27px;
+}
+
+
+.pending-empty strong {
+  color: #4d5264;
+
+  font-size: 12px;
+}
+
+
+.pending-empty p {
+  margin: 4px 0 0;
+
+  color: #969aa8;
+
+  font-size: 10px;
+}
+
+
+/* =========================================================
+   MODAL OVERLAY
+   ========================================================= */
+
+.pending-modal-overlay {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 10000;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding: 25px;
+
+  background:
+    rgba(20, 20, 35, 0.48);
+
+  backdrop-filter: blur(3px);
+}
+
+
+/* =========================================================
+   MODAL
+   ========================================================= */
+
+.pending-modal {
+  width: min(
+    650px,
+    100%
+  );
+
+  max-height: 90vh;
+
+  overflow: hidden;
+
+  border-radius: 15px;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 20px 60px
+    rgba(0, 0, 0, 0.22);
+
+  animation:
+    pending-modal-in
+    0.2s ease;
+}
+
+
+@keyframes pending-modal-in {
+
+  from {
+    opacity: 0;
+
+    transform:
+      translateY(10px)
+      scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateY(0)
+      scale(1);
+  }
+}
+
+
+/* =========================================================
+   MODAL HEADER
+   ========================================================= */
+
+.pending-modal-header {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 15px;
+
+  padding: 18px 20px;
+
+  border-bottom: 1px solid #ececf2;
+}
+
+
+.pending-modal-header h2 {
+  margin: 0;
+
+  color: #171729;
+
+  font-size: 17px;
+
+  font-weight: 800;
+}
+
+
+.pending-modal-header p {
+  margin: 4px 0 0;
+
+  color: #858999;
+
+  font-size: 10px;
+}
+
+
+.pending-modal-header button {
+  width: 32px;
+
+  height: 32px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border: none;
+
+  border-radius: 7px;
+
+  background: #f3f4f6;
+
+  color: #525666;
+
+  font-size: 21px;
+
+  line-height: 1;
+
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+
+.pending-modal-header button:hover {
+  background: #fee2e2;
+
+  color: #dc2626;
+}
+
+
+/* =========================================================
+   MODAL BODY
+   ========================================================= */
+
+.pending-modal-body {
+  max-height: 60vh;
+
+  overflow-y: auto;
+
+  padding: 20px;
+}
+
+
+/* =========================================================
+   DETAIL GRID
+   ========================================================= */
+
+.pending-detail-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 10px;
+}
+
+
+.pending-detail-item {
+  padding: 12px;
+
+  border: 1px solid #ececf2;
+
+  border-radius: 9px;
+
+  background: #fafaff;
+}
+
+
+.pending-detail-item span {
+  display: block;
+
+  margin-bottom: 5px;
+
+  color: #858999;
+
+  font-size: 9px;
+
+  font-weight: 600;
+}
+
+
+.pending-detail-item strong {
+  display: block;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+  color: #25283a;
+
+  font-size: 11px;
+
+  font-weight: 800;
+}
+
+
+.pending-detail-item.highlight {
+  border-color: #dfc5ff;
+
+  background: #faf5ff;
+}
+
+
+.pending-detail-item.highlight strong {
+  color: var(--pending-purple);
+
+  font-size: 14px;
+}
+
+
+/* =========================================================
+   REMARK
+   ========================================================= */
+
+.pending-remark {
+  margin-top: 12px;
+
+  padding: 13px;
+
+  border-radius: 9px;
+
+  background: #f8f8fc;
+}
+
+
+.pending-remark span {
+  color: #777c8d;
+
+  font-size: 9px;
+
+  font-weight: 700;
+}
+
+
+.pending-remark p {
+  margin: 6px 0 0;
+
+  color: #35394b;
+
+  font-size: 11px;
+
+  line-height: 1.5;
+}
+
+
+/* =========================================================
+   MODAL FOOTER
+   ========================================================= */
+
+.pending-modal-footer {
+  display: flex;
+
+  justify-content: flex-end;
+
+  padding: 13px 20px;
+
+  border-top: 1px solid #ececf2;
+}
+
+
+.pending-modal-footer button {
+  height: 34px;
+
+  padding: 0 15px;
+
+  border: none;
+
+  border-radius: 7px;
+
+  background: var(--pending-purple);
+
+  color: #ffffff;
+
+  font-size: 11px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+
+/* =========================================================
+   SIDEBAR SAFETY
+   ========================================================= */
+
+/*
+  तुझा Sidebar fixed असल्यामुळे त्याचा z-index
+  Monthly/Pending page पेक्षा मोठा ठेवला आहे.
+*/
+
+.sidebar,
+.sidebar-container,
+.crm-sidebar,
+[class*="sidebar"] {
+  z-index: 9999 !important;
+}
+
+
+.pending-report-page {
+  z-index: 1;
+}
+
+
+/* =========================================================
+   RESPONSIVE - 1200px
+   ========================================================= */
+
+@media (max-width: 1200px) {
+
+  .pending-report-page {
+    padding: 22px;
+  }
+
+
+  .pending-summary-grid {
+    grid-template-columns:
+      repeat(5, minmax(150px, 1fr));
+
+    overflow-x: auto;
+
+    padding-bottom: 3px;
+  }
+
+
+  .pending-summary-card {
+    min-width: 150px;
+  }
+
+
+  .pending-filter-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+
+  .pending-search-group {
+    grid-column: span 2;
+  }
+}
+
+
+/* =========================================================
+   RESPONSIVE - 900px
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+  .pending-report-page.sidebar-open {
+    margin-left:
+      var(--pending-sidebar-open);
+
+    width:
+      calc(
+        100% -
+        var(--pending-sidebar-open)
+      );
+  }
+
+
+  .pending-report-header {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+
+  .pending-header-actions {
+    width: 100%;
+
+    justify-content: flex-start;
+  }
+
+
+  .pending-summary-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+
+    overflow-x: visible;
+  }
+
+
+  .pending-summary-card {
+    min-width: 0;
+  }
+
+
+  .pending-filter-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+
+  .pending-search-group {
+    grid-column: span 2;
+  }
+}
+
+
+/* =========================================================
+   RESPONSIVE - 650px
+   ========================================================= */
+
+@media (max-width: 650px) {
+
+  .pending-report-page,
+  .pending-report-page.sidebar-open,
+  .pending-report-page.sidebar-closed {
+    width: 100%;
+
+    margin-left: 0;
+
+    padding: 15px;
+  }
+
+
+  .pending-report-title h1 {
+    font-size: 22px;
+  }
+
+
+  .pending-report-title p {
+    font-size: 11px;
+  }
+
+
+  .pending-title-icon {
+    width: 41px;
+
+    min-width: 41px;
+
+    height: 41px;
+
+    font-size: 18px;
+  }
+
+
+  .pending-header-actions {
+    flex-wrap: wrap;
+  }
+
+
+  .pending-refresh-btn,
+  .pending-export-btn {
+    flex: 1;
+
+    min-width: 130px;
+  }
+
+
+  .pending-summary-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+
+    gap: 9px;
+  }
+
+
+  .pending-summary-card {
+    min-height: 75px;
+
+    padding: 11px;
+
+    gap: 8px;
+  }
+
+
+  .pending-summary-icon {
+    width: 33px;
+
+    min-width: 33px;
+
+    height: 33px;
+
+    font-size: 16px;
+  }
+
+
+  .pending-summary-card span {
+    font-size: 9px;
+  }
+
+
+  .pending-summary-card strong {
+    font-size: 18px;
+  }
+
+
+  .pending-filter-card {
+    padding: 14px;
+  }
+
+
+  .pending-filter-heading {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+
+  .pending-reset-btn {
+    width: 100%;
+  }
+
+
+  .pending-filter-grid {
+    grid-template-columns: 1fr;
+  }
+
+
+  .pending-search-group {
+    grid-column: span 1;
+  }
+
+
+  .pending-table-header {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+
+  .pending-result-count {
+    align-self: flex-start;
+  }
+
+
+  .pending-detail-grid {
+    grid-template-columns: 1fr;
+  }
+
+
+  .pending-modal-overlay {
+    padding: 12px;
+  }
+
+
+  .pending-modal {
+    max-height: 94vh;
+  }
+}
+
+
+/* =========================================================
+   VERY SMALL SCREEN
+   ========================================================= */
+
+@media (max-width: 420px) {
+
+  .pending-report-page {
+    padding: 11px;
+  }
+
+
+  .pending-summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+
+  .pending-summary-card {
+    min-height: 68px;
+  }
+
+
+  .pending-header-actions {
+    flex-direction: column;
+  }
+
+
+  .pending-refresh-btn,
+  .pending-export-btn {
+    width: 100%;
+  }
+}
+
+
+/* =========================================================
+   BODY SAFETY
+   ========================================================= */
+
+html,
+body,
+#root {
+  width: 100%;
+
+  min-height: 100%;
+
+  margin: 0;
+
+  padding: 0;
+
+  overflow-x: hidden;
+}
