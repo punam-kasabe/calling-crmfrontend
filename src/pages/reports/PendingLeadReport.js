@@ -6,6 +6,7 @@ import React, {
 } from "react";
 
 import "../../styles/pendingLeadReport.css";
+import Sidebar from "../../components/Sidebar";
 
 /* =========================================================
    API
@@ -251,6 +252,16 @@ const PendingLeadReport = () => {
 
   const [sortDirection, setSortDirection] =
     useState("desc");
+
+  /* =======================================================
+     SIDEBAR STATE
+  ======================================================= */
+
+  const [isOpen, setIsOpen] = useState(true);
+
+  const toggleSidebar = () => {
+    setIsOpen((prev) => !prev);
+  };
 
   /* =======================================================
      FETCH PENDING LEADS
@@ -838,1197 +849,1229 @@ const PendingLeadReport = () => {
   ======================================================= */
 
   return (
-    <div className="pending-report-page">
+    <div className="layout">
 
-      {/* ===================================================
-          HEADER
-      =================================================== */}
+      {/* =================================================
+          SIDEBAR
+      ================================================= */}
 
-      <div className="pending-report-header">
+      <Sidebar
+        isOpen={isOpen}
+        toggleSidebar={toggleSidebar}
+      />
 
-        <div className="pending-report-title">
+      {/* =================================================
+          MAIN CONTENT
+      ================================================= */}
 
-          <div className="pending-title-icon">
-            ⏳
-          </div>
+      <div
+        className={`main-content ${
+          isOpen
+            ? "expanded"
+            : "collapsed"
+        }`}
+      >
 
-          <div>
-            <h1>
-              Pending Lead Report
-            </h1>
+        <div className="pending-report-page">
 
-            <p>
-              Executive-wise pending
-              lead aging & performance
-            </p>
-          </div>
+          {/* =============================================
+              HEADER
+          ============================================= */}
 
-        </div>
+          <div className="pending-report-header">
 
-        <div className="pending-header-actions">
+            <div className="pending-report-title">
 
-          <button
-            type="button"
-            className="pending-refresh-btn"
-            onClick={
-              fetchPendingLeads
-            }
-            disabled={loading}
-          >
-            {loading
-              ? "Loading..."
-              : "↻ Refresh"}
-          </button>
+              <div className="pending-title-icon">
+                ⏳
+              </div>
 
-          <button
-            type="button"
-            className="pending-export-btn"
-            onClick={exportCSV}
-            disabled={
-              !filteredLeads.length
-            }
-          >
-            ↓ Export CSV
-          </button>
+              <div>
+                <h1>
+                  Pending Lead Report
+                </h1>
 
-        </div>
+                <p>
+                  Executive-wise pending
+                  lead aging & performance
+                </p>
+              </div>
 
-      </div>
+            </div>
 
-      {/* ===================================================
-          ERROR
-      =================================================== */}
+            <div className="pending-header-actions">
 
-      {error && (
-        <div className="pending-error">
-
-          <span>⚠</span>
-
-          <div>
-            <strong>
-              Unable to load report
-            </strong>
-
-            <p>
-              {error}
-            </p>
-          </div>
-
-          <button
-            type="button"
-            onClick={
-              fetchPendingLeads
-            }
-          >
-            Retry
-          </button>
-
-        </div>
-      )}
-
-      {/* ===================================================
-          SUMMARY CARDS
-      =================================================== */}
-
-      <div className="pending-summary-grid">
-
-        <div className="pending-summary-card total-card">
-
-          <div className="pending-summary-icon">
-            📋
-          </div>
-
-          <div>
-            <span>
-              Total Pending
-            </span>
-
-            <strong>
-              {summary.total}
-            </strong>
-          </div>
-
-        </div>
-
-        <div className="pending-summary-card today-card">
-
-          <div className="pending-summary-icon">
-            🟢
-          </div>
-
-          <div>
-            <span>
-              Pending ≤ 1 Day
-            </span>
-
-            <strong>
-              {summary.today}
-            </strong>
-          </div>
-
-        </div>
-
-        <div className="pending-summary-card warning-card">
-
-          <div className="pending-summary-icon">
-            🟡
-          </div>
-
-          <div>
-            <span>
-              Pending &gt; 3 Days
-            </span>
-
-            <strong>
-              {summary.over3}
-            </strong>
-          </div>
-
-        </div>
-
-        <div className="pending-summary-card danger-card">
-
-          <div className="pending-summary-icon">
-            🟠
-          </div>
-
-          <div>
-            <span>
-              Pending &gt; 7 Days
-            </span>
-
-            <strong>
-              {summary.over7}
-            </strong>
-          </div>
-
-        </div>
-
-        <div className="pending-summary-card critical-card">
-
-          <div className="pending-summary-icon">
-            🔴
-          </div>
-
-          <div>
-            <span>
-              Pending &gt; 15 Days
-            </span>
-
-            <strong>
-              {summary.over15}
-            </strong>
-          </div>
-
-        </div>
-
-      </div>
-
-      {/* ===================================================
-          FILTER PANEL
-      =================================================== */}
-
-      <div className="pending-filter-card">
-
-        <div className="pending-filter-heading">
-
-          <div>
-            <h2>
-              Search & Filters
-            </h2>
-
-            <p>
-              Find leads that are pending
-              with executives
-            </p>
-          </div>
-
-          <button
-            type="button"
-            className="pending-reset-btn"
-            onClick={
-              resetFilters
-            }
-          >
-            Reset Filters
-          </button>
-
-        </div>
-
-        <div className="pending-filter-grid">
-
-          {/* SEARCH */}
-
-          <div className="pending-filter-group pending-search-group">
-
-            <label>
-              Search Lead
-            </label>
-
-            <div className="pending-search-box">
-
-              <span>
-                🔍
-              </span>
-
-              <input
-                type="text"
-                value={search}
-                onChange={(e) =>
-                  setSearch(
-                    e.target.value
-                  )
+              <button
+                type="button"
+                className="pending-refresh-btn"
+                onClick={
+                  fetchPendingLeads
                 }
-                placeholder="Name, phone, project..."
-              />
+                disabled={loading}
+              >
+                {loading
+                  ? "Loading..."
+                  : "↻ Refresh"}
+              </button>
+
+              <button
+                type="button"
+                className="pending-export-btn"
+                onClick={exportCSV}
+                disabled={
+                  !filteredLeads.length
+                }
+              >
+                ↓ Export CSV
+              </button>
 
             </div>
 
           </div>
 
-          {/* EXECUTIVE */}
+          {/* =============================================
+              ERROR
+          ============================================= */}
 
-          <div className="pending-filter-group">
+          {error && (
+            <div className="pending-error">
 
-            <label>
-              Executive
-            </label>
+              <span>⚠</span>
 
-            <select
-              value={
-                selectedExecutive
-              }
-              onChange={(e) =>
-                setSelectedExecutive(
-                  e.target.value
-                )
-              }
-            >
+              <div>
+                <strong>
+                  Unable to load report
+                </strong>
 
-              <option value="all">
-                All Executives
-              </option>
+                <p>
+                  {error}
+                </p>
+              </div>
 
-              {executives.map(
-                (executive) => {
-                  const key =
-                    `${executive.name}|||${executive.email}`;
-
-                  return (
-                    <option
-                      key={key}
-                      value={key}
-                    >
-                      {executive.name}
-                    </option>
-                  );
+              <button
+                type="button"
+                onClick={
+                  fetchPendingLeads
                 }
-              )}
+              >
+                Retry
+              </button>
 
-            </select>
+            </div>
+          )}
 
-          </div>
+          {/* =============================================
+              SUMMARY CARDS
+          ============================================= */}
 
-          {/* AGE */}
+          <div className="pending-summary-grid">
 
-          <div className="pending-filter-group">
+            <div className="pending-summary-card total-card">
 
-            <label>
-              Pending Age
-            </label>
+              <div className="pending-summary-icon">
+                📋
+              </div>
 
-            <select
-              value={selectedAge}
-              onChange={(e) =>
-                setSelectedAge(
-                  e.target.value
-                )
-              }
-            >
-
-              <option value="all">
-                All Pending
-              </option>
-
-              <option value="1+">
-                More than 1 Day
-              </option>
-
-              <option value="3+">
-                More than 3 Days
-              </option>
-
-              <option value="7+">
-                More than 7 Days
-              </option>
-
-              <option value="15+">
-                More than 15 Days
-              </option>
-
-            </select>
-
-          </div>
-
-          {/* STATUS */}
-
-          <div className="pending-filter-group">
-
-            <label>
-              Status
-            </label>
-
-            <select
-              value={selectedStatus}
-              onChange={(e) =>
-                setSelectedStatus(
-                  e.target.value
-                )
-              }
-            >
-
-              <option value="all">
-                All Statuses
-              </option>
-
-              {statuses.map(
-                (status) => (
-                  <option
-                    key={status}
-                    value={status}
-                  >
-                    {status}
-                  </option>
-                )
-              )}
-
-            </select>
-
-          </div>
-
-        </div>
-
-      </div>
-
-      {/* ===================================================
-          EXECUTIVE SUMMARY
-      =================================================== */}
-
-      <div className="pending-table-card">
-
-        <div className="pending-table-header">
-
-          <div>
-            <h2>
-              Executive-wise Pending
-              Leads
-            </h2>
-
-            <p>
-              Pending leads grouped by
-              current executive
-            </p>
-          </div>
-
-          <div className="pending-result-count">
-            {executiveSummary.length}{" "}
-            Executives
-          </div>
-
-        </div>
-
-        <div className="pending-table-wrapper">
-
-          <table className="pending-executive-table">
-
-            <thead>
-
-              <tr>
-
-                <th>
-                  #
-                </th>
-
-                <th className="left">
-                  Executive
-                </th>
-
-                <th>
+              <div>
+                <span>
                   Total Pending
-                </th>
+                </span>
 
-                <th>
-                  0–1 Day
-                </th>
+                <strong>
+                  {summary.total}
+                </strong>
+              </div>
 
-                <th>
-                  2–3 Days
-                </th>
+            </div>
 
-                <th>
-                  4–7 Days
-                </th>
+            <div className="pending-summary-card today-card">
 
-                <th>
-                  8–15 Days
-                </th>
+              <div className="pending-summary-icon">
+                🟢
+              </div>
 
-                <th>
-                  15+ Days
-                </th>
+              <div>
+                <span>
+                  Pending ≤ 1 Day
+                </span>
 
-              </tr>
+                <strong>
+                  {summary.today}
+                </strong>
+              </div>
 
-            </thead>
+            </div>
 
-            <tbody>
+            <div className="pending-summary-card warning-card">
 
-              {loading ? (
-                <tr>
+              <div className="pending-summary-icon">
+                🟡
+              </div>
 
-                  <td
-                    colSpan="8"
-                    className="pending-loading"
-                  >
+              <div>
+                <span>
+                  Pending &gt; 3 Days
+                </span>
 
-                    <div className="pending-loader">
-                      <span />
-                      <span />
-                      <span />
-                    </div>
+                <strong>
+                  {summary.over3}
+                </strong>
+              </div>
 
-                    Loading pending
-                    leads...
+            </div>
 
-                  </td>
+            <div className="pending-summary-card danger-card">
 
-                </tr>
-              ) : executiveSummary.length ===
-                0 ? (
+              <div className="pending-summary-icon">
+                🟠
+              </div>
 
-                <tr>
+              <div>
+                <span>
+                  Pending &gt; 7 Days
+                </span>
 
-                  <td
-                    colSpan="8"
-                    className="pending-empty"
-                  >
+                <strong>
+                  {summary.over7}
+                </strong>
+              </div>
 
-                    <div>
+            </div>
 
-                      <div className="empty-icon">
-                        📭
-                      </div>
+            <div className="pending-summary-card critical-card">
 
-                      <strong>
-                        No pending leads found
-                      </strong>
+              <div className="pending-summary-icon">
+                🔴
+              </div>
 
-                      <p>
-                        No data matches the
-                        current filters.
-                      </p>
+              <div>
+                <span>
+                  Pending &gt; 15 Days
+                </span>
 
-                    </div>
+                <strong>
+                  {summary.over15}
+                </strong>
+              </div>
 
-                  </td>
+            </div>
 
-                </tr>
-              ) : (
+          </div>
 
-                executiveSummary.map(
-                  (
-                    executive,
-                    index
-                  ) => (
+          {/* =============================================
+              FILTER PANEL
+          ============================================= */}
 
-                    <tr
-                      key={`${executive.name}-${executive.email}`}
-                      className="pending-executive-row"
-                      onClick={() => {
+          <div className="pending-filter-card">
 
-                        setSelectedExecutive(
-                          `${executive.name}|||${executive.email}`
-                        );
+            <div className="pending-filter-heading">
 
-                        setSearch("");
-                        setSelectedAge(
-                          "all"
-                        );
-                        setSelectedStatus(
-                          "all"
-                        );
+              <div>
+                <h2>
+                  Search & Filters
+                </h2>
 
-                      }}
-                    >
+                <p>
+                  Find leads that are pending
+                  with executives
+                </p>
+              </div>
 
-                      <td>
+              <button
+                type="button"
+                className="pending-reset-btn"
+                onClick={
+                  resetFilters
+                }
+              >
+                Reset Filters
+              </button>
 
-                        <span className="pending-rank">
-                          {index + 1}
-                        </span>
+            </div>
 
-                      </td>
+            <div className="pending-filter-grid">
 
-                      <td className="left">
+              {/* SEARCH */}
 
-                        <div className="pending-executive-name">
+              <div className="pending-filter-group pending-search-group">
 
-                          <div className="pending-avatar">
+                <label>
+                  Search Lead
+                </label>
 
-                            {getInitial(
-                              executive.name
-                            )}
+                <div className="pending-search-box">
 
-                          </div>
+                  <span>
+                    🔍
+                  </span>
 
-                          <div>
+                  <input
+                    type="text"
+                    value={search}
+                    onChange={(e) =>
+                      setSearch(
+                        e.target.value
+                      )
+                    }
+                    placeholder="Name, phone, project..."
+                  />
 
-                            <strong>
-                              {
-                                executive.name
-                              }
-                            </strong>
+                </div>
 
-                            {executive.email && (
-                              <small>
-                                {
-                                  executive.email
-                                }
-                              </small>
-                            )}
+              </div>
 
-                          </div>
+              {/* EXECUTIVE */}
 
+              <div className="pending-filter-group">
+
+                <label>
+                  Executive
+                </label>
+
+                <select
+                  value={
+                    selectedExecutive
+                  }
+                  onChange={(e) =>
+                    setSelectedExecutive(
+                      e.target.value
+                    )
+                  }
+                >
+
+                  <option value="all">
+                    All Executives
+                  </option>
+
+                  {executives.map(
+                    (executive) => {
+                      const key =
+                        `${executive.name}|||${executive.email}`;
+
+                      return (
+                        <option
+                          key={key}
+                          value={key}
+                        >
+                          {executive.name}
+                        </option>
+                      );
+                    }
+                  )}
+
+                </select>
+
+              </div>
+
+              {/* AGE */}
+
+              <div className="pending-filter-group">
+
+                <label>
+                  Pending Age
+                </label>
+
+                <select
+                  value={selectedAge}
+                  onChange={(e) =>
+                    setSelectedAge(
+                      e.target.value
+                    )
+                  }
+                >
+
+                  <option value="all">
+                    All Pending
+                  </option>
+
+                  <option value="1+">
+                    More than 1 Day
+                  </option>
+
+                  <option value="3+">
+                    More than 3 Days
+                  </option>
+
+                  <option value="7+">
+                    More than 7 Days
+                  </option>
+
+                  <option value="15+">
+                    More than 15 Days
+                  </option>
+
+                </select>
+
+              </div>
+
+              {/* STATUS */}
+
+              <div className="pending-filter-group">
+
+                <label>
+                  Status
+                </label>
+
+                <select
+                  value={selectedStatus}
+                  onChange={(e) =>
+                    setSelectedStatus(
+                      e.target.value
+                    )
+                  }
+                >
+
+                  <option value="all">
+                    All Statuses
+                  </option>
+
+                  {statuses.map(
+                    (status) => (
+                      <option
+                        key={status}
+                        value={status}
+                      >
+                        {status}
+                      </option>
+                    )
+                  )}
+
+                </select>
+
+              </div>
+
+            </div>
+
+          </div>
+
+          {/* =============================================
+              EXECUTIVE SUMMARY
+          ============================================= */}
+
+          <div className="pending-table-card">
+
+            <div className="pending-table-header">
+
+              <div>
+                <h2>
+                  Executive-wise Pending
+                  Leads
+                </h2>
+
+                <p>
+                  Pending leads grouped by
+                  current executive
+                </p>
+              </div>
+
+              <div className="pending-result-count">
+                {executiveSummary.length}{" "}
+                Executives
+              </div>
+
+            </div>
+
+            <div className="pending-table-wrapper">
+
+              <table className="pending-executive-table">
+
+                <thead>
+
+                  <tr>
+
+                    <th>
+                      #
+                    </th>
+
+                    <th className="left">
+                      Executive
+                    </th>
+
+                    <th>
+                      Total Pending
+                    </th>
+
+                    <th>
+                      0–1 Day
+                    </th>
+
+                    <th>
+                      2–3 Days
+                    </th>
+
+                    <th>
+                      4–7 Days
+                    </th>
+
+                    <th>
+                      8–15 Days
+                    </th>
+
+                    <th>
+                      15+ Days
+                    </th>
+
+                  </tr>
+
+                </thead>
+
+                <tbody>
+
+                  {loading ? (
+
+                    <tr>
+
+                      <td
+                        colSpan="8"
+                        className="pending-loading"
+                      >
+
+                        <div className="pending-loader">
+                          <span />
+                          <span />
+                          <span />
                         </div>
 
-                      </td>
-
-                      <td>
-
-                        <span className="pending-count-badge total">
-                          {
-                            executive.total
-                          }
-                        </span>
-
-                      </td>
-
-                      <td>
-
-                        <span className="pending-count-badge green">
-                          {
-                            executive.zeroOne
-                          }
-                        </span>
-
-                      </td>
-
-                      <td>
-
-                        <span className="pending-count-badge blue">
-                          {
-                            executive.twoThree
-                          }
-                        </span>
-
-                      </td>
-
-                      <td>
-
-                        <span className="pending-count-badge yellow">
-                          {
-                            executive.fourSeven
-                          }
-                        </span>
-
-                      </td>
-
-                      <td>
-
-                        <span className="pending-count-badge orange">
-                          {
-                            executive.eightFifteen
-                          }
-                        </span>
-
-                      </td>
-
-                      <td>
-
-                        <span className="pending-count-badge red">
-                          {
-                            executive.fifteenPlus
-                          }
-                        </span>
+                        Loading pending
+                        leads...
 
                       </td>
 
                     </tr>
 
-                  )
-                )
+                  ) : executiveSummary.length ===
+                    0 ? (
 
-              )}
+                    <tr>
 
-            </tbody>
+                      <td
+                        colSpan="8"
+                        className="pending-empty"
+                      >
 
-          </table>
+                        <div>
 
-        </div>
-
-      </div>
-
-      {/* ===================================================
-          ACTUAL PENDING LEADS
-      =================================================== */}
-
-      <div className="pending-table-card pending-leads-card">
-
-        <div className="pending-table-header">
-
-          <div>
-
-            <h2>
-              Pending Lead Details
-            </h2>
-
-            <p>
-              {filteredLeads.length}{" "}
-              leads matching current
-              filters
-            </p>
-
-          </div>
-
-          <button
-            type="button"
-            className="pending-sort-btn"
-            onClick={() =>
-              setSortDirection(
-                (prev) =>
-                  prev === "desc"
-                    ? "asc"
-                    : "desc"
-              )
-            }
-          >
-
-            Pending Days{" "}
-
-            {sortDirection ===
-            "desc"
-              ? "↓"
-              : "↑"}
-
-          </button>
-
-        </div>
-
-        <div className="pending-table-wrapper">
-
-          <table className="pending-leads-table">
-
-            <thead>
-
-              <tr>
-
-                <th>
-                  #
-                </th>
-
-                <th className="left">
-                  Lead
-                </th>
-
-                <th>
-                  Phone
-                </th>
-
-                <th className="left">
-                  Executive
-                </th>
-
-                <th>
-                  Status
-                </th>
-
-                <th>
-                  Project
-                </th>
-
-                <th>
-                  Pending Since
-                </th>
-
-                <th>
-                  Pending Days
-                </th>
-
-                <th>
-                  Age
-                </th>
-
-              </tr>
-
-            </thead>
-
-            <tbody>
-
-              {loading ? (
-
-                <tr>
-
-                  <td
-                    colSpan="9"
-                    className="pending-loading"
-                  >
-                    Loading...
-                  </td>
-
-                </tr>
-
-              ) : filteredLeads.length ===
-                0 ? (
-
-                <tr>
-
-                  <td
-                    colSpan="9"
-                    className="pending-empty"
-                  >
-
-                    <div>
-
-                      <div className="empty-icon">
-                        🔎
-                      </div>
-
-                      <strong>
-                        No leads found
-                      </strong>
-
-                      <p>
-                        Try changing your
-                        filters.
-                      </p>
-
-                    </div>
-
-                  </td>
-
-                </tr>
-
-              ) : (
-
-                filteredLeads.map(
-                  (
-                    lead,
-                    index
-                  ) => (
-
-                    <tr
-                      key={
-                        lead._id ||
-                        lead.id ||
-                        `${lead._leadName}-${index}`
-                      }
-                      onClick={() =>
-                        setSelectedLead(
-                          lead
-                        )
-                      }
-                    >
-
-                      <td>
-                        {index + 1}
-                      </td>
-
-                      <td className="left">
-
-                        <div className="pending-lead-name">
+                          <div className="empty-icon">
+                            📭
+                          </div>
 
                           <strong>
-                            {
-                              lead._leadName
-                            }
+                            No pending leads found
                           </strong>
 
-                          {lead?.email && (
-                            <small>
-                              {
-                                lead.email
-                              }
-                            </small>
-                          )}
+                          <p>
+                            No data matches the
+                            current filters.
+                          </p>
 
                         </div>
-
-                      </td>
-
-                      <td>
-                        {
-                          lead._phone ||
-                          "-"
-                        }
-                      </td>
-
-                      <td className="left">
-
-                        <div className="small-executive">
-
-                          <span>
-                            {getInitial(
-                              lead._executiveName
-                            )}
-                          </span>
-
-                          {
-                            lead._executiveName
-                          }
-
-                        </div>
-
-                      </td>
-
-                      <td>
-
-                        <span
-                          className={`pending-status ${normalizeText(
-                            lead._status
-                          ).replace(
-                            /\s+/g,
-                            "-"
-                          )}`}
-                        >
-                          {
-                            lead._status
-                          }
-                        </span>
-
-                      </td>
-
-                      <td>
-                        {
-                          lead?.project ||
-                          "-"
-                        }
-                      </td>
-
-                      <td>
-                        {formatDate(
-                          lead._pendingDate
-                        )}
-                      </td>
-
-                      <td>
-
-                        <strong
-                          className={
-                            lead._pendingDays >
-                            15
-                              ? "days-critical"
-                              : lead._pendingDays >
-                                7
-                              ? "days-danger"
-                              : lead._pendingDays >
-                                3
-                              ? "days-warning"
-                              : "days-normal"
-                          }
-                        >
-
-                          {
-                            lead._pendingDays
-                          }
-
-                          <small>
-                            {" "}
-                            day
-                            {lead._pendingDays !==
-                            1
-                              ? "s"
-                              : ""}
-                          </small>
-
-                        </strong>
-
-                      </td>
-
-                      <td>
-
-                        <span
-                          className={`pending-age-badge ${normalizeText(
-                            lead._ageBucket
-                          ).replace(
-                            /[^a-z0-9]+/g,
-                            "-"
-                          )}`}
-                        >
-                          {
-                            lead._ageBucket
-                          }
-                        </span>
 
                       </td>
 
                     </tr>
 
-                  )
-                )
+                  ) : (
 
-              )}
+                    executiveSummary.map(
+                      (
+                        executive,
+                        index
+                      ) => (
 
-            </tbody>
+                        <tr
+                          key={`${executive.name}-${executive.email}`}
+                          className="pending-executive-row"
+                          onClick={() => {
 
-          </table>
+                            setSelectedExecutive(
+                              `${executive.name}|||${executive.email}`
+                            );
 
-        </div>
+                            setSearch("");
 
-      </div>
+                            setSelectedAge(
+                              "all"
+                            );
 
-      {/* ===================================================
-          LEAD DETAIL MODAL
-      =================================================== */}
+                            setSelectedStatus(
+                              "all"
+                            );
 
-      {selectedLead && (
+                          }}
+                        >
 
-        <div
-          className="pending-modal-overlay"
-          onClick={() =>
-            setSelectedLead(
-              null
-            )
-          }
-        >
+                          <td>
 
-          <div
-            className="pending-modal"
-            onClick={(e) =>
-              e.stopPropagation()
-            }
-          >
+                            <span className="pending-rank">
+                              {index + 1}
+                            </span>
 
-            <div className="pending-modal-header">
+                          </td>
+
+                          <td className="left">
+
+                            <div className="pending-executive-name">
+
+                              <div className="pending-avatar">
+
+                                {getInitial(
+                                  executive.name
+                                )}
+
+                              </div>
+
+                              <div>
+
+                                <strong>
+                                  {
+                                    executive.name
+                                  }
+                                </strong>
+
+                                {executive.email && (
+                                  <small>
+                                    {
+                                      executive.email
+                                    }
+                                  </small>
+                                )}
+
+                              </div>
+
+                            </div>
+
+                          </td>
+
+                          <td>
+
+                            <span className="pending-count-badge total">
+                              {
+                                executive.total
+                              }
+                            </span>
+
+                          </td>
+
+                          <td>
+
+                            <span className="pending-count-badge green">
+                              {
+                                executive.zeroOne
+                              }
+                            </span>
+
+                          </td>
+
+                          <td>
+
+                            <span className="pending-count-badge blue">
+                              {
+                                executive.twoThree
+                              }
+                            </span>
+
+                          </td>
+
+                          <td>
+
+                            <span className="pending-count-badge yellow">
+                              {
+                                executive.fourSeven
+                              }
+                            </span>
+
+                          </td>
+
+                          <td>
+
+                            <span className="pending-count-badge orange">
+                              {
+                                executive.eightFifteen
+                              }
+                            </span>
+
+                          </td>
+
+                          <td>
+
+                            <span className="pending-count-badge red">
+                              {
+                                executive.fifteenPlus
+                              }
+                            </span>
+
+                          </td>
+
+                        </tr>
+
+                      )
+                    )
+
+                  )}
+
+                </tbody>
+
+              </table>
+
+            </div>
+
+          </div>
+
+          {/* =============================================
+              ACTUAL PENDING LEADS
+          ============================================= */}
+
+          <div className="pending-table-card pending-leads-card">
+
+            <div className="pending-table-header">
 
               <div>
 
                 <h2>
-                  {
-                    selectedLead._leadName
-                  }
+                  Pending Lead Details
                 </h2>
 
                 <p>
-                  Pending Lead Details
+                  {filteredLeads.length}{" "}
+                  leads matching current
+                  filters
                 </p>
 
               </div>
 
               <button
                 type="button"
+                className="pending-sort-btn"
                 onClick={() =>
-                  setSelectedLead(
-                    null
+                  setSortDirection(
+                    (prev) =>
+                      prev === "desc"
+                        ? "asc"
+                        : "desc"
                   )
                 }
               >
-                ×
+
+                Pending Days{" "}
+
+                {sortDirection ===
+                "desc"
+                  ? "↓"
+                  : "↑"}
+
               </button>
 
             </div>
 
-            <div className="pending-modal-body">
+            <div className="pending-table-wrapper">
 
-              <div className="pending-detail-grid">
+              <table className="pending-leads-table">
 
-                <div className="pending-detail-item">
+                <thead>
 
-                  <span>
-                    Name
-                  </span>
+                  <tr>
 
-                  <strong>
-                    {
-                      selectedLead._leadName
-                    }
-                  </strong>
+                    <th>
+                      #
+                    </th>
 
-                </div>
+                    <th className="left">
+                      Lead
+                    </th>
 
-                <div className="pending-detail-item">
+                    <th>
+                      Phone
+                    </th>
 
-                  <span>
-                    Phone
-                  </span>
+                    <th className="left">
+                      Executive
+                    </th>
 
-                  <strong>
-                    {
-                      selectedLead._phone ||
-                      "-"
-                    }
-                  </strong>
+                    <th>
+                      Status
+                    </th>
 
-                </div>
+                    <th>
+                      Project
+                    </th>
 
-                <div className="pending-detail-item">
+                    <th>
+                      Pending Since
+                    </th>
 
-                  <span>
-                    Executive
-                  </span>
+                    <th>
+                      Pending Days
+                    </th>
 
-                  <strong>
-                    {
-                      selectedLead._executiveName
-                    }
-                  </strong>
+                    <th>
+                      Age
+                    </th>
 
-                </div>
+                  </tr>
 
-                <div className="pending-detail-item">
+                </thead>
 
-                  <span>
-                    Executive Email
-                  </span>
+                <tbody>
 
-                  <strong>
-                    {
-                      selectedLead._executiveEmail ||
-                      "-"
-                    }
-                  </strong>
+                  {loading ? (
 
-                </div>
+                    <tr>
 
-                <div className="pending-detail-item">
+                      <td
+                        colSpan="9"
+                        className="pending-loading"
+                      >
+                        Loading...
+                      </td>
 
-                  <span>
-                    Status
-                  </span>
+                    </tr>
 
-                  <strong>
-                    {
-                      selectedLead._status
-                    }
-                  </strong>
+                  ) : filteredLeads.length ===
+                    0 ? (
 
-                </div>
+                    <tr>
 
-                <div className="pending-detail-item">
+                      <td
+                        colSpan="9"
+                        className="pending-empty"
+                      >
 
-                  <span>
-                    Project
-                  </span>
+                        <div>
 
-                  <strong>
-                    {
-                      selectedLead?.project ||
-                      "-"
-                    }
-                  </strong>
+                          <div className="empty-icon">
+                            🔎
+                          </div>
 
-                </div>
+                          <strong>
+                            No leads found
+                          </strong>
 
-                <div className="pending-detail-item">
+                          <p>
+                            Try changing your
+                            filters.
+                          </p>
 
-                  <span>
-                    Pending Since
-                  </span>
+                        </div>
 
-                  <strong>
-                    {formatDate(
-                      selectedLead._pendingDate
-                    )}
-                  </strong>
+                      </td>
 
-                </div>
+                    </tr>
 
-                <div className="pending-detail-item highlight">
+                  ) : (
 
-                  <span>
-                    Pending Days
-                  </span>
+                    filteredLeads.map(
+                      (
+                        lead,
+                        index
+                      ) => (
 
-                  <strong>
-                    {
-                      selectedLead._pendingDays
-                    }{" "}
-                    Days
-                  </strong>
+                        <tr
+                          key={
+                            lead._id ||
+                            lead.id ||
+                            `${lead._leadName}-${index}`
+                          }
+                          onClick={() =>
+                            setSelectedLead(
+                              lead
+                            )
+                          }
+                        >
 
-                </div>
+                          <td>
+                            {index + 1}
+                          </td>
 
-                <div className="pending-detail-item">
+                          <td className="left">
 
-                  <span>
-                    Source
-                  </span>
+                            <div className="pending-lead-name">
 
-                  <strong>
-                    {
-                      selectedLead?.source ||
-                      "-"
-                    }
-                  </strong>
+                              <strong>
+                                {
+                                  lead._leadName
+                                }
+                              </strong>
 
-                </div>
+                              {lead?.email && (
+                                <small>
+                                  {
+                                    lead.email
+                                  }
+                                </small>
+                              )}
 
-                <div className="pending-detail-item">
+                            </div>
 
-                  <span>
-                    City
-                  </span>
+                          </td>
 
-                  <strong>
-                    {
-                      selectedLead?.city ||
-                      "-"
-                    }
-                  </strong>
+                          <td>
+                            {
+                              lead._phone ||
+                              "-"
+                            }
+                          </td>
 
-                </div>
+                          <td className="left">
 
-              </div>
+                            <div className="small-executive">
 
-              {selectedLead?.remark && (
+                              <span>
+                                {getInitial(
+                                  lead._executiveName
+                                )}
+                              </span>
 
-                <div className="pending-remark">
+                              {
+                                lead._executiveName
+                              }
 
-                  <span>
-                    Remark
-                  </span>
+                            </div>
 
-                  <p>
-                    {
-                      selectedLead.remark
-                    }
-                  </p>
+                          </td>
 
-                </div>
+                          <td>
 
-              )}
+                            <span
+                              className={`pending-status ${normalizeText(
+                                lead._status
+                              ).replace(
+                                /\s+/g,
+                                "-"
+                              )}`}
+                            >
+                              {
+                                lead._status
+                              }
+                            </span>
 
-            </div>
+                          </td>
 
-            <div className="pending-modal-footer">
+                          <td>
+                            {
+                              lead?.project ||
+                              "-"
+                            }
+                          </td>
 
-              <button
-                type="button"
-                onClick={() =>
-                  setSelectedLead(
-                    null
-                  )
-                }
-              >
-                Close
-              </button>
+                          <td>
+                            {formatDate(
+                              lead._pendingDate
+                            )}
+                          </td>
+
+                          <td>
+
+                            <strong
+                              className={
+                                lead._pendingDays >
+                                15
+                                  ? "days-critical"
+                                  : lead._pendingDays >
+                                    7
+                                  ? "days-danger"
+                                  : lead._pendingDays >
+                                    3
+                                  ? "days-warning"
+                                  : "days-normal"
+                              }
+                            >
+
+                              {
+                                lead._pendingDays
+                              }
+
+                              <small>
+                                {" "}
+                                day
+                                {lead._pendingDays !==
+                                1
+                                  ? "s"
+                                  : ""}
+                              </small>
+
+                            </strong>
+
+                          </td>
+
+                          <td>
+
+                            <span
+                              className={`pending-age-badge ${normalizeText(
+                                lead._ageBucket
+                              ).replace(
+                                /[^a-z0-9]+/g,
+                                "-"
+                              )}`}
+                            >
+                              {
+                                lead._ageBucket
+                              }
+                            </span>
+
+                          </td>
+
+                        </tr>
+
+                      )
+                    )
+
+                  )}
+
+                </tbody>
+
+              </table>
 
             </div>
 
           </div>
 
+          {/* =============================================
+              LEAD DETAIL MODAL
+          ============================================= */}
+
+          {selectedLead && (
+
+            <div
+              className="pending-modal-overlay"
+              onClick={() =>
+                setSelectedLead(
+                  null
+                )
+              }
+            >
+
+              <div
+                className="pending-modal"
+                onClick={(e) =>
+                  e.stopPropagation()
+                }
+              >
+
+                <div className="pending-modal-header">
+
+                  <div>
+
+                    <h2>
+                      {
+                        selectedLead._leadName
+                      }
+                    </h2>
+
+                    <p>
+                      Pending Lead Details
+                    </p>
+
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setSelectedLead(
+                        null
+                      )
+                    }
+                  >
+                    ×
+                  </button>
+
+                </div>
+
+                <div className="pending-modal-body">
+
+                  <div className="pending-detail-grid">
+
+                    <div className="pending-detail-item">
+
+                      <span>
+                        Name
+                      </span>
+
+                      <strong>
+                        {
+                          selectedLead._leadName
+                        }
+                      </strong>
+
+                    </div>
+
+                    <div className="pending-detail-item">
+
+                      <span>
+                        Phone
+                      </span>
+
+                      <strong>
+                        {
+                          selectedLead._phone ||
+                          "-"
+                        }
+                      </strong>
+
+                    </div>
+
+                    <div className="pending-detail-item">
+
+                      <span>
+                        Executive
+                      </span>
+
+                      <strong>
+                        {
+                          selectedLead._executiveName
+                        }
+                      </strong>
+
+                    </div>
+
+                    <div className="pending-detail-item">
+
+                      <span>
+                        Executive Email
+                      </span>
+
+                      <strong>
+                        {
+                          selectedLead._executiveEmail ||
+                          "-"
+                        }
+                      </strong>
+
+                    </div>
+
+                    <div className="pending-detail-item">
+
+                      <span>
+                        Status
+                      </span>
+
+                      <strong>
+                        {
+                          selectedLead._status
+                        }
+                      </strong>
+
+                    </div>
+
+                    <div className="pending-detail-item">
+
+                      <span>
+                        Project
+                      </span>
+
+                      <strong>
+                        {
+                          selectedLead?.project ||
+                          "-"
+                        }
+                      </strong>
+
+                    </div>
+
+                    <div className="pending-detail-item">
+
+                      <span>
+                        Pending Since
+                      </span>
+
+                      <strong>
+                        {formatDate(
+                          selectedLead._pendingDate
+                        )}
+                      </strong>
+
+                    </div>
+
+                    <div className="pending-detail-item highlight">
+
+                      <span>
+                        Pending Days
+                      </span>
+
+                      <strong>
+                        {
+                          selectedLead._pendingDays
+                        }{" "}
+                        Days
+                      </strong>
+
+                    </div>
+
+                    <div className="pending-detail-item">
+
+                      <span>
+                        Source
+                      </span>
+
+                      <strong>
+                        {
+                          selectedLead?.source ||
+                          "-"
+                        }
+                      </strong>
+
+                    </div>
+
+                    <div className="pending-detail-item">
+
+                      <span>
+                        City
+                      </span>
+
+                      <strong>
+                        {
+                          selectedLead?.city ||
+                          "-"
+                        }
+                      </strong>
+
+                    </div>
+
+                  </div>
+
+                  {selectedLead?.remark && (
+
+                    <div className="pending-remark">
+
+                      <span>
+                        Remark
+                      </span>
+
+                      <p>
+                        {
+                          selectedLead.remark
+                        }
+                      </p>
+
+                    </div>
+
+                  )}
+
+                </div>
+
+                <div className="pending-modal-footer">
+
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setSelectedLead(
+                        null
+                      )
+                    }
+                  >
+                    Close
+                  </button>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          )}
+
         </div>
 
-      )}
+      </div>
 
     </div>
   );
