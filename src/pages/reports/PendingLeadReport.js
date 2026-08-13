@@ -1,41 +1,45 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+
 import "../../styles/pendingLeadReport.css";
+
 /* =========================================================
    API
-   ========================================================= */
+========================================================= */
 
 const API_URL =
   process.env.REACT_APP_API_URL ||
   "https://calling-crm-backend-7w52.onrender.com/api";
 
-
-const PENDING_STATUSES = [
-  "New",
-  "Ringing",
-  "Interested",
-  "Very Interested",
-  "Follow Up",
-  "Call Back",
-  "Meeting Scheduled",
-  "Negotiation",
-];
-
 /* =========================================================
    HELPERS
-   ========================================================= */
+========================================================= */
 
 const normalizeText = (value) => {
-  if (value === null || value === undefined) return "";
+  if (value === null || value === undefined) {
+    return "";
+  }
+
   return String(value).trim().toLowerCase();
 };
 
 const getInitial = (name = "") => {
   const cleanName = String(name).trim();
 
-  if (!cleanName) return "?";
+  if (!cleanName) {
+    return "?";
+  }
 
   return cleanName.charAt(0).toUpperCase();
 };
+
+/* =========================================================
+   EXECUTIVE NAME
+========================================================= */
 
 const getExecutiveName = (lead) => {
   return (
@@ -50,6 +54,10 @@ const getExecutiveName = (lead) => {
   );
 };
 
+/* =========================================================
+   EXECUTIVE EMAIL
+========================================================= */
+
 const getExecutiveEmail = (lead) => {
   return (
     lead?.assigned_to_email ||
@@ -59,28 +67,54 @@ const getExecutiveEmail = (lead) => {
   );
 };
 
+/* =========================================================
+   LEAD NAME
+========================================================= */
+
 const getLeadName = (lead) => {
-  return lead?.name || lead?.fullName || lead?.leadName || "Unnamed Lead";
+  return (
+    lead?.name ||
+    lead?.fullName ||
+    lead?.leadName ||
+    "Unnamed Lead"
+  );
 };
 
+/* =========================================================
+   PHONE
+========================================================= */
+
 const getLeadPhone = (lead) => {
-  return lead?.phone || lead?.mobile || lead?.mobileNumber || "";
+  return (
+    lead?.phone ||
+    lead?.mobile ||
+    lead?.mobileNumber ||
+    ""
+  );
 };
+
+/* =========================================================
+   STATUS
+========================================================= */
 
 const getLeadStatus = (lead) => {
   return lead?.status || "Unknown";
 };
 
+/* =========================================================
+   PENDING DATE
+========================================================= */
+
 const getPendingDate = (lead) => {
   /*
-    Future backend मध्ये assignedAt primary असेल.
+    Primary:
+      assignedAt
 
-    Existing old leads साठी fallback:
-    assignedAt
-    assigned_at
-    assignedDate
-    createdAt
-    created_date
+    Fallback:
+      assigned_at
+      assignedDate
+      createdAt
+      created_date
   */
 
   const value =
@@ -91,19 +125,29 @@ const getPendingDate = (lead) => {
     lead?.created_date ||
     null;
 
-  if (!value) return null;
+  if (!value) {
+    return null;
+  }
 
   const date = new Date(value);
 
-  if (Number.isNaN(date.getTime())) return null;
+  if (Number.isNaN(date.getTime())) {
+    return null;
+  }
 
   return date;
 };
 
+/* =========================================================
+   CALCULATE PENDING DAYS
+========================================================= */
+
 const calculatePendingDays = (lead) => {
   const pendingDate = getPendingDate(lead);
 
-  if (!pendingDate) return 0;
+  if (!pendingDate) {
+    return 0;
+  }
 
   const now = new Date();
 
@@ -119,27 +163,55 @@ const calculatePendingDays = (lead) => {
     now.getDate()
   );
 
-  const diff = today.getTime() - start.getTime();
+  const diff =
+    today.getTime() -
+    start.getTime();
 
-  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const days = Math.floor(
+    diff / (1000 * 60 * 60 * 24)
+  );
 
   return Math.max(0, days);
 };
 
+/* =========================================================
+   AGE BUCKET
+========================================================= */
+
 const getAgeBucket = (days) => {
-  if (days <= 1) return "0–1 Day";
-  if (days <= 3) return "2–3 Days";
-  if (days <= 7) return "4–7 Days";
-  if (days <= 15) return "8–15 Days";
+  if (days <= 1) {
+    return "0–1 Day";
+  }
+
+  if (days <= 3) {
+    return "2–3 Days";
+  }
+
+  if (days <= 7) {
+    return "4–7 Days";
+  }
+
+  if (days <= 15) {
+    return "8–15 Days";
+  }
+
   return "15+ Days";
 };
 
+/* =========================================================
+   FORMAT DATE
+========================================================= */
+
 const formatDate = (dateValue) => {
-  if (!dateValue) return "-";
+  if (!dateValue) {
+    return "-";
+  }
 
   const date = new Date(dateValue);
 
-  if (Number.isNaN(date.getTime())) return "-";
+  if (Number.isNaN(date.getTime())) {
+    return "-";
+  }
 
   return date.toLocaleDateString("en-IN", {
     day: "2-digit",
@@ -150,12 +222,12 @@ const formatDate = (dateValue) => {
 
 /* =========================================================
    COMPONENT
-   ========================================================= */
+========================================================= */
 
 const PendingLeadReport = () => {
   /* =======================================================
      STATE
-     ======================================================= */
+  ======================================================= */
 
   const [leads, setLeads] = useState([]);
 
@@ -181,92 +253,103 @@ const PendingLeadReport = () => {
     useState("desc");
 
   /* =======================================================
-     FETCH DATA
-     ======================================================= */
+     FETCH PENDING LEADS
+  ======================================================= */
 
-  const fetchPendingLeads = useCallback(async () => {
-    try {
-      setLoading(true);
-      setError("");
+  const fetchPendingLeads = useCallback(
+    async () => {
+      try {
+        setLoading(true);
+        setError("");
 
-      const user =
-        JSON.parse(localStorage.getItem("user")) || {};
+        const user =
+          JSON.parse(
+            localStorage.getItem("user")
+          ) || {};
 
-      const params = new URLSearchParams();
+        const params =
+          new URLSearchParams();
 
-      if (user?.email) {
-        params.append("email", user.email);
-      }
-
-      /*
-        Future backend route:
-
-        GET /api/pending-leads-report
-      */
-
-      const response = await fetch(
-        `${API_URL}/pending-leads-report?${params.toString()}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
+        if (user?.email) {
+          params.append(
+            "email",
+            user.email
+          );
         }
-      );
 
-      if (!response.ok) {
-        throw new Error(
-          `Server returned ${response.status}`
+        const response = await fetch(
+          `${API_URL}/pending-leads-report?${params.toString()}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type":
+                "application/json",
+            },
+          }
         );
+
+        if (!response.ok) {
+          throw new Error(
+            `Server returned ${response.status}`
+          );
+        }
+
+        const data =
+          await response.json();
+
+        /*
+          Supported responses:
+
+          [
+            ...
+          ]
+
+          OR
+
+          {
+            success: true,
+            leads: [...]
+          }
+
+          OR
+
+          {
+            success: true,
+            data: [...]
+          }
+        */
+
+        const apiLeads =
+          Array.isArray(data)
+            ? data
+            : Array.isArray(data?.leads)
+            ? data.leads
+            : Array.isArray(data?.data)
+            ? data.data
+            : [];
+
+        setLeads(apiLeads);
+      } catch (err) {
+        console.error(
+          "Pending Lead Report Error:",
+          err
+        );
+
+        setError(
+          "Pending lead data load झाला नाही. Backend API उपलब्ध आहे का ते check करा."
+        );
+
+        setLeads([]);
+      } finally {
+        setLoading(false);
       }
-
-      const data = await response.json();
-
-      /*
-        API response support:
-
-        {
-          success: true,
-          leads: [...]
-        }
-
-        OR
-
-        {
-          success: true,
-          data: [...]
-        }
-      */
-
-      const apiLeads =
-        Array.isArray(data)
-          ? data
-          : Array.isArray(data?.leads)
-          ? data.leads
-          : Array.isArray(data?.data)
-          ? data.data
-          : [];
-
-      setLeads(apiLeads);
-    } catch (err) {
-      console.error(
-        "Pending Lead Report Error:",
-        err
-      );
-
-      setError(
-        "Pending lead data load झाला नाही. Backend API उपलब्ध आहे का ते check करा."
-      );
-
-      setLeads([]);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+    },
+    []
+  );
 
   /* =======================================================
      INITIAL LOAD
-     ======================================================= */
+  ======================================================= */
 
   useEffect(() => {
     fetchPendingLeads();
@@ -274,7 +357,7 @@ const PendingLeadReport = () => {
 
   /* =======================================================
      ENRICH LEADS
-     ======================================================= */
+  ======================================================= */
 
   const processedLeads = useMemo(() => {
     return leads.map((lead) => {
@@ -306,171 +389,195 @@ const PendingLeadReport = () => {
           pendingDays,
 
         _ageBucket:
-          getAgeBucket(pendingDays),
+          getAgeBucket(
+            pendingDays
+          ),
       };
     });
   }, [leads]);
 
   /* =======================================================
      EXECUTIVE LIST
-     ======================================================= */
+  ======================================================= */
 
   const executives = useMemo(() => {
     const map = new Map();
 
-    processedLeads.forEach((lead) => {
-      const name =
-        lead._executiveName || "Unassigned";
+    processedLeads.forEach(
+      (lead) => {
+        const name =
+          lead._executiveName ||
+          "Unassigned";
 
-      const email =
-        lead._executiveEmail || "";
+        const email =
+          lead._executiveEmail ||
+          "";
 
-      const key =
-        `${name}|||${email}`;
+        const key =
+          `${name}|||${email}`;
 
-      if (!map.has(key)) {
-        map.set(key, {
-          name,
-          email,
-        });
+        if (!map.has(key)) {
+          map.set(key, {
+            name,
+            email,
+          });
+        }
       }
-    });
+    );
 
-    return Array.from(map.values()).sort(
-      (a, b) =>
-        a.name.localeCompare(b.name)
+    return Array.from(
+      map.values()
+    ).sort((a, b) =>
+      a.name.localeCompare(
+        b.name
+      )
     );
   }, [processedLeads]);
 
   /* =======================================================
      STATUS LIST
-     ======================================================= */
+  ======================================================= */
 
   const statuses = useMemo(() => {
     const statusSet = new Set();
 
-    processedLeads.forEach((lead) => {
-      if (lead._status) {
-        statusSet.add(lead._status);
+    processedLeads.forEach(
+      (lead) => {
+        if (lead._status) {
+          statusSet.add(
+            lead._status
+          );
+        }
       }
-    });
+    );
 
-    return Array.from(statusSet).sort(
-      (a, b) => a.localeCompare(b)
+    return Array.from(
+      statusSet
+    ).sort((a, b) =>
+      a.localeCompare(b)
     );
   }, [processedLeads]);
 
   /* =======================================================
      FILTERED LEADS
-     ======================================================= */
+  ======================================================= */
 
   const filteredLeads = useMemo(() => {
     const searchValue =
       normalizeText(search);
 
-    let result = processedLeads.filter(
-      (lead) => {
-        /* -------------------------
-           SEARCH
-           ------------------------- */
+    let result =
+      processedLeads.filter(
+        (lead) => {
+          /* =========================
+             SEARCH
+          ========================= */
 
-        if (searchValue) {
-          const searchableText = [
-            lead._leadName,
-            lead._phone,
-            lead._status,
-            lead._executiveName,
-            lead._executiveEmail,
-            lead?.project,
-            lead?.source,
-            lead?.city,
-          ]
-            .map(normalizeText)
-            .join(" ");
+          if (searchValue) {
+            const searchableText = [
+              lead._leadName,
+              lead._phone,
+              lead._status,
+              lead._executiveName,
+              lead._executiveEmail,
+              lead?.project,
+              lead?.source,
+              lead?.city,
+            ]
+              .map(normalizeText)
+              .join(" ");
+
+            if (
+              !searchableText.includes(
+                searchValue
+              )
+            ) {
+              return false;
+            }
+          }
+
+          /* =========================
+             EXECUTIVE FILTER
+          ========================= */
 
           if (
-            !searchableText.includes(
-              searchValue
-            )
+            selectedExecutive !==
+            "all"
+          ) {
+            const executiveKey =
+              `${lead._executiveName}|||${lead._executiveEmail}`;
+
+            if (
+              executiveKey !==
+              selectedExecutive
+            ) {
+              return false;
+            }
+          }
+
+          /* =========================
+             AGE FILTER
+          ========================= */
+
+          if (
+            selectedAge !== "all"
+          ) {
+            const days =
+              lead._pendingDays;
+
+            if (
+              selectedAge === "1+" &&
+              days <= 1
+            ) {
+              return false;
+            }
+
+            if (
+              selectedAge === "3+" &&
+              days <= 3
+            ) {
+              return false;
+            }
+
+            if (
+              selectedAge === "7+" &&
+              days <= 7
+            ) {
+              return false;
+            }
+
+            if (
+              selectedAge === "15+" &&
+              days <= 15
+            ) {
+              return false;
+            }
+          }
+
+          /* =========================
+             STATUS FILTER
+          ========================= */
+
+          if (
+            selectedStatus !==
+              "all" &&
+            normalizeText(
+              lead._status
+            ) !==
+              normalizeText(
+                selectedStatus
+              )
           ) {
             return false;
           }
+
+          return true;
         }
+      );
 
-        /* -------------------------
-           EXECUTIVE FILTER
-           ------------------------- */
-
-        if (
-          selectedExecutive !== "all"
-        ) {
-          const executiveKey =
-            `${lead._executiveName}|||${lead._executiveEmail}`;
-
-          if (
-            executiveKey !==
-            selectedExecutive
-          ) {
-            return false;
-          }
-        }
-
-        /* -------------------------
-           AGE FILTER
-           ------------------------- */
-
-        if (selectedAge !== "all") {
-          const days =
-            lead._pendingDays;
-
-          if (
-            selectedAge === "1+" &&
-            days <= 1
-          ) {
-            return false;
-          }
-
-          if (
-            selectedAge === "3+" &&
-            days <= 3
-          ) {
-            return false;
-          }
-
-          if (
-            selectedAge === "7+" &&
-            days <= 7
-          ) {
-            return false;
-          }
-
-          if (
-            selectedAge === "15+" &&
-            days <= 15
-          ) {
-            return false;
-          }
-        }
-
-        /* -------------------------
-           STATUS FILTER
-           ------------------------- */
-
-        if (
-          selectedStatus !== "all" &&
-          normalizeText(lead._status) !==
-            normalizeText(selectedStatus)
-        ) {
-          return false;
-        }
-
-        return true;
-      }
-    );
-
-    /* -----------------------------
+    /* =========================
        SORT
-       ----------------------------- */
+    ========================= */
 
     result.sort((a, b) => {
       if (
@@ -500,7 +607,7 @@ const PendingLeadReport = () => {
 
   /* =======================================================
      SUMMARY
-     ======================================================= */
+  ======================================================= */
 
   const summary = useMemo(() => {
     const total =
@@ -541,75 +648,86 @@ const PendingLeadReport = () => {
 
   /* =======================================================
      EXECUTIVE SUMMARY
-     ======================================================= */
+  ======================================================= */
 
-  const executiveSummary = useMemo(() => {
-    const map = new Map();
+  const executiveSummary =
+    useMemo(() => {
+      const map = new Map();
 
-    processedLeads.forEach((lead) => {
-      const name =
-        lead._executiveName ||
-        "Unassigned";
+      processedLeads.forEach(
+        (lead) => {
+          const name =
+            lead._executiveName ||
+            "Unassigned";
 
-      const email =
-        lead._executiveEmail ||
-        "";
+          const email =
+            lead._executiveEmail ||
+            "";
 
-      const key =
-        `${name}|||${email}`;
+          const key =
+            `${name}|||${email}`;
 
-      if (!map.has(key)) {
-        map.set(key, {
-          name,
-          email,
-          total: 0,
-          zeroOne: 0,
-          twoThree: 0,
-          fourSeven: 0,
-          eightFifteen: 0,
-          fifteenPlus: 0,
-        });
-      }
+          if (!map.has(key)) {
+            map.set(key, {
+              name,
+              email,
+              total: 0,
+              zeroOne: 0,
+              twoThree: 0,
+              fourSeven: 0,
+              eightFifteen: 0,
+              fifteenPlus: 0,
+            });
+          }
 
-      const item = map.get(key);
+          const item =
+            map.get(key);
 
-      item.total += 1;
+          item.total += 1;
 
-      if (
-        lead._pendingDays <= 1
-      ) {
-        item.zeroOne += 1;
-      } else if (
-        lead._pendingDays <= 3
-      ) {
-        item.twoThree += 1;
-      } else if (
-        lead._pendingDays <= 7
-      ) {
-        item.fourSeven += 1;
-      } else if (
-        lead._pendingDays <= 15
-      ) {
-        item.eightFifteen += 1;
-      } else {
-        item.fifteenPlus += 1;
-      }
-    });
+          if (
+            lead._pendingDays <=
+            1
+          ) {
+            item.zeroOne += 1;
+          } else if (
+            lead._pendingDays <=
+            3
+          ) {
+            item.twoThree += 1;
+          } else if (
+            lead._pendingDays <=
+            7
+          ) {
+            item.fourSeven += 1;
+          } else if (
+            lead._pendingDays <=
+            15
+          ) {
+            item.eightFifteen +=
+              1;
+          } else {
+            item.fifteenPlus += 1;
+          }
+        }
+      );
 
-    return Array.from(
-      map.values()
-    ).sort(
-      (a, b) =>
-        b.total - a.total
-    );
-  }, [processedLeads]);
+      return Array.from(
+        map.values()
+      ).sort(
+        (a, b) =>
+          b.total - a.total
+      );
+    }, [processedLeads]);
 
   /* =======================================================
      CSV EXPORT
-     ======================================================= */
+  ======================================================= */
 
   const exportCSV = () => {
-    if (!filteredLeads.length) {
+    if (
+      !filteredLeads.length
+    ) {
       return;
     }
 
@@ -688,22 +806,28 @@ const PendingLeadReport = () => {
         .toISOString()
         .slice(0, 10)}.csv`;
 
-    document.body.appendChild(link);
+    document.body.appendChild(
+      link
+    );
 
     link.click();
 
-    document.body.removeChild(link);
+    document.body.removeChild(
+      link
+    );
 
     URL.revokeObjectURL(url);
   };
 
   /* =======================================================
      RESET FILTERS
-     ======================================================= */
+  ======================================================= */
 
   const resetFilters = () => {
     setSearch("");
-    setSelectedExecutive("all");
+    setSelectedExecutive(
+      "all"
+    );
     setSelectedAge("all");
     setSelectedStatus("all");
     setSortDirection("desc");
@@ -711,14 +835,14 @@ const PendingLeadReport = () => {
 
   /* =======================================================
      RENDER
-     ======================================================= */
+  ======================================================= */
 
   return (
     <div className="pending-report-page">
 
       {/* ===================================================
           HEADER
-          =================================================== */}
+      =================================================== */}
 
       <div className="pending-report-header">
 
@@ -773,10 +897,11 @@ const PendingLeadReport = () => {
 
       {/* ===================================================
           ERROR
-          =================================================== */}
+      =================================================== */}
 
       {error && (
         <div className="pending-error">
+
           <span>⚠</span>
 
           <div>
@@ -797,12 +922,13 @@ const PendingLeadReport = () => {
           >
             Retry
           </button>
+
         </div>
       )}
 
       {/* ===================================================
           SUMMARY CARDS
-          =================================================== */}
+      =================================================== */}
 
       <div className="pending-summary-grid">
 
@@ -900,7 +1026,7 @@ const PendingLeadReport = () => {
 
       {/* ===================================================
           FILTER PANEL
-          =================================================== */}
+      =================================================== */}
 
       <div className="pending-filter-card">
 
@@ -920,7 +1046,9 @@ const PendingLeadReport = () => {
           <button
             type="button"
             className="pending-reset-btn"
-            onClick={resetFilters}
+            onClick={
+              resetFilters
+            }
           >
             Reset Filters
           </button>
@@ -976,6 +1104,7 @@ const PendingLeadReport = () => {
                 )
               }
             >
+
               <option value="all">
                 All Executives
               </option>
@@ -1016,6 +1145,7 @@ const PendingLeadReport = () => {
                 )
               }
             >
+
               <option value="all">
                 All Pending
               </option>
@@ -1056,6 +1186,7 @@ const PendingLeadReport = () => {
                 )
               }
             >
+
               <option value="all">
                 All Statuses
               </option>
@@ -1081,7 +1212,7 @@ const PendingLeadReport = () => {
 
       {/* ===================================================
           EXECUTIVE SUMMARY
-          =================================================== */}
+      =================================================== */}
 
       <div className="pending-table-card">
 
@@ -1154,10 +1285,12 @@ const PendingLeadReport = () => {
 
               {loading ? (
                 <tr>
+
                   <td
                     colSpan="8"
                     className="pending-loading"
                   >
+
                     <div className="pending-loader">
                       <span />
                       <span />
@@ -1166,16 +1299,22 @@ const PendingLeadReport = () => {
 
                     Loading pending
                     leads...
+
                   </td>
+
                 </tr>
               ) : executiveSummary.length ===
                 0 ? (
+
                 <tr>
+
                   <td
                     colSpan="8"
                     className="pending-empty"
                   >
+
                     <div>
+
                       <div className="empty-icon">
                         📭
                       </div>
@@ -1188,30 +1327,46 @@ const PendingLeadReport = () => {
                         No data matches the
                         current filters.
                       </p>
+
                     </div>
+
                   </td>
+
                 </tr>
               ) : (
+
                 executiveSummary.map(
-                  (executive, index) => (
+                  (
+                    executive,
+                    index
+                  ) => (
+
                     <tr
                       key={`${executive.name}-${executive.email}`}
                       className="pending-executive-row"
                       onClick={() => {
+
                         setSelectedExecutive(
                           `${executive.name}|||${executive.email}`
                         );
 
                         setSearch("");
-                        setSelectedAge("all");
-                        setSelectedStatus("all");
+                        setSelectedAge(
+                          "all"
+                        );
+                        setSelectedStatus(
+                          "all"
+                        );
+
                       }}
                     >
 
                       <td>
+
                         <span className="pending-rank">
                           {index + 1}
                         </span>
+
                       </td>
 
                       <td className="left">
@@ -1219,12 +1374,15 @@ const PendingLeadReport = () => {
                         <div className="pending-executive-name">
 
                           <div className="pending-avatar">
+
                             {getInitial(
                               executive.name
                             )}
+
                           </div>
 
                           <div>
+
                             <strong>
                               {
                                 executive.name
@@ -1238,6 +1396,7 @@ const PendingLeadReport = () => {
                                 }
                               </small>
                             )}
+
                           </div>
 
                         </div>
@@ -1245,54 +1404,70 @@ const PendingLeadReport = () => {
                       </td>
 
                       <td>
+
                         <span className="pending-count-badge total">
-                          {executive.total}
+                          {
+                            executive.total
+                          }
                         </span>
+
                       </td>
 
                       <td>
+
                         <span className="pending-count-badge green">
                           {
                             executive.zeroOne
                           }
                         </span>
+
                       </td>
 
                       <td>
+
                         <span className="pending-count-badge blue">
                           {
                             executive.twoThree
                           }
                         </span>
+
                       </td>
 
                       <td>
+
                         <span className="pending-count-badge yellow">
                           {
                             executive.fourSeven
                           }
                         </span>
+
                       </td>
 
                       <td>
+
                         <span className="pending-count-badge orange">
                           {
                             executive.eightFifteen
                           }
                         </span>
+
                       </td>
 
                       <td>
+
                         <span className="pending-count-badge red">
                           {
                             executive.fifteenPlus
                           }
                         </span>
+
                       </td>
 
                     </tr>
+
                   )
                 )
+
               )}
 
             </tbody>
@@ -1305,21 +1480,24 @@ const PendingLeadReport = () => {
 
       {/* ===================================================
           ACTUAL PENDING LEADS
-          =================================================== */}
+      =================================================== */}
 
       <div className="pending-table-card pending-leads-card">
 
         <div className="pending-table-header">
 
           <div>
+
             <h2>
               Pending Lead Details
             </h2>
 
             <p>
-              {filteredLeads.length} leads
-              matching current filters
+              {filteredLeads.length}{" "}
+              leads matching current
+              filters
             </p>
+
           </div>
 
           <button
@@ -1334,10 +1512,14 @@ const PendingLeadReport = () => {
               )
             }
           >
+
             Pending Days{" "}
-            {sortDirection === "desc"
+
+            {sortDirection ===
+            "desc"
               ? "↓"
               : "↑"}
+
           </button>
 
         </div>
@@ -1393,22 +1575,30 @@ const PendingLeadReport = () => {
             <tbody>
 
               {loading ? (
+
                 <tr>
+
                   <td
                     colSpan="9"
                     className="pending-loading"
                   >
                     Loading...
                   </td>
+
                 </tr>
+
               ) : filteredLeads.length ===
                 0 ? (
+
                 <tr>
+
                   <td
                     colSpan="9"
                     className="pending-empty"
                   >
+
                     <div>
+
                       <div className="empty-icon">
                         🔎
                       </div>
@@ -1421,12 +1611,21 @@ const PendingLeadReport = () => {
                         Try changing your
                         filters.
                       </p>
+
                     </div>
+
                   </td>
+
                 </tr>
+
               ) : (
+
                 filteredLeads.map(
-                  (lead, index) => (
+                  (
+                    lead,
+                    index
+                  ) => (
+
                     <tr
                       key={
                         lead._id ||
@@ -1496,11 +1695,10 @@ const PendingLeadReport = () => {
                         <span
                           className={`pending-status ${normalizeText(
                             lead._status
-                          )
-                            .replace(
-                              /\s+/g,
-                              "-"
-                            )}`}
+                          ).replace(
+                            /\s+/g,
+                            "-"
+                          )}`}
                         >
                           {
                             lead._status
@@ -1538,6 +1736,7 @@ const PendingLeadReport = () => {
                               : "days-normal"
                           }
                         >
+
                           {
                             lead._pendingDays
                           }
@@ -1550,6 +1749,7 @@ const PendingLeadReport = () => {
                               ? "s"
                               : ""}
                           </small>
+
                         </strong>
 
                       </td>
@@ -1572,8 +1772,10 @@ const PendingLeadReport = () => {
                       </td>
 
                     </tr>
+
                   )
                 )
+
               )}
 
             </tbody>
@@ -1586,13 +1788,16 @@ const PendingLeadReport = () => {
 
       {/* ===================================================
           LEAD DETAIL MODAL
-          =================================================== */}
+      =================================================== */}
 
       {selectedLead && (
+
         <div
           className="pending-modal-overlay"
           onClick={() =>
-            setSelectedLead(null)
+            setSelectedLead(
+              null
+            )
           }
         >
 
@@ -1606,6 +1811,7 @@ const PendingLeadReport = () => {
             <div className="pending-modal-header">
 
               <div>
+
                 <h2>
                   {
                     selectedLead._leadName
@@ -1615,12 +1821,15 @@ const PendingLeadReport = () => {
                 <p>
                   Pending Lead Details
                 </p>
+
               </div>
 
               <button
                 type="button"
                 onClick={() =>
-                  setSelectedLead(null)
+                  setSelectedLead(
+                    null
+                  )
                 }
               >
                 ×
@@ -1633,6 +1842,7 @@ const PendingLeadReport = () => {
               <div className="pending-detail-grid">
 
                 <div className="pending-detail-item">
+
                   <span>
                     Name
                   </span>
@@ -1642,9 +1852,11 @@ const PendingLeadReport = () => {
                       selectedLead._leadName
                     }
                   </strong>
+
                 </div>
 
                 <div className="pending-detail-item">
+
                   <span>
                     Phone
                   </span>
@@ -1655,9 +1867,11 @@ const PendingLeadReport = () => {
                       "-"
                     }
                   </strong>
+
                 </div>
 
                 <div className="pending-detail-item">
+
                   <span>
                     Executive
                   </span>
@@ -1667,9 +1881,11 @@ const PendingLeadReport = () => {
                       selectedLead._executiveName
                     }
                   </strong>
+
                 </div>
 
                 <div className="pending-detail-item">
+
                   <span>
                     Executive Email
                   </span>
@@ -1680,9 +1896,11 @@ const PendingLeadReport = () => {
                       "-"
                     }
                   </strong>
+
                 </div>
 
                 <div className="pending-detail-item">
+
                   <span>
                     Status
                   </span>
@@ -1692,9 +1910,11 @@ const PendingLeadReport = () => {
                       selectedLead._status
                     }
                   </strong>
+
                 </div>
 
                 <div className="pending-detail-item">
+
                   <span>
                     Project
                   </span>
@@ -1705,9 +1925,11 @@ const PendingLeadReport = () => {
                       "-"
                     }
                   </strong>
+
                 </div>
 
                 <div className="pending-detail-item">
+
                   <span>
                     Pending Since
                   </span>
@@ -1717,9 +1939,11 @@ const PendingLeadReport = () => {
                       selectedLead._pendingDate
                     )}
                   </strong>
+
                 </div>
 
                 <div className="pending-detail-item highlight">
+
                   <span>
                     Pending Days
                   </span>
@@ -1730,9 +1954,11 @@ const PendingLeadReport = () => {
                     }{" "}
                     Days
                   </strong>
+
                 </div>
 
                 <div className="pending-detail-item">
+
                   <span>
                     Source
                   </span>
@@ -1743,9 +1969,11 @@ const PendingLeadReport = () => {
                       "-"
                     }
                   </strong>
+
                 </div>
 
                 <div className="pending-detail-item">
+
                   <span>
                     City
                   </span>
@@ -1756,11 +1984,13 @@ const PendingLeadReport = () => {
                       "-"
                     }
                   </strong>
+
                 </div>
 
               </div>
 
               {selectedLead?.remark && (
+
                 <div className="pending-remark">
 
                   <span>
@@ -1774,6 +2004,7 @@ const PendingLeadReport = () => {
                   </p>
 
                 </div>
+
               )}
 
             </div>
@@ -1783,7 +2014,9 @@ const PendingLeadReport = () => {
               <button
                 type="button"
                 onClick={() =>
-                  setSelectedLead(null)
+                  setSelectedLead(
+                    null
+                  )
                 }
               >
                 Close
@@ -1794,6 +2027,7 @@ const PendingLeadReport = () => {
           </div>
 
         </div>
+
       )}
 
     </div>
