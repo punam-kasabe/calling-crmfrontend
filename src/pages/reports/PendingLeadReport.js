@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import "../styles/pendingLeadReport.css";
-
+import "../../styles/pendingLeadReport.css";
 /* =========================================================
    API
    ========================================================= */
@@ -9,10 +8,6 @@ const API_URL =
   process.env.REACT_APP_API_URL ||
   "https://calling-crm-backend-7w52.onrender.com/api";
 
-/* =========================================================
-   PENDING STATUS CONFIG
-   Backend कडून येणाऱ्या statuses नुसार पुढे adjust करू शकतो.
-   ========================================================= */
 
 const PENDING_STATUSES = [
   "New",
