@@ -586,14 +586,14 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
                     </Link>
                   </li>
 
-                  <li>
-                    <Link to="/channel-partner">
-                      <Users size={14} />
-                      Channel Partner
-                    </Link>
-                  </li>
+            <li>
+  <Link to="/channel-partner">
+    <Users size={14} />
+    Channel Partner
+  </Link>
+</li>
 
-                   <li>
+<li>
   <Link to="/monthly-report">
     <CalendarDays size={14} />
     Monthly Report
@@ -608,7 +608,9 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
     }
   >
     <i className="bi bi-hourglass-split"></i>
-    <span>Pending Leads</span>
+    <span className="text">
+      Pending Leads
+    </span>
   </NavLink>
 </li>
                 </ul>
