@@ -345,58 +345,61 @@ export default function App() {
     </ProtectedRoute>
   }
 />
-        {/* REPORTS */}
-        <Route
-          path="/monthly-report"
-          element={
-            <ProtectedRoute>
-              <MonthlyReport />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-  path="/pending-leads"
+    {/* REPORTS */}
+
+<Route
+  path="/monthly-report"
   element={
     <ProtectedRoute>
-      <PendingLeads />
+      <MonthlyReport />
     </ProtectedRoute>
   }
 />
-        <Route
-          path="/projects-report"
-          element={
-            <ProtectedRoute>
-              <ProjectsReport />
-            </ProtectedRoute>
-          }
-        />
 
-        <Route
-          path="/roi-report"
-          element={
-            <ProtectedRoute>
-              <ROIReport />
-            </ProtectedRoute>
-          }
-        />
+<Route
+  path="/pending-leads"
+  element={
+    <ProtectedRoute>
+      <PendingLeadReport />
+    </ProtectedRoute>
+  }
+/>
 
-        <Route
-          path="/sources-report"
-          element={
-            <ProtectedRoute>
-              <SourcesReport />
-            </ProtectedRoute>
-          }
-        />
+<Route
+  path="/projects-report"
+  element={
+    <ProtectedRoute>
+      <ProjectsReport />
+    </ProtectedRoute>
+  }
+/>
 
-        <Route
-          path="/team-performance"
-          element={
-            <ProtectedRoute>
-              <TeamPerformance />
-            </ProtectedRoute>
-          }
-        />
+<Route
+  path="/roi-report"
+  element={
+    <ProtectedRoute>
+      <ROIReport />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/sources-report"
+  element={
+    <ProtectedRoute>
+      <SourcesReport />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/team-performance"
+  element={
+    <ProtectedRoute>
+      <TeamPerformance />
+    </ProtectedRoute>
+  }
+/>
 
         
         {/* GENERAL */}
