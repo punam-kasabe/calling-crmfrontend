@@ -44,7 +44,7 @@ import TeamPerformance from "./pages/reports/TeamPerformance";
 import TotalLeads from "./pages/reports/TotalLeads";
 import StatusLeads from "./pages/reports/StatusLeads";
 import MonthlyReport from "./pages/reports/MonthlyReport";
-import PendingLeads from "./pages/reports/PendingLeads";
+import PendingLeadReport from "./pages/reports/PendingLeadReport";
 
 /* 📄 NORMAL PAGES */
 import BulkUpdate from "./pages/BulkUpdate";
