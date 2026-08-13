@@ -1,8 +1,13 @@
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import {
+  Link,
+  NavLink,
+  useLocation,
+  useNavigate
+} from "react-router-dom";
+
 import { useState } from "react";
 
 import "../styles/sidebar.css";
-
 /* 🔥 ICONS */
 import {
   LayoutDashboard,
@@ -137,9 +142,7 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
                     Reception Dashboard
                   </span>
                 </Link>
-              </li>
-
-              
+              </li>             
 
               <li>
                 <Link
@@ -597,15 +600,17 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
   </Link>
 </li>
 
-<NavLink
-  to="/pending-leads"
-  className={({ isActive }) =>
-    isActive ? "active" : ""
-  }
->
-  <i className="bi bi-hourglass-split"></i>
-  <span>Pending Leads</span>
-</NavLink>
+<li>
+  <NavLink
+    to="/pending-leads"
+    className={({ isActive }) =>
+      isActive ? "active" : ""
+    }
+  >
+    <i className="bi bi-hourglass-split"></i>
+    <span>Pending Leads</span>
+  </NavLink>
+</li>
                 </ul>
 
               </li>
