@@ -313,57 +313,74 @@ useEffect(() => {
 
 }, [fetchMyLeads]);
 
-  /* ================= UPDATE STATUS ================= */
+ /* ================= UPDATE STATUS ================= */
 
-  const updateStatus =
-    async (
+const updateStatus = async (leadId, status) => {
+  try {
+    const currentUser =
+      JSON.parse(localStorage.getItem("user")) || {};
+
+    if (!leadId) {
+      alert("Lead ID missing ❌");
+      return;
+    }
+
+    if (!status) {
+      alert("Please select status ❌");
+      return;
+    }
+
+    console.log("Updating Status:", {
       leadId,
-      status
-    ) => {
+      status,
+      executive_email: currentUser.email
+    });
 
-      try {
-
-       await axios.put(
-  `${API}/update-status/${leadId}`,
-     {
-    status,
-
-         executive_email:
-      JSON.parse(localStorage.getItem("user")).email
+    const res = await axios.put(
+      `${API}/update-status/${leadId}`,
+      {
+        status: status,
+        executive_email: currentUser.email
       }
-         );
+    );
 
-        setLeads((prev) =>
+    console.log("Status Update Response:", res.data);
 
-          prev.map((lead) =>
+    /* Update UI immediately */
+    setLeads((prev) =>
+      prev.map((lead) =>
+        lead._id === leadId
+          ? {
+              ...lead,
+              status: status,
+              updatedAt: new Date().toISOString()
+            }
+          : lead
+      )
+    );
 
-            lead._id === leadId
+    /* Refresh from MongoDB */
+    await fetchMyLeads();
 
-              ? {
-                  ...lead,
-                  status
-                }
+  } catch (err) {
 
-              : lead
+    console.error(
+      "Status update failed:",
+      err
+    );
 
-          )
+    console.error(
+      "Backend response:",
+      err.response?.data
+    );
 
-        );
-        fetchMyLeads();
-
-      }
-
-      catch (err) {
-
-        console.error(
-          "Status update failed",
-          err
-        );
-
-      }
-
-    };
-
+    alert(
+      err.response?.data?.message ||
+      err.response?.data?.error ||
+      "Status update failed ❌"
+    );
+  }
+};
    /* ================= UPDATE LEAD ================= */
 
   const handleUpdateLead =
@@ -1583,10 +1600,10 @@ const handleCardClick = (status) => {
 <select
   className="status-select"
   value={lead.status || "New"}
-  onChange={async (e) => {
-
+  onChange={(e) => {
     const value = e.target.value;
 
+    /* UI मध्ये लगेच status change */
     setLeads((prev) =>
       prev.map((l) =>
         l._id === lead._id
@@ -1598,21 +1615,22 @@ const handleCardClick = (status) => {
       )
     );
 
-    await updateStatus(
+    /* MongoDB मध्ये save */
+    updateStatus(
       lead._id,
       value
     );
   }}
 >
+  {statusOptions.map((status, i) => (
+    <option
+      key={i}
+      value={status}
+    >
+      {status}
+    </option>
+  ))}
 
-{statusOptions.map((status, i) => (
-  <option
-    key={i}
-    value={status}
-  >
-    {status}
-  </option>
-))}
 
 </select>
 
