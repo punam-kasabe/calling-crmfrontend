@@ -17,9 +17,7 @@ const RAW_API_URL =
   "https://calling-crm-backend-7w52.onrender.com";
 
 const API_BASE_URL =
-  RAW_API_URL
-    .replace(/\/+$/, "")
-    .replace(/\/api$/, "") + "/api";
+  RAW_API_URL.replace(/\/+$/, "").replace(/\/api$/, "") + "/api";
 
 /* =========================================================
    HELPERS
@@ -112,11 +110,7 @@ const getLeadPhone = (lead) => {
 ========================================================= */
 
 const getLeadStatus = (lead) => {
-  return (
-    lead?.status ||
-    lead?.Status ||
-    "Unknown"
-  );
+  return lead?.status || lead?.Status || "Unknown";
 };
 
 /* =========================================================
@@ -317,22 +311,6 @@ const PendingLeadReport = () => {
 
       params.append("email", email);
 
-      /*
-        IMPORTANT:
-
-        Previously request was:
-
-        ${API_URL}/pending-leads-report
-
-        which could become:
-
-        https://calling-crm-backend-7w52.onrender.com/pending-leads-report
-
-        Now we use API_BASE_URL:
-
-        https://calling-crm-backend-7w52.onrender.com/api/pending-leads-report
-      */
-
       const endpoint =
         `${API_BASE_URL}/pending-leads-report?${params.toString()}`;
 
@@ -341,88 +319,44 @@ const PendingLeadReport = () => {
         endpoint
       );
 
-    const response = await fetch(endpoint, {
-  method: "GET",
-  headers: {
-    Accept: "application/json",
-  },
-});
+      const response = await fetch(endpoint, {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+        },
+      });
 
-console.log("Pending Lead API URL:", endpoint);
-console.log("Pending Lead API Status:", response.status);
-console.log(
-  "Pending Lead API Content-Type:",
-  response.headers.get("content-type")
-);
+      /* ===================================================
+         CONTENT TYPE CHECK
+      =================================================== */
 
-const contentType =
-  response.headers.get("content-type") || "";
+      const contentType =
+        response.headers.get("content-type") || "";
 
-const responseText = await response.text();
+      let data = null;
 
-console.log(
-  "Pending Lead API Raw Response:",
-  responseText.substring(0, 500)
-);
+      if (
+        contentType.includes(
+          "application/json"
+        )
+      ) {
+        data = await response.json();
+      } else {
+        const text = await response.text();
 
-if (!contentType.includes("application/json")) {
-  throw new Error(
-    `Backend JSON ऐवजी ${contentType || "unknown response"} देत आहे. Status: ${response.status}`
-  );
-}
+        console.error(
+          "Pending Lead API returned non-JSON:",
+          text
+        );
 
-let data;
+        throw new Error(
+          `API returned ${response.status} ${response.statusText}. JSON response मिळाला नाही.`
+        );
+      }
 
-try {
-  data = JSON.parse(responseText);
-} catch (parseError) {
-  console.error(
-    "JSON Parse Error:",
-    parseError
-  );
-
-  console.error(
-    "Raw Backend Response:",
-    responseText
-  );
-
-  throw new Error(
-    "Backend ने valid JSON response दिला नाही."
-  );
-}
-
-if (!response.ok) {
-  throw new Error(
-    data?.message ||
-      `Server returned ${response.status}`
-  );
-}
-
-if (data?.success === false) {
-  throw new Error(
-    data?.message ||
-      "Pending leads load failed"
-  );
-}
-
-const apiLeads =
-  Array.isArray(data)
-    ? data
-    : Array.isArray(data?.leads)
-    ? data.leads
-    : Array.isArray(data?.data)
-    ? data.data
-    : [];
-
-setLeads(apiLeads);
-
-console.log(
-  "Pending Lead Report Loaded:",
-  apiLeads.length
-);
-
-
-
+      /* ===================================================
+         HTTP ERROR
+      =================================================== */
 
       if (!response.ok) {
         throw new Error(
@@ -431,25 +365,9 @@ console.log(
         );
       }
 
-      /*
-        Supported backend responses:
-
-        {
-          success: true,
-          count: 10,
-          leads: [...]
-        }
-
-        OR
-
-        [...]
-
-        OR
-
-        {
-          data: [...]
-        }
-      */
+      /* ===================================================
+         BACKEND ERROR
+      =================================================== */
 
       if (data?.success === false) {
         throw new Error(
@@ -458,14 +376,39 @@ console.log(
         );
       }
 
-      const apiLeads =
-        Array.isArray(data)
-          ? data
-          : Array.isArray(data?.leads)
-          ? data.leads
-          : Array.isArray(data?.data)
-          ? data.data
-          : [];
+      /* ===================================================
+         NORMALIZE API RESPONSE
+         
+         Backend:
+         {
+           success: true,
+           count: 10,
+           leads: [...]
+         }
+
+         Also supports:
+         [...]
+
+         OR
+
+         {
+           data: [...]
+         }
+      =================================================== */
+
+      let apiLeads = [];
+
+      if (Array.isArray(data)) {
+        apiLeads = data;
+      } else if (
+        Array.isArray(data?.leads)
+      ) {
+        apiLeads = data.leads;
+      } else if (
+        Array.isArray(data?.data)
+      ) {
+        apiLeads = data.data;
+      }
 
       setLeads(apiLeads);
 
@@ -578,9 +521,12 @@ console.log(
       }
     });
 
-    return Array.from(map.values()).sort(
-      (a, b) =>
-        a.name.localeCompare(b.name)
+    return Array.from(
+      map.values()
+    ).sort((a, b) =>
+      a.name.localeCompare(
+        b.name
+      )
     );
   }, [processedLeads]);
 
@@ -593,13 +539,16 @@ console.log(
 
     processedLeads.forEach((lead) => {
       if (lead._status) {
-        statusSet.add(lead._status);
+        statusSet.add(
+          lead._status
+        );
       }
     });
 
-    return Array.from(statusSet).sort(
-      (a, b) =>
-        a.localeCompare(b)
+    return Array.from(
+      statusSet
+    ).sort((a, b) =>
+      a.localeCompare(b)
     );
   }, [processedLeads]);
 
@@ -612,118 +561,128 @@ console.log(
       normalizeText(search);
 
     let result =
-      processedLeads.filter((lead) => {
-        /* =========================
-           SEARCH
-        ========================= */
+      processedLeads.filter(
+        (lead) => {
+          /* =============================================
+             SEARCH
+          ============================================= */
 
-        if (searchValue) {
-          const searchableText = [
-            lead._leadName,
-            lead._phone,
-            lead._status,
-            lead._executiveName,
-            lead._executiveEmail,
-            lead?.project,
-            lead?.source,
-            lead?.city,
-            lead?.email,
-          ]
-            .map(normalizeText)
-            .join(" ");
+          if (searchValue) {
+            const searchableText = [
+              lead._leadName,
+              lead._phone,
+              lead._status,
+              lead._executiveName,
+              lead._executiveEmail,
+              lead?.project,
+              lead?.source,
+              lead?.city,
+              lead?.email,
+            ]
+              .map(normalizeText)
+              .join(" ");
 
-          if (
-            !searchableText.includes(
-              searchValue
-            )
-          ) {
-            return false;
-          }
-        }
-
-        /* =========================
-           EXECUTIVE FILTER
-        ========================= */
-
-        if (
-          selectedExecutive !== "all"
-        ) {
-          const executiveKey =
-            `${lead._executiveName}|||${lead._executiveEmail}`;
-
-          if (
-            executiveKey !==
-            selectedExecutive
-          ) {
-            return false;
-          }
-        }
-
-        /* =========================
-           AGE FILTER
-        ========================= */
-
-        if (
-          selectedAge !== "all"
-        ) {
-          const days =
-            lead._pendingDays;
-
-          if (
-            selectedAge === "1+" &&
-            days <= 1
-          ) {
-            return false;
+            if (
+              !searchableText.includes(
+                searchValue
+              )
+            ) {
+              return false;
+            }
           }
 
-          if (
-            selectedAge === "3+" &&
-            days <= 3
-          ) {
-            return false;
-          }
+          /* =============================================
+             EXECUTIVE FILTER
+          ============================================= */
 
           if (
-            selectedAge === "7+" &&
-            days <= 7
+            selectedExecutive !==
+            "all"
           ) {
-            return false;
+            const executiveKey =
+              `${lead._executiveName}|||${lead._executiveEmail}`;
+
+            if (
+              executiveKey !==
+              selectedExecutive
+            ) {
+              return false;
+            }
           }
+
+          /* =============================================
+             AGE FILTER
+          ============================================= */
 
           if (
-            selectedAge === "15+" &&
-            days <= 15
+            selectedAge !==
+            "all"
           ) {
-            return false;
+            const days =
+              lead._pendingDays;
+
+            if (
+              selectedAge ===
+                "1+" &&
+              days <= 1
+            ) {
+              return false;
+            }
+
+            if (
+              selectedAge ===
+                "3+" &&
+              days <= 3
+            ) {
+              return false;
+            }
+
+            if (
+              selectedAge ===
+                "7+" &&
+              days <= 7
+            ) {
+              return false;
+            }
+
+            if (
+              selectedAge ===
+                "15+" &&
+              days <= 15
+            ) {
+              return false;
+            }
           }
-        }
 
-        /* =========================
-           STATUS FILTER
-        ========================= */
+          /* =============================================
+             STATUS FILTER
+          ============================================= */
 
-        if (
-          selectedStatus !== "all" &&
-          normalizeText(
-            lead._status
-          ) !==
+          if (
+            selectedStatus !==
+              "all" &&
             normalizeText(
-              selectedStatus
-            )
-        ) {
-          return false;
+              lead._status
+            ) !==
+              normalizeText(
+                selectedStatus
+              )
+          ) {
+            return false;
+          }
+
+          return true;
         }
+      );
 
-        return true;
-      });
-
-    /* =========================
+    /* =============================================
        SORT
-    ========================= */
+    ============================================= */
 
     result.sort((a, b) => {
       if (
-        sortDirection === "asc"
+        sortDirection ===
+        "asc"
       ) {
         return (
           a._pendingDays -
@@ -828,21 +787,26 @@ console.log(
           item.total += 1;
 
           if (
-            lead._pendingDays <= 1
+            lead._pendingDays <=
+            1
           ) {
             item.zeroOne += 1;
           } else if (
-            lead._pendingDays <= 3
+            lead._pendingDays <=
+            3
           ) {
             item.twoThree += 1;
           } else if (
-            lead._pendingDays <= 7
+            lead._pendingDays <=
+            7
           ) {
             item.fourSeven += 1;
           } else if (
-            lead._pendingDays <= 15
+            lead._pendingDays <=
+            15
           ) {
-            item.eightFifteen += 1;
+            item.eightFifteen +=
+              1;
           } else {
             item.fifteenPlus += 1;
           }
@@ -937,7 +901,9 @@ console.log(
       URL.createObjectURL(blob);
 
     const link =
-      document.createElement("a");
+      document.createElement(
+        "a"
+      );
 
     link.href = url;
 
@@ -1046,7 +1012,9 @@ console.log(
               <button
                 type="button"
                 className="pending-export-btn"
-                onClick={exportCSV}
+                onClick={
+                  exportCSV
+                }
                 disabled={
                   !filteredLeads.length
                 }
@@ -1282,7 +1250,9 @@ console.log(
                           key={key}
                           value={key}
                         >
-                          {executive.name}
+                          {
+                            executive.name
+                          }
                         </option>
                       );
                     }
@@ -1301,7 +1271,9 @@ console.log(
                 </label>
 
                 <select
-                  value={selectedAge}
+                  value={
+                    selectedAge
+                  }
                   onChange={(e) =>
                     setSelectedAge(
                       e.target.value
@@ -1342,7 +1314,9 @@ console.log(
                 </label>
 
                 <select
-                  value={selectedStatus}
+                  value={
+                    selectedStatus
+                  }
                   onChange={(e) =>
                     setSelectedStatus(
                       e.target.value
@@ -1512,7 +1486,9 @@ console.log(
 
                         return (
                           <tr
-                            key={executiveKey}
+                            key={
+                              executiveKey
+                            }
                             className="pending-executive-row"
                             onClick={() => {
 
@@ -1678,7 +1654,8 @@ console.log(
                 onClick={() =>
                   setSortDirection(
                     (prev) =>
-                      prev === "desc"
+                      prev ===
+                      "desc"
                         ? "asc"
                         : "desc"
                   )
