@@ -12,9 +12,14 @@ import Sidebar from "../../components/Sidebar";
    API
 ========================================================= */
 
-const API_URL =
+const RAW_API_URL =
   process.env.REACT_APP_API_URL ||
-  "https://calling-crm-backend-7w52.onrender.com/api";
+  "https://calling-crm-backend-7w52.onrender.com";
+
+const API_BASE_URL =
+  RAW_API_URL
+    .replace(/\/+$/, "")
+    .replace(/\/api$/, "") + "/api";
 
 /* =========================================================
    HELPERS
@@ -282,105 +287,208 @@ const PendingLeadReport = () => {
      FETCH PENDING LEADS
   ======================================================= */
 
-  const fetchPendingLeads = useCallback(
-    async () => {
-      try {
-        setLoading(true);
-        setError("");
+  const fetchPendingLeads = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError("");
 
-        const storedUser =
-          localStorage.getItem("user");
+      const storedUser =
+        localStorage.getItem("user");
 
-        const user = storedUser
-          ? JSON.parse(storedUser)
-          : {};
+      const user = storedUser
+        ? JSON.parse(storedUser)
+        : {};
 
-        if (!user?.email) {
-          setError(
-            "Logged-in user email सापडला नाही. पुन्हा login करा."
-          );
-
-          setLeads([]);
-
-          return;
-        }
-
-        const params = new URLSearchParams();
-
-        params.append(
-          "email",
-          String(user.email).trim().toLowerCase()
-        );
-
-        const response = await fetch(
-          `${API_URL}/pending-leads-report?${params.toString()}`,
-          {
-            method: "GET",
-            headers: {
-              Accept: "application/json",
-              "Content-Type":
-                "application/json",
-            },
-          }
-        );
-
-        const data =
-          await response.json();
-
-        if (!response.ok) {
-          throw new Error(
-            data?.message ||
-              `Server returned ${response.status}`
-          );
-        }
-
-        /*
-          Backend response:
-
-          {
-            success: true,
-            count: number,
-            leads: [...]
-          }
-        */
-
-        if (
-          data?.success === false
-        ) {
-          throw new Error(
-            data?.message ||
-              "Pending leads load failed"
-          );
-        }
-
-        const apiLeads =
-          Array.isArray(data)
-            ? data
-            : Array.isArray(data?.leads)
-            ? data.leads
-            : Array.isArray(data?.data)
-            ? data.data
-            : [];
-
-        setLeads(apiLeads);
-      } catch (err) {
-        console.error(
-          "Pending Lead Report Error:",
-          err
-        );
-
+      if (!user?.email) {
         setError(
-          err?.message ||
-            "Pending lead data load झाला नाही."
+          "Logged-in user email सापडला नाही. पुन्हा login करा."
         );
 
         setLeads([]);
-      } finally {
-        setLoading(false);
+
+        return;
       }
-    },
-    []
+
+      const email = String(user.email)
+        .trim()
+        .toLowerCase();
+
+      const params = new URLSearchParams();
+
+      params.append("email", email);
+
+      /*
+        IMPORTANT:
+
+        Previously request was:
+
+        ${API_URL}/pending-leads-report
+
+        which could become:
+
+        https://calling-crm-backend-7w52.onrender.com/pending-leads-report
+
+        Now we use API_BASE_URL:
+
+        https://calling-crm-backend-7w52.onrender.com/api/pending-leads-report
+      */
+
+      const endpoint =
+        `${API_BASE_URL}/pending-leads-report?${params.toString()}`;
+
+      console.log(
+        "Pending Lead Report API:",
+        endpoint
+      );
+
+    const response = await fetch(endpoint, {
+  method: "GET",
+  headers: {
+    Accept: "application/json",
+  },
+});
+
+console.log("Pending Lead API URL:", endpoint);
+console.log("Pending Lead API Status:", response.status);
+console.log(
+  "Pending Lead API Content-Type:",
+  response.headers.get("content-type")
+);
+
+const contentType =
+  response.headers.get("content-type") || "";
+
+const responseText = await response.text();
+
+console.log(
+  "Pending Lead API Raw Response:",
+  responseText.substring(0, 500)
+);
+
+if (!contentType.includes("application/json")) {
+  throw new Error(
+    `Backend JSON ऐवजी ${contentType || "unknown response"} देत आहे. Status: ${response.status}`
   );
+}
+
+let data;
+
+try {
+  data = JSON.parse(responseText);
+} catch (parseError) {
+  console.error(
+    "JSON Parse Error:",
+    parseError
+  );
+
+  console.error(
+    "Raw Backend Response:",
+    responseText
+  );
+
+  throw new Error(
+    "Backend ने valid JSON response दिला नाही."
+  );
+}
+
+if (!response.ok) {
+  throw new Error(
+    data?.message ||
+      `Server returned ${response.status}`
+  );
+}
+
+if (data?.success === false) {
+  throw new Error(
+    data?.message ||
+      "Pending leads load failed"
+  );
+}
+
+const apiLeads =
+  Array.isArray(data)
+    ? data
+    : Array.isArray(data?.leads)
+    ? data.leads
+    : Array.isArray(data?.data)
+    ? data.data
+    : [];
+
+setLeads(apiLeads);
+
+console.log(
+  "Pending Lead Report Loaded:",
+  apiLeads.length
+);
+
+
+
+
+      if (!response.ok) {
+        throw new Error(
+          data?.message ||
+            `Server returned ${response.status}`
+        );
+      }
+
+      /*
+        Supported backend responses:
+
+        {
+          success: true,
+          count: 10,
+          leads: [...]
+        }
+
+        OR
+
+        [...]
+
+        OR
+
+        {
+          data: [...]
+        }
+      */
+
+      if (data?.success === false) {
+        throw new Error(
+          data?.message ||
+            "Pending leads load failed"
+        );
+      }
+
+      const apiLeads =
+        Array.isArray(data)
+          ? data
+          : Array.isArray(data?.leads)
+          ? data.leads
+          : Array.isArray(data?.data)
+          ? data.data
+          : [];
+
+      setLeads(apiLeads);
+
+      console.log(
+        "Pending Lead Report Loaded:",
+        apiLeads.length
+      );
+    } catch (err) {
+      console.error(
+        "Pending Lead Report Error:",
+        err
+      );
+
+      setError(
+        err?.message ||
+          "Pending lead data load झाला नाही."
+      );
+
+      setLeads([]);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   /* =======================================================
      INITIAL LOAD
@@ -438,9 +546,7 @@ const PendingLeadReport = () => {
           pendingDays,
 
         _ageBucket:
-          getAgeBucket(
-            pendingDays
-          ),
+          getAgeBucket(pendingDays),
       };
     });
   }, [leads]);
@@ -452,34 +558,29 @@ const PendingLeadReport = () => {
   const executives = useMemo(() => {
     const map = new Map();
 
-    processedLeads.forEach(
-      (lead) => {
-        const name =
-          lead._executiveName ||
-          "Unassigned";
+    processedLeads.forEach((lead) => {
+      const name =
+        lead._executiveName ||
+        "Unassigned";
 
-        const email =
-          lead._executiveEmail ||
-          "";
+      const email =
+        lead._executiveEmail ||
+        "";
 
-        const key =
-          `${name}|||${email}`;
+      const key =
+        `${name}|||${email}`;
 
-        if (!map.has(key)) {
-          map.set(key, {
-            name,
-            email,
-          });
-        }
+      if (!map.has(key)) {
+        map.set(key, {
+          name,
+          email,
+        });
       }
-    );
+    });
 
-    return Array.from(
-      map.values()
-    ).sort((a, b) =>
-      a.name.localeCompare(
-        b.name
-      )
+    return Array.from(map.values()).sort(
+      (a, b) =>
+        a.name.localeCompare(b.name)
     );
   }, [processedLeads]);
 
@@ -490,20 +591,15 @@ const PendingLeadReport = () => {
   const statuses = useMemo(() => {
     const statusSet = new Set();
 
-    processedLeads.forEach(
-      (lead) => {
-        if (lead._status) {
-          statusSet.add(
-            lead._status
-          );
-        }
+    processedLeads.forEach((lead) => {
+      if (lead._status) {
+        statusSet.add(lead._status);
       }
-    );
+    });
 
-    return Array.from(
-      statusSet
-    ).sort((a, b) =>
-      a.localeCompare(b)
+    return Array.from(statusSet).sort(
+      (a, b) =>
+        a.localeCompare(b)
     );
   }, [processedLeads]);
 
@@ -516,114 +612,110 @@ const PendingLeadReport = () => {
       normalizeText(search);
 
     let result =
-      processedLeads.filter(
-        (lead) => {
-          /* =========================
-             SEARCH
-          ========================= */
+      processedLeads.filter((lead) => {
+        /* =========================
+           SEARCH
+        ========================= */
 
-          if (searchValue) {
-            const searchableText = [
-              lead._leadName,
-              lead._phone,
-              lead._status,
-              lead._executiveName,
-              lead._executiveEmail,
-              lead?.project,
-              lead?.source,
-              lead?.city,
-              lead?.email,
-            ]
-              .map(normalizeText)
-              .join(" ");
-
-            if (
-              !searchableText.includes(
-                searchValue
-              )
-            ) {
-              return false;
-            }
-          }
-
-          /* =========================
-             EXECUTIVE FILTER
-          ========================= */
+        if (searchValue) {
+          const searchableText = [
+            lead._leadName,
+            lead._phone,
+            lead._status,
+            lead._executiveName,
+            lead._executiveEmail,
+            lead?.project,
+            lead?.source,
+            lead?.city,
+            lead?.email,
+          ]
+            .map(normalizeText)
+            .join(" ");
 
           if (
-            selectedExecutive !==
-            "all"
+            !searchableText.includes(
+              searchValue
+            )
           ) {
-            const executiveKey =
-              `${lead._executiveName}|||${lead._executiveEmail}`;
-
-            if (
-              executiveKey !==
-              selectedExecutive
-            ) {
-              return false;
-            }
+            return false;
           }
+        }
 
-          /* =========================
-             AGE FILTER
-          ========================= */
+        /* =========================
+           EXECUTIVE FILTER
+        ========================= */
+
+        if (
+          selectedExecutive !== "all"
+        ) {
+          const executiveKey =
+            `${lead._executiveName}|||${lead._executiveEmail}`;
 
           if (
-            selectedAge !== "all"
+            executiveKey !==
+            selectedExecutive
           ) {
-            const days =
-              lead._pendingDays;
-
-            if (
-              selectedAge === "1+" &&
-              days <= 1
-            ) {
-              return false;
-            }
-
-            if (
-              selectedAge === "3+" &&
-              days <= 3
-            ) {
-              return false;
-            }
-
-            if (
-              selectedAge === "7+" &&
-              days <= 7
-            ) {
-              return false;
-            }
-
-            if (
-              selectedAge === "15+" &&
-              days <= 15
-            ) {
-              return false;
-            }
+            return false;
           }
+        }
 
-          /* =========================
-             STATUS FILTER
-          ========================= */
+        /* =========================
+           AGE FILTER
+        ========================= */
+
+        if (
+          selectedAge !== "all"
+        ) {
+          const days =
+            lead._pendingDays;
 
           if (
-            selectedStatus !==
-              "all" &&
-            normalizeText(
-              lead._status
-            ) !==
-              normalizeText(
-                selectedStatus
-              )
+            selectedAge === "1+" &&
+            days <= 1
           ) {
             return false;
           }
 
-          return true;
+          if (
+            selectedAge === "3+" &&
+            days <= 3
+          ) {
+            return false;
+          }
+
+          if (
+            selectedAge === "7+" &&
+            days <= 7
+          ) {
+            return false;
+          }
+
+          if (
+            selectedAge === "15+" &&
+            days <= 15
+          ) {
+            return false;
+          }
         }
-      );
+
+        /* =========================
+           STATUS FILTER
+        ========================= */
+
+        if (
+          selectedStatus !== "all" &&
+          normalizeText(
+            lead._status
+          ) !==
+            normalizeText(
+              selectedStatus
+            )
+        ) {
+          return false;
+        }
+
+        return true;
+      });
 
     /* =========================
        SORT
@@ -836,7 +928,8 @@ const PendingLeadReport = () => {
     const blob = new Blob(
       [csvContent],
       {
-        type: "text/csv;charset=utf-8;",
+        type:
+          "text/csv;charset=utf-8;",
       }
     );
 
@@ -1412,135 +1505,139 @@ const PendingLeadReport = () => {
                       (
                         executive,
                         index
-                      ) => (
+                      ) => {
 
-                        <tr
-                          key={`${executive.name}-${executive.email}`}
-                          className="pending-executive-row"
-                          onClick={() => {
+                        const executiveKey =
+                          `${executive.name}|||${executive.email}`;
 
-                            setSelectedExecutive(
-                              `${executive.name}|||${executive.email}`
-                            );
+                        return (
+                          <tr
+                            key={executiveKey}
+                            className="pending-executive-row"
+                            onClick={() => {
 
-                            setSearch("");
+                              setSelectedExecutive(
+                                executiveKey
+                              );
 
-                            setSelectedAge(
-                              "all"
-                            );
+                              setSearch("");
 
-                            setSelectedStatus(
-                              "all"
-                            );
+                              setSelectedAge(
+                                "all"
+                              );
 
-                          }}
-                        >
+                              setSelectedStatus(
+                                "all"
+                              );
 
-                          <td>
+                            }}
+                          >
 
-                            <span className="pending-rank">
-                              {index + 1}
-                            </span>
+                            <td>
 
-                          </td>
+                              <span className="pending-rank">
+                                {index + 1}
+                              </span>
 
-                          <td className="left">
+                            </td>
 
-                            <div className="pending-executive-name">
+                            <td className="left">
 
-                              <div className="pending-avatar">
+                              <div className="pending-executive-name">
 
-                                {getInitial(
-                                  executive.name
-                                )}
+                                <div className="pending-avatar">
 
-                              </div>
-
-                              <div>
-
-                                <strong>
-                                  {
+                                  {getInitial(
                                     executive.name
-                                  }
-                                </strong>
+                                  )}
 
-                                {executive.email && (
-                                  <small>
+                                </div>
+
+                                <div>
+
+                                  <strong>
                                     {
-                                      executive.email
+                                      executive.name
                                     }
-                                  </small>
-                                )}
+                                  </strong>
+
+                                  {executive.email && (
+                                    <small>
+                                      {
+                                        executive.email
+                                      }
+                                    </small>
+                                  )}
+
+                                </div>
 
                               </div>
 
-                            </div>
+                            </td>
 
-                          </td>
+                            <td>
 
-                          <td>
+                              <span className="pending-count-badge total">
+                                {
+                                  executive.total
+                                }
+                              </span>
 
-                            <span className="pending-count-badge total">
-                              {
-                                executive.total
-                              }
-                            </span>
+                            </td>
 
-                          </td>
+                            <td>
 
-                          <td>
+                              <span className="pending-count-badge green">
+                                {
+                                  executive.zeroOne
+                                }
+                              </span>
 
-                            <span className="pending-count-badge green">
-                              {
-                                executive.zeroOne
-                              }
-                            </span>
+                            </td>
 
-                          </td>
+                            <td>
 
-                          <td>
+                              <span className="pending-count-badge blue">
+                                {
+                                  executive.twoThree
+                                }
+                              </span>
 
-                            <span className="pending-count-badge blue">
-                              {
-                                executive.twoThree
-                              }
-                            </span>
+                            </td>
 
-                          </td>
+                            <td>
 
-                          <td>
+                              <span className="pending-count-badge yellow">
+                                {
+                                  executive.fourSeven
+                                }
+                              </span>
 
-                            <span className="pending-count-badge yellow">
-                              {
-                                executive.fourSeven
-                              }
-                            </span>
+                            </td>
 
-                          </td>
+                            <td>
 
-                          <td>
+                              <span className="pending-count-badge orange">
+                                {
+                                  executive.eightFifteen
+                                }
+                              </span>
 
-                            <span className="pending-count-badge orange">
-                              {
-                                executive.eightFifteen
-                              }
-                            </span>
+                            </td>
 
-                          </td>
+                            <td>
 
-                          <td>
+                              <span className="pending-count-badge red">
+                                {
+                                  executive.fifteenPlus
+                                }
+                              </span>
 
-                            <span className="pending-count-badge red">
-                              {
-                                executive.fifteenPlus
-                              }
-                            </span>
+                            </td>
 
-                          </td>
-
-                        </tr>
-
-                      )
+                          </tr>
+                        );
+                      }
                     )
 
                   )}
