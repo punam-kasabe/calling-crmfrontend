@@ -28,6 +28,10 @@ const normalizeText = (value) => {
   return String(value).trim().toLowerCase();
 };
 
+/* =========================================================
+   INITIAL
+========================================================= */
+
 const getInitial = (name = "") => {
   const cleanName = String(name).trim();
 
@@ -51,6 +55,7 @@ const getExecutiveName = (lead) => {
     lead?.closingExecutive ||
     lead?.assigned_to ||
     lead?.assigned_to_email ||
+    lead?.assignedToEmail ||
     "Unassigned"
   );
 };
@@ -64,6 +69,7 @@ const getExecutiveEmail = (lead) => {
     lead?.assigned_to_email ||
     lead?.assigned_to ||
     lead?.assignedToEmail ||
+    lead?.assigned_to_email_address ||
     ""
   );
 };
@@ -77,6 +83,7 @@ const getLeadName = (lead) => {
     lead?.name ||
     lead?.fullName ||
     lead?.leadName ||
+    lead?.Name ||
     "Unnamed Lead"
   );
 };
@@ -90,6 +97,7 @@ const getLeadPhone = (lead) => {
     lead?.phone ||
     lead?.mobile ||
     lead?.mobileNumber ||
+    lead?.Phone ||
     ""
   );
 };
@@ -99,7 +107,11 @@ const getLeadPhone = (lead) => {
 ========================================================= */
 
 const getLeadStatus = (lead) => {
-  return lead?.status || "Unknown";
+  return (
+    lead?.status ||
+    lead?.Status ||
+    "Unknown"
+  );
 };
 
 /* =========================================================
@@ -108,22 +120,25 @@ const getLeadStatus = (lead) => {
 
 const getPendingDate = (lead) => {
   /*
-    Primary:
-      assignedAt
+    Priority:
 
-    Fallback:
-      assigned_at
-      assignedDate
-      createdAt
-      created_date
+    1. assignedAt
+    2. assigned_at
+    3. assignedDate
+    4. assigned_date
+    5. createdAt
+    6. created_date
+    7. Created at
   */
 
   const value =
     lead?.assignedAt ||
     lead?.assigned_at ||
     lead?.assignedDate ||
+    lead?.assigned_date ||
     lead?.createdAt ||
     lead?.created_date ||
+    lead?.["Created at"] ||
     null;
 
   if (!value) {
@@ -254,7 +269,7 @@ const PendingLeadReport = () => {
     useState("desc");
 
   /* =======================================================
-     SIDEBAR STATE
+     SIDEBAR
   ======================================================= */
 
   const [isOpen, setIsOpen] = useState(true);
@@ -273,62 +288,70 @@ const PendingLeadReport = () => {
         setLoading(true);
         setError("");
 
-        const user =
-          JSON.parse(
-            localStorage.getItem("user")
-          ) || {};
+        const storedUser =
+          localStorage.getItem("user");
 
-        const params =
-          new URLSearchParams();
+        const user = storedUser
+          ? JSON.parse(storedUser)
+          : {};
 
-        if (user?.email) {
-          params.append(
-            "email",
-            user.email
+        if (!user?.email) {
+          setError(
+            "Logged-in user email सापडला नाही. पुन्हा login करा."
           );
+
+          setLeads([]);
+
+          return;
         }
+
+        const params = new URLSearchParams();
+
+        params.append(
+          "email",
+          String(user.email).trim().toLowerCase()
+        );
 
         const response = await fetch(
           `${API_URL}/pending-leads-report?${params.toString()}`,
           {
             method: "GET",
             headers: {
+              Accept: "application/json",
               "Content-Type":
                 "application/json",
             },
           }
         );
 
-        if (!response.ok) {
-          throw new Error(
-            `Server returned ${response.status}`
-          );
-        }
-
         const data =
           await response.json();
 
+        if (!response.ok) {
+          throw new Error(
+            data?.message ||
+              `Server returned ${response.status}`
+          );
+        }
+
         /*
-          Supported responses:
-
-          [
-            ...
-          ]
-
-          OR
+          Backend response:
 
           {
             success: true,
+            count: number,
             leads: [...]
           }
-
-          OR
-
-          {
-            success: true,
-            data: [...]
-          }
         */
+
+        if (
+          data?.success === false
+        ) {
+          throw new Error(
+            data?.message ||
+              "Pending leads load failed"
+          );
+        }
 
         const apiLeads =
           Array.isArray(data)
@@ -347,7 +370,8 @@ const PendingLeadReport = () => {
         );
 
         setError(
-          "Pending lead data load झाला नाही. Backend API उपलब्ध आहे का ते check करा."
+          err?.message ||
+            "Pending lead data load झाला नाही."
         );
 
         setLeads([]);
@@ -364,6 +388,20 @@ const PendingLeadReport = () => {
 
   useEffect(() => {
     fetchPendingLeads();
+  }, [fetchPendingLeads]);
+
+  /* =======================================================
+     AUTO REFRESH
+  ======================================================= */
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      fetchPendingLeads();
+    }, 30000);
+
+    return () => {
+      clearInterval(interval);
+    };
   }, [fetchPendingLeads]);
 
   /* =======================================================
@@ -494,6 +532,7 @@ const PendingLeadReport = () => {
               lead?.project,
               lead?.source,
               lead?.city,
+              lead?.email,
             ]
               .map(normalizeText)
               .join(" ");
@@ -645,7 +684,7 @@ const PendingLeadReport = () => {
     const today =
       processedLeads.filter(
         (lead) =>
-          lead._pendingDays === 0
+          lead._pendingDays <= 1
       ).length;
 
     return {
@@ -697,26 +736,21 @@ const PendingLeadReport = () => {
           item.total += 1;
 
           if (
-            lead._pendingDays <=
-            1
+            lead._pendingDays <= 1
           ) {
             item.zeroOne += 1;
           } else if (
-            lead._pendingDays <=
-            3
+            lead._pendingDays <= 3
           ) {
             item.twoThree += 1;
           } else if (
-            lead._pendingDays <=
-            7
+            lead._pendingDays <= 7
           ) {
             item.fourSeven += 1;
           } else if (
-            lead._pendingDays <=
-            15
+            lead._pendingDays <= 15
           ) {
-            item.eightFifteen +=
-              1;
+            item.eightFifteen += 1;
           } else {
             item.fifteenPlus += 1;
           }
@@ -747,6 +781,7 @@ const PendingLeadReport = () => {
       "Executive Email",
       "Lead Name",
       "Phone",
+      "Email",
       "Status",
       "Project",
       "Source",
@@ -763,6 +798,7 @@ const PendingLeadReport = () => {
           lead._executiveEmail,
           lead._leadName,
           lead._phone,
+          lead?.email || "",
           lead._status,
           lead?.project || "",
           lead?.source || "",
@@ -2026,6 +2062,21 @@ const PendingLeadReport = () => {
 
                     </div>
 
+                    <div className="pending-detail-item">
+
+                      <span>
+                        Email
+                      </span>
+
+                      <strong>
+                        {
+                          selectedLead?.email ||
+                          "-"
+                        }
+                      </strong>
+
+                    </div>
+
                   </div>
 
                   {selectedLead?.remark && (
@@ -2039,6 +2090,24 @@ const PendingLeadReport = () => {
                       <p>
                         {
                           selectedLead.remark
+                        }
+                      </p>
+
+                    </div>
+
+                  )}
+
+                  {selectedLead?.description && (
+
+                    <div className="pending-remark">
+
+                      <span>
+                        Description
+                      </span>
+
+                      <p>
+                        {
+                          selectedLead.description
                         }
                       </p>
 
