@@ -3,29 +3,29 @@
 ========================================================= */
 
 .dashboard-page {
-  width: 100%;
   min-height: 100vh;
+  width: 100%;
   background: #f5f7fb;
   overflow-x: hidden;
-  box-sizing: border-box;
 }
 
 
 /* =========================================================
-   MAIN DASHBOARD CONTAINER
+   MAIN CONTAINER
 ========================================================= */
 
 .dashboard-container {
   min-height: 100vh;
-  background: #f5f7fb;
-  transition: margin-left 0.25s ease, width 0.25s ease;
+  width: calc(100% - 0px);
   box-sizing: border-box;
-  padding-top: 0;
+  transition: margin-left 0.25s ease, width 0.25s ease;
 }
 
+
 /*
+   Sidebar open / close
    IMPORTANT:
-   जर तुझ्या Sidebar ची width 145px असेल तर हे values योग्य आहेत.
+   Adjust these only if your Sidebar width is different.
 */
 
 .dashboard-container.sidebar-open {
@@ -44,12 +44,12 @@
 ========================================================= */
 
 .dashboard-topbar {
-  position: sticky !important;
+  position: sticky;
   top: 0;
-  z-index: 9999;
+  z-index: 5000;
 
   width: 100%;
-  min-height: 64px;
+  height: 64px;
 
   display: flex;
   align-items: center;
@@ -59,24 +59,24 @@
 
   border-bottom: 1px solid #e5e7eb;
 
-  padding: 0 24px;
+  padding: 0 22px;
 
   box-sizing: border-box;
 
-  box-shadow: 0 1px 4px rgba(15, 23, 42, 0.04);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
 }
 
 
-/* =========================================================
-   TOPBAR LEFT
-========================================================= */
+/* LEFT */
 
 .dashboard-topbar-left {
   display: flex;
   align-items: center;
-  gap: 18px;
-  min-width: 0;
+  gap: 14px;
 }
+
+
+/* MENU BUTTON */
 
 .topbar-menu-btn {
   width: 38px;
@@ -87,12 +87,13 @@
   justify-content: center;
 
   border: none;
-  background: transparent;
-
   border-radius: 8px;
 
-  font-size: 22px;
+  background: transparent;
+
   color: #374151;
+
+  font-size: 21px;
 
   cursor: pointer;
 
@@ -101,19 +102,23 @@
 
 .topbar-menu-btn:hover {
   background: #f3f4f6;
-  color: #6d28d9;
 }
+
+
+/* TITLE */
 
 .topbar-title {
   font-size: 18px;
-  font-weight: 600;
+  font-weight: 700;
+
   color: #1f2937;
+
   white-space: nowrap;
 }
 
 
 /* =========================================================
-   TOPBAR RIGHT
+   RIGHT PROFILE
 ========================================================= */
 
 .dashboard-topbar-right {
@@ -121,30 +126,26 @@
 
   display: flex;
   align-items: center;
-  justify-content: center;
 }
 
 
-/* =========================================================
-   PROFILE BUTTON
-========================================================= */
+/* PROFILE BUTTON */
 
 .profile-btn {
-  border: none;
-  background: transparent;
+  width: 40px;
+  height: 40px;
 
   padding: 0;
 
+  border: none;
+
+  background: transparent;
+
   cursor: pointer;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
-.profile-btn:focus {
-  outline: none;
-}
+
+/* PROFILE CIRCLE */
 
 .profile-circle {
   width: 40px;
@@ -168,13 +169,7 @@
   font-weight: 700;
 
   box-shadow:
-    0 4px 12px rgba(124, 58, 237, 0.25);
-
-  transition: transform 0.2s ease;
-}
-
-.profile-btn:hover .profile-circle {
-  transform: scale(1.05);
+    0 3px 10px rgba(124, 58, 237, 0.25);
 }
 
 
@@ -183,12 +178,12 @@
 ========================================================= */
 
 .profile-dropdown {
-  position: absolute !important;
+  position: absolute;
 
-  top: 50px !important;
-  right: 0 !important;
+  top: 50px;
+  right: 0;
 
-  width: 260px !important;
+  width: 260px;
 
   background: #ffffff;
 
@@ -198,45 +193,35 @@
 
   padding: 18px;
 
-  box-shadow:
-    0 12px 35px rgba(0, 0, 0, 0.16);
-
-  z-index: 10000 !important;
-
   box-sizing: border-box;
 
-  animation: profileDrop 0.18s ease;
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.15);
+
+  z-index: 10000;
 }
 
-@keyframes profileDrop {
-  from {
-    opacity: 0;
-    transform: translateY(-5px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
 
 .profile-name {
   font-size: 15px;
   font-weight: 700;
+
   color: #111827;
-  margin-bottom: 6px;
+
+  margin-bottom: 5px;
 }
+
 
 .profile-email {
   font-size: 13px;
+
   color: #6b7280;
 
   word-break: break-word;
-  line-height: 1.5;
 }
 
+
 .profile-divider {
-  width: 100%;
   height: 1px;
 
   background: #e5e7eb;
@@ -244,28 +229,29 @@
   margin: 15px 0;
 }
 
+
 .profile-logout {
   width: 100%;
 
   border: none;
+
   border-radius: 7px;
 
   padding: 10px 12px;
 
   background: #ef4444;
+
   color: #ffffff;
 
-  font-size: 14px;
   font-weight: 600;
 
   cursor: pointer;
 
-  transition: all 0.2s ease;
+  transition: background 0.2s ease;
 }
 
 .profile-logout:hover {
   background: #dc2626;
-  transform: translateY(-1px);
 }
 
 
@@ -276,7 +262,7 @@
 .dashboard-content {
   width: 100%;
 
-  padding: 24px;
+  padding: 22px;
 
   box-sizing: border-box;
 }
@@ -287,29 +273,13 @@
 ========================================================= */
 
 .loading-box {
-  width: 100%;
-
   min-height: 300px;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  background: #ffffff;
-
-  border-radius: 14px;
-
-  box-shadow:
-    0 2px 12px rgba(15, 23, 42, 0.06);
-}
-
-.loading-box h5 {
-  margin: 0;
-
   color: #6b7280;
-
-  font-size: 15px;
-  font-weight: 600;
 }
 
 
@@ -331,12 +301,8 @@
 }
 
 
-/* =========================================================
-   SUMMARY CARD
-========================================================= */
-
 .compact-card {
-  min-height: 92px;
+  min-height: 88px;
 
   padding: 15px 14px;
 
@@ -344,101 +310,107 @@
 
   box-sizing: border-box;
 
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-
-  overflow: hidden;
-
   color: #ffffff;
 
-  box-shadow:
-    0 5px 14px rgba(15, 23, 42, 0.08);
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: center;
 
   transition:
     transform 0.2s ease,
     box-shadow 0.2s ease;
-}
-
-.compact-card:hover {
-  transform: translateY(-3px);
 
   box-shadow:
-    0 9px 22px rgba(15, 23, 42, 0.14);
+    0 3px 10px rgba(0, 0, 0, 0.08);
 }
+
+
+.compact-card:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 7px 18px rgba(0, 0, 0, 0.12);
+}
+
 
 .compact-card h6 {
   margin: 0 0 7px 0;
 
-  font-size: 12px;
+  font-size: 11px;
 
   font-weight: 600;
 
-  line-height: 1.3;
-
-  color: rgba(255, 255, 255, 0.92);
+  opacity: 0.95;
 }
+
 
 .compact-card h3 {
   margin: 0;
 
-  font-size: 23px;
+  font-size: 22px;
 
-  line-height: 1;
+  font-weight: 800;
 
-  font-weight: 700;
-
-  color: #ffffff;
+  line-height: 1.1;
 }
 
 
-/* =========================================================
-   CARD COLORS
-========================================================= */
+/* CARD COLORS */
 
 .card-blue {
-  background: linear-gradient(
-    135deg,
-    #6366f1,
-    #7778ee
-  );
+  background:
+    linear-gradient(
+      135deg,
+      #6366f1,
+      #818cf8
+    );
 }
+
 
 .card-green {
-  background: linear-gradient(
-    135deg,
-    #00b878,
-    #00c98a
-  );
+  background:
+    linear-gradient(
+      135deg,
+      #00a878,
+      #00c389
+    );
 }
+
 
 .card-yellow {
-  background: linear-gradient(
-    135deg,
-    #f0ad22,
-    #e9a91f
-  );
+  background:
+    linear-gradient(
+      135deg,
+      #e9a51a,
+      #f3b52c
+    );
 }
+
 
 .card-red {
-  background: linear-gradient(
-    135deg,
-    #f04f68,
-    #f65a74
-  );
+  background:
+    linear-gradient(
+      135deg,
+      #f43f5e,
+      #fb7185
+    );
 }
 
+
 .card-purple {
-  background: linear-gradient(
-    135deg,
-    #8b20d9,
-    #a020e7
-  );
+  background:
+    linear-gradient(
+      135deg,
+      #8b16dc,
+      #a21caf
+    );
 }
 
 
 /* =========================================================
-   COMMON CHART CARD
+   GENERIC CHART CARD
 ========================================================= */
 
 .chart-card {
@@ -446,26 +418,23 @@
 
   background: #ffffff;
 
-  border-radius: 14px;
+  border-radius: 12px;
 
   padding: 18px;
 
   box-sizing: border-box;
 
-  border: 1px solid #edf0f5;
+  border: 1px solid #e5e7eb;
 
   box-shadow:
-    0 3px 14px rgba(15, 23, 42, 0.055);
-
-  overflow: hidden;
+    0 2px 8px rgba(0, 0, 0, 0.04);
 }
+
 
 .chart-card h5 {
   margin: 0 0 16px 0;
 
   font-size: 15px;
-
-  line-height: 1.4;
 
   font-weight: 700;
 
@@ -474,7 +443,7 @@
 
 
 /* =========================================================
-   BOOTSTRAP MT-4 SUPPORT
+   BOOTSTRAP mt-4 SUPPORT
 ========================================================= */
 
 .mt-4 {
@@ -483,7 +452,7 @@
 
 
 /* =========================================================
-   EXECUTIVE PERFORMANCE TABLE
+   TABLE
 ========================================================= */
 
 .table-responsive {
@@ -491,76 +460,62 @@
 
   overflow-x: auto;
 
-  -webkit-overflow-scrolling: touch;
+  overflow-y: hidden;
 }
+
 
 .table {
   width: 100%;
 
-  margin-bottom: 0;
-
   border-collapse: collapse;
 
+  margin: 0;
+
   background: #ffffff;
-
-  font-size: 13px;
 }
 
-.table th,
-.table td {
-  padding: 10px 12px;
 
-  vertical-align: middle;
-
-  text-align: center;
-
-  border: 1px solid #e1e5eb;
-}
-
-.table thead th {
+.table th {
   background: #f8fafc;
 
-  color: #1f2937;
+  color: #111827;
 
   font-size: 12px;
 
   font-weight: 700;
+
+  padding: 11px 10px;
+
+  text-align: center;
+
+  white-space: nowrap;
+
+  border: 1px solid #e5e7eb;
+}
+
+
+.table td {
+  padding: 10px;
+
+  font-size: 12px;
+
+  color: #374151;
+
+  text-align: center;
+
+  border: 1px solid #e5e7eb;
 
   white-space: nowrap;
 }
 
-.table tbody td {
-  color: #374151;
 
-  font-size: 12px;
-
-  font-weight: 500;
-
-  background: #ffffff;
-}
-
-.table tbody tr {
-  transition: background 0.15s ease;
-}
-
-.table tbody tr:hover td {
+.table tbody tr:hover {
   background: #f8fafc;
 }
 
 
 /* =========================================================
-   EXECUTIVE NAME
-========================================================= */
-
-.table tbody td:first-child {
-  font-weight: 700;
-
-  color: #111827;
-}
-
-
-/* =========================================================
-   DASHBOARD TWO COLUMN ROW
+   DASHBOARD ROW
 ========================================================= */
 
 .dashboard-row {
@@ -572,9 +527,8 @@
     repeat(2, minmax(0, 1fr));
 
   gap: 18px;
-
-  box-sizing: border-box;
 }
+
 
 .chart-half {
   min-width: 0;
@@ -582,19 +536,11 @@
 
 
 /* =========================================================
-   DOUGHNUT CHART
+   DOUGHNUT
 ========================================================= */
 
-.chart-half .chart-card {
-  min-height: 340px;
-
-  display: flex;
-
-  flex-direction: column;
-}
-
-.chart-half .chart-card canvas {
-  max-height: 270px !important;
+.chart-half canvas {
+  max-height: 300px !important;
 }
 
 
@@ -604,38 +550,11 @@
 
 .leaderboard-list {
   width: 100%;
-
-  display: flex;
-
-  flex-direction: column;
-
-  gap: 8px;
-
-  max-height: 280px;
-
-  overflow-y: auto;
-
-  padding-right: 3px;
 }
 
-.leaderboard-list::-webkit-scrollbar {
-  width: 5px;
-}
-
-.leaderboard-list::-webkit-scrollbar-track {
-  background: #f3f4f6;
-  border-radius: 10px;
-}
-
-.leaderboard-list::-webkit-scrollbar-thumb {
-  background: #c7cad1;
-  border-radius: 10px;
-}
 
 .leader-item {
-  width: 100%;
-
-  min-height: 42px;
+  min-height: 45px;
 
   display: flex;
 
@@ -643,55 +562,33 @@
 
   justify-content: space-between;
 
-  gap: 10px;
+  padding: 8px 12px;
 
-  padding: 9px 12px;
-
-  box-sizing: border-box;
-
-  border-radius: 8px;
+  margin-bottom: 8px;
 
   background: #f8fafc;
 
-  border: 1px solid #edf0f4;
+  border-radius: 8px;
 
-  color: #374151;
+  border: 1px solid #e5e7eb;
 
-  font-size: 13px;
-
-  transition: all 0.2s ease;
+  box-sizing: border-box;
 }
 
-.leader-item:hover {
-  background: #f1f5f9;
-
-  transform: translateX(2px);
-}
 
 .leader-item span {
-  overflow: hidden;
+  font-size: 13px;
 
-  text-overflow: ellipsis;
-
-  white-space: nowrap;
+  color: #374151;
 
   font-weight: 600;
 }
 
+
 .leader-item strong {
-  min-width: 30px;
+  font-size: 14px;
 
-  text-align: center;
-
-  padding: 4px 7px;
-
-  border-radius: 6px;
-
-  background: #ede9fe;
-
-  color: #6d28d9;
-
-  font-size: 12px;
+  color: #4f46e5;
 }
 
 
@@ -702,79 +599,48 @@
 .activity-list {
   width: 100%;
 
-  max-height: 280px;
+  max-height: 320px;
 
   overflow-y: auto;
-
-  display: flex;
-
-  flex-direction: column;
-
-  gap: 8px;
-
-  padding-right: 3px;
 }
 
-.activity-list::-webkit-scrollbar {
-  width: 5px;
-}
-
-.activity-list::-webkit-scrollbar-track {
-  background: #f3f4f6;
-
-  border-radius: 10px;
-}
-
-.activity-list::-webkit-scrollbar-thumb {
-  background: #c7cad1;
-
-  border-radius: 10px;
-}
 
 .activity-item {
-  width: 100%;
-
-  min-height: 46px;
-
   display: flex;
 
   align-items: center;
 
   justify-content: space-between;
 
-  gap: 15px;
+  gap: 12px;
 
-  padding: 9px 12px;
+  padding: 11px 12px;
 
-  box-sizing: border-box;
-
-  border-radius: 8px;
+  margin-bottom: 8px;
 
   background: #f8fafc;
 
-  border: 1px solid #edf0f4;
+  border-radius: 8px;
+
+  border: 1px solid #e5e7eb;
 }
 
+
 .activity-item strong {
-  color: #1f2937;
+  color: #111827;
 
   font-size: 13px;
 
   font-weight: 700;
 
   white-space: nowrap;
-
-  overflow: hidden;
-
-  text-overflow: ellipsis;
 }
+
 
 .activity-item span {
   color: #6b7280;
 
   font-size: 12px;
-
-  text-align: right;
 
   overflow: hidden;
 
@@ -783,25 +649,21 @@
 
 
 /* =========================================================
-   TODAY'S VISITS
+   BADGE
 ========================================================= */
 
-.chart-card .badge {
-  display: inline-flex;
-
-  align-items: center;
-  justify-content: center;
-
-  min-width: 80px;
+.badge {
+  display: inline-block;
 
   padding: 5px 9px;
 
-  border-radius: 20px;
+  border-radius: 6px;
 
   font-size: 11px;
 
-  font-weight: 600;
+  font-weight: 700;
 }
+
 
 .bg-success {
   background: #16a34a !important;
@@ -811,55 +673,19 @@
 
 
 /* =========================================================
-   TODAY'S VISITS TABLE
-========================================================= */
-
-.chart-card .table-responsive table {
-  min-width: 760px;
-}
-
-.chart-card .table-responsive table th {
-  white-space: nowrap;
-}
-
-
-/* =========================================================
-   EMPTY STATES
-========================================================= */
-
-.chart-card p {
-  margin: 15px 0;
-
-  text-align: center;
-
-  color: #9ca3af;
-
-  font-size: 13px;
-}
-
-
-/* =========================================================
-   SMOOTH PAGE
-========================================================= */
-
-* {
-  box-sizing: border-box;
-}
-
-
-/* =========================================================
    SCROLLBAR
 ========================================================= */
 
-.dashboard-page::-webkit-scrollbar {
-  width: 7px;
+.activity-list::-webkit-scrollbar,
+.table-responsive::-webkit-scrollbar {
+  width: 6px;
+
+  height: 6px;
 }
 
-.dashboard-page::-webkit-scrollbar-track {
-  background: #f1f5f9;
-}
 
-.dashboard-page::-webkit-scrollbar-thumb {
+.activity-list::-webkit-scrollbar-thumb,
+.table-responsive::-webkit-scrollbar-thumb {
   background: #cbd5e1;
 
   border-radius: 10px;
@@ -867,7 +693,7 @@
 
 
 /* =========================================================
-   LARGE DESKTOP
+   RESPONSIVE - 1400
 ========================================================= */
 
 @media (max-width: 1400px) {
@@ -877,28 +703,24 @@
       repeat(4, minmax(0, 1fr));
   }
 
-  .compact-card {
-    min-height: 90px;
-  }
-
 }
 
 
 /* =========================================================
-   DESKTOP / LAPTOP
+   RESPONSIVE - 1100
 ========================================================= */
 
 @media (max-width: 1100px) {
 
-  .dashboard-content {
-    padding: 20px;
+  .dashboard-container.sidebar-open {
+    margin-left: 145px;
+
+    width: calc(100% - 145px);
   }
 
   .cards-grid {
     grid-template-columns:
       repeat(3, minmax(0, 1fr));
-
-    gap: 12px;
   }
 
   .dashboard-row {
@@ -906,15 +728,11 @@
       1fr;
   }
 
-  .chart-half .chart-card {
-    min-height: auto;
-  }
-
 }
 
 
 /* =========================================================
-   TABLET
+   RESPONSIVE - 768
 ========================================================= */
 
 @media (max-width: 768px) {
@@ -925,20 +743,10 @@
     width: 100%;
   }
 
-  .dashboard-container.sidebar-close {
-    margin-left: 0;
-
-    width: 100%;
-  }
-
   .dashboard-topbar {
-    min-height: 58px;
+    height: 58px;
 
-    padding: 0 15px;
-  }
-
-  .dashboard-topbar-left {
-    gap: 8px;
+    padding: 0 14px;
   }
 
   .topbar-title {
@@ -946,7 +754,7 @@
   }
 
   .dashboard-content {
-    padding: 15px;
+    padding: 14px;
   }
 
   .cards-grid {
@@ -957,65 +765,44 @@
   }
 
   .compact-card {
-    min-height: 88px;
-
-    padding: 13px;
-  }
-
-  .compact-card h6 {
-    font-size: 11px;
+    min-height: 82px;
   }
 
   .compact-card h3 {
-    font-size: 21px;
-  }
-
-  .dashboard-row {
-    grid-template-columns: 1fr;
-
-    gap: 15px;
+    font-size: 20px;
   }
 
   .chart-card {
     padding: 14px;
-
-    border-radius: 11px;
   }
 
-  .chart-card h5 {
-    font-size: 14px;
+  .table th,
+  .table td {
+    font-size: 11px;
 
-    margin-bottom: 13px;
-  }
-
-  .profile-dropdown {
-    width: 230px !important;
-
-    right: 0 !important;
+    padding: 8px;
   }
 
 }
 
 
 /* =========================================================
-   MOBILE
+   RESPONSIVE - 480
 ========================================================= */
 
 @media (max-width: 480px) {
+
+  .cards-grid {
+    grid-template-columns:
+      1fr;
+  }
 
   .dashboard-content {
     padding: 10px;
   }
 
-  .dashboard-topbar {
-    padding: 0 10px;
-  }
-
-  .topbar-menu-btn {
-    width: 34px;
-    height: 34px;
-
-    font-size: 20px;
+  .dashboard-topbar-left {
+    gap: 8px;
   }
 
   .topbar-title {
@@ -1029,80 +816,8 @@
     font-size: 14px;
   }
 
-  .cards-grid {
-    grid-template-columns: 1fr;
-
-    gap: 9px;
-  }
-
-  .compact-card {
-    min-height: 82px;
-
-    padding: 13px 14px;
-
-    border-radius: 10px;
-  }
-
-  .compact-card h6 {
-    font-size: 12px;
-
-    margin-bottom: 6px;
-  }
-
-  .compact-card h3 {
-    font-size: 22px;
-  }
-
-  .chart-card {
-    padding: 12px;
-  }
-
-  .table {
-    font-size: 11px;
-  }
-
-  .table th,
-  .table td {
-    padding: 8px 9px;
-  }
-
-  .activity-item {
-    flex-direction: column;
-
-    align-items: flex-start;
-
-    gap: 3px;
-  }
-
-  .activity-item span {
-    text-align: left;
-  }
-
   .profile-dropdown {
-    width: 220px !important;
-
-    right: -5px !important;
-  }
-
-}
-
-
-/* =========================================================
-   VERY SMALL SCREEN
-========================================================= */
-
-@media (max-width: 360px) {
-
-  .dashboard-content {
-    padding: 8px;
-  }
-
-  .topbar-title {
-    font-size: 14px;
-  }
-
-  .compact-card h3 {
-    font-size: 20px;
+    width: 220px;
   }
 
 }
