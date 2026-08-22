@@ -18,6 +18,15 @@ export default function Dashboard() {
     setIsOpen(!isOpen);
   };
 
+  const [profileOpen, setProfileOpen] = useState(false);
+
+const handleLogout = () => {
+  localStorage.removeItem("user");
+  localStorage.removeItem("token");
+  navigate("/login");
+};
+
+
   /* =========================================
      USER
   ========================================= */
@@ -43,6 +52,7 @@ export default function Dashboard() {
     booked: 0,
     not_interested: 0,
     pending: 0,
+
     statusData: [],
     executives: [],
     assignments: [],
@@ -118,6 +128,79 @@ export default function Dashboard() {
         isOpen={isOpen}
         toggleSidebar={toggleSidebar}
       />
+
+       
+{/* =========================================
+   TOP HEADER
+========================================= */}
+
+<div className="dashboard-topbar">
+
+  {/* LEFT SIDE */}
+
+  <div className="dashboard-topbar-left">
+
+    <button
+      className="topbar-menu-btn"
+      onClick={toggleSidebar}
+      type="button"
+    >
+      ☰
+    </button>
+
+    <span className="topbar-title">
+      CRM Dashboard
+    </span>
+
+  </div>
+
+
+  {/* RIGHT SIDE */}
+
+  <div className="dashboard-topbar-right">
+
+    <button
+      className="profile-btn"
+      onClick={() => setProfileOpen(!profileOpen)}
+      type="button"
+    >
+      <span className="profile-circle">
+        {(user?.name || user?.email || "U")
+          .charAt(0)
+          .toUpperCase()}
+      </span>
+    </button>
+
+
+    {profileOpen && (
+
+      <div className="profile-dropdown">
+
+        <div className="profile-name">
+          {user?.name || "User"}
+        </div>
+
+        <div className="profile-email">
+          {user?.email || ""}
+        </div>
+
+        <div className="profile-divider" />
+
+        <button
+          className="profile-logout"
+          onClick={handleLogout}
+          type="button"
+        >
+          Logout
+        </button>
+
+      </div>
+
+    )}
+
+  </div>
+
+</div>
 
       {/* =========================================
          MAIN CONTAINER
