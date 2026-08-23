@@ -43,18 +43,16 @@ export default function Pipeline() {
   backlog: 0
 });
 
-
- const [filters, setFilters] = useState({
+  // 🔥 FILTER STATE
+  const [filters, setFilters] = useState({
   status: [],
-  assigned: [],
+  assigned: "",
   closingExecutive: "",
   project: "",
   createdFrom: "",
   createdTo: ""
 });
  
-
-
   const user = useMemo(() => {
     return JSON.parse(localStorage.getItem("user")) || {};
   }, []);
@@ -81,44 +79,6 @@ const statusOptions = [
   { value: "Site Visit", label: "Site Visit" }
    ];
 
-// ================= STATUS CHECKBOX OPTION =================
-
-const customStatusOption = (props) => {
-  const {
-    data,
-    isSelected,
-    innerRef,
-    innerProps
-  } = props;
-
-  return (
-    <div
-      ref={innerRef}
-      {...innerProps}
-      style={{
-        display: "flex",
-        alignItems: "center",
-        padding: "8px 10px",
-        cursor: "pointer",
-        background: isSelected ? "#f0f7ff" : "white"
-      }}
-    >
-      <input
-        type="checkbox"
-        checked={isSelected}
-        readOnly
-        style={{
-          marginRight: "10px",
-          width: "16px",
-          height: "16px",
-          cursor: "pointer"
-        }}
-      />
-
-      <span>{data.label}</span>
-    </div>
-  );
-};
 
   /* ================= FETCH ================= */
   const fetchLeads = useCallback(async () => {
@@ -203,7 +163,6 @@ fetchProjects();
   });
 
 }, [fetchLeads]);
-
 
   /* ================= DELETE ================= */
   const handleDelete = async (id) => {
@@ -325,63 +284,39 @@ fetchProjects();
 
     /* ================= EXPORT EXCEL ================= */
 
-const handleExport = async () => {
+ const handleExport = async () => {
+
   try {
-
-    // Multiple Assigned To मधून फक्त emails काढा
-    const exportFilters = {
-      ...filters,
-
-      assigned: Array.isArray(filters.assigned)
-        ? filters.assigned.map((item) => item.value)
-        : []
-    };
-
-    console.log("EXPORT FILTERS =", exportFilters);
 
     const res = await axios.post(
       `${API}/export-leads`,
       {
         email: user.email,
         role: user.role,
-        filters: exportFilters,
-        search
+        filters,
+        search,
       }
     );
 
-    console.log("EXPORT RESPONSE =", res.data);
-
-    if (!Array.isArray(res.data) || res.data.length === 0) {
+    if (!res.data || res.data.length === 0) {
       toast.error("No Leads To Export ❌");
       return;
     }
 
     const exportData = res.data.map((l) => ({
-      Name: l.name || "-",
-      Mobile: l.phone || "-",
-      Source: l.source || "-",
-      Status: l.status || "-",
-      Project: l.project || "-",
-      Assigned: l.assigned_to || "-",
+      Name: l.name,
+      Mobile: l.phone,
+      Status: l.status,
+      Project: l.project,
+      Assigned: l.assigned_to,
       "Closing Officer": l.assigned_manager || "-",
-
-      Remark:
-        l.remark ||
-        l.description ||
-        (
-          Array.isArray(l.followups) &&
-          l.followups.length > 0
-        )
-          ? l.followups[l.followups.length - 1]?.note || "-"
-          : "-",
-
+      Remark: l.remark || "-",
       "Created Date": l.createdAt
         ? new Date(l.createdAt).toLocaleString("en-IN")
         : "-",
-
       "Next Call": l.next_call_date
         ? new Date(l.next_call_date).toLocaleDateString("en-GB")
-        : "-"
+        : "-",
     }));
 
     const worksheet = XLSX.utils.json_to_sheet(exportData);
@@ -399,23 +334,19 @@ const handleExport = async () => {
       "Pipeline_Leads.xlsx"
     );
 
-    toast.success(
-      `${exportData.length} Leads Exported Successfully ✅`
-    );
+    toast.success("Excel Exported ✅");
 
   } catch (err) {
 
-    console.error(
-      "EXPORT ERROR =",
-      err.response?.data || err
-    );
+    console.log(err);
 
-    toast.error(
-      err.response?.data?.message ||
-      "Export Failed ❌"
-    );
+    toast.error("Export Failed ❌");
+
   }
-};   
+
+};
+
+   
   /* ================= CARDS ================= */
 
 const stats = {
@@ -522,29 +453,21 @@ onChange={(e) => {
 
     <div className="col-md-2">
 
-    <Select
+     <Select
   isMulti
   options={statusOptions}
   closeMenuOnSelect={false}
-  hideSelectedOptions={false}
   value={filters.status}
-  onChange={(selected) => {
+  onChange={(selected) =>
     setFilters({
       ...filters,
       status: selected || []
-    });
-
-    setPage(1);
-  }}
-  components={{
-    Option: customStatusOption
-  }}
+    })
+  }
   placeholder="Select Status"
-  classNamePrefix="status-select"
 />
 
     </div>
-
 
 
     {/* ASSIGNED TO */}
@@ -569,14 +492,13 @@ onChange={(e) => {
     }
 
     value={filters.assigned}
-   onChange={(selected) => {
-  setFilters({
-    ...filters,
-    assigned: selected || []
-  });
 
-  setPage(1);
-}}
+    onChange={(selected) =>
+      setFilters({
+        ...filters,
+        assigned: selected || []
+      })
+    }
 />
 
 </div>
@@ -589,15 +511,12 @@ onChange={(e) => {
       <select
         className="form-select"
         value={filters.closingExecutive}
-
-        onChange={(e) => {
-  setFilters({
-    ...filters,
-    closingExecutive: e.target.value
-  });
-
-  setPage(1);
-}}
+        onChange={(e) =>
+          setFilters({
+            ...filters,
+            closingExecutive: e.target.value
+          })
+        }
       >
 
         <option value="">
@@ -626,15 +545,12 @@ onChange={(e) => {
       <select
         className="form-select"
         value={filters.project}
-        
-        onChange={(e) => {
-  setFilters({
-    ...filters,
-    project: e.target.value
-  });
-
-  setPage(1);
-}}
+        onChange={(e) =>
+          setFilters({
+            ...filters,
+            project: e.target.value
+          })
+        }
       >
 
       <option value="">
@@ -661,14 +577,12 @@ onChange={(e) => {
         type="date"
         className="form-control"
         value={filters.createdFrom}
-        onChange={(e) => {
-  setFilters({
-    ...filters,
-    createdFrom: e.target.value
-  });
-
-  setPage(1);
-}}
+        onChange={(e) =>
+          setFilters({
+            ...filters,
+            createdFrom: e.target.value
+          })
+        }
       />
 
     </div>
@@ -681,14 +595,12 @@ onChange={(e) => {
         type="date"
         className="form-control"
         value={filters.createdTo}
-        onChange={(e) => {
-  setFilters({
-    ...filters,
-    createdTo: e.target.value
-  });
-
-  setPage(1);
-}}
+        onChange={(e) =>
+          setFilters({
+            ...filters,
+            createdTo: e.target.value
+          })
+        }
       />
 
     </div>
@@ -702,7 +614,7 @@ onChange={(e) => {
         onClick={() =>
           setFilters({
          status: [],
-            assigned: [],
+            assigned: "",
             closingExecutive: "",
             project: "",
             createdFrom: "",
