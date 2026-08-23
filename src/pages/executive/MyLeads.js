@@ -169,47 +169,6 @@ const statusOptions = [
   "No Response"
 ];
 
-/* ================= STATUS FILTER HANDLERS ================= */
-
-const handleStatusCheckbox = (status) => {
-  setStatusFilter("");
-
-  setSelectedStatuses((prev) => {
-    if (prev.includes(status)) {
-      return prev.filter(
-        (item) => item !== status
-      );
-    }
-
-    return [
-      ...prev,
-      status
-    ];
-  });
-};
-
-
-const handleSelectAllStatuses = () => {
-  setStatusFilter("");
-
-  if (
-    selectedStatuses.length ===
-    statusOptions.length
-  ) {
-    setSelectedStatuses([]);
-  } else {
-    setSelectedStatuses([
-      ...statusOptions
-    ]);
-  }
-};
-
-
-const isAllStatusesSelected =
-  statusOptions.length > 0 &&
-  selectedStatuses.length ===
-    statusOptions.length;
-
 
 const deadReasonOptions = [
   "Budget Issue",
@@ -719,8 +678,8 @@ useEffect(() => {
   descriptionFilter
 ]);
 
-  /* ================= FILTER ================= */
 
+  /* ================= FILTER ================= */
 
   const filteredLeads =
     useMemo(() => {
