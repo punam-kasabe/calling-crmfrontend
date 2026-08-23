@@ -41,43 +41,6 @@ export default function MyLeads() {
 const [statusFilter, setStatusFilter] = useState("");
 
 
-  const handleStatusCheckbox = (status) => {
-
-  setStatusFilter("");
-
-  setSelectedStatuses((prev) => {
-
-    if (prev.includes(status)) {
-
-      return prev.filter(
-        (item) => item !== status
-      );
-
-    }
-
-    return [
-      ...prev,
-      status
-    ];
-
-  });
-
-};
-
-const handleSelectAllStatuses = () => {
-
-  setStatusFilter("");
-
-  if (selectedStatuses.length === statusOptions.length) {
-    setSelectedStatuses([]);
-  } else {
-    setSelectedStatuses([...statusOptions]);
-  }
-
-};
-
-const isAllStatusesSelected =
-  selectedStatuses.length === statusOptions.length;
 
   const [selectedLead,
     setSelectedLead] =
@@ -205,6 +168,48 @@ const statusOptions = [
   "Future Prospect",
   "No Response"
 ];
+
+/* ================= STATUS FILTER HANDLERS ================= */
+
+const handleStatusCheckbox = (status) => {
+  setStatusFilter("");
+
+  setSelectedStatuses((prev) => {
+    if (prev.includes(status)) {
+      return prev.filter(
+        (item) => item !== status
+      );
+    }
+
+    return [
+      ...prev,
+      status
+    ];
+  });
+};
+
+
+const handleSelectAllStatuses = () => {
+  setStatusFilter("");
+
+  if (
+    selectedStatuses.length ===
+    statusOptions.length
+  ) {
+    setSelectedStatuses([]);
+  } else {
+    setSelectedStatuses([
+      ...statusOptions
+    ]);
+  }
+};
+
+
+const isAllStatusesSelected =
+  statusOptions.length > 0 &&
+  selectedStatuses.length ===
+    statusOptions.length;
+
 
 const deadReasonOptions = [
   "Budget Issue",
@@ -714,7 +719,6 @@ useEffect(() => {
   descriptionFilter
 ]);
 
-
   /* ================= FILTER ================= */
 
   const filteredLeads =
@@ -927,7 +931,6 @@ const handlePrevPage = () => {
 };
 
 
- /* ================= MONTHLY STATS ================= */
 
 /* ================= FILTERED STATS ================= */
 
