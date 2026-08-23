@@ -123,21 +123,11 @@ const projectOptions = [
   "99 villa plot.",
   "Affordable life",
   "Alibaug Plot.",
-  "ANJALI ZAMIN.",
   "Gudipadwa plot in 5 Lacs.",
   "Khopoli-pali Road plots",
-  "Maha-Mumbaai",
   "Mahamumbai",
-  "MAHAMUMBAI",
-  "Maha-Mumbaii",
   "Mahamumbai Phase 2",
-  "Mmahamumbai.",
   "Panvel (99Villa)",
-  "Sheetal Campaign.",
-  "Sheetal THANE.",
-  "Thane (Nitesh)",
-  "Thane (Virendra)",
-  "THANE...( VIRENDRA)",
   "THANE...( VIRENDRAA)"
 ];
 
