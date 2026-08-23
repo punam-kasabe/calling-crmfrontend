@@ -35,7 +35,9 @@ export default function MyLeads() {
   const [search, setSearch] =
     useState("");
 
-   const [selectedStatuses, setSelectedStatuses] = useState([]);
+  const [statusFilter,
+    setStatusFilter] =
+    useState("");
 
   const [selectedLead,
     setSelectedLead] =
@@ -123,9 +125,16 @@ const projectOptions = [
   "Alibaug Plot.",
   "Gudipadwa plot in 5 Lacs.",
   "Khopoli-pali Road plots",
+
   "Mahamumbai",
+
   "Mahamumbai Phase 2",
+ 
   "Panvel (99Villa)",
+ 
+ 
+ 
+ 
   "THANE...( VIRENDRAA)"
 ];
 
@@ -692,8 +701,6 @@ useEffect(() => {
                 search.toLowerCase()
               );
 
-
-              
        const matchesStatus = (() => {
 
   if (!statusFilter) return true;
