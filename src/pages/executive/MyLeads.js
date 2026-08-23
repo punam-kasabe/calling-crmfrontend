@@ -34,7 +34,10 @@ export default function MyLeads() {
 
   const [search, setSearch] =
     useState("");
-const [statusFilter, setStatusFilter] = useState([]);
+
+  const [statusFilter,
+    setStatusFilter] =
+    useState("");
 
   const [selectedLead,
     setSelectedLead] =
@@ -712,11 +715,9 @@ useEffect(() => {
     );
   }
 
-
   return lead.status === statusFilter;
 
 })();
-
 
 const matchesProject =
   selectedProjects
@@ -1335,68 +1336,25 @@ const handleCardClick = (status) => {
       }
     />
 
+    <select
+      value={statusFilter}
+      onChange={(e) =>
+        setStatusFilter(e.target.value)
+      }
+    >
+      <option value="">
+        All Status
+      </option>
 
-
-    <div className="multi-filter">
-  <label>Status</label>
-
-  <Select
-    options={statusOptions.map((status) => ({
-      value: status,
-      label: status
-    }))}
-    isMulti
-    isSearchable
-    isClearable
-
-    closeMenuOnSelect={false}
-    hideSelectedOptions={false}
-
-    value={statusFilter}
-
-    onChange={(selected) =>
-      setStatusFilter(selected || [])
-    }
-
-    placeholder="Select Status..."
-
-    styles={{
-      control: (base, state) => ({
-        ...base,
-        minHeight: "45px",
-        borderRadius: "10px",
-        borderColor: state.isFocused
-          ? "#2563eb"
-          : "#d1d5db",
-        boxShadow: "none"
-      }),
-
-      menu: (base) => ({
-        ...base,
-        zIndex: 9999
-      }),
-
-      menuPortal: (base) => ({
-        ...base,
-        zIndex: 99999
-      }),
-
-      multiValue: (base) => ({
-        ...base,
-        borderRadius: "6px"
-      }),
-
-      multiValueLabel: (base) => ({
-        ...base,
-        fontWeight: "500"
-      })
-    }}
-
-    menuPortalTarget={document.body}
-  />
-</div>
-
-
+      {statusOptions.map((status, i) => (
+        <option
+          key={i}
+          value={status}
+        >
+          {status}
+        </option>
+      ))}
+    </select>
 
     {/* CREATED DATE */}
 
@@ -1642,7 +1600,8 @@ const handleCardClick = (status) => {
 <select
   className="status-select"
   value={lead.status || "New"}
-  onChange={(e) => {
+  onChange={async (e) => {
+
     const value = e.target.value;
 
     setLeads((prev) =>
@@ -1656,21 +1615,21 @@ const handleCardClick = (status) => {
       )
     );
 
-    updateStatus(
+    await updateStatus(
       lead._id,
       value
     );
   }}
 >
-  {statusOptions.map((status, i) => (
-    <option
-      key={i}
-      value={status}
-    >
-      {status}
-    </option>
-  ))}
 
+{statusOptions.map((status, i) => (
+  <option
+    key={i}
+    value={status}
+  >
+    {status}
+  </option>
+))}
 
 </select>
 
