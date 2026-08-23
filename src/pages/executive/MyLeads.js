@@ -34,10 +34,7 @@ export default function MyLeads() {
 
   const [search, setSearch] =
     useState("");
-
-  const [statusFilter,
-    setStatusFilter] =
-    useState("");
+const [statusFilter, setStatusFilter] = useState([]);
 
   const [selectedLead,
     setSelectedLead] =
@@ -704,20 +701,23 @@ useEffect(() => {
                 search.toLowerCase()
               );
 
-       const matchesStatus = (() => {
 
-  if (!statusFilter) return true;
 
-  if (statusFilter === "Interested") {
-    return (
-      lead.status === "Interested" ||
-      lead.status === "Very Interested"
-    );
-  }
+    const matchesStatus =
+  statusFilter.length > 0
+    ? statusFilter.some((status) => {
 
-  return lead.status === statusFilter;
+        if (status.value === "Interested") {
+          return (
+            lead.status === "Interested" ||
+            lead.status === "Very Interested"
+          );
+        }
 
-})();
+        return lead.status === status.value;
+      })
+    : true;
+
 
 const matchesProject =
   selectedProjects
@@ -944,13 +944,23 @@ const stats = useMemo(() => {
 const handleCardClick = (status) => {
 
   if (status === "TOTAL") {
-    setStatusFilter("");
+
+    setStatusFilter([]);
+
   } else {
-    setStatusFilter(status);
+
+    setStatusFilter([
+      {
+        value: status,
+        label: status
+      }
+    ]);
+
   }
 
   setCurrentPage(1);
 };
+
  return (
 
     <div className="layout">
@@ -996,15 +1006,21 @@ const handleCardClick = (status) => {
 <div className="stats-grid">
 
   <div
-    className={`stats-card ${statusFilter === "" ? "active-card" : ""}`}
-    onClick={() => handleCardClick("TOTAL")}
+className={`stats-card ${
+  statusFilter.length === 0 ? "active-card" : ""
+}`}    
+onClick={() => handleCardClick("TOTAL")}
   >
     <h5>Total</h5>
     <p>{stats.total}</p>
   </div>
 
   <div
-    className={`stats-card new ${statusFilter === "New" ? "active-card" : ""}`}
+ className={`stats-card new ${
+  statusFilter.some((s) => s.value === "New")
+    ? "active-card"
+    : ""
+}`}
     onClick={() => handleCardClick("New")}
   >
     <h5>New</h5>
@@ -1012,15 +1028,24 @@ const handleCardClick = (status) => {
   </div>
 
   <div
-    className={`stats-card interested ${statusFilter === "Interested" ? "active-card" : ""}`}
-    onClick={() => handleCardClick("Interested")}
+className={`stats-card interested ${
+  statusFilter.some((s) => s.value === "Interested")
+    ? "active-card"
+    : ""
+}`}   
+
+onClick={() => handleCardClick("Interested")}
   >
     <h5>Interested</h5>
     <p>{stats.interested}</p>
   </div>
 
   <div
-    className={`stats-card booked ${statusFilter === "Booked" ? "active-card" : ""}`}
+className={`stats-card booked ${
+  statusFilter.some((s) => s.value === "Booked")
+    ? "active-card"
+    : ""
+}`}
     onClick={() => handleCardClick("Booked")}
   >
     <h5>Booked</h5>
@@ -1028,7 +1053,11 @@ const handleCardClick = (status) => {
   </div>
 
   <div
-    className={`stats-card followup ${statusFilter === "Follow Up" ? "active-card" : ""}`}
+    className={`stats-card followup ${
+      statusFilter.some((s) => s.value === "Follow Up")
+        ? "active-card"
+        : ""
+    }`}
     onClick={() => handleCardClick("Follow Up")}
   >
     <h5>Followup</h5>
@@ -1036,7 +1065,11 @@ const handleCardClick = (status) => {
   </div>
 
   <div
-    className={`stats-card not ${statusFilter === "Not Interested" ? "active-card" : ""}`}
+    className={`stats-card not ${
+      statusFilter.some((s) => s.value === "Not Interested")
+        ? "active-card"
+        : ""
+    }`}
     onClick={() => handleCardClick("Not Interested")}
   >
     <h5>Not Interested</h5>
@@ -1044,7 +1077,11 @@ const handleCardClick = (status) => {
   </div>
 
   <div
-    className={`stats-card sitevisit ${statusFilter === "Site Visit Done" ? "active-card" : ""}`}
+    className={`stats-card sitevisit ${
+      statusFilter.some((s) => s.value === "Site Visit Done")
+        ? "active-card"
+        : ""
+    }`}
     onClick={() => handleCardClick("Site Visit Done")}
   >
     <h5>Site Visit Done</h5>
@@ -1119,7 +1156,7 @@ const handleCardClick = (status) => {
   + New Lead
 
 </button>
-
+setStatusFilter("");
   <button
     className="export-btn"
 
@@ -1336,25 +1373,67 @@ const handleCardClick = (status) => {
       }
     />
 
-    <select
-      value={statusFilter}
-      onChange={(e) =>
-        setStatusFilter(e.target.value)
-      }
-    >
-      <option value="">
-        All Status
-      </option>
 
-      {statusOptions.map((status, i) => (
-        <option
-          key={i}
-          value={status}
-        >
-          {status}
-        </option>
-      ))}
-    </select>
+    <div className="multi-filter">
+  <label>Status</label>
+
+  <Select
+    options={statusOptions.map((status) => ({
+      value: status,
+      label: status
+    }))}
+    isMulti
+    isSearchable
+    isClearable
+
+    closeMenuOnSelect={false}
+    hideSelectedOptions={false}
+
+    value={statusFilter}
+
+    onChange={(selected) =>
+      setStatusFilter(selected || [])
+    }
+
+    placeholder="Select Status..."
+
+    styles={{
+      control: (base, state) => ({
+        ...base,
+        minHeight: "45px",
+        borderRadius: "10px",
+        borderColor: state.isFocused
+          ? "#2563eb"
+          : "#d1d5db",
+        boxShadow: "none"
+      }),
+
+      menu: (base) => ({
+        ...base,
+        zIndex: 9999
+      }),
+
+      menuPortal: (base) => ({
+        ...base,
+        zIndex: 99999
+      }),
+
+      multiValue: (base) => ({
+        ...base,
+        borderRadius: "6px"
+      }),
+
+      multiValueLabel: (base) => ({
+        ...base,
+        fontWeight: "500"
+      })
+    }}
+
+    menuPortalTarget={document.body}
+  />
+</div>
+
+
 
     {/* CREATED DATE */}
 
@@ -1429,9 +1508,9 @@ const handleCardClick = (status) => {
   className="clear-filter-btn"
   onClick={() => {
 
-    setSubSourceFilter("");
+     setSubSourceFilter("");
     setAssignedFilter("");
-    setStatusFilter("");
+    setStatusFilter([]);
     setFromDateFilter("");
     setToDateFilter("");
     setNextCallFrom("");
@@ -1442,7 +1521,6 @@ const handleCardClick = (status) => {
     setSelectedDepartments([]);
     setSelectedExecutives([]);
     setSelectedCities([]);
-
   }}
 >
   Clear Filters
@@ -1603,7 +1681,6 @@ const handleCardClick = (status) => {
   onChange={(e) => {
     const value = e.target.value;
 
-    /* UI मध्ये लगेच status change */
     setLeads((prev) =>
       prev.map((l) =>
         l._id === lead._id
@@ -1615,7 +1692,6 @@ const handleCardClick = (status) => {
       )
     );
 
-    /* MongoDB मध्ये save */
     updateStatus(
       lead._id,
       value
