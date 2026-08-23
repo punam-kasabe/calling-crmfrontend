@@ -655,25 +655,25 @@ export default function ExecutiveDashboard() {
 
           <div className="stat-card booking-card">
 
-  <div className="stat-icon">
-    <CheckCircle size={28} />
-  </div>
+          <div className="stat-icon">
+           <CheckCircle size={28} />
+             </div>
 
-  <div>
-    <h2>
-      {stats.bookingDone}
-    </h2>
+           <div>
+               <h2>
+                {stats.bookingDone}
+             </h2>
 
-    <p>
-      Booking Done
-    </p>
+            <p>
+               Booking Done
+            </p>
 
-    <span className="stat-subtitle">
-      Successful bookings
-    </span>
-  </div>
+            <span className="stat-subtitle">
+              Successful bookings
+            </span>
+         </div>
 
-</div>
+           </div>
 
           {/* TODAY FOLLOWUPS */}
 

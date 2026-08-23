@@ -14,6 +14,7 @@ import {
   FaEdit
 } from "react-icons/fa";
 import "../../styles/myleads.css";
+
 const API =
   "https://calling-crm-backend-7w52.onrender.com/api";
 
@@ -35,9 +36,48 @@ export default function MyLeads() {
   const [search, setSearch] =
     useState("");
 
-  const [statusFilter,
-    setStatusFilter] =
-    useState("");
+   const [selectedStatuses, setSelectedStatuses] = useState([]);
+
+const [statusFilter, setStatusFilter] = useState("");
+
+
+  const handleStatusCheckbox = (status) => {
+
+  setStatusFilter("");
+
+  setSelectedStatuses((prev) => {
+
+    if (prev.includes(status)) {
+
+      return prev.filter(
+        (item) => item !== status
+      );
+
+    }
+
+    return [
+      ...prev,
+      status
+    ];
+
+  });
+
+};
+
+const handleSelectAllStatuses = () => {
+
+  setStatusFilter("");
+
+  if (selectedStatuses.length === statusOptions.length) {
+    setSelectedStatuses([]);
+  } else {
+    setSelectedStatuses([...statusOptions]);
+  }
+
+};
+
+const isAllStatusesSelected =
+  selectedStatuses.length === statusOptions.length;
 
   const [selectedLead,
     setSelectedLead] =
@@ -658,6 +698,7 @@ useEffect(() => {
 
 }, [
   search,
+  selectedStatuses,
   statusFilter,
   selectedProjects,
   selectedSources,
@@ -672,6 +713,8 @@ useEffect(() => {
   nextCallTo,
   descriptionFilter
 ]);
+
+
   /* ================= FILTER ================= */
 
   const filteredLeads =
@@ -694,20 +737,15 @@ useEffect(() => {
                 search.toLowerCase()
               );
 
-       const matchesStatus = (() => {
 
-  if (!statusFilter) return true;
+const matchesStatus =
 
-  if (statusFilter === "Interested") {
-    return (
-      lead.status === "Interested" ||
-      lead.status === "Very Interested"
-    );
-  }
+  statusFilter
+    ? lead.status === statusFilter
 
-  return lead.status === statusFilter;
-
-})();
+    : selectedStatuses.length === 0
+      ? true
+      : selectedStatuses.includes(lead.status);
 
 const matchesProject =
   selectedProjects
@@ -929,18 +967,22 @@ const stats = useMemo(() => {
 
 }, [filteredLeads]); 
 
+
 /* ================= CARD CLICK FILTER ================= */
 
 const handleCardClick = (status) => {
 
   if (status === "TOTAL") {
     setStatusFilter("");
+    setSelectedStatuses([]);
   } else {
     setStatusFilter(status);
+    setSelectedStatuses([]);
   }
 
   setCurrentPage(1);
 };
+
  return (
 
     <div className="layout">
@@ -1326,25 +1368,80 @@ const handleCardClick = (status) => {
       }
     />
 
-    <select
-      value={statusFilter}
-      onChange={(e) =>
-        setStatusFilter(e.target.value)
-      }
-    >
-      <option value="">
-        All Status
-      </option>
+    {/* ================= STATUS MULTI CHECKBOX ================= */}
 
-      {statusOptions.map((status, i) => (
-        <option
-          key={i}
-          value={status}
-        >
+
+<div className="status-checkbox-filter">
+
+  <div className="status-checkbox-header">
+
+    <label>
+      Status
+    </label>
+
+    <label className="select-all-status">
+
+      <input
+        type="checkbox"
+        checked={isAllStatusesSelected}
+        onChange={handleSelectAllStatuses}
+      />
+
+      Select All
+
+    </label>
+
+  </div>
+
+
+  <div className="status-checkbox-list">
+
+    {statusOptions.map((status) => (
+
+      <label
+        key={status}
+        className="status-checkbox-item"
+      >
+
+        <input
+          type="checkbox"
+          checked={selectedStatuses.includes(status)}
+          onChange={() =>
+            handleStatusCheckbox(status)
+          }
+        />
+
+        <span>
           {status}
-        </option>
-      ))}
-    </select>
+        </span>
+
+      </label>
+
+    ))}
+
+  </div>
+
+
+  {selectedStatuses.length > 0 && (
+
+    <div className="selected-status-count">
+
+      {selectedStatuses.length} Status Selected
+
+      <button
+        type="button"
+        onClick={() =>
+          setSelectedStatuses([])
+        }
+      >
+        Clear
+      </button>
+
+    </div>
+
+  )}
+
+</div>
 
     {/* CREATED DATE */}
 
@@ -1419,21 +1516,22 @@ const handleCardClick = (status) => {
   className="clear-filter-btn"
   onClick={() => {
 
-    setSubSourceFilter("");
-    setAssignedFilter("");
-    setStatusFilter("");
-    setFromDateFilter("");
-    setToDateFilter("");
-    setNextCallFrom("");
-    setNextCallTo("");
-    setDescriptionFilter("");
-    setSelectedProjects(null);
-    setSelectedSources([]);
-    setSelectedDepartments([]);
-    setSelectedExecutives([]);
-    setSelectedCities([]);
+  setStatusFilter("");
+  setSubSourceFilter("");
+  setAssignedFilter("");
+  setSelectedStatuses([]);
+  setFromDateFilter("");
+  setToDateFilter("");
+  setNextCallFrom("");
+  setNextCallTo("");
+  setDescriptionFilter("");
+  setSelectedProjects(null);
+  setSelectedSources([]);
+  setSelectedDepartments([]);
+  setSelectedExecutives([]);
+  setSelectedCities([]);
 
-  }}
+}}
 >
   Clear Filters
 </button>
