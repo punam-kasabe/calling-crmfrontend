@@ -14,7 +14,6 @@ import {
   FaEdit
 } from "react-icons/fa";
 import "../../styles/myleads.css";
-
 const API =
   "https://calling-crm-backend-7w52.onrender.com/api";
 
@@ -41,6 +40,43 @@ export default function MyLeads() {
 const [statusFilter, setStatusFilter] = useState("");
 
 
+  const handleStatusCheckbox = (status) => {
+
+  setStatusFilter("");
+
+  setSelectedStatuses((prev) => {
+
+    if (prev.includes(status)) {
+
+      return prev.filter(
+        (item) => item !== status
+      );
+
+    }
+
+    return [
+      ...prev,
+      status
+    ];
+
+  });
+
+};
+
+const handleSelectAllStatuses = () => {
+
+  setStatusFilter("");
+
+  if (selectedStatuses.length === statusOptions.length) {
+    setSelectedStatuses([]);
+  } else {
+    setSelectedStatuses([...statusOptions]);
+  }
+
+};
+
+const isAllStatusesSelected =
+  selectedStatuses.length === statusOptions.length;
 
   const [selectedLead,
     setSelectedLead] =
@@ -168,7 +204,6 @@ const statusOptions = [
   "Future Prospect",
   "No Response"
 ];
-
 
 const deadReasonOptions = [
   "Budget Issue",
@@ -891,6 +926,7 @@ const handlePrevPage = () => {
 };
 
 
+ /* ================= MONTHLY STATS ================= */
 
 /* ================= FILTERED STATS ================= */
 
