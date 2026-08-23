@@ -64,14 +64,15 @@ export default function ExecutiveDashboard() {
   ===================================== */
 
   const [stats, setStats] = useState({
-    totalLeads: 0,
-    followups: 0,
-    calls: 0,
-    converted: 0,
-    todayFollowups: 0,
-    hotLeads: 0,
-    pendingCalls: 0,
-  });
+  totalLeads: 0,
+  followups: 0,
+  calls: 0,
+  bookingDone: 0,
+  todayFollowups: 0,
+  hotLeads: 0,
+  pendingCalls: 0,
+});
+
 
   /* =====================================
      RECENT DATA
@@ -108,7 +109,7 @@ export default function ExecutiveDashboard() {
         totalLeads: res.data.totalLeads || 0,
         followups: res.data.followups || 0,
         calls: res.data.calls || 0,
-        converted: res.data.converted || 0,
+         bookingDone: res.data.bookingDone || 0,
         todayFollowups: res.data.todayFollowups || 0,
         hotLeads: res.data.hotLeads || 0,
         pendingCalls: res.data.pendingCalls || 0,
@@ -652,29 +653,27 @@ export default function ExecutiveDashboard() {
 
           {/* CONVERTED */}
 
-          <div className="stat-card success-card">
+          <div className="stat-card booking-card">
 
-            <div className="stat-icon">
-              <CheckCircle size={24} />
-            </div>
+  <div className="stat-icon">
+    <CheckCircle size={28} />
+  </div>
 
-            <div className="stat-content">
+  <div>
+    <h2>
+      {stats.bookingDone}
+    </h2>
 
-              <span>
-                Converted Leads
-              </span>
+    <p>
+      Booking Done
+    </p>
 
-              <h2>
-                {stats.converted}
-              </h2>
+    <span className="stat-subtitle">
+      Successful bookings
+    </span>
+  </div>
 
-              <small>
-                Successful conversions
-              </small>
-
-            </div>
-
-          </div>
+</div>
 
           {/* TODAY FOLLOWUPS */}
 
