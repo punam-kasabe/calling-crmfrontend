@@ -248,30 +248,29 @@ export default function MyLeads() {
   ======================================================= */
 
   const sourceOptions = [
-    "Website",
-    "99 Acres",
-    "Facebook",
-    "Google",
-    "Hoarding",
-    "Microsites",
-    "Virtual call",
-    "Vishal Sir Leads",
-    "Chatbot",
-    "Reference",
-    "Old client"
-  ];
-
+  "Website",
+  "99 Acres",
+  "Facebook",
+  "Google",
+  "Hoarding",
+  "Microsites",
+  "Virtual call",
+  "Vishal Sir Leads",
+  "Chatbot",
+  "Reference",
+  "Old client"
+];
   /* =======================================================
      DEPARTMENT
   ======================================================= */
 
   const departmentOptions = [
-    "Sales/Marketing",
-    "HR/Admin",
-    "Aasma Madam",
-    "Nilesh Sir",
-    "Telecaller"
-  ];
+  "Sales/Marketing",
+  "HR/Admin",
+  "Aasma Madam",
+  "Nilesh Sir",
+  "Telecaller"
+];
 
   /* =======================================================
      SOURCE DROPDOWN
