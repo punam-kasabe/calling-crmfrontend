@@ -43,16 +43,18 @@ export default function Pipeline() {
   backlog: 0
 });
 
-  // 🔥 FILTER STATE
-  const [filters, setFilters] = useState({
+
+ const [filters, setFilters] = useState({
   status: [],
-  assigned: "",
+  assigned: [],
   closingExecutive: "",
   project: "",
   createdFrom: "",
   createdTo: ""
 });
  
+
+
   const user = useMemo(() => {
     return JSON.parse(localStorage.getItem("user")) || {};
   }, []);
@@ -79,6 +81,44 @@ const statusOptions = [
   { value: "Site Visit", label: "Site Visit" }
    ];
 
+// ================= STATUS CHECKBOX OPTION =================
+
+const customStatusOption = (props) => {
+  const {
+    data,
+    isSelected,
+    innerRef,
+    innerProps
+  } = props;
+
+  return (
+    <div
+      ref={innerRef}
+      {...innerProps}
+      style={{
+        display: "flex",
+        alignItems: "center",
+        padding: "8px 10px",
+        cursor: "pointer",
+        background: isSelected ? "#f0f7ff" : "white"
+      }}
+    >
+      <input
+        type="checkbox"
+        checked={isSelected}
+        readOnly
+        style={{
+          marginRight: "10px",
+          width: "16px",
+          height: "16px",
+          cursor: "pointer"
+        }}
+      />
+
+      <span>{data.label}</span>
+    </div>
+  );
+};
 
   /* ================= FETCH ================= */
   const fetchLeads = useCallback(async () => {
@@ -163,6 +203,7 @@ fetchProjects();
   });
 
 }, [fetchLeads]);
+
 
   /* ================= DELETE ================= */
   const handleDelete = async (id) => {
@@ -481,21 +522,29 @@ onChange={(e) => {
 
     <div className="col-md-2">
 
-     <Select
+    <Select
   isMulti
   options={statusOptions}
   closeMenuOnSelect={false}
+  hideSelectedOptions={false}
   value={filters.status}
-  onChange={(selected) =>
+  onChange={(selected) => {
     setFilters({
       ...filters,
       status: selected || []
-    })
-  }
+    });
+
+    setPage(1);
+  }}
+  components={{
+    Option: customStatusOption
+  }}
   placeholder="Select Status"
+  classNamePrefix="status-select"
 />
 
     </div>
+
 
 
     {/* ASSIGNED TO */}
@@ -520,13 +569,14 @@ onChange={(e) => {
     }
 
     value={filters.assigned}
+   onChange={(selected) => {
+  setFilters({
+    ...filters,
+    assigned: selected || []
+  });
 
-    onChange={(selected) =>
-      setFilters({
-        ...filters,
-        assigned: selected || []
-      })
-    }
+  setPage(1);
+}}
 />
 
 </div>
@@ -539,12 +589,15 @@ onChange={(e) => {
       <select
         className="form-select"
         value={filters.closingExecutive}
-        onChange={(e) =>
-          setFilters({
-            ...filters,
-            closingExecutive: e.target.value
-          })
-        }
+
+        onChange={(e) => {
+  setFilters({
+    ...filters,
+    closingExecutive: e.target.value
+  });
+
+  setPage(1);
+}}
       >
 
         <option value="">
@@ -573,12 +626,15 @@ onChange={(e) => {
       <select
         className="form-select"
         value={filters.project}
-        onChange={(e) =>
-          setFilters({
-            ...filters,
-            project: e.target.value
-          })
-        }
+        
+        onChange={(e) => {
+  setFilters({
+    ...filters,
+    project: e.target.value
+  });
+
+  setPage(1);
+}}
       >
 
       <option value="">
@@ -605,12 +661,14 @@ onChange={(e) => {
         type="date"
         className="form-control"
         value={filters.createdFrom}
-        onChange={(e) =>
-          setFilters({
-            ...filters,
-            createdFrom: e.target.value
-          })
-        }
+        onChange={(e) => {
+  setFilters({
+    ...filters,
+    createdFrom: e.target.value
+  });
+
+  setPage(1);
+}}
       />
 
     </div>
@@ -623,12 +681,14 @@ onChange={(e) => {
         type="date"
         className="form-control"
         value={filters.createdTo}
-        onChange={(e) =>
-          setFilters({
-            ...filters,
-            createdTo: e.target.value
-          })
-        }
+        onChange={(e) => {
+  setFilters({
+    ...filters,
+    createdTo: e.target.value
+  });
+
+  setPage(1);
+}}
       />
 
     </div>
@@ -642,7 +702,7 @@ onChange={(e) => {
         onClick={() =>
           setFilters({
          status: [],
-            assigned: "",
+            assigned: [],
             closingExecutive: "",
             project: "",
             createdFrom: "",
