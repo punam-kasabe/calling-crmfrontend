@@ -67,18 +67,54 @@
 }
 
 /* =========================================================
+   HIDE SIDEBAR ON EXECUTIVE DASHBOARD
+   ========================================================= */
+
+/*
+   Sidebar component:
+   .sidebar.open
+   .sidebar.collapsed
+
+   Top navbar:
+   .top-navbar
+
+   Executive dashboard वर sidebar पूर्णपणे hide केला आहे.
+*/
+
+.executive-layout .sidebar,
+.executive-layout .sidebar.open,
+.executive-layout .sidebar.collapsed {
+  display: none !important;
+}
+
+/*
+   Sidebar component जर top navbar render करत असेल
+   तर तो सुद्धा dashboard वर hide होईल.
+*/
+
+.executive-layout .top-navbar,
+.executive-layout .top-navbar.shifted,
+.executive-layout .top-navbar.collapsed {
+  display: none !important;
+}
+
+/* =========================================================
    MAIN CONTENT
    ========================================================= */
 
 .executive-main {
+  width: 100%;
+
   min-height: 100vh;
 
   /*
-     UPDATED:
-     Dashboard content slightly moved downward.
+     IMPORTANT:
+     Sidebar hidden असल्यामुळे margin-left = 0
   */
 
-  padding: 42px 28px 50px;
+  margin-left: 0 !important;
+
+  padding: 38px 30px 55px;
 
   background:
     linear-gradient(
@@ -89,20 +125,20 @@
     );
 
   transition:
-    margin-left 0.25s ease,
+    padding 0.25s ease,
     width 0.25s ease;
 }
 
 /*
-   Sidebar width adjust
+   Sidebar open/close दोन्ही अवस्थेत
+   dashboard full width राहील.
 */
 
-.executive-main.sidebar-open {
-  margin-left: 165px;
-}
-
+.executive-main.sidebar-open,
 .executive-main.sidebar-close {
-  margin-left: 70px;
+  width: 100% !important;
+
+  margin-left: 0 !important;
 }
 
 /* =========================================================
@@ -111,22 +147,23 @@
 
 .executive-header {
   width: 100%;
+
   min-height: 82px;
 
   display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
 
-  /*
-     Slightly more spacing below header
-  */
+  align-items: flex-start;
+
+  justify-content: space-between;
 
   margin-bottom: 25px;
 }
 
 .header-badge {
   display: inline-flex;
+
   align-items: center;
+
   gap: 7px;
 
   padding: 6px 11px;
@@ -262,9 +299,11 @@
   position: absolute;
 
   top: -6px;
+
   right: -6px;
 
   min-width: 18px;
+
   height: 18px;
 
   padding: 0 4px;
@@ -1788,12 +1827,9 @@
 @media (max-width: 1400px) {
 
   .executive-main {
-    /*
-       Keep the dashboard slightly lower
-       on medium desktop screens too.
-    */
+    padding: 34px 24px 45px;
 
-    padding: 36px 22px 45px;
+    margin-left: 0 !important;
   }
 
   .stats-grid {
@@ -1814,12 +1850,14 @@
 
 @media (max-width: 1100px) {
 
-  .executive-main.sidebar-open {
-    margin-left: 150px;
-  }
+  .executive-main,
+  .executive-main.sidebar-open,
+  .executive-main.sidebar-close {
+    margin-left: 0 !important;
 
-  .executive-main {
-    padding: 32px 18px 40px;
+    width: 100% !important;
+
+    padding: 30px 18px 40px;
   }
 
   .stats-grid {
@@ -1838,12 +1876,13 @@
 
 @media (max-width: 800px) {
 
+  .executive-main,
   .executive-main.sidebar-open,
   .executive-main.sidebar-close {
-    margin-left: 0;
-  }
+    margin-left: 0 !important;
 
-  .executive-main {
+    width: 100% !important;
+
     padding: 26px 14px 35px;
   }
 
@@ -1904,7 +1943,13 @@
 
 @media (max-width: 550px) {
 
-  .executive-main {
+  .executive-main,
+  .executive-main.sidebar-open,
+  .executive-main.sidebar-close {
+    margin-left: 0 !important;
+
+    width: 100% !important;
+
     padding: 22px 10px 30px;
   }
 
