@@ -8,987 +8,1885 @@ import {
 import axios from "axios";
 import Select from "react-select";
 import Sidebar from "../../components/Sidebar";
+
 import {
   FaPhoneAlt,
   FaWhatsapp,
   FaEdit
 } from "react-icons/fa";
+
 import "../../styles/myleads.css";
+
+/* =========================================================
+   API
+========================================================= */
 
 const API =
   "https://calling-crm-backend-7w52.onrender.com/api";
 
+/* =========================================================
+   COMPONENT
+========================================================= */
+
 export default function MyLeads() {
 
-  const [isOpen, setIsOpen] =
-    useState(true);
+  /* =======================================================
+     SIDEBAR
+  ======================================================= */
 
-  const toggleSidebar = () =>
-    setIsOpen(!isOpen);
+  const [isOpen, setIsOpen] = useState(true);
 
-  const [leads, setLeads] =
-    useState([]);
+  const toggleSidebar = () => {
+    setIsOpen((prev) => !prev);
+  };
 
-  
-  const [loading, setLoading] =
-    useState(true);
+  /* =======================================================
+     LEADS
+  ======================================================= */
 
-  const [search, setSearch] =
-    useState("");
+  const [leads, setLeads] = useState([]);
 
-   const [selectedStatuses, setSelectedStatuses] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-const [statusFilter, setStatusFilter] = useState("");
+  const [search, setSearch] = useState("");
 
+  /* =======================================================
+     STATUS FILTER
+  ======================================================= */
 
+  const [selectedStatuses, setSelectedStatuses] = useState([]);
 
-  const [selectedLead,
-    setSelectedLead] =
-    useState(null);
+  const [statusFilter, setStatusFilter] = useState("");
 
-  const [showModal,
-    setShowModal] =
+  /* =======================================================
+     MODALS
+  ======================================================= */
+
+  const [selectedLead, setSelectedLead] = useState(null);
+
+  const [showModal, setShowModal] = useState(false);
+
+  const [showNewLeadModal, setShowNewLeadModal] =
     useState(false);
-const [showBookingModal,
-setShowBookingModal] =
-useState(false);
 
-const [bookingData,
-setBookingData] =
-useState({
+  const [showBookingModal, setShowBookingModal] =
+    useState(false);
 
-unitNo:"",
-bookingAmount:""
+  /* =======================================================
+     BOOKING
+  ======================================================= */
 
-});
+  const [bookingData, setBookingData] = useState({
+    unitNo: "",
+    bookingAmount: ""
+  });
+
+  /* =======================================================
+     ADVANCED SEARCH
+  ======================================================= */
 
   const [showAdvancedSearch, setShowAdvancedSearch] =
     useState(false);
-  
- 
-const [subSourceFilter, setSubSourceFilter] = useState("");
-const [assignedFilter, setAssignedFilter] = useState("");
-const [fromDateFilter, setFromDateFilter] = useState("");
-const [toDateFilter, setToDateFilter] = useState("");
-const [nextCallFrom, setNextCallFrom] = useState("");
-const [nextCallTo, setNextCallTo] = useState("");
-const [descriptionFilter, setDescriptionFilter] = useState("");
-const [selectedProjects, setSelectedProjects] = useState(null);
-const [selectedSources, setSelectedSources] = useState([]);
-const [selectedDepartments, setSelectedDepartments] = useState([]);
-const [selectedExecutives, setSelectedExecutives] = useState([]);
-const [selectedCities, setSelectedCities] = useState([]);
 
+  const [subSourceFilter, setSubSourceFilter] =
+    useState("");
 
-const [callModal, setCallModal] = useState(false);
+  const [assignedFilter, setAssignedFilter] =
+    useState("");
 
-const [activeCall, setActiveCall] = useState(null);
+  const [fromDateFilter, setFromDateFilter] =
+    useState("");
 
-const [callStartTime, setCallStartTime] = useState(null);
-const [callDuration, setCallDuration] = useState("");
+  const [toDateFilter, setToDateFilter] =
+    useState("");
 
+  const [nextCallFrom, setNextCallFrom] =
+    useState("");
 
-/* ================= PAGINATION ================= */
+  const [nextCallTo, setNextCallTo] =
+    useState("");
 
-const [currentPage, setCurrentPage] = useState(1);
-const leadsPerPage = 10;
+  const [descriptionFilter, setDescriptionFilter] =
+    useState("");
 
-     /* ================= NEW LEAD MODAL ================= */
+  /* =======================================================
+     SELECT FILTERS
+  ======================================================= */
 
-  
+  const [selectedProjects, setSelectedProjects] =
+    useState(null);
+
+  const [selectedSources, setSelectedSources] =
+    useState([]);
+
+  const [selectedDepartments, setSelectedDepartments] =
+    useState([]);
+
+  const [selectedExecutives, setSelectedExecutives] =
+    useState([]);
+
+  const [selectedCities, setSelectedCities] =
+    useState([]);
+
+  /* =======================================================
+     CALL
+  ======================================================= */
+
+  const [callModal, setCallModal] = useState(false);
+
+  const [activeCall, setActiveCall] = useState(null);
+
+  const [callStartTime, setCallStartTime] =
+    useState(null);
+
+  const [callDuration, setCallDuration] =
+    useState("");
+
+  /* =======================================================
+     PAGINATION
+  ======================================================= */
+
+  const [currentPage, setCurrentPage] =
+    useState(1);
+
+  const leadsPerPage = 10;
+
+  /* =======================================================
+     NEW LEAD
+  ======================================================= */
+
   const [newLead, setNewLead] = useState({
-  name: "",
-  phone: "",
-  email: "",
-  executive_email: "",
-  project: "",
-  status: "New",
-  source: "",
-  subSource: "",
-  city: "",
-  assignedTo: "",
-  assigned_to_email: "",
-  closingExecutive: "",
-  next_call_date: "",
-  department: "",
-  description: "",
-  deadReason: "",
-  deadSubReason: "",
-  bookingDate: "",
-});
+    name: "",
+    phone: "",
+    email: "",
+    executive_email: "",
+    project: "",
+    status: "New",
+    source: "",
+    subSource: "",
+    city: "",
+    assignedTo: "",
+    assigned_to_email: "",
+    assigned_to: "",
+    closingExecutive: "",
+    next_call_date: "",
+    department: "",
+    description: "",
+    deadReason: "",
+    deadSubReason: "",
+    bookingDate: ""
+  });
 
+  /* =======================================================
+     PROJECT OPTIONS
+  ======================================================= */
 
+  const projectOptions = [
+    "99villa.",
+    "99 villa plot.",
+    "Affordable life",
+    "Alibaug Plot.",
+    "Gudipadwa plot in 5 Lacs.",
+    "Khopoli-pali Road plots",
+    "Mahamumbai",
+    "Mahamumbai Phase 2",
+    "Panvel (99Villa)",
+    "THANE...( VIRENDRAA)"
+  ];
 
-/* ================= DROPDOWNS ================= */
+  /* =======================================================
+     STATUS OPTIONS
+  ======================================================= */
 
-const projectOptions = [
-  "99villa.",
-  "99 villa plot.",
-  "Affordable life",
-  "Alibaug Plot.",
-  "Gudipadwa plot in 5 Lacs.",
-  "Khopoli-pali Road plots",
-  "Mahamumbai",
-  "Mahamumbai Phase 2",
-  "Panvel (99Villa)",
-  "THANE...( VIRENDRAA)"
-];
+  const statusOptions = [
+    "New",
+    "Ringing",
+    "Connected",
+    "Interested",
+    "Old Booking From Old Data",
+    "Old Site Visit",
+    "Very Interested",
+    "Out of Service",
+    "Not Interested",
+    "Call Cut",
+    "Busy",
+    "Call Back",
+    "Switched Off",
+    "Number Not Reachable",
+    "Wrong Number",
+    "Invalid Number",
+    "Duplicate Lead",
+    "Follow Up",
+    "Follow Up Done",
+    "Meeting Scheduled",
+    "Site Visit Planned",
+    "Site Visit Done",
+    "Negotiation",
+    "Payment Pending",
+    "Booked",
+    "Already Booked But 7/12 Pending",
+    "Documents Pending",
+    "Other Property Booked",
+    "Token Received",
+    "Cancelled",
+    "Future Prospect",
+    "No Response"
+  ];
 
-const statusOptions = [
-  "New",
-  "Ringing",
-  "Connected",
-  "Interested",
-  "Old Booking From Old Data",
-  "Old Site Visit",
-  "Very Interested",
-  "Out of Service",
-  "Not Interested",
-  "Call Cut",
-  "Busy",
-  "Call Back",
-  "Switched Off",
-  "Number Not Reachable",
-  "Wrong Number",
-  "Invalid Number",
-  "Duplicate Lead",
-  "Follow Up",
-  "Follow Up Done",
-  "Meeting Scheduled",
-  "Site Visit Planned",
-  "Site Visit Done",
-  "Negotiation",
-  "Payment Pending",
-  "Booked",
-  "Already Booked But 7/12 Pending",
-  "Documents Pending",
-  "Other Property Booked",
-  "Token Received",
-  "Cancelled",
-  "Future Prospect",
-  "No Response"
-];
+  /* =======================================================
+     DEAD REASON
+  ======================================================= */
 
-/* ================= STATUS FILTER HANDLERS ================= */
+  const deadReasonOptions = [
+    "Budget Issue",
+    "Location Issue",
+    "Other"
+  ];
 
-const handleStatusCheckbox = (status) => {
-  setStatusFilter("");
+  /* =======================================================
+     SOURCE
+  ======================================================= */
 
-  setSelectedStatuses((prev) => {
-    if (prev.includes(status)) {
-      return prev.filter(
-        (item) => item !== status
+  const sourceOptions = [
+    "Website",
+    "99 Acres",
+    "Facebook",
+    "Google",
+    "Hoarding",
+    "Microsites",
+    "Virtual call",
+    "Vishal Sir Leads",
+    "Chatbot",
+    "Reference",
+    "Old client"
+  ];
+
+  /* =======================================================
+     DEPARTMENT
+  ======================================================= */
+
+  const departmentOptions = [
+    "Sales/Marketing",
+    "HR/Admin",
+    "Aasma Madam",
+    "Nilesh Sir",
+    "Telecaller"
+  ];
+
+  /* =======================================================
+     SOURCE DROPDOWN
+  ======================================================= */
+
+  const sourceDropdownOptions = useMemo(() => {
+    return sourceOptions.map((item) => ({
+      value: item,
+      label: item
+    }));
+  }, []);
+
+  /* =======================================================
+     DEPARTMENT DROPDOWN
+  ======================================================= */
+
+  const departmentDropdownOptions = useMemo(() => {
+    return departmentOptions.map((item) => ({
+      value: item,
+      label: item
+    }));
+  }, []);
+
+  /* =======================================================
+     USER
+  ======================================================= */
+
+  const user = useMemo(() => {
+
+    try {
+
+      return (
+        JSON.parse(
+          localStorage.getItem("user")
+        ) || {}
       );
+
+    } catch (error) {
+
+      console.error(
+        "Invalid user data in localStorage",
+        error
+      );
+
+      return {};
     }
 
-    return [
-      ...prev,
-      status
-    ];
-  });
-};
-
-
-const handleSelectAllStatuses = () => {
-  setStatusFilter("");
-
-  if (
-    selectedStatuses.length ===
-    statusOptions.length
-  ) {
-    setSelectedStatuses([]);
-  } else {
-    setSelectedStatuses([
-      ...statusOptions
-    ]);
-  }
-};
-
-
-const isAllStatusesSelected =
-  statusOptions.length > 0 &&
-  selectedStatuses.length ===
-    statusOptions.length;
-
-
-const deadReasonOptions = [
-  "Budget Issue",
-  "Location Issue",
-  "Other",
-];
-
-const sourceOptions = [
-  "Website",
-  "99 Acres",
-  "Facebook",
-  "Google",
-  "Hoarding",
-  "Microsites",
-  "Virtual call",
-  "Vishal Sir Leads",
-  "Chatbot",
-  "Reference",
-  "Old client"
-];
-
-const departmentOptions = [
-  "Sales/Marketing",
-  "HR/Admin",
-  "Aasma Madam",
-  "Nilesh Sir",
-  "Telecaller"
-];
-
-
-const sourceDropdownOptions = sourceOptions.map((item) => ({
-  value: item,
-  label: item
-}));
-
-const departmentDropdownOptions = departmentOptions.map((item) => ({
-  value: item,
-  label: item
-}));
-
-const executiveDropdownOptions = [
-  ...new Set(
-    leads
-      .map((l) => l.closingExecutive)
-      .filter(Boolean)
-  )
-].map((item) => ({
-  value: item,
-  label: item
-}));
-
-const cityDropdownOptions = [
-  ...new Set(
-    leads
-      .map((l) => l.city)
-      .filter(Boolean)
-  )
-].map((item) => ({
-  value: item,
-  label: item
-}));
-
-
-  /* ================= USER ================= */
-
-   const user = useMemo(() => {
-
-    return JSON.parse(
-      localStorage.getItem("user")
-    ) || {};
-
   }, []);
-  
-/* ================= NEW LEAD MODAL ================= */
 
-  const [showNewLeadModal, setShowNewLeadModal] =
-  useState(false);
+  /* =======================================================
+     EXECUTIVE DROPDOWN OPTIONS
+  ======================================================= */
 
+  const executiveDropdownOptions = useMemo(() => {
 
-  /* ================= FETCH LEADS ================= */
+    const values = [
+      ...new Set(
+        leads
+          .map(
+            (lead) =>
+              lead.closingExecutive
+          )
+          .filter(Boolean)
+      )
+    ];
 
-  const fetchMyLeads =
-    useCallback(async () => {
+    return values.map((item) => ({
+      value: item,
+      label: item
+    }));
+
+  }, [leads]);
+
+  /* =======================================================
+     CITY DROPDOWN OPTIONS
+  ======================================================= */
+
+  const cityDropdownOptions = useMemo(() => {
+
+    const values = [
+      ...new Set(
+        leads
+          .map(
+            (lead) =>
+              lead.city
+          )
+          .filter(Boolean)
+      )
+    ];
+
+    return values.map((item) => ({
+      value: item,
+      label: item
+    }));
+
+  }, [leads]);
+
+  /* =======================================================
+     PROJECT FILTER OPTIONS
+  ======================================================= */
+
+  const projectFilterOptions = [
+    {
+      value: "Mahamumbai",
+      label: "Mahamumbai"
+    },
+    {
+      value: "6975",
+      label: "Mahamumbai Phase 2"
+    },
+    {
+      value: "7142",
+      label: "Thane (Nitesh)"
+    },
+    {
+      value: "6674",
+      label: "Panvel (99Villa)"
+    },
+    {
+      value: "6673",
+      label: "Thane (Virendra)"
+    },
+    {
+      value: "7517",
+      label: "Affordable life"
+    },
+    {
+      value: "7514",
+      label: "99villa."
+    },
+    {
+      value: "7670",
+      label: "99 villa plot."
+    },
+    {
+      value: "7743",
+      label: "MAHAMUMBAI"
+    },
+    {
+      value: "7747",
+      label: "Khopoli-pali Road plots"
+    },
+    {
+      value: "7843",
+      label: "ANJALI ZAMIN."
+    },
+    {
+      value: "7876",
+      label: "Sheetal THANE."
+    },
+    {
+      value: "7898",
+      label: "THANE...( VIRENDRA)"
+    },
+    {
+      value: "7899",
+      label: "Alibaug Plot."
+    },
+    {
+      value: "7871",
+      label: "Sheetal Campaign."
+    },
+    {
+      value: "7912",
+      label: "Maha-Mumbaai"
+    },
+    {
+      value: "7929",
+      label: "THANE...( VIRENDRAA)"
+    },
+    {
+      value: "7941",
+      label: "Gudipadwa plot in 5 Lacs."
+    }
+  ];
+
+  /* =======================================================
+     STATUS CHECKBOX
+  ======================================================= */
+
+  const handleStatusCheckbox = (status) => {
+
+    setStatusFilter("");
+
+    setSelectedStatuses((prev) => {
+
+      if (prev.includes(status)) {
+
+        return prev.filter(
+          (item) => item !== status
+        );
+      }
+
+      return [
+        ...prev,
+        status
+      ];
+
+    });
+  };
+
+  /* =======================================================
+     SELECT ALL STATUS
+  ======================================================= */
+
+  const handleSelectAllStatuses = () => {
+
+    setStatusFilter("");
+
+    if (
+      selectedStatuses.length ===
+      statusOptions.length
+    ) {
+
+      setSelectedStatuses([]);
+
+    } else {
+
+      setSelectedStatuses([
+        ...statusOptions
+      ]);
+    }
+  };
+
+  const isAllStatusesSelected =
+    statusOptions.length > 0 &&
+    selectedStatuses.length ===
+      statusOptions.length;
+
+  /* =======================================================
+     FETCH MY LEADS
+  ======================================================= */
+
+  const fetchMyLeads = useCallback(
+    async () => {
+
+      if (!user?.email) {
+
+        setLeads([]);
+
+        setLoading(false);
+
+        return;
+      }
 
       try {
 
-        if (!user?.email) {
+        setLoading(true);
 
-          setLoading(false);
-
-          return;
-
-        }
-
-        const res =
+        const response =
           await axios.get(
-
             `${API}/my-leads`,
-
             {
               params: {
                 email: user.email
               }
             }
-
           );
 
-        setLeads(res.data || []);
+        const data =
+          Array.isArray(response.data)
+            ? response.data
+            : response.data?.leads || [];
 
-      }
+        setLeads(data);
 
-      catch (err) {
+      } catch (error) {
 
         console.error(
-          "Error fetching leads",
-          err
+          "Error fetching my leads:",
+          error
         );
 
-      }
+        setLeads([]);
 
-      finally {
+      } finally {
 
         setLoading(false);
 
       }
 
-    }, [user]);
+    },
+    [user?.email]
+  );
 
+  /* =======================================================
+     INITIAL FETCH
+  ======================================================= */
 
+  useEffect(() => {
 
-  /* ================= FETCH EXECUTIVES ================= */
+    fetchMyLeads();
 
-useEffect(() => {
+  }, [fetchMyLeads]);
 
-  fetchMyLeads();
+  /* =======================================================
+     UPDATE STATUS
+  ======================================================= */
 
-}, [fetchMyLeads]);
+  const updateStatus = async (
+    leadId,
+    status
+  ) => {
 
- /* ================= UPDATE STATUS ================= */
+    try {
 
-const updateStatus = async (leadId, status) => {
-  try {
-    const currentUser =
-      JSON.parse(localStorage.getItem("user")) || {};
+      const currentUser =
+        JSON.parse(
+          localStorage.getItem("user")
+        ) || {};
 
-    if (!leadId) {
-      alert("Lead ID missing ❌");
-      return;
-    }
-
-    if (!status) {
-      alert("Please select status ❌");
-      return;
-    }
-
-    console.log("Updating Status:", {
-      leadId,
-      status,
-      executive_email: currentUser.email
-    });
-
-    const res = await axios.put(
-      `${API}/update-status/${leadId}`,
-      {
-        status: status,
-        executive_email: currentUser.email
-      }
-    );
-
-    console.log("Status Update Response:", res.data);
-
-    /* Update UI immediately */
-    setLeads((prev) =>
-      prev.map((lead) =>
-        lead._id === leadId
-          ? {
-              ...lead,
-              status: status,
-              updatedAt: new Date().toISOString()
-            }
-          : lead
-      )
-    );
-
-    /* Refresh from MongoDB */
-    await fetchMyLeads();
-
-  } catch (err) {
-
-    console.error(
-      "Status update failed:",
-      err
-    );
-
-    console.error(
-      "Backend response:",
-      err.response?.data
-    );
-
-    alert(
-      err.response?.data?.message ||
-      err.response?.data?.error ||
-      "Status update failed ❌"
-    );
-  }
-};
-   /* ================= UPDATE LEAD ================= */
-
-  const handleUpdateLead =
-    async () => {
-
-      try {
-
-  const updatedData = {
-  executive_email:
-  selectedLead.executive_email ||
-  user.email,
-  name: selectedLead.name,
-  phone: selectedLead.phone,
-  email: selectedLead.email,
-
-  assignedTo:
-  selectedLead.assignedTo,
-
-   assigned_to_email:
-   selectedLead.assigned_to_email,
-
-   assigned_to:
-   selectedLead.assigned_to_email,
-
-   closingExecutive:
-   selectedLead.closingExecutive,
-
-   status:
-    selectedLead.status,
-
-  source:
-    selectedLead.source,
-
-  subSource:
-    selectedLead.subSource,
-
-  city:
-    selectedLead.city,
-
-  project:
-    selectedLead.project,
-
-  next_call_date:
-    selectedLead.next_call_date,
-
-  description:
-    selectedLead.description,
-
-  department:
-    selectedLead.department,
-
-  deadReason:
-    selectedLead.deadReason,
-
-  deadSubReason:
-    selectedLead.deadSubReason,
-
-  bookingDate:
-    selectedLead.bookingDate
-};
-
-      await axios.put(
-      `${API}/update-lead/${selectedLead._id}`,
-      updatedData
-      );
-
-        setLeads((prev) =>
-
-          prev.map((lead) =>
-
-            lead._id ===
-            selectedLead._id
-
-              ? selectedLead
-
-              : lead
-
-          )
-
-        );
-
-        setShowModal(false);
-
-      fetchMyLeads();
-
-      alert(
-      "Lead Updated ✅"
-      );
-      }
-
-      catch (err) {
-
-        console.error(err);
+      if (!leadId) {
 
         alert(
-          "Update Failed ❌"
+          "Lead ID missing ❌"
         );
 
+        return;
       }
 
-    };
+      if (!status) {
+
+        alert(
+          "Please select status ❌"
+        );
+
+        return;
+      }
+
+      const executiveEmail =
+        currentUser?.email ||
+        user?.email ||
+        "";
+
+      const response =
+        await axios.put(
+          `${API}/update-status/${leadId}`,
+          {
+            status,
+            executive_email:
+              executiveEmail
+          }
+        );
+
+      console.log(
+        "Status Update Response:",
+        response.data
+      );
+
+      /* ---------------------------------------------------
+         Immediate UI update
+      --------------------------------------------------- */
+
+      setLeads((prev) =>
+        prev.map((lead) =>
+          lead._id === leadId
+            ? {
+                ...lead,
+                status,
+                updatedAt:
+                  new Date().toISOString()
+              }
+            : lead
+        )
+      );
+
+      /* ---------------------------------------------------
+         Refresh from MongoDB
+      --------------------------------------------------- */
+
+      await fetchMyLeads();
+
+    } catch (error) {
+
+      console.error(
+        "Status update failed:",
+        error
+      );
+
+      console.error(
+        "Backend response:",
+        error.response?.data
+      );
+
+      alert(
+        error.response?.data?.message ||
+        error.response?.data?.error ||
+        "Status update failed ❌"
+      );
+
+      /* Refresh so UI matches DB */
+
+      await fetchMyLeads();
+    }
+  };
+
+  /* =======================================================
+     UPDATE LEAD
+  ======================================================= */
+
+  const handleUpdateLead = async () => {
+
+    if (!selectedLead?._id) {
+
+      alert(
+        "Lead ID missing ❌"
+      );
+
+      return;
+    }
+
+    try {
+
+      const updatedData = {
+
+        executive_email:
+          selectedLead.executive_email ||
+          user.email,
+
+        name:
+          selectedLead.name || "",
+
+        phone:
+          selectedLead.phone || "",
+
+        email:
+          selectedLead.email || "",
+
+        assignedTo:
+          selectedLead.assignedTo || "",
+
+        assigned_to_email:
+          selectedLead.assigned_to_email ||
+          user.email ||
+          "",
+
+        assigned_to:
+          selectedLead.assigned_to_email ||
+          selectedLead.assigned_to ||
+          user.email ||
+          "",
+
+        closingExecutive:
+          selectedLead.closingExecutive || "",
+
+        status:
+          selectedLead.status || "New",
+
+        source:
+          selectedLead.source || "",
+
+        subSource:
+          selectedLead.subSource || "",
+
+        city:
+          selectedLead.city || "",
+
+        project:
+          selectedLead.project || "",
+
+        next_call_date:
+          selectedLead.next_call_date || "",
+
+        description:
+          selectedLead.description || "",
+
+        department:
+          selectedLead.department || "",
+
+        deadReason:
+          selectedLead.deadReason || "",
+
+        deadSubReason:
+          selectedLead.deadSubReason || "",
+
+        bookingDate:
+          selectedLead.bookingDate || ""
+      };
+
+      const response =
+        await axios.put(
+          `${API}/update-lead/${selectedLead._id}`,
+          updatedData
+        );
+
+      console.log(
+        "Lead update response:",
+        response.data
+      );
+
+      /* ---------------------------------------------------
+         Update local UI
+      --------------------------------------------------- */
+
+      setLeads((prev) =>
+        prev.map((lead) =>
+          lead._id === selectedLead._id
+            ? {
+                ...lead,
+                ...updatedData,
+                updatedAt:
+                  new Date().toISOString()
+              }
+            : lead
+        )
+      );
+
+      setShowModal(false);
+
+      setSelectedLead(null);
+
+      await fetchMyLeads();
+
+      alert(
+        "Lead Updated Successfully ✅"
+      );
+
+    } catch (error) {
+
+      console.error(
+        "Lead update failed:",
+        error
+      );
+
+      console.error(
+        "Backend:",
+        error.response?.data
+      );
+
+      alert(
+        error.response?.data?.message ||
+        "Update Failed ❌"
+      );
+    }
+  };
+
+  /* =======================================================
+     START CALL
+  ======================================================= */
 
   const startCall = async (lead) => {
 
-  setActiveCall(lead);
+    if (!lead?.phone) {
 
-  setCallStartTime(new Date());
-
-  window.open(`tel:${lead.phone}`);
-
-  setTimeout(() => {
-    setCallModal(true);
-  }, 3000);
-
-};
-
-
-useEffect(() => {
-
-  let interval;
-
-  if (callModal && callStartTime) {
-
-    interval = setInterval(() => {
-
-      const seconds = Math.floor(
-        (new Date() - callStartTime) / 1000
+      alert(
+        "Phone number not available ❌"
       );
 
-      setCallDuration(`${seconds} sec`);
+      return;
+    }
 
-    }, 1000);
+    setActiveCall(lead);
 
-  }
+    setCallStartTime(
+      new Date()
+    );
 
-  return () => clearInterval(interval);
+    setCallDuration(
+      "0 sec"
+    );
 
-}, [callModal, callStartTime]);
+    /* ---------------------------------------------------
+       Open phone
+    --------------------------------------------------- */
 
+    window.open(
+      `tel:${String(
+        lead.phone
+      ).replace(/\D/g, "")}`
+    );
+
+    /* ---------------------------------------------------
+       Show call modal after 3 seconds
+    --------------------------------------------------- */
+
+    setTimeout(() => {
+
+      setCallModal(true);
+
+    }, 3000);
+  };
+
+  /* =======================================================
+     CALL TIMER
+  ======================================================= */
+
+  useEffect(() => {
+
+    let interval = null;
+
+    if (
+      callModal &&
+      callStartTime
+    ) {
+
+      interval =
+        setInterval(() => {
+
+          const seconds =
+            Math.floor(
+              (
+                new Date() -
+                callStartTime
+              ) / 1000
+            );
+
+          setCallDuration(
+            `${seconds} sec`
+          );
+
+        }, 1000);
+    }
+
+    return () => {
+
+      if (interval) {
+
+        clearInterval(interval);
+
+      }
+    };
+
+  }, [
+    callModal,
+    callStartTime
+  ]);
+
+  /* =======================================================
+     CREATE BOOKING
+  ======================================================= */
 
   const handleCreateBooking =
-async()=>{
+    async () => {
 
-try{
+      if (!selectedLead?._id) {
 
-await axios.post(
+        alert(
+          "Lead not selected ❌"
+        );
 
-`${API}/create-booking`,
+        return;
+      }
 
-{
+      if (!bookingData.unitNo) {
 
-leadId:
-selectedLead._id,
+        alert(
+          "Please enter Unit No ❌"
+        );
 
-clientName:
-selectedLead.name,
+        return;
+      }
 
-phone:
-selectedLead.phone,
+      if (!bookingData.bookingAmount) {
 
-project:
-selectedLead.project,
+        alert(
+          "Please enter Booking Amount ❌"
+        );
 
-executive:
-selectedLead.closingExecutive,
+        return;
+      }
 
-attendingOfficer:
-selectedLead.assignedTo,
+      try {
 
-unitNo:
-bookingData.unitNo,
+        const response =
+          await axios.post(
+            `${API}/create-booking`,
+            {
+              leadId:
+                selectedLead._id,
 
-bookingAmount:
-bookingData.bookingAmount
+              clientName:
+                selectedLead.name,
 
-}
+              phone:
+                selectedLead.phone,
 
-);
+              project:
+                selectedLead.project,
 
-alert(
-"Booking Added ✅"
-);
+              executive:
+                selectedLead.closingExecutive,
 
-setShowBookingModal(false);
+              attendingOfficer:
+                selectedLead.assignedTo,
 
-setBookingData({
+              unitNo:
+                bookingData.unitNo,
 
-unitNo:"",
-bookingAmount:""
+              bookingAmount:
+                bookingData.bookingAmount
+            }
+          );
 
-});
+        console.log(
+          "Booking response:",
+          response.data
+        );
 
-fetchMyLeads();
+        alert(
+          "Booking Added Successfully ✅"
+        );
 
-}catch(err){
+        setShowBookingModal(
+          false
+        );
 
-console.log(err);
+        setBookingData({
+          unitNo: "",
+          bookingAmount: ""
+        });
 
-alert(
-"Booking Failed ❌"
-);
+        await fetchMyLeads();
 
-}
+      } catch (error) {
 
-};
-/* ================= ADD NEW LEAD ================= */
+        console.error(
+          "Booking failed:",
+          error
+        );
 
-const handleAddNewLead = async () => {
+        console.error(
+          "Backend:",
+          error.response?.data
+        );
 
-  if (
-    !newLead.name ||
-    !newLead.phone ||
-    !newLead.project
-  ) {
+        alert(
+          error.response?.data?.message ||
+          "Booking Failed ❌"
+        );
+      }
+    };
 
-    alert(
-      "Please fill required fields ❌"
+  /* =======================================================
+     ADD NEW LEAD
+  ======================================================= */
+
+  const handleAddNewLead =
+    async () => {
+
+      if (
+        !newLead.name ||
+        !newLead.phone ||
+        !newLead.project
+      ) {
+
+        alert(
+          "Please fill required fields ❌"
+        );
+
+        return;
+      }
+
+      try {
+
+        const payload = {
+
+          ...newLead,
+
+          executive_email:
+            newLead.executive_email ||
+            user.email ||
+            "",
+
+          assignedTo:
+            newLead.assignedTo ||
+            user.name ||
+            user.username ||
+            "",
+
+          assigned_to_email:
+            newLead.assigned_to_email ||
+            user.email ||
+            "",
+
+          assigned_to:
+            newLead.assigned_to ||
+            newLead.assigned_to_email ||
+            user.email ||
+            "",
+
+          closingExecutive:
+            newLead.closingExecutive ||
+            user.name ||
+            user.username ||
+            ""
+        };
+
+        const response =
+          await axios.post(
+            `${API}/add-lead`,
+            payload
+          );
+
+        console.log(
+          "New Lead Response:",
+          response.data
+        );
+
+        const createdLead =
+          response.data?.lead ||
+          response.data;
+
+        if (
+          createdLead &&
+          typeof createdLead ===
+            "object"
+        ) {
+
+          setLeads((prev) => [
+            createdLead,
+            ...prev
+          ]);
+        }
+
+        alert(
+          "Lead Added Successfully ✅"
+        );
+
+        setShowNewLeadModal(
+          false
+        );
+
+        /* -------------------------------------------------
+           RESET
+        ------------------------------------------------- */
+
+        setNewLead({
+          name: "",
+          phone: "",
+          email: "",
+          executive_email:
+            user.email || "",
+          project: "",
+          status: "New",
+          source: "",
+          subSource: "",
+          city: "",
+          assignedTo:
+            user.name ||
+            user.username ||
+            "",
+          assigned_to_email:
+            user.email || "",
+          assigned_to:
+            user.email || "",
+          closingExecutive:
+            user.name ||
+            user.username ||
+            "",
+          next_call_date: "",
+          department: "",
+          description: "",
+          deadReason: "",
+          deadSubReason: "",
+          bookingDate: ""
+        });
+
+        await fetchMyLeads();
+
+      } catch (error) {
+
+        console.error(
+          "Add lead failed:",
+          error
+        );
+
+        console.error(
+          "Backend:",
+          error.response?.data
+        );
+
+        alert(
+          error.response?.data?.message ||
+          "Failed To Add Lead ❌"
+        );
+      }
+    };
+
+  /* =======================================================
+     RESET PAGINATION WHEN FILTER CHANGES
+  ======================================================= */
+
+  useEffect(() => {
+
+    setCurrentPage(1);
+
+  }, [
+    search,
+    selectedStatuses,
+    statusFilter,
+    selectedProjects,
+    selectedSources,
+    selectedExecutives,
+    selectedCities,
+    selectedDepartments,
+    subSourceFilter,
+    assignedFilter,
+    fromDateFilter,
+    toDateFilter,
+    nextCallFrom,
+    nextCallTo,
+    descriptionFilter
+  ]);
+    /* =======================================================
+     FILTERED LEADS
+  ======================================================= */
+
+  const filteredLeads = useMemo(() => {
+
+    return leads.filter((lead) => {
+
+      /* ---------------------------------------------------
+         GLOBAL SEARCH
+      --------------------------------------------------- */
+
+      const searchText = `
+        ${lead.name || ""}
+        ${lead.phone || ""}
+        ${lead.project || ""}
+        ${lead.source || ""}
+        ${lead.closingExecutive || ""}
+        ${lead.assignedTo || ""}
+        ${lead.description || ""}
+        ${lead.subSource || ""}
+      `.toLowerCase();
+
+      const matchesSearch =
+        searchText.includes(
+          search.toLowerCase().trim()
+        );
+
+      /* ---------------------------------------------------
+         STATUS
+      --------------------------------------------------- */
+
+      const matchesStatus =
+        statusFilter
+          ? lead.status ===
+            statusFilter
+          : selectedStatuses.length === 0
+          ? true
+          : selectedStatuses.includes(
+              lead.status
+            );
+
+      /* ---------------------------------------------------
+         PROJECT
+      --------------------------------------------------- */
+
+      const matchesProject =
+        selectedProjects
+          ? (
+              lead.project ===
+                selectedProjects.value ||
+              lead.project ===
+                selectedProjects.label ||
+              String(lead.project) ===
+                String(
+                  selectedProjects.value
+                )
+            )
+          : true;
+
+      /* ---------------------------------------------------
+         SOURCE
+      --------------------------------------------------- */
+
+      const matchesSource =
+        selectedSources.length > 0
+          ? selectedSources.some(
+              (item) =>
+                item.value ===
+                lead.source
+            )
+          : true;
+
+      /* ---------------------------------------------------
+         EXECUTIVE
+      --------------------------------------------------- */
+
+      const matchesExecutive =
+        selectedExecutives.length > 0
+          ? selectedExecutives.some(
+              (item) =>
+                item.value ===
+                lead.closingExecutive
+            )
+          : true;
+
+      /* ---------------------------------------------------
+         CITY
+      --------------------------------------------------- */
+
+      const matchesCity =
+        selectedCities.length > 0
+          ? selectedCities.some(
+              (item) =>
+                item.value ===
+                lead.city
+            )
+          : true;
+
+      /* ---------------------------------------------------
+         DEPARTMENT
+      --------------------------------------------------- */
+
+      const matchesDepartment =
+        selectedDepartments.length > 0
+          ? selectedDepartments.some(
+              (item) =>
+                item.value ===
+                lead.department
+            )
+          : true;
+
+      /* ---------------------------------------------------
+         ASSIGNED TO
+      --------------------------------------------------- */
+
+      const assignedValue =
+        String(
+          lead.assignedTo ||
+          lead.assigned_to ||
+          lead.assigned_to_email ||
+          ""
+        ).toLowerCase();
+
+      const matchesAssigned =
+        assignedFilter
+          ? assignedValue.includes(
+              assignedFilter
+                .toLowerCase()
+                .trim()
+            )
+          : true;
+
+      /* ---------------------------------------------------
+         DESCRIPTION
+      --------------------------------------------------- */
+
+      const descriptionValue =
+        String(
+          lead.description || ""
+        ).toLowerCase();
+
+      const matchesDescription =
+        descriptionFilter
+          ? descriptionValue.includes(
+              descriptionFilter
+                .toLowerCase()
+                .trim()
+            )
+          : true;
+
+      /* ---------------------------------------------------
+         CREATED DATE
+      --------------------------------------------------- */
+
+      let createdDate = "";
+
+      if (lead.createdAt) {
+
+        const date =
+          new Date(
+            lead.createdAt
+          );
+
+        if (
+          !Number.isNaN(
+            date.getTime()
+          )
+        ) {
+
+          createdDate =
+            date
+              .toISOString()
+              .split("T")[0];
+        }
+      }
+
+      const matchesFromDate =
+        fromDateFilter
+          ? createdDate >=
+            fromDateFilter
+          : true;
+
+      const matchesToDate =
+        toDateFilter
+          ? createdDate <=
+            toDateFilter
+          : true;
+
+      /* ---------------------------------------------------
+         SUB SOURCE
+      --------------------------------------------------- */
+
+      const subSourceValue =
+        String(
+          lead.subSource || ""
+        ).toLowerCase();
+
+      const matchesSubSource =
+        subSourceFilter
+          ? subSourceValue.includes(
+              subSourceFilter
+                .toLowerCase()
+                .trim()
+            )
+          : true;
+
+      /* ---------------------------------------------------
+         NEXT CALL DATE
+      --------------------------------------------------- */
+
+      let nextCallDate = "";
+
+      if (
+        lead.next_call_date
+      ) {
+
+        const raw =
+          String(
+            lead.next_call_date
+          );
+
+        nextCallDate =
+          raw.includes("T")
+            ? raw.split("T")[0]
+            : raw.substring(0, 10);
+      }
+
+      const matchesNextCallFrom =
+        nextCallFrom
+          ? nextCallDate >=
+            nextCallFrom
+          : true;
+
+      const matchesNextCallTo =
+        nextCallTo
+          ? nextCallDate <=
+            nextCallTo
+          : true;
+
+      /* ---------------------------------------------------
+         FINAL RESULT
+      --------------------------------------------------- */
+
+      return (
+        matchesSearch &&
+        matchesStatus &&
+        matchesProject &&
+        matchesSource &&
+        matchesExecutive &&
+        matchesCity &&
+        matchesDepartment &&
+        matchesAssigned &&
+        matchesDescription &&
+        matchesFromDate &&
+        matchesToDate &&
+        matchesSubSource &&
+        matchesNextCallFrom &&
+        matchesNextCallTo
+      );
+
+    });
+
+  }, [
+    leads,
+    search,
+    statusFilter,
+    selectedStatuses,
+    selectedProjects,
+    selectedSources,
+    selectedExecutives,
+    selectedCities,
+    selectedDepartments,
+    assignedFilter,
+    descriptionFilter,
+    fromDateFilter,
+    toDateFilter,
+    subSourceFilter,
+    nextCallFrom,
+    nextCallTo
+  ]);
+
+  /* =======================================================
+     PAGINATION
+  ======================================================= */
+
+  const totalPages =
+    Math.ceil(
+      filteredLeads.length /
+      leadsPerPage
     );
 
-    return;
-  }
+  const indexOfLastLead =
+    currentPage *
+    leadsPerPage;
 
-  try {
+  const indexOfFirstLead =
+    indexOfLastLead -
+    leadsPerPage;
 
-    const res = await axios.post(
-      `${API}/add-lead`,
-      newLead
+  const currentLeads =
+    filteredLeads.slice(
+      indexOfFirstLead,
+      indexOfLastLead
     );
 
-    /* ================= ADD DIRECTLY IN TABLE ================= */
+  /* =======================================================
+     NEXT PAGE
+  ======================================================= */
 
-    const createdLead =
-      res.data?.lead || res.data;
+  const handleNextPage = () => {
 
-    setLeads((prev) => [
-      createdLead,
-      ...prev
-    ]);
+    if (
+      currentPage <
+      totalPages
+    ) {
 
-    alert(
-      "Lead Added Successfully ✅"
-    );
+      setCurrentPage(
+        (prev) => prev + 1
+      );
+    }
+  };
 
-    setShowNewLeadModal(false);
+  /* =======================================================
+     PREVIOUS PAGE
+  ======================================================= */
 
-    /* ================= RESET FORM ================= */
+  const handlePrevPage = () => {
+
+    if (
+      currentPage > 1
+    ) {
+
+      setCurrentPage(
+        (prev) => prev - 1
+      );
+    }
+  };
+
+  /* =======================================================
+     STATS
+  ======================================================= */
+
+  const stats = useMemo(() => {
+
+    return {
+
+      total:
+        filteredLeads.length,
+
+      new:
+        filteredLeads.filter(
+          (lead) =>
+            lead.status ===
+            "New"
+        ).length,
+
+      interested:
+        filteredLeads.filter(
+          (lead) =>
+            lead.status ===
+              "Interested" ||
+            lead.status ===
+              "Very Interested"
+        ).length,
+
+      booked:
+        filteredLeads.filter(
+          (lead) =>
+            lead.status ===
+            "Booked"
+        ).length,
+
+      followup:
+        filteredLeads.filter(
+          (lead) =>
+            lead.status ===
+            "Follow Up"
+        ).length,
+
+      notInterested:
+        filteredLeads.filter(
+          (lead) =>
+            lead.status ===
+            "Not Interested"
+        ).length,
+
+      siteVisitDone:
+        filteredLeads.filter(
+          (lead) =>
+            lead.status ===
+            "Site Visit Done"
+        ).length
+    };
+
+  }, [filteredLeads]);
+
+  /* =======================================================
+     CARD CLICK
+  ======================================================= */
+
+  const handleCardClick =
+    (status) => {
+
+      if (
+        status === "TOTAL"
+      ) {
+
+        setStatusFilter("");
+
+        setSelectedStatuses([]);
+
+      } else {
+
+        setStatusFilter(
+          status
+        );
+
+        setSelectedStatuses([]);
+      }
+
+      setCurrentPage(1);
+    };
+
+  /* =======================================================
+     CLEAR FILTERS
+  ======================================================= */
+
+  const clearFilters = () => {
+
+    setSearch("");
+
+    setStatusFilter("");
+
+    setSelectedStatuses([]);
+
+    setSelectedProjects(null);
+
+    setSelectedSources([]);
+
+    setSelectedDepartments([]);
+
+    setSelectedExecutives([]);
+
+    setSelectedCities([]);
+
+    setSubSourceFilter("");
+
+    setAssignedFilter("");
+
+    setFromDateFilter("");
+
+    setToDateFilter("");
+
+    setNextCallFrom("");
+
+    setNextCallTo("");
+
+    setDescriptionFilter("");
+
+    setCurrentPage(1);
+  };
+
+  /* =======================================================
+     OPEN NEW LEAD MODAL
+  ======================================================= */
+
+  const openNewLeadModal = () => {
 
     setNewLead({
-  name: "",
-  phone: "",
-  email: "",
-  project: "",
-  status: "",
-  source: "",
-  subSource: "",
-  city: "",
-  assignedTo: "",
-  assigned_to_email: "",
-  closingExecutive: "",
-  next_call_date: "",
-  department: "",
-  description: "",
-  deadReason: "",
-  deadSubReason: "",
-  bookingDate: "",
-});
-  }
 
-  catch (err) {
+      name: "",
 
-    console.error(err);
+      phone: "",
 
-    alert(
-      "Failed To Add Lead ❌"
+      email: "",
+
+      executive_email:
+        user.email || "",
+
+      project: "",
+
+      status: "New",
+
+      source: "",
+
+      subSource: "",
+
+      city: "",
+
+      assignedTo:
+        user.name ||
+        user.username ||
+        "",
+
+      assigned_to_email:
+        user.email || "",
+
+      assigned_to:
+        user.email || "",
+
+      closingExecutive:
+        user.name ||
+        user.username ||
+        "",
+
+      next_call_date: "",
+
+      department: "",
+
+      description: "",
+
+      deadReason: "",
+
+      deadSubReason: "",
+
+      bookingDate: ""
+    });
+
+    setShowNewLeadModal(true);
+  };
+
+  /* =======================================================
+     EXPORT CSV
+  ======================================================= */
+
+  const handleExportCSV = () => {
+
+    if (
+      filteredLeads.length === 0
+    ) {
+
+      alert(
+        "No leads to export ❌"
+      );
+
+      return;
+    }
+
+    const headers = [
+      "Name",
+      "Mobile",
+      "Email",
+      "Assigned To",
+      "Assigned Email",
+      "Closing Executive",
+      "Status",
+      "Source",
+      "Sub Source",
+      "Project",
+      "City",
+      "Department",
+      "Description",
+      "Next Call Date",
+      "Created At",
+      "Last Activity"
+    ];
+
+    const escapeCSV = (
+      value
+    ) => {
+
+      const text =
+        value === null ||
+        value === undefined
+          ? ""
+          : String(value);
+
+      return `"${text.replace(
+        /"/g,
+        '""'
+      )}"`;
+    };
+
+    const rows = [
+      headers.join(",")
+    ];
+
+    filteredLeads.forEach(
+      (lead) => {
+
+        const row = [
+
+          escapeCSV(
+            lead.name
+          ),
+
+          escapeCSV(
+            lead.phone
+          ),
+
+          escapeCSV(
+            lead.email
+          ),
+
+          escapeCSV(
+            lead.assignedTo ||
+            lead.assigned_to ||
+            ""
+          ),
+
+          escapeCSV(
+            lead.assigned_to_email
+          ),
+
+          escapeCSV(
+            lead.closingExecutive
+          ),
+
+          escapeCSV(
+            lead.status
+          ),
+
+          escapeCSV(
+            lead.source
+          ),
+
+          escapeCSV(
+            lead.subSource
+          ),
+
+          escapeCSV(
+            lead.project
+          ),
+
+          escapeCSV(
+            lead.city
+          ),
+
+          escapeCSV(
+            lead.department
+          ),
+
+          escapeCSV(
+            lead.description
+          ),
+
+          escapeCSV(
+            lead.next_call_date
+              ? String(
+                  lead.next_call_date
+                ).split("T")[0]
+              : ""
+          ),
+
+          escapeCSV(
+            lead.createdAt
+          ),
+
+          escapeCSV(
+            lead.updatedAt
+          )
+        ];
+
+        rows.push(
+          row.join(",")
+        );
+      }
     );
 
-  }
-
-};
-  /* ================= RESET PAGE ON FILTER CHANGE ================= */
-
-useEffect(() => {
-
-  setCurrentPage(1);
-
-}, [
-  search,
-  selectedStatuses,
-  statusFilter,
-  selectedProjects,
-  selectedSources,
-  selectedExecutives,
-  selectedCities,
-  selectedDepartments,
-  subSourceFilter,
-  assignedFilter,
-  fromDateFilter,
-  toDateFilter,
-  nextCallFrom,
-  nextCallTo,
-  descriptionFilter
-]);
-
-  /* ================= FILTER ================= */
-
-  const filteredLeads =
-    useMemo(() => {
-
-      return leads.filter(
-        (lead) => {
-
-          const matchesSearch =
-
-           `${lead.name || ""}
-            ${lead.phone || ""}
-            ${lead.project || ""}
-            ${lead.source || ""}
-            ${lead.closingExecutive || ""}`
-                    
-              .toLowerCase()
-
-              .includes(
-                search.toLowerCase()
-              );
-
-
-const matchesStatus =
-
-  statusFilter
-    ? lead.status === statusFilter
-
-    : selectedStatuses.length === 0
-      ? true
-      : selectedStatuses.includes(lead.status);
-
-const matchesProject =
-  selectedProjects
-    ? selectedProjects.value === lead.project ||
-      selectedProjects.label === lead.project
-    : true;
-
-const matchesSource =
-  selectedSources.length > 0
-    ? selectedSources.some(
-        (s) => s.value === lead.source
-      )
-    : true;
-
-const matchesExecutive =
-  selectedExecutives.length > 0
-    ? selectedExecutives.some(
-        (e) =>
-          e.value === lead.closingExecutive
-      )
-    : true;
-
-const matchesCity =
-  selectedCities.length > 0
-    ? selectedCities.some(
-        (c) => c.value === lead.city
-      )
-    : true;
-
-const matchesDepartment =
-  selectedDepartments.length > 0
-    ? selectedDepartments.some(
-        (d) => d.value === lead.department
-      )
-    : true;
-
-
-
-
-const matchesAssigned =
-  assignedFilter
-    ? lead.assignedTo
-        ?.toLowerCase()
-        .includes(
-          assignedFilter.toLowerCase()
-        )
-    : true;
-
-const matchesDescription =
-  descriptionFilter
-    ? lead.description
-        ?.toLowerCase()
-        .includes(
-          descriptionFilter.toLowerCase()
-        )
-    : true;
-
-
-const createdDate =
-  lead.createdAt
-    ? new Date(lead.createdAt)
-        .toISOString()
-        .split("T")[0]
-    : "";
-
-const matchesFromDate =
-  fromDateFilter
-    ? createdDate >= fromDateFilter
-    : true;
-
-const matchesToDate =
-  toDateFilter
-    ? createdDate <= toDateFilter
-    : true;
-
-
-const matchesSubSource =
-  subSourceFilter
-    ? lead.subSource
-        ?.toLowerCase()
-        .includes(
-          subSourceFilter.toLowerCase()
-        )
-    : true;
-
-
-const nextCallDate =
-  lead.next_call_date
-    ? lead.next_call_date
-        .split("T")[0]
-    : "";
-
-const matchesNextCallFrom =
-  nextCallFrom
-    ? nextCallDate >= nextCallFrom
-    : true;
-
-const matchesNextCallTo =
-  nextCallTo
-    ? nextCallDate <= nextCallTo
-    : true;
-return (
-  matchesSearch &&
-  matchesStatus &&
-  matchesProject &&
-  matchesSource &&
-  matchesExecutive &&
-  matchesSubSource &&
-  matchesCity &&
-  matchesDepartment &&
-  matchesAssigned &&
-  matchesDescription &&
-  matchesFromDate &&
-  matchesToDate &&
-  matchesNextCallFrom &&
-  matchesNextCallTo
-);
+    const blob =
+      new Blob(
+        [
+          rows.join("\n")
+        ],
+        {
+          type:
+            "text/csv;charset=utf-8;"
         }
       );
 
-    }, [
+    const url =
+      window.URL.createObjectURL(
+        blob
+      );
 
+    const link =
+      document.createElement(
+        "a"
+      );
 
-  leads,
-  search,
-  statusFilter,
-  assignedFilter,
-  subSourceFilter,
-  fromDateFilter,
-  toDateFilter,
-  nextCallFrom,
-  nextCallTo,
-  descriptionFilter,
-  selectedProjects,
-  selectedSources,
-  selectedExecutives,
-  selectedCities,
-  selectedDepartments
- ]);
+    link.href = url;
 
-/* ================= PAGINATION LOGIC ================= */
+    link.download =
+      "my-leads.csv";
 
-const totalPages = Math.ceil(
-  filteredLeads.length / leadsPerPage
-);
+    document.body.appendChild(
+      link
+    );
 
-const indexOfLastLead =
-  currentPage * leadsPerPage;
+    link.click();
 
-const indexOfFirstLead =
-  indexOfLastLead - leadsPerPage;
+    document.body.removeChild(
+      link
+    );
 
-const currentLeads =
-  filteredLeads.slice(
-    indexOfFirstLead,
-    indexOfLastLead
-  );
-
-/* ================= PAGE CHANGE ================= */
-
-const handleNextPage = () => {
-
-  if (currentPage < totalPages) {
-
-    setCurrentPage(currentPage + 1);
-
-  }
-
-};
-
-const handlePrevPage = () => {
-
-  if (currentPage > 1) {
-
-    setCurrentPage(currentPage - 1);
-
-  }
-
-};
-
-
-
-/* ================= FILTERED STATS ================= */
-
-const stats = useMemo(() => {
-
-  return {
-
-    total: filteredLeads.length,
-
-    new: filteredLeads.filter(
-      (l) => l.status === "New"
-    ).length,
-
-    interested: filteredLeads.filter(
-      (l) =>
-        l.status === "Interested" ||
-        l.status === "Very Interested"
-    ).length,
-
-    booked: filteredLeads.filter(
-      (l) => l.status === "Booked"
-    ).length,
-
-    followup: filteredLeads.filter(
-      (l) => l.status === "Follow Up"
-    ).length,
-
-    notInterested: filteredLeads.filter(
-      (l) => l.status === "Not Interested"
-    ).length,
-
-    siteVisitDone: filteredLeads.filter(
-      (l) => l.status === "Site Visit Done"
-    ).length,
-
+    window.URL.revokeObjectURL(
+      url
+    );
   };
 
-}, [filteredLeads]); 
+  /* =======================================================
+     RENDER
+  ======================================================= */
 
-
-/* ================= CARD CLICK FILTER ================= */
-
-const handleCardClick = (status) => {
-
-  if (status === "TOTAL") {
-    setStatusFilter("");
-    setSelectedStatuses([]);
-  } else {
-    setStatusFilter(status);
-    setSelectedStatuses([]);
-  }
-
-  setCurrentPage(1);
-};
-
- return (
+  return (
 
     <div className="layout">
+
+      {/* ===================================================
+          SIDEBAR
+      =================================================== */}
 
       <Sidebar
         isOpen={isOpen}
@@ -996,6 +1894,10 @@ const handleCardClick = (status) => {
           toggleSidebar
         }
       />
+
+      {/* ===================================================
+          MAIN CONTENT
+      =================================================== */}
 
       <div
         className={`main-content ${
@@ -1005,7 +1907,9 @@ const handleCardClick = (status) => {
         }`}
       >
 
-        {/* ================= HEADER ================= */}
+        {/* ================================================
+            HEADER
+        ================================================= */}
 
         <div className="page-header">
 
@@ -1026,525 +1930,660 @@ const handleCardClick = (status) => {
 
         </div>
 
-       {/* ================= SMALL STATS ================= */}
-
-<div className="stats-grid">
-
-  <div
-    className={`stats-card ${statusFilter === "" ? "active-card" : ""}`}
-    onClick={() => handleCardClick("TOTAL")}
-  >
-    <h5>Total</h5>
-    <p>{stats.total}</p>
-  </div>
-
-  <div
-    className={`stats-card new ${statusFilter === "New" ? "active-card" : ""}`}
-    onClick={() => handleCardClick("New")}
-  >
-    <h5>New</h5>
-    <p>{stats.new}</p>
-  </div>
-
-  <div
-    className={`stats-card interested ${statusFilter === "Interested" ? "active-card" : ""}`}
-    onClick={() => handleCardClick("Interested")}
-  >
-    <h5>Interested</h5>
-    <p>{stats.interested}</p>
-  </div>
-
-  <div
-    className={`stats-card booked ${statusFilter === "Booked" ? "active-card" : ""}`}
-    onClick={() => handleCardClick("Booked")}
-  >
-    <h5>Booked</h5>
-    <p>{stats.booked}</p>
-  </div>
-
-  <div
-    className={`stats-card followup ${statusFilter === "Follow Up" ? "active-card" : ""}`}
-    onClick={() => handleCardClick("Follow Up")}
-  >
-    <h5>Followup</h5>
-    <p>{stats.followup}</p>
-  </div>
-
-  <div
-    className={`stats-card not ${statusFilter === "Not Interested" ? "active-card" : ""}`}
-    onClick={() => handleCardClick("Not Interested")}
-  >
-    <h5>Not Interested</h5>
-    <p>{stats.notInterested}</p>
-  </div>
-
-  <div
-    className={`stats-card sitevisit ${statusFilter === "Site Visit Done" ? "active-card" : ""}`}
-    onClick={() => handleCardClick("Site Visit Done")}
-  >
-    <h5>Site Visit Done</h5>
-    <p>{stats.siteVisitDone}</p>
-  </div>
-
-</div>
-         {/* ================= SINGLE SEARCH ================= */}
-
-         <div className="filter-bar">
-
-        <input
-         type="text"
-         placeholder="Type to search"
-         value={search}
-         onChange={(e) =>
-        setSearch(e.target.value)
-       }
-         className="global-search"
-       />
-
-       </div>
-       
-{/* ================= ACTION BUTTONS ================= */}
-
-<div className="top-actions">
-
-  <button
-    className="advanced-btn"
-
-    onClick={() =>
-      setShowAdvancedSearch(
-        !showAdvancedSearch
-      )
-    }
-  >
-
-    Advanced Search
-
-  </button>
-    
-<button
-  className="newlead-btn"
-
-  onClick={() => {
-
- setNewLead((prev) => ({
-  ...prev,
-
-  assignedTo:
-    user?.name ||
-    user?.username ||
-    "",
-
-  assigned_to_email:
-    user?.email || "",
-
-    executive_email:
-  user?.email || "",
-
-  closingExecutive:
-    user?.name ||
-    user?.username ||
-    ""
-}));
-
-  setShowNewLeadModal(true);
-
-}}
->
-
-  + New Lead
-
-</button>
-
-  <button
-    className="export-btn"
-
-    onClick={() => {
-
-      const csvRows = [];
-
-      const headers = [
-
-"Name",
-"Mobile",
-
-"Assigned To",
-
-"Assigned Email",
-
-"Closing Executive",
-
-"Status",
-
-"Project",
-
-"Description",
-
-"Next Call Date",
-
-"Sub Source",
-
-"Created At"
-
-];
-
-      csvRows.push(headers.join(","));
-
-      filteredLeads.forEach((lead) => {
-
-       const row = [
-
-  `"${lead.name || ""}"`,
-  `"${lead.phone || ""}"`,
-  `"${lead.assignedTo || ""}"`,
-  `"${lead.assigned_to_email || ""}"`,
-  `"${lead.closingExecutive || ""}"`,
-  `"${lead.status || ""}"`,
-  `"${lead.project || ""}"`,
-  `"${lead.description || ""}"`,
-  `"${
-  lead.next_call_date
-    ? lead.next_call_date.split("T")[0]
-    : ""
-}"`,
-  `"${lead.subSource || ""}"`,
-  `"${lead.createdAt || ""}"`
-
-];
-
-        csvRows.push(row.join(","));
-
-      });
-
-      const blob = new Blob(
-        [csvRows.join("\n")],
-        { type: "text/csv" }
-      );
-
-      const url =
-        window.URL.createObjectURL(blob);
-
-      const a =
-        document.createElement("a");
-
-      a.href = url;
-
-      a.download =
-        "my-leads.csv";
-
-      a.click();
-
-    }}
-  >
-
-    Export CSV
-
-  </button>
-
-       </div>
-       {showAdvancedSearch && (
-
-  <div className="advanced-search-box">
-
-    <div className="multi-filter">
-  <label>Project</label>
-
-  <Select
-    options={[
-       { value: "Mahamumbai", label: "Mahamumbai" },
-      { value: "6975", label: "Mahamumbai Phase 2" },
-      { value: "7142", label: "Thane (Nitesh)" },
-      { value: "6674", label: "Panvel (99Villa)" },
-      { value: "6673", label: "Thane (Virendra)" },
-      { value: "7517", label: "Affordable life" },
-      { value: "7514", label: "99villa." },
-      { value: "7670", label: "99 villa plot." },
-      { value: "7743", label: "MAHAMUMBAI" },
-      { value: "7747", label: "Khopoli-pali Road plots" },
-      { value: "7843", label: "ANJALI ZAMIN." },
-      { value: "7876", label: "Sheetal THANE." },
-      { value: "7898", label: "THANE...( VIRENDRA)" },
-      { value: "7899", label: "Alibaug Plot." },
-      { value: "7871", label: "Sheetal Campaign." },
-      { value: "7912", label: "Maha-Mumbaai" },
-      { value: "7929", label: "THANE...( VIRENDRAA)" },
-      { value: "7941", label: "Gudipadwa plot in 5 Lacs." },
-    ]}
-
-    isSearchable
-    isClearable
-
-    value={selectedProjects}
-
-    onChange={(selected) =>
-      setSelectedProjects(selected)
-    }
-
-    placeholder="Search Project..."
-
-    styles={{
-      control: (base) => ({
-        ...base,
-        minHeight: "45px",
-        borderRadius: "10px"
-      }),
-      menu: (base) => ({
-        ...base,
-        zIndex: 9999
-      })
-    }}
-  />
-</div>
-
-
-   <div className="multi-filter">
-  <label>Source</label>
-
-  <Select
-    options={sourceDropdownOptions}
-    isMulti
-    closeMenuOnSelect={false}
-    hideSelectedOptions={false}
-    value={selectedSources}
-    onChange={setSelectedSources}
-    placeholder="Select Source"
-  />
-</div>
-
-    <input
-      type="text"
-      placeholder="Search Sub Source..."
-      value={subSourceFilter}
-      onChange={(e) =>
-        setSubSourceFilter(e.target.value)
-      }
-    />
-
-   <div className="multi-filter">
-  <label>City</label>
-
-  <Select
-    options={cityDropdownOptions}
-    isMulti
-    closeMenuOnSelect={false}
-    hideSelectedOptions={false}
-    value={selectedCities}
-    onChange={setSelectedCities}
-    placeholder="Select City"
-  />
-</div>
-
-
-<div className="multi-filter">
-  <label>Executive</label>
-
-  <Select
-    options={executiveDropdownOptions}
-    isMulti
-    closeMenuOnSelect={false}
-    hideSelectedOptions={false}
-    value={selectedExecutives}
-    onChange={setSelectedExecutives}
-    placeholder="Select Executive"
-  />
-</div>
-
-    <div className="multi-filter">
-  <label>Department</label>
-
-  <Select
-    options={departmentDropdownOptions}
-    isMulti
-    closeMenuOnSelect={false}
-    hideSelectedOptions={false}
-    value={selectedDepartments}
-    onChange={setSelectedDepartments}
-    placeholder="Select Department"
-  />
-</div>
-
-    <input
-      type="text"
-      placeholder="Assigned To..."
-      value={assignedFilter}
-      onChange={(e) =>
-        setAssignedFilter(e.target.value)
-      }
-    />
-
-    {/* ================= STATUS MULTI CHECKBOX ================= */}
-
-
-<div className="status-checkbox-filter">
-
-  <div className="status-checkbox-header">
-
-    <label>
-      Status
-    </label>
-
-    <label className="select-all-status">
-
-      <input
-        type="checkbox"
-        checked={isAllStatusesSelected}
-        onChange={handleSelectAllStatuses}
-      />
-
-      Select All
-
-    </label>
-
-  </div>
-
-
-  <div className="status-checkbox-list">
-
-    {statusOptions.map((status) => (
-
-      <label
-        key={status}
-        className="status-checkbox-item"
-      >
-
-        <input
-          type="checkbox"
-          checked={selectedStatuses.includes(status)}
-          onChange={() =>
-            handleStatusCheckbox(status)
-          }
-        />
-
-        <span>
-          {status}
-        </span>
-
-      </label>
-
-    ))}
-
-  </div>
-
-
-  {selectedStatuses.length > 0 && (
-
-    <div className="selected-status-count">
-
-      {selectedStatuses.length} Status Selected
-
-      <button
-        type="button"
-        onClick={() =>
-          setSelectedStatuses([])
-        }
-      >
-        Clear
-      </button>
-
-    </div>
-
-  )}
-
-</div>
-
-    {/* CREATED DATE */}
-
-    <div className="date-group">
-      <label>
-        Created Date From
-      </label>
-
-      <input
-        type="date"
-        value={fromDateFilter}
-        onChange={(e) =>
-          setFromDateFilter(e.target.value)
-        }
-      />
-    </div>
-
-    <div className="date-group">
-      <label>
-        Created Date To
-      </label>
-
-      <input
-        type="date"
-        value={toDateFilter}
-        onChange={(e) =>
-          setToDateFilter(e.target.value)
-        }
-      />
-    </div>
-
-    {/* NEXT CALL DATE */}
-
-    <div className="date-group">
-      <label>
-        Next Call Date From
-      </label>
-
-      <input
-        type="date"
-        value={nextCallFrom}
-        onChange={(e) =>
-          setNextCallFrom(e.target.value)
-        }
-      />
-    </div>
-
-    <div className="date-group">
-      <label>
-        Next Call Date To
-      </label>
-
-      <input
-        type="date"
-        value={nextCallTo}
-        onChange={(e) =>
-          setNextCallTo(e.target.value)
-        }
-      />
-    </div>
-
-    <input
-      type="text"
-      placeholder="Description..."
-      value={descriptionFilter}
-      onChange={(e) =>
-        setDescriptionFilter(e.target.value)
-      }
-    />
-
-   <button
-  className="clear-filter-btn"
-  onClick={() => {
-
-  setStatusFilter("");
-  setSubSourceFilter("");
-  setAssignedFilter("");
-  setSelectedStatuses([]);
-  setFromDateFilter("");
-  setToDateFilter("");
-  setNextCallFrom("");
-  setNextCallTo("");
-  setDescriptionFilter("");
-  setSelectedProjects(null);
-  setSelectedSources([]);
-  setSelectedDepartments([]);
-  setSelectedExecutives([]);
-  setSelectedCities([]);
-
-}}
->
-  Clear Filters
-</button>
-
-  </div>
-
-)}
-
-
-        {/* ================= CONTENT ================= */}
+        {/* ================================================
+            STATS
+        ================================================= */}
+
+        <div className="stats-grid">
+
+          <div
+            className={`stats-card ${
+              statusFilter === ""
+                ? "active-card"
+                : ""
+            }`}
+            onClick={() =>
+              handleCardClick(
+                "TOTAL"
+              )
+            }
+          >
+
+            <h5>
+              Total
+            </h5>
+
+            <p>
+              {stats.total}
+            </p>
+
+          </div>
+
+          <div
+            className={`stats-card new ${
+              statusFilter ===
+              "New"
+                ? "active-card"
+                : ""
+            }`}
+            onClick={() =>
+              handleCardClick(
+                "New"
+              )
+            }
+          >
+
+            <h5>
+              New
+            </h5>
+
+            <p>
+              {stats.new}
+            </p>
+
+          </div>
+
+          <div
+            className={`stats-card interested ${
+              statusFilter ===
+              "Interested"
+                ? "active-card"
+                : ""
+            }`}
+            onClick={() =>
+              handleCardClick(
+                "Interested"
+              )
+            }
+          >
+
+            <h5>
+              Interested
+            </h5>
+
+            <p>
+              {stats.interested}
+            </p>
+
+          </div>
+
+          <div
+            className={`stats-card booked ${
+              statusFilter ===
+              "Booked"
+                ? "active-card"
+                : ""
+            }`}
+            onClick={() =>
+              handleCardClick(
+                "Booked"
+              )
+            }
+          >
+
+            <h5>
+              Booked
+            </h5>
+
+            <p>
+              {stats.booked}
+            </p>
+
+          </div>
+
+          <div
+            className={`stats-card followup ${
+              statusFilter ===
+              "Follow Up"
+                ? "active-card"
+                : ""
+            }`}
+            onClick={() =>
+              handleCardClick(
+                "Follow Up"
+              )
+            }
+          >
+
+            <h5>
+              Followup
+            </h5>
+
+            <p>
+              {stats.followup}
+            </p>
+
+          </div>
+
+          <div
+            className={`stats-card not ${
+              statusFilter ===
+              "Not Interested"
+                ? "active-card"
+                : ""
+            }`}
+            onClick={() =>
+              handleCardClick(
+                "Not Interested"
+              )
+            }
+          >
+
+            <h5>
+              Not Interested
+            </h5>
+
+            <p>
+              {stats.notInterested}
+            </p>
+
+          </div>
+
+          <div
+            className={`stats-card sitevisit ${
+              statusFilter ===
+              "Site Visit Done"
+                ? "active-card"
+                : ""
+            }`}
+            onClick={() =>
+              handleCardClick(
+                "Site Visit Done"
+              )
+            }
+          >
+
+            <h5>
+              Site Visit Done
+            </h5>
+
+            <p>
+              {stats.siteVisitDone}
+            </p>
+
+          </div>
+
+        </div>
+
+        {/* ================================================
+            GLOBAL SEARCH
+        ================================================= */}
+
+        <div className="filter-bar">
+
+          <input
+            type="text"
+            placeholder="Type to search"
+            value={search}
+            onChange={(e) =>
+              setSearch(
+                e.target.value
+              )
+            }
+            className="global-search"
+          />
+
+        </div>
+
+        {/* ================================================
+            ACTION BUTTONS
+        ================================================= */}
+
+        <div className="top-actions">
+
+          <button
+            className="advanced-btn"
+            onClick={() =>
+              setShowAdvancedSearch(
+                (prev) => !prev
+              )
+            }
+          >
+
+            {showAdvancedSearch
+              ? "Hide Advanced Search"
+              : "Advanced Search"}
+
+          </button>
+
+          <button
+            className="newlead-btn"
+            onClick={
+              openNewLeadModal
+            }
+          >
+
+            + New Lead
+
+          </button>
+
+          <button
+            className="export-btn"
+            onClick={
+              handleExportCSV
+            }
+          >
+
+            Export CSV
+
+          </button>
+
+        </div>
+
+        {/* ================================================
+            ADVANCED SEARCH
+        ================================================= */}
+
+        {showAdvancedSearch && (
+
+          <div className="advanced-search-box">
+
+            {/* PROJECT */}
+
+            <div className="multi-filter">
+
+              <label>
+                Project
+              </label>
+
+              <Select
+                options={
+                  projectFilterOptions
+                }
+                isSearchable
+                isClearable
+                value={
+                  selectedProjects
+                }
+                onChange={
+                  setSelectedProjects
+                }
+                placeholder="Search Project..."
+                styles={{
+                  control:
+                    (base) => ({
+                      ...base,
+                      minHeight:
+                        "45px",
+                      borderRadius:
+                        "10px"
+                    }),
+
+                  menu:
+                    (base) => ({
+                      ...base,
+                      zIndex:
+                        9999
+                    })
+                }}
+              />
+
+            </div>
+
+            {/* SOURCE */}
+
+            <div className="multi-filter">
+
+              <label>
+                Source
+              </label>
+
+              <Select
+                options={
+                  sourceDropdownOptions
+                }
+                isMulti
+                closeMenuOnSelect={
+                  false
+                }
+                hideSelectedOptions={
+                  false
+                }
+                value={
+                  selectedSources
+                }
+                onChange={
+                  setSelectedSources
+                }
+                placeholder="Select Source"
+              />
+
+            </div>
+
+            {/* SUB SOURCE */}
+
+            <input
+              type="text"
+              placeholder="Search Sub Source..."
+              value={
+                subSourceFilter
+              }
+              onChange={(e) =>
+                setSubSourceFilter(
+                  e.target.value
+                )
+              }
+            />
+
+            {/* CITY */}
+
+            <div className="multi-filter">
+
+              <label>
+                City
+              </label>
+
+              <Select
+                options={
+                  cityDropdownOptions
+                }
+                isMulti
+                closeMenuOnSelect={
+                  false
+                }
+                hideSelectedOptions={
+                  false
+                }
+                value={
+                  selectedCities
+                }
+                onChange={
+                  setSelectedCities
+                }
+                placeholder="Select City"
+              />
+
+            </div>
+
+            {/* EXECUTIVE */}
+
+            <div className="multi-filter">
+
+              <label>
+                Executive
+              </label>
+
+              <Select
+                options={
+                  executiveDropdownOptions
+                }
+                isMulti
+                closeMenuOnSelect={
+                  false
+                }
+                hideSelectedOptions={
+                  false
+                }
+                value={
+                  selectedExecutives
+                }
+                onChange={
+                  setSelectedExecutives
+                }
+                placeholder="Select Executive"
+              />
+
+            </div>
+
+            {/* DEPARTMENT */}
+
+            <div className="multi-filter">
+
+              <label>
+                Department
+              </label>
+
+              <Select
+                options={
+                  departmentDropdownOptions
+                }
+                isMulti
+                closeMenuOnSelect={
+                  false
+                }
+                hideSelectedOptions={
+                  false
+                }
+                value={
+                  selectedDepartments
+                }
+                onChange={
+                  setSelectedDepartments
+                }
+                placeholder="Select Department"
+              />
+
+            </div>
+
+            {/* ASSIGNED */}
+
+            <input
+              type="text"
+              placeholder="Assigned To..."
+              value={
+                assignedFilter
+              }
+              onChange={(e) =>
+                setAssignedFilter(
+                  e.target.value
+                )
+              }
+            />
+
+            {/* ==========================================
+                STATUS CHECKBOX
+            =========================================== */}
+
+            <div className="status-checkbox-filter">
+
+              <div className="status-checkbox-header">
+
+                <label>
+                  Status
+                </label>
+
+                <label className="select-all-status">
+
+                  <input
+                    type="checkbox"
+                    checked={
+                      isAllStatusesSelected
+                    }
+                    onChange={
+                      handleSelectAllStatuses
+                    }
+                  />
+
+                  Select All
+
+                </label>
+
+              </div>
+
+              <div className="status-checkbox-list">
+
+                {statusOptions.map(
+                  (status) => (
+
+                    <label
+                      key={status}
+                      className="status-checkbox-item"
+                    >
+
+                      <input
+                        type="checkbox"
+                        checked={selectedStatuses.includes(
+                          status
+                        )}
+                        onChange={() =>
+                          handleStatusCheckbox(
+                            status
+                          )
+                        }
+                      />
+
+                      <span>
+                        {status}
+                      </span>
+
+                    </label>
+
+                  )
+                )}
+
+              </div>
+
+              {selectedStatuses.length >
+                0 && (
+
+                <div className="selected-status-count">
+
+                  {selectedStatuses.length}
+                  {" "}
+                  Status Selected
+
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setSelectedStatuses(
+                        []
+                      )
+                    }
+                  >
+                    Clear
+                  </button>
+
+                </div>
+
+              )}
+
+            </div>
+
+            {/* ==========================================
+                CREATED FROM
+            =========================================== */}
+
+            <div className="date-group">
+
+              <label>
+                Created Date From
+              </label>
+
+              <input
+                type="date"
+                value={
+                  fromDateFilter
+                }
+                onChange={(e) =>
+                  setFromDateFilter(
+                    e.target.value
+                  )
+                }
+              />
+
+            </div>
+
+            {/* CREATED TO */}
+
+            <div className="date-group">
+
+              <label>
+                Created Date To
+              </label>
+
+              <input
+                type="date"
+                value={
+                  toDateFilter
+                }
+                onChange={(e) =>
+                  setToDateFilter(
+                    e.target.value
+                  )
+                }
+              />
+
+            </div>
+
+            {/* NEXT CALL FROM */}
+
+            <div className="date-group">
+
+              <label>
+                Next Call Date From
+              </label>
+
+              <input
+                type="date"
+                value={
+                  nextCallFrom
+                }
+                onChange={(e) =>
+                  setNextCallFrom(
+                    e.target.value
+                  )
+                }
+              />
+
+            </div>
+
+            {/* NEXT CALL TO */}
+
+            <div className="date-group">
+
+              <label>
+                Next Call Date To
+              </label>
+
+              <input
+                type="date"
+                value={
+                  nextCallTo
+                }
+                onChange={(e) =>
+                  setNextCallTo(
+                    e.target.value
+                  )
+                }
+              />
+
+            </div>
+
+            {/* DESCRIPTION */}
+
+            <input
+              type="text"
+              placeholder="Description..."
+              value={
+                descriptionFilter
+              }
+              onChange={(e) =>
+                setDescriptionFilter(
+                  e.target.value
+                )
+              }
+            />
+
+            {/* CLEAR */}
+
+            <button
+              className="clear-filter-btn"
+              onClick={
+                clearFilters
+              }
+            >
+
+              Clear Filters
+
+            </button>
+
+          </div>
+
+        )}
+
+        {/* ================================================
+            CONTENT
+        ================================================= */}
 
         {loading ? (
 
@@ -1565,45 +2604,77 @@ const handleCardClick = (status) => {
 
         ) : (
 
-      <div className="table-wrapper">
-         <table className="leads-table">
+          <div className="table-wrapper">
+
+            <table className="leads-table">
+
               <thead>
 
                 <tr>
 
-                  <th>Sr No</th>
+                  <th>
+                    Sr No
+                  </th>
 
-                  <th>Name</th>
+                  <th>
+                    Name
+                  </th>
 
-                  <th>Call / Mobile</th>
+                  <th>
+                    Call / Mobile
+                  </th>
 
-                  <th>Assigned To</th>                  
+                  <th>
+                    Assigned To
+                  </th>
 
-                  <th>Status</th>
+                  <th>
+                    Status
+                  </th>
 
-                  <th>Source</th>
+                  <th>
+                    Source
+                  </th>
 
-                  <th>Project</th>
+                  <th>
+                    Project
+                  </th>
 
-                  <th>Description</th>
-             
-                  <th>Next Call Date</th>
+                  <th>
+                    Description
+                  </th>
 
-                  <th>Sub Source</th>
+                  <th>
+                    Next Call Date
+                  </th>
 
-                  <th>Created At</th>
-                  <th>Last Activity</th>
-                  <th>Update Status</th>
-                  
+                  <th>
+                    Sub Source
+                  </th>
 
-                  <th>Action</th>
+                  <th>
+                    Created At
+                  </th>
+
+                  <th>
+                    Last Activity
+                  </th>
+
+                  <th>
+                    Update Status
+                  </th>
+
+                  <th>
+                    Action
+                  </th>
 
                 </tr>
+
               </thead>
+
               <tbody>
 
                 {currentLeads.map(
-
                   (
                     lead,
                     index
@@ -1611,969 +2682,1353 @@ const handleCardClick = (status) => {
 
                     <tr
                       key={
-                        lead._id
+                        lead._id ||
+                        `${lead.phone}-${index}`
                       }
                     >
 
                       <td>
-                       {indexOfFirstLead + index + 1}
+                        {indexOfFirstLead +
+                          index +
+                          1}
                       </td>
 
                       <td>
-                        {lead.name || "-"}
+                        {lead.name ||
+                          "-"}
                       </td>
 
                       <td>
-                        {lead.phone || "-"}
+                        {lead.phone ||
+                          "-"}
                       </td>
-
-               <td>
-  {lead.assignedTo
-    ? lead.assignedTo
-    : lead.assigned_to_email
-    ? lead.assigned_to_email
-    : "-"}
-</td>
-
-                    
-
-                     <td>
-
-  <span
-    className={`status-badge ${lead.status
-      ?.toLowerCase()
-      .replace(/\s+/g, "-")}`}
-  >
-    {lead.status || "New"}
-  </span>
-
-</td>
-
-<td>
-  {lead.source || "-"}
-</td>
-
-<td>
-  {lead.project || "-"}
-</td>
-
-                     <td className="description-cell">
-                     {lead.description || "-"}
-                     </td>
-
-                         
-                     <td>
-                {lead.next_call_date
-                ? lead.next_call_date.split("T")[0]
-                   : "-"}
-                     </td>
 
                       <td>
-                        {lead.subSource || "-"}
+
+                        {lead.assignedTo ||
+                          lead.assigned_to ||
+                          lead.assigned_to_email ||
+                          "-"}
+
                       </td>
 
-                     <td>
-  {lead.createdAt
-    ? new Date(lead.createdAt).toLocaleString()
-    : "-"
-  }
-</td>
+                      <td>
 
-<td>
-  {lead.updatedAt
-    ? new Date(lead.updatedAt).toLocaleString()
-    : "-"
-  }
-</td>
+                        <span
+                          className={`status-badge ${
+                            String(
+                              lead.status ||
+                              "New"
+                            )
+                              .toLowerCase()
+                              .replace(
+                                /\s+/g,
+                                "-"
+                              )
+                          }`}
+                        >
 
-<td>
+                          {lead.status ||
+                            "New"}
 
-<select
-  className="status-select"
-  value={lead.status || "New"}
-  onChange={async (e) => {
+                        </span>
 
-    const value = e.target.value;
+                      </td>
 
-    setLeads((prev) =>
-      prev.map((l) =>
-        l._id === lead._id
-          ? {
-              ...l,
-              status: value
-            }
-          : l
-      )
-    );
+                      <td>
+                        {lead.source ||
+                          "-"}
+                      </td>
 
-    await updateStatus(
-      lead._id,
-      value
-    );
-  }}
->
+                      <td>
+                        {lead.project ||
+                          "-"}
+                      </td>
 
-{statusOptions.map((status, i) => (
-  <option
-    key={i}
-    value={status}
-  >
-    {status}
-  </option>
-))}
+                      <td className="description-cell">
 
-</select>
+                        {lead.description ||
+                          "-"}
 
-</td>
+                      </td>
+
+                      <td>
+
+                        {lead.next_call_date
+                          ? String(
+                              lead.next_call_date
+                            ).split(
+                              "T"
+                            )[0]
+                          : "-"}
+
+                      </td>
+
+                      <td>
+                        {lead.subSource ||
+                          "-"}
+                      </td>
+
+                      <td>
+
+                        {lead.createdAt
+                          ? new Date(
+                              lead.createdAt
+                            ).toLocaleString()
+                          : "-"}
+
+                      </td>
+
+                      <td>
+
+                        {lead.updatedAt
+                          ? new Date(
+                              lead.updatedAt
+                            ).toLocaleString()
+                          : "-"}
+
+                      </td>
+
+                      {/* STATUS UPDATE */}
+
+                      <td>
+
+                        <select
+                          className="status-select"
+                          value={
+                            lead.status ||
+                            "New"
+                          }
+                          onChange={async (
+                            e
+                          ) => {
+
+                            const value =
+                              e.target
+                                .value;
+
+                            /* Immediate UI */
+
+                            setLeads(
+                              (prev) =>
+                                prev.map(
+                                  (
+                                    item
+                                  ) =>
+                                    item._id ===
+                                    lead._id
+                                      ? {
+                                          ...item,
+                                          status:
+                                            value
+                                        }
+                                      : item
+                                )
+                            );
+
+                            await updateStatus(
+                              lead._id,
+                              value
+                            );
+
+                          }}
+                        >
+
+                          {statusOptions.map(
+                            (
+                              status
+                            ) => (
+
+                              <option
+                                key={
+                                  status
+                                }
+                                value={
+                                  status
+                                }
+                              >
+                                {status}
+                              </option>
+
+                            )
+                          )}
+
+                        </select>
+
+                      </td>
 
                       {/* ACTIONS */}
 
                       <td>
 
-                      <div className="action-buttons">
+                        <div className="action-buttons">
 
-  {/* CALL ICON */}
+                          {/* CALL */}
 
-  <button
-  className="call-btn icon-btn"
-  title="Call"
-  onClick={() => startCall(lead)}
->
-  <FaPhoneAlt />
-</button>
+                          <button
+                            className="call-btn icon-btn"
+                            title="Call"
+                            onClick={() =>
+                              startCall(
+                                lead
+                              )
+                            }
+                          >
 
+                            <FaPhoneAlt />
 
+                          </button>
 
+                          {/* WHATSAPP */}
 
+                          <a
+                            href={`https://wa.me/91${String(
+                              lead.phone ||
+                              ""
+                            ).replace(
+                              /\D/g,
+                              ""
+                            )}`}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="whatsapp-btn icon-btn"
+                            title="WhatsApp"
+                          >
 
-  {/* WHATSAPP ICON */}
+                            <FaWhatsapp />
 
-  <a
-    href={`https://wa.me/91${String(
-      lead.phone
-    ).replace(/\D/g, "")}`}
+                          </a>
 
-    target="_blank"
-    rel="noreferrer"
+                          {/* EDIT */}
 
-    className="whatsapp-btn icon-btn"
-    title="WhatsApp"
-  >
-    <FaWhatsapp />
-  </a>
+                          <button
+                            className="edit-btn icon-btn"
+                            title="Edit"
+                            onClick={() => {
 
-  {/* EDIT ICON */}
+                              setSelectedLead(
+                                {
+                                  ...lead,
 
-  <button
-    className="edit-btn icon-btn"
+                                  executive_email:
+                                    lead.executive_email ||
+                                    user.email,
 
-    title="Edit"
+                                  assignedTo:
+                                    lead.assignedTo ||
+                                    "",
 
-   onClick={() => {
+                                  assigned_to_email:
+                                    lead.assigned_to_email ||
+                                    user.email ||
+                                    "",
 
-  setSelectedLead({
+                                  assigned_to:
+                                    lead.assigned_to ||
+                                    lead.assigned_to_email ||
+                                    user.email ||
+                                    "",
 
-    ...lead,
+                                  next_call_date:
+                                    lead.next_call_date
+                                      ? String(
+                                          lead.next_call_date
+                                        ).split(
+                                          "T"
+                                        )[0]
+                                      : ""
+                                }
+                              );
 
-    executive_email:
-    lead.executive_email ||
-    user.email,
+                              setShowModal(
+                                true
+                              );
 
-    assignedTo: lead.assignedTo,
-    assigned_to_email:
-      lead.assigned_to_email ||
-      user.email ||
-      "",
+                            }}
+                          >
 
-    next_call_date:
-      lead.next_call_date
-        ? lead.next_call_date.split("T")[0]
-        : ""
+                            <FaEdit />
 
-  });
+                          </button>
 
-  setShowModal(true);
+                          {/* BOOKING */}
 
-}}
-  >
-    <FaEdit />
-  </button>
-{lead.status === "Booked" && (
+                          {lead.status ===
+                            "Booked" && (
 
-<button
-className="booking-btn"
+                            <button
+                              className="booking-btn"
+                              onClick={() => {
 
-onClick={()=>{
+                                setSelectedLead(
+                                  lead
+                                );
 
-setSelectedLead(lead);
+                                setBookingData(
+                                  {
+                                    unitNo:
+                                      "",
+                                    bookingAmount:
+                                      ""
+                                  }
+                                );
 
-setShowBookingModal(true);
+                                setShowBookingModal(
+                                  true
+                                );
 
-}}
->
+                              }}
+                            >
 
-Booking
+                              Booking
 
-</button>
+                            </button>
 
-)}
-</div>
+                          )}
+
+                        </div>
 
                       </td>
 
                     </tr>
 
                   )
-
                 )}
 
               </tbody>
 
             </table>
 
-  {/* ================= PAGINATION ================= */}
+            {/* ==========================================
+                PAGINATION
+            =========================================== */}
 
-<div className="pagination">
+            <div className="pagination">
 
-  <button
-    onClick={handlePrevPage}
-    disabled={currentPage === 1}
-    className="page-btn"
-  >
-    Previous
-  </button>
+              <button
+                onClick={
+                  handlePrevPage
+                }
+                disabled={
+                  currentPage ===
+                  1
+                }
+                className="page-btn"
+              >
 
-  <span className="page-info">
-  Page {currentPage} of {totalPages || 1}
-  </span>
+                Previous
 
-  <button
-    onClick={handleNextPage}
-   disabled={
-  currentPage === totalPages ||
-  totalPages === 0
-}
-    className="page-btn"
-  >
-    Next
-  </button>
+              </button>
 
-</div>
+              <span className="page-info">
 
+                Page{" "}
+                {currentPage}{" "}
+                of{" "}
+                {totalPages || 1}
+
+              </span>
+
+              <button
+                onClick={
+                  handleNextPage
+                }
+                disabled={
+                  currentPage ===
+                    totalPages ||
+                  totalPages ===
+                    0
+                }
+                className="page-btn"
+              >
+
+                Next
+
+              </button>
+
+            </div>
+
+          </div>
+
+        )}
+                {/* =================================================
+            NEW LEAD MODAL
+        ================================================== */}
+
+        {showNewLeadModal && (
+
+          <div className="modal-overlay">
+
+            <div className="modal-box large-modal">
+
+              <h2>
+                Add New Lead
+              </h2>
+
+              <div className="lead-form-grid">
+
+                {/* NAME */}
+
+                <input
+                  type="text"
+                  placeholder="Name"
+                  value={
+                    newLead.name
+                  }
+                  onChange={(e) =>
+                    setNewLead(
+                      (prev) => ({
+                        ...prev,
+                        name:
+                          e.target.value
+                      })
+                    )
+                  }
+                />
+
+                {/* PHONE */}
+
+                <input
+                  type="text"
+                  placeholder="Mobile"
+                  value={
+                    newLead.phone
+                  }
+                  onChange={(e) =>
+                    setNewLead(
+                      (prev) => ({
+                        ...prev,
+                        phone:
+                          e.target.value
+                      })
+                    )
+                  }
+                />
+
+                {/* EMAIL */}
+
+                <input
+                  type="email"
+                  placeholder="Primary Email"
+                  value={
+                    newLead.email
+                  }
+                  onChange={(e) =>
+                    setNewLead(
+                      (prev) => ({
+                        ...prev,
+                        email:
+                          e.target.value
+                      })
+                    )
+                  }
+                />
+
+                {/* PROJECT */}
+
+                <select
+                  value={
+                    newLead.project
+                  }
+                  onChange={(e) =>
+                    setNewLead(
+                      (prev) => ({
+                        ...prev,
+                        project:
+                          e.target.value
+                      })
+                    )
+                  }
+                >
+
+                  <option value="">
+                    Please Select Project
+                  </option>
+
+                  {projectOptions.map(
+                    (
+                      project
+                    ) => (
+
+                      <option
+                        key={
+                          project
+                        }
+                        value={
+                          project
+                        }
+                      >
+                        {project}
+                      </option>
+
+                    )
+                  )}
+
+                </select>
+
+                {/* STATUS */}
+
+                <select
+                  value={
+                    newLead.status
+                  }
+                  onChange={(e) =>
+                    setNewLead(
+                      (prev) => ({
+                        ...prev,
+                        status:
+                          e.target.value
+                      })
+                    )
+                  }
+                >
+
+                  <option value="">
+                    Lead Status
+                  </option>
+
+                  {statusOptions.map(
+                    (
+                      status
+                    ) => (
+
+                      <option
+                        key={
+                          status
+                        }
+                        value={
+                          status
+                        }
+                      >
+                        {status}
+                      </option>
+
+                    )
+                  )}
+
+                </select>
+
+                {/* NEXT CALL */}
+
+                <input
+                  type="date"
+                  value={
+                    newLead.next_call_date
+                  }
+                  onChange={(e) =>
+                    setNewLead(
+                      (prev) => ({
+                        ...prev,
+                        next_call_date:
+                          e.target.value
+                      })
+                    )
+                  }
+                />
+
+                {/* SOURCE */}
+
+                <select
+                  value={
+                    newLead.source
+                  }
+                  onChange={(e) =>
+                    setNewLead(
+                      (prev) => ({
+                        ...prev,
+                        source:
+                          e.target.value
+                      })
+                    )
+                  }
+                >
+
+                  <option value="">
+                    Select Source
+                  </option>
+
+                  {sourceOptions.map(
+                    (
+                      source
+                    ) => (
+
+                      <option
+                        key={
+                          source
+                        }
+                        value={
+                          source
+                        }
+                      >
+                        {source}
+                      </option>
+
+                    )
+                  )}
+
+                </select>
+
+                {/* SUB SOURCE */}
+
+                <input
+                  type="text"
+                  placeholder="Sub Source"
+                  value={
+                    newLead.subSource
+                  }
+                  onChange={(e) =>
+                    setNewLead(
+                      (prev) => ({
+                        ...prev,
+                        subSource:
+                          e.target.value
+                      })
+                    )
+                  }
+                />
+
+                {/* CITY */}
+
+                <input
+                  type="text"
+                  placeholder="City"
+                  value={
+                    newLead.city
+                  }
+                  onChange={(e) =>
+                    setNewLead(
+                      (prev) => ({
+                        ...prev,
+                        city:
+                          e.target.value
+                      })
+                    )
+                  }
+                />
+
+                {/* ASSIGNED TO */}
+
+                <input
+                  type="text"
+                  placeholder="Assign To"
+                  value={
+                    newLead.assignedTo
+                  }
+                  onChange={(e) =>
+                    setNewLead(
+                      (prev) => ({
+                        ...prev,
+                        assignedTo:
+                          e.target.value
+                      })
+                    )
+                  }
+                />
+
+                {/* CLOSING EXECUTIVE */}
+
+                <input
+                  type="text"
+                  placeholder="Closing Executive"
+                  value={
+                    newLead.closingExecutive
+                  }
+                  onChange={(e) =>
+                    setNewLead(
+                      (prev) => ({
+                        ...prev,
+                        closingExecutive:
+                          e.target.value
+                      })
+                    )
+                  }
+                />
+
+                {/* DEPARTMENT */}
+
+                <select
+                  value={
+                    newLead.department
+                  }
+                  onChange={(e) =>
+                    setNewLead(
+                      (prev) => ({
+                        ...prev,
+                        department:
+                          e.target.value
+                      })
+                    )
+                  }
+                >
+
+                  <option value="">
+                    Please Select Department
+                  </option>
+
+                  {departmentOptions.map(
+                    (
+                      department
+                    ) => (
+
+                      <option
+                        key={
+                          department
+                        }
+                        value={
+                          department
+                        }
+                      >
+                        {department}
+                      </option>
+
+                    )
+                  )}
+
+                </select>
+
+              </div>
+
+              {/* ==========================================
+                  DEAD REASON
+              =========================================== */}
+
+              {newLead.status ===
+                "Not Interested" && (
+
+                <div className="lead-form-grid">
+
+                  <select
+                    value={
+                      newLead.deadReason
+                    }
+                    onChange={(e) =>
+                      setNewLead(
+                        (prev) => ({
+                          ...prev,
+                          deadReason:
+                            e.target.value
+                        })
+                      )
+                    }
+                  >
+
+                    <option value="">
+                      Dead Reason
+                    </option>
+
+                    {deadReasonOptions.map(
+                      (
+                        reason
+                      ) => (
+
+                        <option
+                          key={
+                            reason
+                          }
+                          value={
+                            reason
+                          }
+                        >
+                          {reason}
+                        </option>
+
+                      )
+                    )}
+
+                  </select>
+
+                  <input
+                    type="text"
+                    placeholder="Dead Sub Reason"
+                    value={
+                      newLead.deadSubReason
+                    }
+                    onChange={(e) =>
+                      setNewLead(
+                        (prev) => ({
+                          ...prev,
+                          deadSubReason:
+                            e.target.value
+                        })
+                      )
+                    }
+                  />
+
+                </div>
+
+              )}
+
+              {/* ==========================================
+                  BOOKING DATA
+              =========================================== */}
+
+              {newLead.status ===
+                "Booked" && (
+
+                <div className="lead-form-grid">
+
+                  <input
+                    type="date"
+                    value={
+                      newLead.bookingDate
+                    }
+                    onChange={(e) =>
+                      setNewLead(
+                        (prev) => ({
+                          ...prev,
+                          bookingDate:
+                            e.target.value
+                        })
+                      )
+                    }
+                  />
+
+                  <input
+                    type="file"
+                    onChange={() => {}}
+                  />
+
+                </div>
+
+              )}
+
+              {/* DESCRIPTION */}
+
+              <textarea
+                placeholder="Comment"
+                rows="4"
+                value={
+                  newLead.description
+                }
+                onChange={(e) =>
+                  setNewLead(
+                    (prev) => ({
+                      ...prev,
+                      description:
+                        e.target.value
+                    })
+                  )
+                }
+              />
+
+              {/* ACTIONS */}
+
+              <div className="modal-actions">
+
+                <button
+                  className="cancel-btn"
+                  onClick={() =>
+                    setShowNewLeadModal(
+                      false
+                    )
+                  }
+                >
+
+                  Cancel
+
+                </button>
+
+                <button
+                  className="save-btn"
+                  onClick={
+                    handleAddNewLead
+                  }
+                >
+
+                  Save Lead
+
+                </button>
+
+              </div>
+
+            </div>
 
           </div>
 
         )}
 
-      </div>
-
-     {/* ================= NEW LEAD MODAL ================= */}
-
-{showNewLeadModal && (
-
-  <div className="modal-overlay">
-
-    <div className="modal-box large-modal">
-
-      <h2>Add New Lead</h2>
-
-      <div className="lead-form-grid">
-
-        <input
-          type="text"
-          placeholder="Name"
-          value={newLead.name}
-          onChange={(e) =>
-            setNewLead({
-              ...newLead,
-              name: e.target.value
-            })
-          }
-        />
-
-        <input
-          type="text"
-          placeholder="Mobile"
-          value={newLead.phone}
-          onChange={(e) =>
-            setNewLead({
-              ...newLead,
-              phone: e.target.value
-            })
-          }
-        />
-
-        <input
-          type="email"
-          placeholder="Primary Email"
-          value={newLead.email}
-          onChange={(e) =>
-            setNewLead({
-              ...newLead,
-              email: e.target.value
-            })
-          }
-        />
-
-        <select
-          value={newLead.project}
-          onChange={(e) =>
-            setNewLead({
-              ...newLead,
-              project: e.target.value
-            })
-          }
-        >
-
-          <option value="">
-            Please Select Project
-          </option>
-
-          {projectOptions.map((p, i) => (
-            <option key={i} value={p}>
-              {p}
-            </option>
-          ))}
-
-        </select>
-
-        <select
-          value={newLead.status}
-          onChange={(e) =>
-            setNewLead({
-              ...newLead,
-              status: e.target.value
-            })
-          }
-        >
-
-          <option value="">
-            Lead Status
-          </option>
-
-          {statusOptions.map((s, i) => (
-            <option key={i} value={s}>
-              {s}
-
-
-              
-            </option>
-          ))}
-
-        </select>
-
-        <input
-          type="date"
-          value={newLead.next_call_date}
-          onChange={(e) =>
-            setNewLead({
-              ...newLead,
-              next_call_date:
-                e.target.value
-            })
-          }
-        />
-
-           <select
-         value={newLead.source}
-        onChange={(e) =>
-        setNewLead({
-        ...newLead,
-         source: e.target.value
-         })
-           }
-           >
-           <option value="">
-              Select Source
-          </option>
-
-           {sourceOptions.map((source, i) => (
-            <option
-              key={i}
-            value={source}
-             >
-            {source}
-            </option>
-                ))}
-             </select>
-
-        <input
-          type="text"
-          placeholder="Sub Source"
-          value={newLead.subSource}
-          onChange={(e) =>
-            setNewLead({
-              ...newLead,
-              subSource: e.target.value
-            })
-          }
-        />
-
-        <input
-          type="text"
-          placeholder="City"
-          value={newLead.city}
-          onChange={(e) =>
-            setNewLead({
-              ...newLead,
-              city: e.target.value
-            })
-          }
-        />
-
-        <input
-          type="text"
-          placeholder="Assign To"
-          value={newLead.assignedTo}
-          onChange={(e) =>
-            setNewLead({
-              ...newLead,
-              assignedTo: e.target.value
-            })
-          }
-        />
-
-        <input
-          type="text"
-          placeholder="Closing Executive"
-          value={newLead.closingExecutive}
-          onChange={(e) =>
-            setNewLead({
-              ...newLead,
-              closingExecutive:
-                e.target.value
-            })
-          }
-        />
-
-        <select
-  value={newLead.department}
-  onChange={(e) =>
-    setNewLead({
-      ...newLead,
-      department: e.target.value
-    })
-  }
->
-  <option value="">
-    Please Select Department
-  </option>
-
-  {departmentOptions.map((dept, i) => (
-    <option
-      key={i}
-      value={dept}
-    >
-      {dept}
-    </option>
-  ))}
-</select>
-
-      </div>
-
-      {/* DEAD REASON */}
-
-      {newLead.status ===
-        "Not Interested" && (
-
-        <div className="lead-form-grid">
-
-          <select
-            value={newLead.deadReason}
-            onChange={(e) =>
-              setNewLead({
-                ...newLead,
-                deadReason:
-                  e.target.value
-              })
-            }
-          >
-
-            <option value="">
-              Dead Reason
-            </option>
-
-            {deadReasonOptions.map((d, i) => (
-              <option key={i} value={d}>
-                {d}
-              </option>
-            ))}
-
-          </select>
-
-          <input
-            type="text"
-            placeholder="Dead Sub Reason"
-            value={newLead.deadSubReason}
-            onChange={(e) =>
-              setNewLead({
-                ...newLead,
-                deadSubReason:
-                  e.target.value
-              })
-            }
-          />
-
-        </div>
-
-      )}
-
-      {/* BOOKING */}
-
-      {newLead.status ===
-        "Booked" && (
-
-        <div className="lead-form-grid">
-
-          <input
-            type="date"
-            value={newLead.bookingDate}
-            onChange={(e) =>
-              setNewLead({
-                ...newLead,
-                bookingDate:
-                  e.target.value
-              })
-            }
-          />
-
-          <input type="file" />
-
-        </div>
-
-      )}
-
-      <textarea
-        placeholder="Comment"
-        rows="4"
-        value={newLead.description}
-        onChange={(e) =>
-          setNewLead({
-            ...newLead,
-            description:
-              e.target.value
-          })
-        }
-      />
-
-      <div className="modal-actions">
-
-        <button
-          className="cancel-btn"
-          onClick={() =>
-            setShowNewLeadModal(false)
-          }
-        >
-          Cancel
-        </button>
-
-        <button
-          className="save-btn"
-          onClick={handleAddNewLead}
-        >
-          Save Lead
-        </button>
-
-      </div>
-
-    </div>
-
-  </div>
-
-)}
-    
-     {/* ================= EDIT MODAL ================= */}
-
-    {showModal && selectedLead && (
-
-  <div className="modal-overlay">
-
-    <div className="modal-box large-modal">
-
-      <h2>Edit Lead</h2>
-
-      <div className="lead-form-grid">
-      
-        {/* STATUS */}
-
-        <div>
-          <label>Status</label>
-
-          <select
-            value={
-              selectedLead.status || ""
-            }
-
-            onChange={(e) =>
-
-              setSelectedLead({
-
-                ...selectedLead,
-
-                status:
-                  e.target.value
-
-              })
-
-            }
-          >
-
-            <option value="">
-              Select Status
-            </option>
-
-            {statusOptions.map((status, i) => (
-
-              <option
-                key={i}
-                value={status}
-              >
-                {status}
-              </option>
-
-            ))}
-
-          </select>
-        </div>
-
-        {/* PROJECT */}
-
-        <div>
-          <label>Project</label>
-
-          <select
-            value={
-              selectedLead.project || ""
-            }
-
-            onChange={(e) =>
-
-              setSelectedLead({
-
-                ...selectedLead,
-
-                project:
-                  e.target.value
-
-              })
-
-            }
-          >
-
-            <option value="">
-              Select Project
-            </option>
-
-            {projectOptions.map((project, i) => (
-
-              <option
-                key={i}
-                value={project}
-              >
-                {project}
-              </option>
-
-            ))}
-
-          </select>
-        </div>
-
-
-      {/* SOURCE */}
-
-<div>
-  <label>Source</label>
-
-  <select
-    value={
-      selectedLead.source || ""
-    }
-
-    onChange={(e) =>
-
-      setSelectedLead({
-
-        ...selectedLead,
-
-        source:
-          e.target.value
-
-      })
-
-    }
-  >
-
-    <option value="">
-      Select Source
-    </option>
-
-    {sourceOptions.map((source, i) => (
-
-      <option
-        key={i}
-        value={source}
-      >
-        {source}
-      </option>
-
-    ))}
-
-        </select>
-       </div>
-
-        {/* DEPARTMENT */}
-
-<div>
-  <label>Department</label>
-
-  <select
-    value={
-      selectedLead.department || ""
-    }
-
-    onChange={(e) =>
-
-      setSelectedLead({
-
-        ...selectedLead,
-
-        department:
-          e.target.value
-
-      })
-
-    }
-  >
-
-    <option value="">
-      Please Select Department
-    </option>
-
-    {departmentOptions.map((dept, i) => (
-
-      <option
-        key={i}
-        value={dept}
-      >
-        {dept}
-      </option>
-
-    ))}
-
-  </select>
-</div>
-
-
-
-        {/* NEXT CALL DATE */}
-
-        <div>
-          <label>Next Call Date</label>
-
-          <input
-            type="date"
-
-            value={
-              selectedLead.next_call_date || ""
-            }
-
-            onChange={(e) =>
-
-              setSelectedLead({
-
-                ...selectedLead,
-
-                next_call_date:
-                  e.target.value
-
-              })
-
-            }
-          />
-        </div>
-
-      </div>
-
-      {/* COMMENT */}
-
-      <textarea
-        placeholder="Comment"
-        rows="4"
-
-        value={
-          selectedLead.description || ""
-        }
-
-        onChange={(e) =>
-
-          setSelectedLead({
-
-            ...selectedLead,
-
-            description:
-              e.target.value
-
-          })
-
-        }
-      />
-
-      {/* BUTTONS */}
-
-      <div className="modal-actions">
-
-        <button
-          className="cancel-btn"
-
-          onClick={() =>
-            setShowModal(false)
-          }
-        >
-          Cancel
-        </button>
-
-        <button
-          className="save-btn"
-
-          onClick={handleUpdateLead}
-        >
-          Save
-        </button>
+        {/* =================================================
+            EDIT LEAD MODAL
+        ================================================== */}
+
+        {showModal &&
+          selectedLead && (
+
+            <div className="modal-overlay">
+
+              <div className="modal-box large-modal">
+
+                <h2>
+                  Edit Lead
+                </h2>
+
+                <div className="lead-form-grid">
+
+                  {/* STATUS */}
+
+                  <div>
+
+                    <label>
+                      Status
+                    </label>
+
+                    <select
+                      value={
+                        selectedLead.status ||
+                        ""
+                      }
+                      onChange={(e) =>
+                        setSelectedLead(
+                          (prev) => ({
+                            ...prev,
+                            status:
+                              e.target.value
+                          })
+                        )
+                      }
+                    >
+
+                      <option value="">
+                        Select Status
+                      </option>
+
+                      {statusOptions.map(
+                        (
+                          status
+                        ) => (
+
+                          <option
+                            key={
+                              status
+                            }
+                            value={
+                              status
+                            }
+                          >
+                            {status}
+                          </option>
+
+                        )
+                      )}
+
+                    </select>
+
+                  </div>
+
+                  {/* PROJECT */}
+
+                  <div>
+
+                    <label>
+                      Project
+                    </label>
+
+                    <select
+                      value={
+                        selectedLead.project ||
+                        ""
+                      }
+                      onChange={(e) =>
+                        setSelectedLead(
+                          (prev) => ({
+                            ...prev,
+                            project:
+                              e.target.value
+                          })
+                        )
+                      }
+                    >
+
+                      <option value="">
+                        Select Project
+                      </option>
+
+                      {projectOptions.map(
+                        (
+                          project
+                        ) => (
+
+                          <option
+                            key={
+                              project
+                            }
+                            value={
+                              project
+                            }
+                          >
+                            {project}
+                          </option>
+
+                        )
+                      )}
+
+                    </select>
+
+                  </div>
+
+                  {/* SOURCE */}
+
+                  <div>
+
+                    <label>
+                      Source
+                    </label>
+
+                    <select
+                      value={
+                        selectedLead.source ||
+                        ""
+                      }
+                      onChange={(e) =>
+                        setSelectedLead(
+                          (prev) => ({
+                            ...prev,
+                            source:
+                              e.target.value
+                          })
+                        )
+                      }
+                    >
+
+                      <option value="">
+                        Select Source
+                      </option>
+
+                      {sourceOptions.map(
+                        (
+                          source
+                        ) => (
+
+                          <option
+                            key={
+                              source
+                            }
+                            value={
+                              source
+                            }
+                          >
+                            {source}
+                          </option>
+
+                        )
+                      )}
+
+                    </select>
+
+                  </div>
+
+                  {/* DEPARTMENT */}
+
+                  <div>
+
+                    <label>
+                      Department
+                    </label>
+
+                    <select
+                      value={
+                        selectedLead.department ||
+                        ""
+                      }
+                      onChange={(e) =>
+                        setSelectedLead(
+                          (prev) => ({
+                            ...prev,
+                            department:
+                              e.target.value
+                          })
+                        )
+                      }
+                    >
+
+                      <option value="">
+                        Please Select Department
+                      </option>
+
+                      {departmentOptions.map(
+                        (
+                          department
+                        ) => (
+
+                          <option
+                            key={
+                              department
+                            }
+                            value={
+                              department
+                            }
+                          >
+                            {department}
+                          </option>
+
+                        )
+                      )}
+
+                    </select>
+
+                  </div>
+
+                  {/* NEXT CALL DATE */}
+
+                  <div>
+
+                    <label>
+                      Next Call Date
+                    </label>
+
+                    <input
+                      type="date"
+                      value={
+                        selectedLead.next_call_date ||
+                        ""
+                      }
+                      onChange={(e) =>
+                        setSelectedLead(
+                          (prev) => ({
+                            ...prev,
+                            next_call_date:
+                              e.target.value
+                          })
+                        )
+                      }
+                    />
+
+                  </div>
+
+                </div>
+
+                {/* DESCRIPTION */}
+
+                <textarea
+                  placeholder="Comment"
+                  rows="4"
+                  value={
+                    selectedLead.description ||
+                    ""
+                  }
+                  onChange={(e) =>
+                    setSelectedLead(
+                      (prev) => ({
+                        ...prev,
+                        description:
+                          e.target.value
+                      })
+                    )
+                  }
+                />
+
+                {/* ACTIONS */}
+
+                <div className="modal-actions">
+
+                  <button
+                    className="cancel-btn"
+                    onClick={() => {
+
+                      setShowModal(
+                        false
+                      );
+
+                      setSelectedLead(
+                        null
+                      );
+
+                    }}
+                  >
+
+                    Cancel
+
+                  </button>
+
+                  <button
+                    className="save-btn"
+                    onClick={
+                      handleUpdateLead
+                    }
+                  >
+
+                    Save
+
+                  </button>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          )}
+
+        {/* =================================================
+            BOOKING MODAL
+        ================================================== */}
+
+        {showBookingModal && (
+
+          <div className="modal-overlay">
+
+            <div className="modal-box">
+
+              <h3>
+                Add Booking
+              </h3>
+
+              <input
+                type="text"
+                placeholder="Unit No"
+                value={
+                  bookingData.unitNo
+                }
+                onChange={(e) =>
+                  setBookingData(
+                    (prev) => ({
+                      ...prev,
+                      unitNo:
+                        e.target.value
+                    })
+                  )
+                }
+              />
+
+              <input
+                type="number"
+                placeholder="Booking Amount"
+                value={
+                  bookingData.bookingAmount
+                }
+                onChange={(e) =>
+                  setBookingData(
+                    (prev) => ({
+                      ...prev,
+                      bookingAmount:
+                        e.target.value
+                    })
+                  )
+                }
+              />
+
+              <div className="modal-actions">
+
+                <button
+                  className="cancel-btn"
+                  onClick={() => {
+
+                    setShowBookingModal(
+                      false
+                    );
+
+                    setBookingData({
+                      unitNo: "",
+                      bookingAmount:
+                        ""
+                    });
+
+                  }}
+                >
+
+                  Cancel
+
+                </button>
+
+                <button
+                  className="save-btn"
+                  onClick={
+                    handleCreateBooking
+                  }
+                >
+
+                  Save Booking
+
+                </button>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        )}
+
+        {/* =================================================
+            CALL MODAL
+        ================================================== */}
+
+        {callModal &&
+          activeCall && (
+
+            <div className="modal-overlay">
+
+              <div className="modal-box">
+
+                <h3>
+                  Call In Progress
+                </h3>
+
+                <p>
+
+                  <strong>
+                    Name:
+                  </strong>{" "}
+                  {activeCall.name ||
+                    "-"}
+
+                </p>
+
+                <p>
+
+                  <strong>
+                    Phone:
+                  </strong>{" "}
+                  {activeCall.phone ||
+                    "-"}
+
+                </p>
+
+                <p>
+
+                  <strong>
+                    Duration:
+                  </strong>{" "}
+                  {callDuration ||
+                    "0 sec"}
+
+                </p>
+
+                <button
+                  className="save-btn"
+                  onClick={() => {
+
+                    setCallModal(
+                      false
+                    );
+
+                    setCallDuration(
+                      ""
+                    );
+
+                    setCallStartTime(
+                      null
+                    );
+
+                    setActiveCall(
+                      null
+                    );
+
+                  }}
+                >
+
+                  Close
+
+                </button>
+
+              </div>
+
+            </div>
+
+          )}
 
       </div>
 
     </div>
-
-  </div>
-
-
-
-)}
-
-{showBookingModal && (
-
-<div className="modal-overlay">
-
-<div className="modal-box">
-
-<h3>Add Booking</h3>
-
-<input
-type="text"
-placeholder="Unit No"
-
-value={bookingData.unitNo}
-
-onChange={(e)=>
-
-setBookingData({
-
-...bookingData,
-
-unitNo:e.target.value
-
-})
-
-}
-/>
-
-<input
-type="number"
-placeholder="Booking Amount"
-
-value={bookingData.bookingAmount}
-
-onChange={(e)=>
-
-setBookingData({
-
-...bookingData,
-
-bookingAmount:e.target.value
-
-})
-
-}
-/>
-
-<div className="modal-actions">
-
-<button
-className="cancel-btn"
-
-onClick={()=>{
-
-setShowBookingModal(false);
-
-}}
->
-
-Cancel
-
-</button>
-
-<button
-className="save-btn"
-
-onClick={handleCreateBooking}
->
-
-Save Booking
-
-</button>
-
-</div>
-
-</div>
-
-</div>
-
-)}
-
-{/* ================= CALL MODAL ================= */}
-
-{callModal && activeCall && (
-
-  <div className="modal-overlay">
-
-    <div className="modal-box">
-
-      <h3>Call In Progress</h3>
-
-      <p>
-        <strong>Name:</strong> {activeCall.name}
-      </p>
-
-      <p>
-        <strong>Phone:</strong> {activeCall.phone}
-      </p>
-
-      <p>
-        <strong>Duration:</strong> {callDuration}
-      </p>
-
-      <button
-        className="save-btn"
-        onClick={() => {
-  setCallModal(false);
-  setCallDuration("");
-  setCallStartTime(null);
-  setActiveCall(null);
-}}
-      >
-
-        Close
-      </button>
-
-    </div>
-
-  </div>
-
-)}
-
-    </div>
-
   );
-
 }
-
