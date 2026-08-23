@@ -278,23 +278,22 @@ export default function MyLeads() {
   ======================================================= */
 
   const sourceDropdownOptions = useMemo(() => {
-    return sourceOptions.map((item) => ({
-      value: item,
-      label: item
-    }));
-  }, []);
+  return sourceOptions.map((item) => ({
+    value: item,
+    label: item
+  }));
+}, [sourceOptions]);
 
   /* =======================================================
      DEPARTMENT DROPDOWN
   ======================================================= */
 
   const departmentDropdownOptions = useMemo(() => {
-    return departmentOptions.map((item) => ({
-      value: item,
-      label: item
-    }));
-  }, []);
-
+  return departmentOptions.map((item) => ({
+    value: item,
+    label: item
+  }));
+}, [departmentOptions]);
   /* =======================================================
      USER
   ======================================================= */
