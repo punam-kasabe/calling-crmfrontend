@@ -37,47 +37,6 @@ export default function MyLeads() {
 
    const [selectedStatuses, setSelectedStatuses] = useState([]);
 
-const [statusFilter, setStatusFilter] = useState("");
-
-
-  const handleStatusCheckbox = (status) => {
-
-  setStatusFilter("");
-
-  setSelectedStatuses((prev) => {
-
-    if (prev.includes(status)) {
-
-      return prev.filter(
-        (item) => item !== status
-      );
-
-    }
-
-    return [
-      ...prev,
-      status
-    ];
-
-  });
-
-};
-
-const handleSelectAllStatuses = () => {
-
-  setStatusFilter("");
-
-  if (selectedStatuses.length === statusOptions.length) {
-    setSelectedStatuses([]);
-  } else {
-    setSelectedStatuses([...statusOptions]);
-  }
-
-};
-
-const isAllStatusesSelected =
-  selectedStatuses.length === statusOptions.length;
-
   const [selectedLead,
     setSelectedLead] =
     useState(null);
@@ -697,7 +656,6 @@ useEffect(() => {
 
 }, [
   search,
-  selectedStatuses,
   statusFilter,
   selectedProjects,
   selectedSources,
@@ -712,8 +670,6 @@ useEffect(() => {
   nextCallTo,
   descriptionFilter
 ]);
-
-
   /* ================= FILTER ================= */
 
   const filteredLeads =
@@ -737,14 +693,21 @@ useEffect(() => {
               );
 
 
-const matchesStatus =
+              
+       const matchesStatus = (() => {
 
-  statusFilter
-    ? lead.status === statusFilter
+  if (!statusFilter) return true;
 
-    : selectedStatuses.length === 0
-      ? true
-      : selectedStatuses.includes(lead.status);
+  if (statusFilter === "Interested") {
+    return (
+      lead.status === "Interested" ||
+      lead.status === "Very Interested"
+    );
+  }
+
+  return lead.status === statusFilter;
+
+})();
 
 const matchesProject =
   selectedProjects
@@ -966,22 +929,18 @@ const stats = useMemo(() => {
 
 }, [filteredLeads]); 
 
-
 /* ================= CARD CLICK FILTER ================= */
 
 const handleCardClick = (status) => {
 
   if (status === "TOTAL") {
     setStatusFilter("");
-    setSelectedStatuses([]);
   } else {
     setStatusFilter(status);
-    setSelectedStatuses([]);
   }
 
   setCurrentPage(1);
 };
-
  return (
 
     <div className="layout">
@@ -1367,80 +1326,25 @@ const handleCardClick = (status) => {
       }
     />
 
-    {/* ================= STATUS MULTI CHECKBOX ================= */}
+    <select
+      value={statusFilter}
+      onChange={(e) =>
+        setStatusFilter(e.target.value)
+      }
+    >
+      <option value="">
+        All Status
+      </option>
 
-
-<div className="status-checkbox-filter">
-
-  <div className="status-checkbox-header">
-
-    <label>
-      Status
-    </label>
-
-    <label className="select-all-status">
-
-      <input
-        type="checkbox"
-        checked={isAllStatusesSelected}
-        onChange={handleSelectAllStatuses}
-      />
-
-      Select All
-
-    </label>
-
-  </div>
-
-
-  <div className="status-checkbox-list">
-
-    {statusOptions.map((status) => (
-
-      <label
-        key={status}
-        className="status-checkbox-item"
-      >
-
-        <input
-          type="checkbox"
-          checked={selectedStatuses.includes(status)}
-          onChange={() =>
-            handleStatusCheckbox(status)
-          }
-        />
-
-        <span>
+      {statusOptions.map((status, i) => (
+        <option
+          key={i}
+          value={status}
+        >
           {status}
-        </span>
-
-      </label>
-
-    ))}
-
-  </div>
-
-
-  {selectedStatuses.length > 0 && (
-
-    <div className="selected-status-count">
-
-      {selectedStatuses.length} Status Selected
-
-      <button
-        type="button"
-        onClick={() =>
-          setSelectedStatuses([])
-        }
-      >
-        Clear
-      </button>
-
-    </div>
-
-  )}
-
-</div>
+        </option>
+      ))}
+    </select>
 
     {/* CREATED DATE */}
 
@@ -1515,22 +1419,21 @@ const handleCardClick = (status) => {
   className="clear-filter-btn"
   onClick={() => {
 
-  setStatusFilter("");
-  setSubSourceFilter("");
-  setAssignedFilter("");
-  setSelectedStatuses([]);
-  setFromDateFilter("");
-  setToDateFilter("");
-  setNextCallFrom("");
-  setNextCallTo("");
-  setDescriptionFilter("");
-  setSelectedProjects(null);
-  setSelectedSources([]);
-  setSelectedDepartments([]);
-  setSelectedExecutives([]);
-  setSelectedCities([]);
+    setSubSourceFilter("");
+    setAssignedFilter("");
+    setStatusFilter("");
+    setFromDateFilter("");
+    setToDateFilter("");
+    setNextCallFrom("");
+    setNextCallTo("");
+    setDescriptionFilter("");
+    setSelectedProjects(null);
+    setSelectedSources([]);
+    setSelectedDepartments([]);
+    setSelectedExecutives([]);
+    setSelectedCities([]);
 
-}}
+  }}
 >
   Clear Filters
 </button>
