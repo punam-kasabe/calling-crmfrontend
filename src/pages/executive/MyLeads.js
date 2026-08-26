@@ -35,9 +35,10 @@ export default function MyLeads() {
   const [search, setSearch] =
     useState("");
 
-  const [statusFilter,
-    setStatusFilter] =
-    useState("");
+ const [statusFilter, setStatusFilter] = useState([]);
+
+ const [editStatus, setEditStatus] = useState("");
+
 
   const [selectedLead,
     setSelectedLead] =
@@ -92,7 +93,7 @@ const leadsPerPage = 10;
 
      /* ================= NEW LEAD MODAL ================= */
 
-  
+     
   const [newLead, setNewLead] = useState({
   name: "",
   phone: "",
@@ -114,9 +115,8 @@ const leadsPerPage = 10;
   bookingDate: "",
 });
 
-
-
 /* ================= DROPDOWNS ================= */
+
 
 const projectOptions = [
   "99villa.",
@@ -125,18 +125,14 @@ const projectOptions = [
   "Alibaug Plot.",
   "Gudipadwa plot in 5 Lacs.",
   "Khopoli-pali Road plots",
-
   "Mahamumbai",
-
+  "Mahamumbai 3.0",
   "Mahamumbai Phase 2",
- 
   "Panvel (99Villa)",
- 
- 
- 
- 
-  "THANE...( VIRENDRAA)"
+  "THANE...( VIRENDRAA)",
+  "Thane"
 ];
+
 
 const statusOptions = [
   "New",
@@ -459,13 +455,14 @@ const updateStatus = async (leadId, status) => {
 
         );
 
-        setShowModal(false);
+       setShowModal(false);
+setEditStatus("");
 
-      fetchMyLeads();
+fetchMyLeads();
 
-      alert(
-      "Lead Updated ✅"
-      );
+alert(
+  "Lead Updated ✅"
+);
       }
 
       catch (err) {
@@ -630,7 +627,7 @@ const handleAddNewLead = async () => {
   phone: "",
   email: "",
   project: "",
-  status: "",
+  status: "New",
   source: "",
   subSource: "",
   city: "",
@@ -701,20 +698,13 @@ useEffect(() => {
                 search.toLowerCase()
               );
 
-       const matchesStatus = (() => {
 
-  if (!statusFilter) return true;
 
-  if (statusFilter === "Interested") {
-    return (
-      lead.status === "Interested" ||
-      lead.status === "Very Interested"
-    );
-  }
+     const matchesStatus =
+  statusFilter.length === 0
+    ? true
+    : statusFilter.includes(lead.status);
 
-  return lead.status === statusFilter;
-
-})();
 
 const matchesProject =
   selectedProjects
@@ -896,7 +886,6 @@ const handlePrevPage = () => {
 };
 
 
- /* ================= MONTHLY STATS ================= */
 
 /* ================= FILTERED STATS ================= */
 
@@ -936,18 +925,29 @@ const stats = useMemo(() => {
 
 }, [filteredLeads]); 
 
-/* ================= CARD CLICK FILTER ================= */
 
+/* ================= CARD CLICK FILTER ================= */
 const handleCardClick = (status) => {
 
   if (status === "TOTAL") {
-    setStatusFilter("");
-  } else {
-    setStatusFilter(status);
-  }
 
+    setStatusFilter([]);
+
+  } else if (status === "Interested") {
+
+    setStatusFilter([
+      "Interested",
+      "Very Interested"
+    ]);
+
+  } else {
+
+    setStatusFilter([status]);
+  }
   setCurrentPage(1);
 };
+
+
  return (
 
     <div className="layout">
@@ -993,15 +993,21 @@ const handleCardClick = (status) => {
 <div className="stats-grid">
 
   <div
-    className={`stats-card ${statusFilter === "" ? "active-card" : ""}`}
-    onClick={() => handleCardClick("TOTAL")}
-  >
+  className={`stats-card ${
+    statusFilter.length === 0
+      ? "active-card"
+      : ""
+  }`}
+  onClick={() => handleCardClick("TOTAL")}
+>
+
     <h5>Total</h5>
     <p>{stats.total}</p>
   </div>
 
+
   <div
-    className={`stats-card new ${statusFilter === "New" ? "active-card" : ""}`}
+    className={`stats-card new ${statusFilter.includes("New") ? "active-card" : ""}`}
     onClick={() => handleCardClick("New")}
   >
     <h5>New</h5>
@@ -1009,7 +1015,7 @@ const handleCardClick = (status) => {
   </div>
 
   <div
-    className={`stats-card interested ${statusFilter === "Interested" ? "active-card" : ""}`}
+    className={`stats-card interested ${statusFilter.includes("Interested") ? "active-card" : ""}`}
     onClick={() => handleCardClick("Interested")}
   >
     <h5>Interested</h5>
@@ -1017,7 +1023,7 @@ const handleCardClick = (status) => {
   </div>
 
   <div
-    className={`stats-card booked ${statusFilter === "Booked" ? "active-card" : ""}`}
+    className={`stats-card booked ${statusFilter.includes("Booked") ? "active-card" : ""}`}
     onClick={() => handleCardClick("Booked")}
   >
     <h5>Booked</h5>
@@ -1025,7 +1031,7 @@ const handleCardClick = (status) => {
   </div>
 
   <div
-    className={`stats-card followup ${statusFilter === "Follow Up" ? "active-card" : ""}`}
+    className={`stats-card followup ${statusFilter.includes("Follow Up") ? "active-card" : ""}`}
     onClick={() => handleCardClick("Follow Up")}
   >
     <h5>Followup</h5>
@@ -1033,7 +1039,7 @@ const handleCardClick = (status) => {
   </div>
 
   <div
-    className={`stats-card not ${statusFilter === "Not Interested" ? "active-card" : ""}`}
+    className={`stats-card not ${statusFilter.includes("Not Interested") ? "active-card" : ""}`}
     onClick={() => handleCardClick("Not Interested")}
   >
     <h5>Not Interested</h5>
@@ -1041,7 +1047,7 @@ const handleCardClick = (status) => {
   </div>
 
   <div
-    className={`stats-card sitevisit ${statusFilter === "Site Visit Done" ? "active-card" : ""}`}
+    className={`stats-card sitevisit ${statusFilter.includes("Site Visit Done") ? "active-card" : ""}`}
     onClick={() => handleCardClick("Site Visit Done")}
   >
     <h5>Site Visit Done</h5>
@@ -1049,6 +1055,8 @@ const handleCardClick = (status) => {
   </div>
 
 </div>
+
+
          {/* ================= SINGLE SEARCH ================= */}
 
          <div className="filter-bar">
@@ -1333,25 +1341,61 @@ const handleCardClick = (status) => {
       }
     />
 
-    <select
-      value={statusFilter}
-      onChange={(e) =>
-        setStatusFilter(e.target.value)
-      }
-    >
-      <option value="">
-        All Status
-      </option>
+<div className="multi-filter">
+  <label>Status</label>
 
-      {statusOptions.map((status, i) => (
-        <option
-          key={i}
-          value={status}
-        >
-          {status}
-        </option>
-      ))}
-    </select>
+  <Select
+    options={statusOptions.map((status) => ({
+      value: status,
+      label: status
+    }))}
+
+    isMulti
+    closeMenuOnSelect={false}
+    hideSelectedOptions={false}
+
+    isSearchable
+    isClearable
+
+    value={statusFilter.map((status) => ({
+      value: status,
+      label: status
+    }))}
+
+    onChange={(selected) => {
+
+      setStatusFilter(
+        selected
+          ? selected.map(
+              (item) => item.value
+            )
+          : []
+      );
+
+    }}
+
+    placeholder="Select Status..."
+
+    styles={{
+      control: (base) => ({
+        ...base,
+        minHeight: "45px",
+        borderRadius: "10px"
+      }),
+
+      menu: (base) => ({
+        ...base,
+        zIndex: 9999
+      }),
+
+      multiValue: (base) => ({
+        ...base,
+        borderRadius: "6px"
+      })
+    }}
+  />
+</div>
+
 
     {/* CREATED DATE */}
 
@@ -1426,22 +1470,22 @@ const handleCardClick = (status) => {
   className="clear-filter-btn"
   onClick={() => {
 
-    setSubSourceFilter("");
-    setAssignedFilter("");
-    setStatusFilter("");
-    setFromDateFilter("");
-    setToDateFilter("");
-    setNextCallFrom("");
-    setNextCallTo("");
-    setDescriptionFilter("");
-    setSelectedProjects(null);
-    setSelectedSources([]);
-    setSelectedDepartments([]);
-    setSelectedExecutives([]);
-    setSelectedCities([]);
-
+setSubSourceFilter("");
+setAssignedFilter("");
+setStatusFilter([]);
+setFromDateFilter("");
+setToDateFilter("");
+setNextCallFrom("");
+setNextCallTo("");
+setDescriptionFilter("");
+setSelectedProjects(null);
+setSelectedSources([]);
+setSelectedDepartments([]);
+setSelectedExecutives([]);
+setSelectedCities([]);
   }}
 >
+
   Clear Filters
 </button>
 
@@ -1697,7 +1741,7 @@ const handleCardClick = (status) => {
         : ""
 
   });
-
+   setEditStatus(lead.status || "");
   setShowModal(true);
 
 }}
@@ -2100,47 +2144,61 @@ Booking
 
       <div className="lead-form-grid">
       
+
+
         {/* STATUS */}
 
-        <div>
-          <label>Status</label>
+       <div className="multi-filter">
+  <label>Status</label>
 
-          <select
-            value={
-              selectedLead.status || ""
-            }
+  <Select
+    options={statusOptions.map((status) => ({
+      value: status,
+      label: status
+    }))}
 
-            onChange={(e) =>
+    isSearchable
+    isClearable
 
-              setSelectedLead({
+    value={
+      editStatus
+        ? {
+            value: editStatus,
+            label: editStatus
+          }
+        : null
+    }
 
-                ...selectedLead,
+    onChange={(selected) => {
 
-                status:
-                  e.target.value
+      const value =
+        selected?.value || "";
 
-              })
+      setEditStatus(value);
 
-            }
-          >
+      setSelectedLead((prev) => ({
+        ...prev,
+        status: value
+      }));
 
-            <option value="">
-              Select Status
-            </option>
+    }}
 
-            {statusOptions.map((status, i) => (
+    placeholder="Select Status..."
 
-              <option
-                key={i}
-                value={status}
-              >
-                {status}
-              </option>
+    styles={{
+      control: (base) => ({
+        ...base,
+        minHeight: "45px",
+        borderRadius: "10px"
+      }),
 
-            ))}
-
-          </select>
-        </div>
+      menu: (base) => ({
+        ...base,
+        zIndex: 9999
+      })
+    }}
+  />
+</div>
 
         {/* PROJECT */}
 
@@ -2324,19 +2382,26 @@ Booking
         }
       />
 
+
       {/* BUTTONS */}
+
+
 
       <div className="modal-actions">
 
-        <button
-          className="cancel-btn"
+       <button
+  className="cancel-btn"
+  onClick={() => {
 
-          onClick={() =>
-            setShowModal(false)
-          }
-        >
-          Cancel
-        </button>
+    setShowModal(false);
+    setEditStatus("");
+
+  }}
+>
+  Cancel
+</button>
+
+
 
         <button
           className="save-btn"
@@ -2351,8 +2416,6 @@ Booking
     </div>
 
   </div>
-
-
 
 )}
 
