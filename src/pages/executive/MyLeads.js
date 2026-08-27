@@ -37,8 +37,7 @@ export default function MyLeads() {
 
  const [statusFilter, setStatusFilter] = useState([]);
 
- const [editStatus, setEditStatus] = useState("");
-
+ const [editStatus, setEditStatus] = useState([]);
 
   const [selectedLead,
     setSelectedLead] =
@@ -456,7 +455,7 @@ const updateStatus = async (leadId, status) => {
         );
 
        setShowModal(false);
-setEditStatus("");
+setEditStatus([]);
 
 fetchMyLeads();
 
@@ -1858,8 +1857,13 @@ setSelectedCities([]);
         : ""
 
   });
-   setEditStatus(lead.status || "");
-  setShowModal(true);
+  setEditStatus(
+  lead.status
+    ? [lead.status]
+    : []
+);
+
+setShowModal(true);
 
 }}
   >
@@ -2263,9 +2267,11 @@ Booking
       
 
 
-        {/* STATUS */}
+    {/* STATUS */}
 
-       <div className="multi-filter">
+{/* STATUS */}
+
+<div className="multi-filter">
   <label>Status</label>
 
   <Select
@@ -2274,48 +2280,139 @@ Booking
       label: status
     }))}
 
+    isMulti
     isSearchable
     isClearable
 
-    value={
-      editStatus
-        ? {
-            value: editStatus,
-            label: editStatus
-          }
-        : null
-    }
+    closeMenuOnSelect={false}
+    hideSelectedOptions={false}
 
-    onChange={(selected) => {
+    value={editStatus.map((status) => ({
+      value: status,
+      label: status
+    }))}
 
-      const value =
-        selected?.value || "";
+    onChange={(selectedOptions) => {
 
-      setEditStatus(value);
+      const selectedStatuses =
+        selectedOptions || [];
+
+      const statuses =
+        selectedStatuses.map(
+          (option) => option.value
+        );
+
+      setEditStatus(statuses);
 
       setSelectedLead((prev) => ({
         ...prev,
-        status: value
+
+        /*
+         * Backend मध्ये existing status field
+         * string असल्यामुळे primary/first status
+         * save केला जातो.
+         */
+        status:
+          statuses.length > 0
+            ? statuses[0]
+            : ""
       }));
 
     }}
 
     placeholder="Select Status..."
 
+    className="status-multi-select"
+
+    classNamePrefix="status"
+
     styles={{
-      control: (base) => ({
+      control: (base, state) => ({
         ...base,
+
         minHeight: "45px",
-        borderRadius: "10px"
+
+        borderRadius: "10px",
+
+        borderColor:
+          state.isFocused
+            ? "#2684ff"
+            : "#ddd",
+
+        boxShadow:
+          state.isFocused
+            ? "0 0 0 1px #2684ff"
+            : "none",
+
+        "&:hover": {
+          borderColor: "#2684ff"
+        }
       }),
 
       menu: (base) => ({
         ...base,
-        zIndex: 9999
+
+        zIndex: 99999
+      }),
+
+      menuList: (base) => ({
+        ...base,
+
+        maxHeight: "300px"
+      }),
+
+      option: (
+        base,
+        state
+      ) => ({
+        ...base,
+
+        backgroundColor:
+          state.isSelected
+            ? "#2684ff"
+            : state.isFocused
+            ? "#f0f7ff"
+            : "white",
+
+        color:
+          state.isSelected
+            ? "white"
+            : "#333",
+
+        cursor: "pointer"
+      }),
+
+      multiValue: (base) => ({
+        ...base,
+
+        backgroundColor: "#e8f1ff",
+
+        borderRadius: "6px"
+      }),
+
+      multiValueLabel: (base) => ({
+        ...base,
+
+        color: "#1769aa",
+
+        fontWeight: "500"
+      }),
+
+      multiValueRemove: (base) => ({
+        ...base,
+
+        color: "#1769aa",
+
+        "&:hover": {
+          backgroundColor: "#1769aa",
+          color: "white"
+        }
       })
     }}
   />
 </div>
+
+
 
         {/* PROJECT */}
 
@@ -2511,7 +2608,7 @@ Booking
   onClick={() => {
 
     setShowModal(false);
-    setEditStatus("");
+setEditStatus([]);
 
   }}
 >
