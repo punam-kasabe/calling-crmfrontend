@@ -168,6 +168,28 @@ const statusOptions = [
   "No Response"
 ];
 
+
+/* ================= STATUS HELPERS ================= */
+
+const getLeadStatuses = (lead) => {
+
+  if (Array.isArray(lead?.status)) {
+    return lead.status;
+  }
+
+  if (lead?.status) {
+    return [lead.status];
+  }
+
+  return ["New"];
+};
+
+const hasStatus = (lead, status) => {
+
+  return getLeadStatuses(lead).includes(status);
+
+};
+
 const deadReasonOptions = [
   "Budget Issue",
   "Location Issue",
@@ -306,55 +328,93 @@ useEffect(() => {
 }, [fetchMyLeads]);
 
  /* ================= UPDATE STATUS ================= */
+const updateStatus = async (leadId, statuses) => {
 
-const updateStatus = async (leadId, status) => {
   try {
+
     const currentUser =
-      JSON.parse(localStorage.getItem("user")) || {};
+      JSON.parse(
+        localStorage.getItem("user")
+      ) || {};
 
     if (!leadId) {
+
       alert("Lead ID missing ❌");
+
       return;
+
     }
 
-    if (!status) {
+    const statusArray =
+      Array.isArray(statuses)
+        ? statuses
+        : statuses
+          ? [statuses]
+          : [];
+
+    if (statusArray.length === 0) {
+
       alert("Please select status ❌");
+
       return;
+
     }
 
-    console.log("Updating Status:", {
-      leadId,
-      status,
-      executive_email: currentUser.email
-    });
-
-    const res = await axios.put(
-      `${API}/update-status/${leadId}`,
+    console.log(
+      "Updating Status:",
       {
-        status: status,
-        executive_email: currentUser.email
+        leadId,
+        statuses: statusArray,
+        executive_email:
+          currentUser.email
       }
     );
 
-    console.log("Status Update Response:", res.data);
+    const res =
+      await axios.put(
 
-    /* Update UI immediately */
-    setLeads((prev) =>
-      prev.map((lead) =>
-        lead._id === leadId
-          ? {
-              ...lead,
-              status: status,
-              updatedAt: new Date().toISOString()
-            }
-          : lead
-      )
+        `${API}/update-status/${leadId}`,
+
+        {
+          status: statusArray,
+
+          executive_email:
+            currentUser.email
+        }
+
+      );
+
+    console.log(
+      "Status Update Response:",
+      res.data
     );
 
-    /* Refresh from MongoDB */
-    await fetchMyLeads();
+    /* ================= UI UPDATE ================= */
 
-  } catch (err) {
+    setLeads((prev) =>
+
+      prev.map((lead) =>
+
+        lead._id === leadId
+
+          ? {
+              ...lead,
+
+              status: statusArray,
+
+              updatedAt:
+                new Date().toISOString()
+            }
+
+          : lead
+
+      )
+
+    );
+
+  }
+
+  catch (err) {
 
     console.error(
       "Status update failed:",
@@ -367,12 +427,24 @@ const updateStatus = async (leadId, status) => {
     );
 
     alert(
+
       err.response?.data?.message ||
+
       err.response?.data?.error ||
+
       "Status update failed ❌"
+
     );
+
+    /* Refresh if update failed */
+
+    await fetchMyLeads();
+
   }
+
 };
+
+
    /* ================= UPDATE LEAD ================= */
 
   const handleUpdateLead =
@@ -387,7 +459,6 @@ const updateStatus = async (leadId, status) => {
   name: selectedLead.name,
   phone: selectedLead.phone,
   email: selectedLead.email,
-
   assignedTo:
   selectedLead.assignedTo,
 
@@ -400,8 +471,12 @@ const updateStatus = async (leadId, status) => {
    closingExecutive:
    selectedLead.closingExecutive,
 
-   status:
-    selectedLead.status,
+  status:
+  Array.isArray(editStatus)
+    ? editStatus
+    : editStatus
+      ? [editStatus]
+      : [],
 
   source:
     selectedLead.source,
@@ -702,7 +777,9 @@ useEffect(() => {
      const matchesStatus =
   statusFilter.length === 0
     ? true
-    : statusFilter.includes(lead.status);
+    : statusFilter.some((status) =>
+        hasStatus(lead, status)
+      );
 
 
 const matchesProject =
@@ -887,7 +964,6 @@ const handlePrevPage = () => {
 
 
 /* ================= FILTERED STATS ================= */
-
 const stats = useMemo(() => {
 
   return {
@@ -895,34 +971,34 @@ const stats = useMemo(() => {
     total: filteredLeads.length,
 
     new: filteredLeads.filter(
-      (l) => l.status === "New"
+      (l) => hasStatus(l, "New")
     ).length,
 
     interested: filteredLeads.filter(
       (l) =>
-        l.status === "Interested" ||
-        l.status === "Very Interested"
+        hasStatus(l, "Interested") ||
+        hasStatus(l, "Very Interested")
     ).length,
 
     booked: filteredLeads.filter(
-      (l) => l.status === "Booked"
+      (l) => hasStatus(l, "Booked")
     ).length,
 
     followup: filteredLeads.filter(
-      (l) => l.status === "Follow Up"
+      (l) => hasStatus(l, "Follow Up")
     ).length,
 
     notInterested: filteredLeads.filter(
-      (l) => l.status === "Not Interested"
+      (l) => hasStatus(l, "Not Interested")
     ).length,
 
     siteVisitDone: filteredLeads.filter(
-      (l) => l.status === "Site Visit Done"
+      (l) => hasStatus(l, "Site Visit Done")
     ).length,
 
   };
 
-}, [filteredLeads]); 
+}, [filteredLeads]);
 
 
 /* ================= CARD CLICK FILTER ================= */
@@ -1703,24 +1779,25 @@ setSelectedCities([]);
 
                     
 
-                     <td>
+                  <td>
 
-  <span
-    className={`status-badge ${lead.status
-      ?.toLowerCase()
-      .replace(/\s+/g, "-")}`}
-  >
-    {lead.status || "New"}
-  </span>
+  <div className="status-badges">
 
-</td>
+    {getLeadStatuses(lead).map((status, index) => (
 
-<td>
-  {lead.source || "-"}
-</td>
+      <span
+        key={index}
+        className={`status-badge ${status
+          ?.toLowerCase()
+          .replace(/\s+/g, "-")}`}
+      >
+        {status}
+      </span>
 
-<td>
-  {lead.project || "-"}
+    ))}
+
+  </div>
+
 </td>
 
                      <td className="description-cell">
@@ -1752,46 +1829,163 @@ setSelectedCities([]);
   }
 </td>
 
+
 <td>
 
-<select
-  className="status-select"
-  value={lead.status || "New"}
-  onChange={async (e) => {
+  <Select
 
-    const value = e.target.value;
+    options={statusOptions.map((status) => ({
+      value: status,
+      label: status
+    }))}
 
-    setLeads((prev) =>
-      prev.map((l) =>
-        l._id === lead._id
-          ? {
-              ...l,
-              status: value
-            }
-          : l
-      )
-    );
+    isMulti
 
-    await updateStatus(
-      lead._id,
-      value
-    );
-  }}
->
+    closeMenuOnSelect={false}
 
-{statusOptions.map((status, i) => (
-  <option
-    key={i}
-    value={status}
-  >
-    {status}
-  </option>
-))}
+    hideSelectedOptions={false}
 
-</select>
+    isSearchable
+
+    isClearable
+
+    value={getLeadStatuses(lead).map((status) => ({
+      value: status,
+      label: status
+    }))}
+
+    onChange={async (selectedOptions) => {
+
+      const statuses =
+        (selectedOptions || []).map(
+          (option) => option.value
+        );
+
+      /* ================= UPDATE UI ================= */
+
+      setLeads((prev) =>
+        prev.map((l) =>
+          l._id === lead._id
+            ? {
+                ...l,
+                status: statuses
+              }
+            : l
+        )
+      );
+
+      /* ================= UPDATE DATABASE ================= */
+
+      await updateStatus(
+        lead._id,
+        statuses
+      );
+
+    }}
+
+    placeholder="Select Status..."
+
+    className="status-multi-select"
+
+    classNamePrefix="status"
+
+    styles={{
+
+      control: (base, state) => ({
+        ...base,
+
+        minHeight: "40px",
+
+        minWidth: "180px",
+
+        borderRadius: "8px",
+
+        borderColor:
+          state.isFocused
+            ? "#2684ff"
+            : "#ddd",
+
+        boxShadow:
+          state.isFocused
+            ? "0 0 0 1px #2684ff"
+            : "none",
+
+        "&:hover": {
+          borderColor: "#2684ff"
+        }
+
+      }),
+
+      menu: (base) => ({
+        ...base,
+
+        zIndex: 99999
+
+      }),
+
+      menuList: (base) => ({
+        ...base,
+
+        maxHeight: "250px"
+
+      }),
+
+      option: (base, state) => ({
+        ...base,
+
+        backgroundColor:
+          state.isSelected
+            ? "#2684ff"
+            : state.isFocused
+              ? "#f0f7ff"
+              : "white",
+
+        color:
+          state.isSelected
+            ? "white"
+            : "#333",
+
+        cursor: "pointer"
+
+      }),
+
+      multiValue: (base) => ({
+        ...base,
+
+        backgroundColor: "#e8f1ff",
+
+        borderRadius: "5px"
+
+      }),
+
+      multiValueLabel: (base) => ({
+        ...base,
+
+        color: "#1769aa",
+
+        fontWeight: "500"
+
+      }),
+
+      multiValueRemove: (base) => ({
+        ...base,
+
+        color: "#1769aa",
+
+        cursor: "pointer",
+
+        ":hover": {
+          backgroundColor: "#1769aa",
+          color: "white"
+        }
+
+      })
+
+    }}
+
+  />
 
 </td>
-
                       {/* ACTIONS */}
 
                       <td>
@@ -1858,9 +2052,11 @@ setSelectedCities([]);
 
   });
   setEditStatus(
-  lead.status
-    ? [lead.status]
-    : []
+  Array.isArray(lead.status)
+    ? lead.status
+    : lead.status
+      ? [lead.status]
+      : []
 );
 
 setShowModal(true);
@@ -2304,19 +2500,7 @@ Booking
 
       setEditStatus(statuses);
 
-      setSelectedLead((prev) => ({
-        ...prev,
-
-        /*
-         * Backend मध्ये existing status field
-         * string असल्यामुळे primary/first status
-         * save केला जातो.
-         */
-        status:
-          statuses.length > 0
-            ? statuses[0]
-            : ""
-      }));
+      
 
     }}
 
