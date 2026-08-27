@@ -170,8 +170,7 @@ const statusOptions = [
 
 
 /* ================= STATUS HELPERS ================= */
-
-const getLeadStatuses = (lead) => {
+const getLeadStatuses = useCallback((lead) => {
 
   if (Array.isArray(lead?.status)) {
     return lead.status;
@@ -182,13 +181,14 @@ const getLeadStatuses = (lead) => {
   }
 
   return ["New"];
-};
 
-const hasStatus = (lead, status) => {
+}, []);
+
+const hasStatus = useCallback((lead, status) => {
 
   return getLeadStatuses(lead).includes(status);
 
-};
+}, [getLeadStatuses]);
 
 const deadReasonOptions = [
   "Budget Issue",
@@ -902,8 +902,6 @@ return (
       );
 
     }, [
-
-
   leads,
   search,
   statusFilter,
@@ -918,8 +916,9 @@ return (
   selectedSources,
   selectedExecutives,
   selectedCities,
-  selectedDepartments
- ]);
+  selectedDepartments,
+  hasStatus
+]);
 
 /* ================= PAGINATION LOGIC ================= */
 
@@ -998,7 +997,7 @@ const stats = useMemo(() => {
 
   };
 
-}, [filteredLeads]);
+}, [filteredLeads, hasStatus]);
 
 
 /* ================= CARD CLICK FILTER ================= */
