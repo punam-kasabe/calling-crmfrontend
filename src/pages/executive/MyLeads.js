@@ -933,20 +933,66 @@ const handleCardClick = (status) => {
 
     setStatusFilter([]);
 
-  } else if (status === "Interested") {
+    setCurrentPage(1);
 
-    setStatusFilter([
-      "Interested",
-      "Very Interested"
-    ]);
+    return;
+  }
+
+  if (status === "Interested") {
+
+    setStatusFilter((prev) => {
+
+      const interestedStatuses = [
+        "Interested",
+        "Very Interested"
+      ];
+
+      const alreadySelected =
+        interestedStatuses.every(
+          (s) => prev.includes(s)
+        );
+
+      if (alreadySelected) {
+
+        return prev.filter(
+          (s) =>
+            !interestedStatuses.includes(s)
+        );
+
+      }
+
+      return [
+        ...new Set([
+          ...prev,
+          ...interestedStatuses
+        ])
+      ];
+
+    });
 
   } else {
 
-    setStatusFilter([status]);
+    setStatusFilter((prev) => {
+
+      if (prev.includes(status)) {
+
+        return prev.filter(
+          (s) => s !== status
+        );
+
+      }
+
+      return [
+        ...prev,
+        status
+      ];
+
+    });
+
   }
+
   setCurrentPage(1);
 };
-
 
  return (
 
@@ -1340,7 +1386,6 @@ const handleCardClick = (status) => {
         setAssignedFilter(e.target.value)
       }
     />
-
 <div className="multi-filter">
   <label>Status</label>
 
@@ -1351,10 +1396,13 @@ const handleCardClick = (status) => {
     }))}
 
     isMulti
+
     closeMenuOnSelect={false}
+
     hideSelectedOptions={false}
 
     isSearchable
+
     isClearable
 
     value={statusFilter.map((status) => ({
@@ -1362,40 +1410,109 @@ const handleCardClick = (status) => {
       label: status
     }))}
 
-    onChange={(selected) => {
+    onChange={(selectedOptions) => {
+
+      const selectedStatuses =
+        selectedOptions || [];
 
       setStatusFilter(
-        selected
-          ? selected.map(
-              (item) => item.value
-            )
-          : []
+        selectedStatuses.map(
+          (option) => option.value
+        )
       );
 
+      setCurrentPage(1);
     }}
 
     placeholder="Select Status..."
 
+    className="status-multi-select"
+
+    classNamePrefix="status"
+
     styles={{
-      control: (base) => ({
+      control: (base, state) => ({
         ...base,
+
         minHeight: "45px",
-        borderRadius: "10px"
+
+        borderRadius: "10px",
+
+        borderColor: state.isFocused
+          ? "#2684ff"
+          : "#ddd",
+
+        boxShadow: state.isFocused
+          ? "0 0 0 1px #2684ff"
+          : "none",
+
+        "&:hover": {
+          borderColor: "#2684ff"
+        }
       }),
 
       menu: (base) => ({
         ...base,
-        zIndex: 9999
+
+        zIndex: 99999
+      }),
+
+      menuList: (base) => ({
+        ...base,
+
+        maxHeight: "300px"
+      }),
+
+      option: (
+        base,
+        state
+      ) => ({
+        ...base,
+
+        backgroundColor:
+          state.isSelected
+            ? "#2684ff"
+            : state.isFocused
+            ? "#f0f7ff"
+            : "white",
+
+        color:
+          state.isSelected
+            ? "white"
+            : "#333",
+
+        cursor: "pointer"
       }),
 
       multiValue: (base) => ({
         ...base,
+
+        backgroundColor: "#e8f1ff",
+
         borderRadius: "6px"
+      }),
+
+      multiValueLabel: (base) => ({
+        ...base,
+
+        color: "#1769aa",
+
+        fontWeight: "500"
+      }),
+
+      multiValueRemove: (base) => ({
+        ...base,
+
+        color: "#1769aa",
+
+        ":hover": {
+          backgroundColor: "#1769aa",
+          color: "white"
+        }
       })
     }}
   />
 </div>
-
 
     {/* CREATED DATE */}
 
