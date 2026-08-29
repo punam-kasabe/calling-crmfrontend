@@ -37,7 +37,8 @@ export default function MyLeads() {
 
  const [statusFilter, setStatusFilter] = useState([]);
 
- const [editStatus, setEditStatus] = useState([]);
+ const [editStatus, setEditStatus] = useState("");
+
 
   const [selectedLead,
     setSelectedLead] =
@@ -626,7 +627,7 @@ const handleAddNewLead = async () => {
   phone: "",
   email: "",
   project: "",
-  status: "New",
+  status: "",
   source: "",
   subSource: "",
   city: "",
@@ -885,6 +886,7 @@ const handlePrevPage = () => {
 };
 
 
+ /* ================= MONTHLY STATS ================= */
 
 /* ================= FILTERED STATS ================= */
 
@@ -932,66 +934,21 @@ const handleCardClick = (status) => {
 
     setStatusFilter([]);
 
-    setCurrentPage(1);
+  } else if (status === "Interested") {
 
-    return;
-  }
-
-  if (status === "Interested") {
-
-    setStatusFilter((prev) => {
-
-      const interestedStatuses = [
-        "Interested",
-        "Very Interested"
-      ];
-
-      const alreadySelected =
-        interestedStatuses.every(
-          (s) => prev.includes(s)
-        );
-
-      if (alreadySelected) {
-
-        return prev.filter(
-          (s) =>
-            !interestedStatuses.includes(s)
-        );
-
-      }
-
-      return [
-        ...new Set([
-          ...prev,
-          ...interestedStatuses
-        ])
-      ];
-
-    });
+    setStatusFilter([
+      "Interested",
+      "Very Interested"
+    ]);
 
   } else {
 
-    setStatusFilter((prev) => {
-
-      if (prev.includes(status)) {
-
-        return prev.filter(
-          (s) => s !== status
-        );
-
-      }
-
-      return [
-        ...prev,
-        status
-      ];
-
-    });
+    setStatusFilter([status]);
 
   }
-
   setCurrentPage(1);
 };
+
 
  return (
 
@@ -1385,6 +1342,9 @@ const handleCardClick = (status) => {
         setAssignedFilter(e.target.value)
       }
     />
+
+
+
 <div className="multi-filter">
   <label>Status</label>
 
@@ -1393,125 +1353,45 @@ const handleCardClick = (status) => {
       value: status,
       label: status
     }))}
-
     isMulti
-
     closeMenuOnSelect={false}
-
     hideSelectedOptions={false}
-
     isSearchable
-
     isClearable
-
     value={statusFilter.map((status) => ({
       value: status,
       label: status
     }))}
-
-    onChange={(selectedOptions) => {
-
-      const selectedStatuses =
-        selectedOptions || [];
-
+    onChange={(selected) => {
       setStatusFilter(
-        selectedStatuses.map(
-          (option) => option.value
-        )
+        selected
+          ? selected.map((item) => item.value)
+          : []
       );
-
-      setCurrentPage(1);
     }}
-
     placeholder="Select Status..."
-
-    className="status-multi-select"
-
-    classNamePrefix="status"
-
     styles={{
-      control: (base, state) => ({
+      control: (base) => ({
         ...base,
-
         minHeight: "45px",
-
-        borderRadius: "10px",
-
-        borderColor: state.isFocused
-          ? "#2684ff"
-          : "#ddd",
-
-        boxShadow: state.isFocused
-          ? "0 0 0 1px #2684ff"
-          : "none",
-
-        "&:hover": {
-          borderColor: "#2684ff"
-        }
+        borderRadius: "10px"
       }),
 
       menu: (base) => ({
         ...base,
-
-        zIndex: 99999
-      }),
-
-      menuList: (base) => ({
-        ...base,
-
-        maxHeight: "300px"
-      }),
-
-      option: (
-        base,
-        state
-      ) => ({
-        ...base,
-
-        backgroundColor:
-          state.isSelected
-            ? "#2684ff"
-            : state.isFocused
-            ? "#f0f7ff"
-            : "white",
-
-        color:
-          state.isSelected
-            ? "white"
-            : "#333",
-
-        cursor: "pointer"
+        zIndex: 9999
       }),
 
       multiValue: (base) => ({
         ...base,
-
-        backgroundColor: "#e8f1ff",
-
         borderRadius: "6px"
-      }),
-
-      multiValueLabel: (base) => ({
-        ...base,
-
-        color: "#1769aa",
-
-        fontWeight: "500"
-      }),
-
-      multiValueRemove: (base) => ({
-        ...base,
-
-        color: "#1769aa",
-
-        ":hover": {
-          backgroundColor: "#1769aa",
-          color: "white"
-        }
       })
     }}
   />
 </div>
+
+
+
 
     {/* CREATED DATE */}
 
@@ -1857,13 +1737,8 @@ setSelectedCities([]);
         : ""
 
   });
-  setEditStatus(
-  lead.status
-    ? [lead.status]
-    : []
-);
 
-setShowModal(true);
+  setShowModal(true);
 
 }}
   >
@@ -2267,9 +2142,9 @@ Booking
       
 
 
-    {/* STATUS */}
+        {/* STATUS */}
 
-<div className="multi-filter">
+       <div className="multi-filter">
   <label>Status</label>
 
   <Select
