@@ -168,28 +168,6 @@ const statusOptions = [
   "No Response"
 ];
 
-
-/* ================= STATUS HELPERS ================= */
-
-const getLeadStatuses = (lead) => {
-
-  if (Array.isArray(lead?.status)) {
-    return lead.status;
-  }
-
-  if (lead?.status) {
-    return [lead.status];
-  }
-
-  return ["New"];
-};
-
-const hasStatus = (lead, status) => {
-
-  return getLeadStatuses(lead).includes(status);
-
-};
-
 const deadReasonOptions = [
   "Budget Issue",
   "Location Issue",
@@ -328,93 +306,55 @@ useEffect(() => {
 }, [fetchMyLeads]);
 
  /* ================= UPDATE STATUS ================= */
-const updateStatus = async (leadId, statuses) => {
 
+const updateStatus = async (leadId, status) => {
   try {
-
     const currentUser =
-      JSON.parse(
-        localStorage.getItem("user")
-      ) || {};
+      JSON.parse(localStorage.getItem("user")) || {};
 
     if (!leadId) {
-
       alert("Lead ID missing ❌");
-
       return;
-
     }
 
-    const statusArray =
-      Array.isArray(statuses)
-        ? statuses
-        : statuses
-          ? [statuses]
-          : [];
-
-    if (statusArray.length === 0) {
-
+    if (!status) {
       alert("Please select status ❌");
-
       return;
-
     }
 
-    console.log(
-      "Updating Status:",
+    console.log("Updating Status:", {
+      leadId,
+      status,
+      executive_email: currentUser.email
+    });
+
+    const res = await axios.put(
+      `${API}/update-status/${leadId}`,
       {
-        leadId,
-        statuses: statusArray,
-        executive_email:
-          currentUser.email
+        status: status,
+        executive_email: currentUser.email
       }
     );
 
-    const res =
-      await axios.put(
+    console.log("Status Update Response:", res.data);
 
-        `${API}/update-status/${leadId}`,
-
-        {
-          status: statusArray,
-
-          executive_email:
-            currentUser.email
-        }
-
-      );
-
-    console.log(
-      "Status Update Response:",
-      res.data
-    );
-
-    /* ================= UI UPDATE ================= */
-
+    /* Update UI immediately */
     setLeads((prev) =>
-
       prev.map((lead) =>
-
         lead._id === leadId
-
           ? {
               ...lead,
-
-              status: statusArray,
-
-              updatedAt:
-                new Date().toISOString()
+              status: status,
+              updatedAt: new Date().toISOString()
             }
-
           : lead
-
       )
-
     );
 
-  }
+    /* Refresh from MongoDB */
+    await fetchMyLeads();
 
-  catch (err) {
+  } catch (err) {
 
     console.error(
       "Status update failed:",
@@ -427,23 +367,12 @@ const updateStatus = async (leadId, statuses) => {
     );
 
     alert(
-
       err.response?.data?.message ||
-
       err.response?.data?.error ||
-
       "Status update failed ❌"
-
     );
-
-    /* Refresh if update failed */
-
-    await fetchMyLeads();
-
   }
-
 };
-
    /* ================= UPDATE LEAD ================= */
 
   const handleUpdateLead =
@@ -458,6 +387,7 @@ const updateStatus = async (leadId, statuses) => {
   name: selectedLead.name,
   phone: selectedLead.phone,
   email: selectedLead.email,
+
   assignedTo:
   selectedLead.assignedTo,
 
@@ -470,12 +400,8 @@ const updateStatus = async (leadId, statuses) => {
    closingExecutive:
    selectedLead.closingExecutive,
 
-  status:
-  Array.isArray(editStatus)
-    ? editStatus
-    : editStatus
-      ? [editStatus]
-      : [],
+   status:
+    selectedLead.status,
 
   source:
     selectedLead.source,
@@ -529,7 +455,7 @@ const updateStatus = async (leadId, statuses) => {
         );
 
        setShowModal(false);
-setEditStatus([]);
+setEditStatus("");
 
 fetchMyLeads();
 
@@ -776,9 +702,7 @@ useEffect(() => {
      const matchesStatus =
   statusFilter.length === 0
     ? true
-    : statusFilter.some((status) =>
-        hasStatus(lead, status)
-      );
+    : statusFilter.includes(lead.status);
 
 
 const matchesProject =
@@ -963,6 +887,7 @@ const handlePrevPage = () => {
 
 
 /* ================= FILTERED STATS ================= */
+
 const stats = useMemo(() => {
 
   return {
@@ -970,34 +895,34 @@ const stats = useMemo(() => {
     total: filteredLeads.length,
 
     new: filteredLeads.filter(
-      (l) => hasStatus(l, "New")
+      (l) => l.status === "New"
     ).length,
 
     interested: filteredLeads.filter(
       (l) =>
-        hasStatus(l, "Interested") ||
-        hasStatus(l, "Very Interested")
+        l.status === "Interested" ||
+        l.status === "Very Interested"
     ).length,
 
     booked: filteredLeads.filter(
-      (l) => hasStatus(l, "Booked")
+      (l) => l.status === "Booked"
     ).length,
 
     followup: filteredLeads.filter(
-      (l) => hasStatus(l, "Follow Up")
+      (l) => l.status === "Follow Up"
     ).length,
 
     notInterested: filteredLeads.filter(
-      (l) => hasStatus(l, "Not Interested")
+      (l) => l.status === "Not Interested"
     ).length,
 
     siteVisitDone: filteredLeads.filter(
-      (l) => hasStatus(l, "Site Visit Done")
+      (l) => l.status === "Site Visit Done"
     ).length,
 
   };
 
-}, [filteredLeads]);
+}, [filteredLeads]); 
 
 
 /* ================= CARD CLICK FILTER ================= */
@@ -1778,25 +1703,24 @@ setSelectedCities([]);
 
                     
 
-                  <td>
+                     <td>
 
-  <div className="status-badges">
+  <span
+    className={`status-badge ${lead.status
+      ?.toLowerCase()
+      .replace(/\s+/g, "-")}`}
+  >
+    {lead.status || "New"}
+  </span>
 
-    {getLeadStatuses(lead).map((status, index) => (
+</td>
 
-      <span
-        key={index}
-        className={`status-badge ${status
-          ?.toLowerCase()
-          .replace(/\s+/g, "-")}`}
-      >
-        {status}
-      </span>
+<td>
+  {lead.source || "-"}
+</td>
 
-    ))}
-
-  </div>
-
+<td>
+  {lead.project || "-"}
 </td>
 
                      <td className="description-cell">
@@ -1828,163 +1752,46 @@ setSelectedCities([]);
   }
 </td>
 
-
 <td>
 
-  <Select
+<select
+  className="status-select"
+  value={lead.status || "New"}
+  onChange={async (e) => {
 
-    options={statusOptions.map((status) => ({
-      value: status,
-      label: status
-    }))}
+    const value = e.target.value;
 
-    isMulti
+    setLeads((prev) =>
+      prev.map((l) =>
+        l._id === lead._id
+          ? {
+              ...l,
+              status: value
+            }
+          : l
+      )
+    );
 
-    closeMenuOnSelect={false}
+    await updateStatus(
+      lead._id,
+      value
+    );
+  }}
+>
 
-    hideSelectedOptions={false}
+{statusOptions.map((status, i) => (
+  <option
+    key={i}
+    value={status}
+  >
+    {status}
+  </option>
+))}
 
-    isSearchable
-
-    isClearable
-
-    value={getLeadStatuses(lead).map((status) => ({
-      value: status,
-      label: status
-    }))}
-
-    onChange={async (selectedOptions) => {
-
-      const statuses =
-        (selectedOptions || []).map(
-          (option) => option.value
-        );
-
-      /* ================= UPDATE UI ================= */
-
-      setLeads((prev) =>
-        prev.map((l) =>
-          l._id === lead._id
-            ? {
-                ...l,
-                status: statuses
-              }
-            : l
-        )
-      );
-
-      /* ================= UPDATE DATABASE ================= */
-
-      await updateStatus(
-        lead._id,
-        statuses
-      );
-
-    }}
-
-    placeholder="Select Status..."
-
-    className="status-multi-select"
-
-    classNamePrefix="status"
-
-    styles={{
-
-      control: (base, state) => ({
-        ...base,
-
-        minHeight: "40px",
-
-        minWidth: "180px",
-
-        borderRadius: "8px",
-
-        borderColor:
-          state.isFocused
-            ? "#2684ff"
-            : "#ddd",
-
-        boxShadow:
-          state.isFocused
-            ? "0 0 0 1px #2684ff"
-            : "none",
-
-        "&:hover": {
-          borderColor: "#2684ff"
-        }
-
-      }),
-
-      menu: (base) => ({
-        ...base,
-
-        zIndex: 99999
-
-      }),
-
-      menuList: (base) => ({
-        ...base,
-
-        maxHeight: "250px"
-
-      }),
-
-      option: (base, state) => ({
-        ...base,
-
-        backgroundColor:
-          state.isSelected
-            ? "#2684ff"
-            : state.isFocused
-              ? "#f0f7ff"
-              : "white",
-
-        color:
-          state.isSelected
-            ? "white"
-            : "#333",
-
-        cursor: "pointer"
-
-      }),
-
-      multiValue: (base) => ({
-        ...base,
-
-        backgroundColor: "#e8f1ff",
-
-        borderRadius: "5px"
-
-      }),
-
-      multiValueLabel: (base) => ({
-        ...base,
-
-        color: "#1769aa",
-
-        fontWeight: "500"
-
-      }),
-
-      multiValueRemove: (base) => ({
-        ...base,
-
-        color: "#1769aa",
-
-        cursor: "pointer",
-
-        ":hover": {
-          backgroundColor: "#1769aa",
-          color: "white"
-        }
-
-      })
-
-    }}
-
-  />
+</select>
 
 </td>
+
                       {/* ACTIONS */}
 
                       <td>
@@ -2051,11 +1858,9 @@ setSelectedCities([]);
 
   });
   setEditStatus(
-  Array.isArray(lead.status)
-    ? lead.status
-    : lead.status
-      ? [lead.status]
-      : []
+  lead.status
+    ? [lead.status]
+    : []
 );
 
 setShowModal(true);
@@ -2464,8 +2269,6 @@ Booking
 
     {/* STATUS */}
 
-{/* STATUS */}
-
 <div className="multi-filter">
   <label>Status</label>
 
@@ -2475,127 +2278,48 @@ Booking
       label: status
     }))}
 
-    isMulti
     isSearchable
     isClearable
 
-    closeMenuOnSelect={false}
-    hideSelectedOptions={false}
+    value={
+      editStatus
+        ? {
+            value: editStatus,
+            label: editStatus
+          }
+        : null
+    }
 
-    value={editStatus.map((status) => ({
-      value: status,
-      label: status
-    }))}
+    onChange={(selected) => {
 
-    onChange={(selectedOptions) => {
+      const value =
+        selected?.value || "";
 
-      const selectedStatuses =
-        selectedOptions || [];
+      setEditStatus(value);
 
-      const statuses =
-        selectedStatuses.map(
-          (option) => option.value
-        );
-
-      setEditStatus(statuses);
-
-      
+      setSelectedLead((prev) => ({
+        ...prev,
+        status: value
+      }));
 
     }}
 
     placeholder="Select Status..."
 
-    className="status-multi-select"
-
-    classNamePrefix="status"
-
     styles={{
-      control: (base, state) => ({
+      control: (base) => ({
         ...base,
-
         minHeight: "45px",
-
-        borderRadius: "10px",
-
-        borderColor:
-          state.isFocused
-            ? "#2684ff"
-            : "#ddd",
-
-        boxShadow:
-          state.isFocused
-            ? "0 0 0 1px #2684ff"
-            : "none",
-
-        "&:hover": {
-          borderColor: "#2684ff"
-        }
+        borderRadius: "10px"
       }),
 
       menu: (base) => ({
         ...base,
-
-        zIndex: 99999
-      }),
-
-      menuList: (base) => ({
-        ...base,
-
-        maxHeight: "300px"
-      }),
-
-      option: (
-        base,
-        state
-      ) => ({
-        ...base,
-
-        backgroundColor:
-          state.isSelected
-            ? "#2684ff"
-            : state.isFocused
-            ? "#f0f7ff"
-            : "white",
-
-        color:
-          state.isSelected
-            ? "white"
-            : "#333",
-
-        cursor: "pointer"
-      }),
-
-      multiValue: (base) => ({
-        ...base,
-
-        backgroundColor: "#e8f1ff",
-
-        borderRadius: "6px"
-      }),
-
-      multiValueLabel: (base) => ({
-        ...base,
-
-        color: "#1769aa",
-
-        fontWeight: "500"
-      }),
-
-      multiValueRemove: (base) => ({
-        ...base,
-
-        color: "#1769aa",
-
-        "&:hover": {
-          backgroundColor: "#1769aa",
-          color: "white"
-        }
+        zIndex: 9999
       })
     }}
   />
 </div>
-
-
 
         {/* PROJECT */}
 
@@ -2791,7 +2515,7 @@ Booking
   onClick={() => {
 
     setShowModal(false);
-setEditStatus([]);
+    setEditStatus("");
 
   }}
 >
