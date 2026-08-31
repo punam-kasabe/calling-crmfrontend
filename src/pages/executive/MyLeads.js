@@ -974,9 +974,8 @@ const handleCardClick = (status) => {
         <div className="page-header">
 
           <h2>
-            My Leads
-          </h2>
-
+  My Leads
+</h2>
           <p>
 
             Total Leads :
