@@ -251,7 +251,189 @@ fetchProjects();
 
 };
 
+/* ================= SELECT LEAD ================= */
 
+const handleSelectLead = (id) => {
+
+  setSelectedLeads((prev) => {
+
+    if (prev.includes(id)) {
+
+      return prev.filter(
+        (leadId) => leadId !== id
+      );
+
+    }
+
+    return [
+      ...prev,
+      id
+    ];
+
+  });
+
+};
+
+
+/* ================= MULTIPLE DELETE ================= */
+
+const handleMultipleDelete = async () => {
+
+  if (selectedLeads.length === 0) {
+
+    toast.warning(
+      "Please select at least one lead ❗"
+    );
+
+    return;
+
+  }
+
+
+  const result = await Swal.fire({
+
+    title: "Are you sure?",
+
+    text: `Delete ${selectedLeads.length} selected leads permanently?`,
+
+    icon: "warning",
+
+    showCancelButton: true,
+
+    confirmButtonText: "Yes, Delete",
+
+    cancelButtonText: "Cancel",
+
+    confirmButtonColor: "#dc3545"
+
+  });
+
+
+  if (!result.isConfirmed) return;
+
+
+  try {
+
+    const token =
+      localStorage.getItem("token");
+
+
+    if (!token) {
+
+      toast.error(
+        "Login token not found ❌"
+      );
+
+      return;
+
+    }
+
+
+    /* ================= DELETE ALL SELECTED ================= */
+
+    await Promise.all(
+
+      selectedLeads.map((id) =>
+
+        axios.delete(
+
+          `${API}/delete-lead/${id}`,
+
+          {
+
+            headers: {
+
+              Authorization:
+                `Bearer ${token}`
+
+            }
+
+          }
+
+        )
+
+      )
+
+    );
+
+
+    /* ================= REMOVE FROM UI ================= */
+
+    setLeads((prev) =>
+
+      prev.filter(
+
+        (lead) =>
+          !selectedLeads.includes(
+            lead._id
+          )
+
+      )
+
+    );
+
+
+    /* ================= CLEAR SELECTION ================= */
+
+    setSelectedLeads([]);
+
+
+    /* ================= REFRESH ================= */
+
+    fetchLeads();
+
+
+    toast.success(
+      "Selected Leads Deleted Successfully ✅"
+    );
+
+
+  } catch (err) {
+
+    console.error(
+      "MULTIPLE DELETE ERROR =",
+      err
+    );
+
+
+    console.error(
+      "RESPONSE =",
+      err.response?.data
+    );
+
+
+    if (
+      err.response?.status === 401
+    ) {
+
+      toast.error(
+        "Unauthorized ❌ Please login again"
+      );
+
+    }
+
+    else if (
+      err.response?.status === 403
+    ) {
+
+      toast.error(
+        "You don't have permission to delete leads ❌"
+      );
+
+    }
+
+    else {
+
+      toast.error(
+        err.response?.data?.message ||
+        "Multiple Delete Failed ❌"
+      );
+
+    }
+
+  }
+
+};
   /* ================= UPDATE ================= */
  const handleUpdate = async () => {
 
