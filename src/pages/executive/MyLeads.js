@@ -1535,8 +1535,7 @@ setSelectedCities([]);
              
                   <th>Next Call Date</th>
 
-                  <th>Sub Source</th>
-
+            
                   <th>Created At</th>
                   <th>Last Activity</th>
                   <th>Update Status</th>
@@ -1614,9 +1613,7 @@ setSelectedCities([]);
                    : "-"}
                      </td>
 
-                      <td>
-                        {lead.subSource || "-"}
-                      </td>
+                     
 
                      <td>
   {lead.createdAt
