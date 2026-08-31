@@ -261,9 +261,24 @@
     width:130px;
 }
 
+/* ===============================
+   SR NO - COMPACT WIDTH
+================================= */
+
+.leads-table th:first-child,
+.leads-table td:first-child {
+  width: 45px !important;
+  min-width: 45px !important;
+  max-width: 45px !important;
+  padding-left: 4px !important;
+  padding-right: 4px !important;
+  text-align: center;
+  white-space: nowrap;
+}
+
 .leads-table {
-  min-width: 2500px !important;
-  width: 2500px !important;
+  min-width: 2300px !important;
+  width: 2300px !important;
   border-collapse: collapse;
   table-layout: fixed;
 }
