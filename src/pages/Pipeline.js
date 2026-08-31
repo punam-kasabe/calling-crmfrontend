@@ -166,89 +166,91 @@ fetchProjects();
 
   /* ================= DELETE ================= */
   const handleDelete = async (id) => {
-    const result = await Swal.fire({
-      title: "Are you sure?",
-      text: "Delete permanently?",
-      icon: "warning",
-      showCancelButton: true
-    });
-
-    if (!result.isConfirmed) return;
-
-    try {
-      await axios.delete(`${API}/delete-lead/${id}`);
-      toast.success("Deleted ✅");
-      fetchLeads();
-    } catch (err) {
-  console.log(err);
-
-  if (err.response) {
-    console.log(err.response.data);
-  }
-
-  toast.error("Delete Failed ❌");
-}
-  };
-    
-  const handleSelectLead = (id) => {
-
-  setSelectedLeads((prev) => {
-
-    if (prev.includes(id)) {
-      return prev.filter((x) => x !== id);
-    }
-
-    return [...prev, id];
-
-  });
-
-       };  
-
-       const handleMultipleDelete = async () => {
-
-  if (selectedLeads.length === 0) {
-
-    toast.error("Select Leads First ❌");
-
-    return;
-
-  }
 
   const result = await Swal.fire({
-    title: `Delete ${selectedLeads.length} Leads ?`,
-    text: "This action cannot be undone",
+    title: "Are you sure?",
+    text: "Delete permanently?",
     icon: "warning",
     showCancelButton: true,
+    confirmButtonText: "Yes, Delete",
+    cancelButtonText: "Cancel",
+    confirmButtonColor: "#dc3545"
   });
 
   if (!result.isConfirmed) return;
 
   try {
 
-    await axios.post(
-      `${API}/delete-multiple-leads`,
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      toast.error("Login token not found ❌");
+      return;
+    }
+
+    console.log("Deleting Lead ID =", id);
+    console.log("Token exists =", !!token);
+
+    const res = await axios.delete(
+      `${API}/delete-lead/${id}`,
       {
-        ids: selectedLeads
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
       }
     );
 
-    toast.success("Leads Deleted Successfully ✅");
+    console.log("DELETE RESPONSE =", res.data);
 
-    setSelectedLeads([]);
+    toast.success("Lead Deleted Successfully ✅");
 
+    // remove deleted lead immediately from UI
+    setLeads((prev) =>
+      prev.filter((lead) => lead._id !== id)
+    );
+
+    // remove from selected list
+    setSelectedLeads((prev) =>
+      prev.filter((leadId) => leadId !== id)
+    );
+
+    // refresh database data
     fetchLeads();
 
   } catch (err) {
 
-  console.log(err);
+    console.error("DELETE LEAD ERROR =", err);
 
-  if (err.response) {
-    console.log(err.response.data);
+    console.error(
+      "DELETE RESPONSE =",
+      err.response?.data
+    );
+
+    console.error(
+      "DELETE STATUS =",
+      err.response?.status
+    );
+
+    if (err.response?.status === 401) {
+      toast.error("Unauthorized ❌ Please login again");
+    }
+    else if (err.response?.status === 403) {
+      toast.error("You don't have permission to delete leads ❌");
+    }
+    else if (err.response?.status === 404) {
+      toast.error("Lead not found ❌");
+    }
+    else {
+      toast.error(
+        err.response?.data?.message ||
+        "Delete Failed ❌"
+      );
+    }
+
   }
 
-  toast.error("Delete Failed ❌");
-}
 };
+
 
   /* ================= UPDATE ================= */
  const handleUpdate = async () => {
