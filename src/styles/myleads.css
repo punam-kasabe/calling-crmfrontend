@@ -158,52 +158,395 @@
   color: white;
 }
 
-/* ===============================
-   ADVANCED SEARCH
-================================= */
+/* =========================================================
+   ADVANCED SEARCH - PROFESSIONAL CRM STYLE
+========================================================= */
 
 .advanced-search-box {
-  background: white;
-  padding: 20px;
-  border-radius: 14px;
-  margin-bottom: 20px;
-  box-shadow: 0 2px 12px rgba(0,0,0,.08);
+  width: 100%;
+  box-sizing: border-box;
+
+  background: #ffffff;
+
+  padding: 22px;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+
+  margin-top: 5px;
+  margin-bottom: 22px;
+
+  box-shadow:
+    0 4px 15px rgba(15, 23, 42, 0.06),
+    0 1px 3px rgba(15, 23, 42, 0.04);
 
   display: grid;
-  grid-template-columns: repeat(auto-fit,minmax(250px,1fr));
-  gap: 15px;
+
+  grid-template-columns:
+    repeat(4, minmax(220px, 1fr));
+
+  gap: 18px;
+
+  align-items: end;
+
+  animation: advancedSearchOpen 0.25s ease;
 }
 
-.advanced-search-box input,
-.advanced-search-box select {
+
+/* ===============================
+   OPEN ANIMATION
+================================= */
+
+@keyframes advancedSearchOpen {
+
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+}
+
+
+/* ===============================
+   NORMAL INPUTS
+================================= */
+
+.advanced-search-box > input {
   width: 100%;
   height: 45px;
-  border: 1px solid #ddd;
+
+  box-sizing: border-box;
+
+  padding: 0 13px;
+
+  border: 1px solid #d7dce3;
+
   border-radius: 10px;
-  padding: 0 12px;
+
+  background: #ffffff;
+
+  color: #1f2937;
+
+  font-size: 14px;
+
+  outline: none;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
 }
 
-.date-group {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
+
+.advanced-search-box > input::placeholder {
+  color: #9ca3af;
 }
 
-.multi-filter label {
+
+.advanced-search-box > input:hover {
+  border-color: #b9c2cf;
+}
+
+
+.advanced-search-box > input:focus {
+  border-color: #2563eb;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 0 0 3px rgba(37, 99, 235, 0.10);
+}
+
+
+/* ===============================
+   MULTI FILTER CONTAINER
+================================= */
+
+.multi-filter {
+  width: 100%;
+  min-width: 0;
+}
+
+
+.multi-filter label,
+.date-group label {
   display: block;
-  margin-bottom: 6px;
+
+  margin-bottom: 7px;
+
+  font-size: 13px;
+
   font-weight: 600;
+
+  color: #374151;
 }
 
-.clear-filter-btn {
-  background: crimson;
-  color: white;
-  border: none;
-  border-radius: 10px;
-  height: 45px;
+
+/* ===============================
+   REACT SELECT
+================================= */
+
+.multi-filter .select__control {
+  min-height: 45px;
+}
+
+
+/* React Select control */
+
+.advanced-search-box .css-13cymwt-control,
+.advanced-search-box .css-t3ipsp-control {
+  min-height: 45px !important;
+
+  border-radius: 10px !important;
+
+  border-color: #d7dce3 !important;
+
+  box-shadow: none !important;
+
+  background: #ffffff !important;
+}
+
+
+/* Focus */
+
+.advanced-search-box .css-t3ipsp-control {
+  border-color: #2563eb !important;
+
+  box-shadow:
+    0 0 0 3px rgba(37, 99, 235, 0.10) !important;
+}
+
+
+/* React select text */
+
+.advanced-search-box .css-1dimb5e-singleValue {
+  color: #1f2937;
+  font-size: 14px;
+}
+
+
+/* Placeholder */
+
+.advanced-search-box .css-1jqq78o-placeholder {
+  color: #9ca3af;
+  font-size: 14px;
+}
+
+
+/* ===============================
+   REACT SELECT MENU
+================================= */
+
+.advanced-search-box .css-qr46ko-menu,
+.advanced-search-box .css-1nmdiq5-menu {
+  z-index: 99999 !important;
+
+  border-radius: 10px !important;
+
+  overflow: hidden;
+
+  border: 1px solid #e5e7eb;
+
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.12);
+}
+
+
+/* Options */
+
+.advanced-search-box .css-10wo9uf-option,
+.advanced-search-box .css-d7l1ni-option {
+  font-size: 14px;
+
+  padding: 10px 12px;
+
   cursor: pointer;
 }
 
+
+/* Multi selected tags */
+
+.advanced-search-box .css-1p3m7a8-multiValue {
+  background: #eff6ff !important;
+
+  border-radius: 6px !important;
+}
+
+
+.advanced-search-box .css-9jq23d {
+  color: #2563eb !important;
+}
+
+
+.advanced-search-box .css-wsp0cs-MultiValueGeneric {
+  color: #1d4ed8 !important;
+
+  font-size: 13px;
+
+  font-weight: 500;
+}
+
+
+/* ===============================
+   DATE FILTER
+================================= */
+
+.date-group {
+  width: 100%;
+
+  display: flex;
+
+  flex-direction: column;
+
+  min-width: 0;
+}
+
+
+.date-group input {
+  width: 100%;
+
+  height: 45px;
+
+  box-sizing: border-box;
+
+  padding: 0 12px;
+
+  border: 1px solid #d7dce3;
+
+  border-radius: 10px;
+
+  background: #ffffff;
+
+  color: #374151;
+
+  font-size: 14px;
+
+  outline: none;
+
+  transition: 0.2s ease;
+}
+
+
+.date-group input:hover {
+  border-color: #b9c2cf;
+}
+
+
+.date-group input:focus {
+  border-color: #2563eb;
+
+  box-shadow:
+    0 0 0 3px rgba(37, 99, 235, 0.10);
+}
+
+
+/* ===============================
+   CLEAR FILTER BUTTON
+================================= */
+
+.clear-filter-btn {
+  width: 100%;
+
+  height: 45px;
+
+  border: none;
+
+  border-radius: 10px;
+
+  background: #dc2626;
+
+  color: #ffffff;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+
+.clear-filter-btn:hover {
+  background: #b91c1c;
+
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 5px 12px rgba(220, 38, 38, 0.20);
+}
+
+
+.clear-filter-btn:active {
+  transform: translateY(0);
+}
+
+
+/* =========================================================
+   ADVANCED SEARCH RESPONSIVE
+========================================================= */
+
+
+/* Laptop */
+
+@media (max-width: 1400px) {
+
+  .advanced-search-box {
+    grid-template-columns:
+      repeat(3, minmax(210px, 1fr));
+
+    gap: 16px;
+  }
+
+}
+
+
+/* Tablet */
+
+@media (max-width: 1000px) {
+
+  .advanced-search-box {
+    grid-template-columns:
+      repeat(2, minmax(200px, 1fr));
+
+    padding: 18px;
+
+    gap: 15px;
+  }
+
+}
+
+
+/* Mobile */
+
+@media (max-width: 600px) {
+
+  .advanced-search-box {
+    grid-template-columns: 1fr;
+
+    padding: 15px;
+
+    gap: 13px;
+
+    border-radius: 12px;
+  }
+
+
+  .advanced-search-box > input,
+  .date-group input,
+  .clear-filter-btn {
+    height: 44px;
+  }
+
+}
 /* ===============================
    TABLE
 ================================= */
