@@ -1073,114 +1073,103 @@ const handleCardClick = (status) => {
        />
 
        </div>
-       
-{/* ================= ACTION BUTTONS ================= */}
+      {/* ================= ACTION BUTTONS ================= */}
 
 <div className="top-actions">
 
   <button
     className="advanced-btn"
-
     onClick={() =>
-      setShowAdvancedSearch(
-        !showAdvancedSearch
-      )
+      setShowAdvancedSearch(!showAdvancedSearch)
     }
   >
-
     Advanced Search
-
   </button>
-    
-<button
-  className="newlead-btn"
 
-  onClick={() => {
+  <button
+    className="newlead-btn"
+    onClick={() => {
 
- setNewLead((prev) => ({
-  ...prev,
+      setNewLead((prev) => ({
+        ...prev,
 
-  assignedTo:
-    user?.name ||
-    user?.username ||
-    "",
+        assignedTo:
+          user?.name ||
+          user?.username ||
+          "",
 
-  assigned_to_email:
-    user?.email || "",
+        assigned_to_email:
+          user?.email || "",
 
-    executive_email:
-  user?.email || "",
+        executive_email:
+          user?.email || "",
 
-  closingExecutive:
-    user?.name ||
-    user?.username ||
-    ""
-}));
+        closingExecutive:
+          user?.name ||
+          user?.username ||
+          ""
+      }));
 
-  setShowNewLeadModal(true);
+      setShowNewLeadModal(true);
 
-}}
->
-
-  + New Lead
-
-</button>
+    }}
+  >
+    + New Lead
+  </button>
 
   <button
     className="export-btn"
-
     onClick={() => {
 
       const csvRows = [];
 
       const headers = [
-
-"Name",
-"Mobile",
-
-"Assigned To",
-
-"Assigned Email",
-
-"Closing Executive",
-
-"Status",
-
-"Project",
-
-"Description",
-
-"Next Call Date",
-
-"Sub Source",
-
-"Created At"
-
-];
+        "Name",
+        "Mobile",
+        "Assigned To",
+        "Assigned Email",
+        "Closing Executive",
+        "Status",
+        "Project",
+        "Description",
+        "Next Call Date",
+        "Sub Source",
+        "Created At"
+      ];
 
       csvRows.push(headers.join(","));
 
       filteredLeads.forEach((lead) => {
 
-       const row = [
+        const row = [
 
-  `"${lead.name || ""}"`,
-  `"${lead.phone || ""}"`,
-  `"${lead.assignedTo || ""}"`,
-  `"${lead.assigned_to_email || ""}"`,
-  `"${lead.closingExecutive || ""}"`,
-  `"${lead.status || ""}"`,
-  `"${lead.project || ""}"`,
-  `"${lead.description || ""}"`,
-  `"${
-  lead.next_call_date
-    ? lead.next_call_date.split("T")[0]
-    : ""
-}"`,
-  `"${lead.subSource || ""}"`,
-  `"${lead.createdAt || ""}"`
+          `"${lead.name || ""}"`,
 
-];
+          `"${lead.phone || ""}"`,
+
+          `"${lead.assignedTo || ""}"`,
+
+          `"${lead.assigned_to_email || ""}"`,
+
+          `"${lead.closingExecutive || ""}"`,
+
+          `"${lead.status || ""}"`,
+
+          `"${lead.project || ""}"`,
+
+          `"${lead.description || ""}"`,
+
+          `"${
+            lead.next_call_date
+              ? lead.next_call_date.split("T")[0]
+              : ""
+          }"`,
+
+          `"${lead.subSource || ""}"`,
+
+          `"${lead.createdAt || ""}"`
+
+        ];
 
         csvRows.push(row.join(","));
 
@@ -1199,87 +1188,108 @@ const handleCardClick = (status) => {
 
       a.href = url;
 
-      a.download =
-        "my-leads.csv";
+      a.download = "my-leads.csv";
 
       a.click();
 
+      window.URL.revokeObjectURL(url);
+
     }}
   >
-
     Export CSV
-
   </button>
 
-       </div>
-       {showAdvancedSearch && (
+</div>
+
+
+{/* ================= ADVANCED SEARCH ================= */}
+
+{showAdvancedSearch && (
 
   <div className="advanced-search-box">
 
+    {/* PROJECT */}
+
     <div className="multi-filter">
-  <label>Project</label>
 
-  <Select
-    options={[
-       { value: "Mahamumbai", label: "Mahamumbai" },
-      { value: "6975", label: "Mahamumbai Phase 2" },
-      { value: "7142", label: "Thane (Nitesh)" },
-      { value: "6674", label: "Panvel (99Villa)" },
-      { value: "6673", label: "Thane (Virendra)" },
-      { value: "7517", label: "Affordable life" },
-      { value: "7514", label: "99villa." },
-      { value: "7670", label: "99 villa plot." },
-      { value: "7743", label: "MAHAMUMBAI" },
-      { value: "7747", label: "Khopoli-pali Road plots" },
-      { value: "7843", label: "ANJALI ZAMIN." },
-      { value: "7876", label: "Sheetal THANE." },
-      { value: "7898", label: "THANE...( VIRENDRA)" },
-      { value: "7899", label: "Alibaug Plot." },
-      { value: "7871", label: "Sheetal Campaign." },
-      { value: "7912", label: "Maha-Mumbaai" },
-      { value: "7929", label: "THANE...( VIRENDRAA)" },
-      { value: "7941", label: "Gudipadwa plot in 5 Lacs." },
-    ]}
+      <label>Project</label>
 
-    isSearchable
-    isClearable
+      <Select
+        options={[
+          { value: "Mahamumbai", label: "Mahamumbai" },
+          { value: "6975", label: "Mahamumbai Phase 2" },
+          { value: "7142", label: "Thane (Nitesh)" },
+          { value: "6674", label: "Panvel (99Villa)" },
+          { value: "6673", label: "Thane (Virendra)" },
+          { value: "7517", label: "Affordable life" },
+          { value: "7514", label: "99villa." },
+          { value: "7670", label: "99 villa plot." },
+          { value: "7743", label: "MAHAMUMBAI" },
+          { value: "7747", label: "Khopoli-pali Road plots" },
+          { value: "7843", label: "ANJALI ZAMIN." },
+          { value: "7876", label: "Sheetal THANE." },
+          { value: "7898", label: "THANE...( VIRENDRA)" },
+          { value: "7899", label: "Alibaug Plot." },
+          { value: "7871", label: "Sheetal Campaign." },
+          { value: "7912", label: "Maha-Mumbaai" },
+          { value: "7929", label: "THANE...( VIRENDRAA)" },
+          { value: "7941", label: "Gudipadwa plot in 5 Lacs." }
+        ]}
 
-    value={selectedProjects}
+        isSearchable
+        isClearable
 
-    onChange={(selected) =>
-      setSelectedProjects(selected)
-    }
+        value={selectedProjects}
 
-    placeholder="Search Project..."
+        onChange={(selected) =>
+          setSelectedProjects(selected)
+        }
 
-    styles={{
-      control: (base) => ({
-        ...base,
-        minHeight: "45px",
-        borderRadius: "10px"
-      }),
-      menu: (base) => ({
-        ...base,
-        zIndex: 9999
-      })
-    }}
-  />
-</div>
+        placeholder="Search Project..."
+
+        styles={{
+          control: (base) => ({
+            ...base,
+            minHeight: "45px",
+            borderRadius: "10px"
+          }),
+
+          menu: (base) => ({
+            ...base,
+            zIndex: 9999
+          })
+        }}
+      />
+
+    </div>
 
 
-   <div className="multi-filter">
-  <label>Source</label>
+    {/* SOURCE */}
 
-  <Select
-    options={sourceDropdownOptions}
-    isMulti
-    closeMenuOnSelect={false}
-    hideSelectedOptions={false}
-    value={selectedSources}
-    onChange={setSelectedSources}
-    placeholder="Select Source"
-  />
-</div>
+    <div className="multi-filter">
+
+      <label>Source</label>
+
+      <Select
+        options={sourceDropdownOptions}
+
+        isMulti
+
+        closeMenuOnSelect={false}
+
+        hideSelectedOptions={false}
+
+        value={selectedSources}
+
+        onChange={setSelectedSources}
+
+        placeholder="Select Source"
+      />
+
+    </div>
+
+
+    {/* SUB SOURCE */}
 
     <input
       type="text"
@@ -1290,111 +1300,72 @@ const handleCardClick = (status) => {
       }
     />
 
-   <div className="multi-filter">
-  <label>City</label>
 
-  <Select
-    options={cityDropdownOptions}
-    isMulti
-    closeMenuOnSelect={false}
-    hideSelectedOptions={false}
-    value={selectedCities}
-    onChange={setSelectedCities}
-    placeholder="Select City"
-  />
-</div>
-
-
-<div className="multi-filter">
-  <label>Executive</label>
-
-  <Select
-    options={executiveDropdownOptions}
-    isMulti
-    closeMenuOnSelect={false}
-    hideSelectedOptions={false}
-    value={selectedExecutives}
-    onChange={setSelectedExecutives}
-    placeholder="Select Executive"
-  />
-</div>
+    {/* STATUS */}
 
     <div className="multi-filter">
-  <label>Department</label>
 
-  <Select
-    options={departmentDropdownOptions}
-    isMulti
-    closeMenuOnSelect={false}
-    hideSelectedOptions={false}
-    value={selectedDepartments}
-    onChange={setSelectedDepartments}
-    placeholder="Select Department"
-  />
-</div>
+      <label>Status</label>
 
-    <input
-      type="text"
-      placeholder="Assigned To..."
-      value={assignedFilter}
-      onChange={(e) =>
-        setAssignedFilter(e.target.value)
-      }
-    />
+      <Select
+        options={statusOptions.map((status) => ({
+          value: status,
+          label: status
+        }))}
 
+        isMulti
 
+        closeMenuOnSelect={false}
 
-<div className="multi-filter">
-  <label>Status</label>
+        hideSelectedOptions={false}
 
-  <Select
-    options={statusOptions.map((status) => ({
-      value: status,
-      label: status
-    }))}
-    isMulti
-    closeMenuOnSelect={false}
-    hideSelectedOptions={false}
-    isSearchable
-    isClearable
-    value={statusFilter.map((status) => ({
-      value: status,
-      label: status
-    }))}
-    onChange={(selected) => {
-      setStatusFilter(
-        selected
-          ? selected.map((item) => item.value)
-          : []
-      );
-    }}
-    placeholder="Select Status..."
-    styles={{
-      control: (base) => ({
-        ...base,
-        minHeight: "45px",
-        borderRadius: "10px"
-      }),
+        isSearchable
 
-      menu: (base) => ({
-        ...base,
-        zIndex: 9999
-      }),
+        isClearable
 
-      multiValue: (base) => ({
-        ...base,
-        borderRadius: "6px"
-      })
-    }}
-  />
-</div>
+        value={statusFilter.map((status) => ({
+          value: status,
+          label: status
+        }))}
+
+        onChange={(selected) => {
+
+          setStatusFilter(
+            selected
+              ? selected.map((item) => item.value)
+              : []
+          );
+
+        }}
+
+        placeholder="Select Status..."
+
+        styles={{
+          control: (base) => ({
+            ...base,
+            minHeight: "45px",
+            borderRadius: "10px"
+          }),
+
+          menu: (base) => ({
+            ...base,
+            zIndex: 9999
+          }),
+
+          multiValue: (base) => ({
+            ...base,
+            borderRadius: "6px"
+          })
+        }}
+      />
+
+    </div>
 
 
-
-
-    {/* CREATED DATE */}
+    {/* ================= CREATED DATE ================= */}
 
     <div className="date-group">
+
       <label>
         Created Date From
       </label>
@@ -1406,9 +1377,12 @@ const handleCardClick = (status) => {
           setFromDateFilter(e.target.value)
         }
       />
+
     </div>
 
+
     <div className="date-group">
+
       <label>
         Created Date To
       </label>
@@ -1420,11 +1394,14 @@ const handleCardClick = (status) => {
           setToDateFilter(e.target.value)
         }
       />
+
     </div>
 
-    {/* NEXT CALL DATE */}
+
+    {/* ================= NEXT CALL DATE ================= */}
 
     <div className="date-group">
+
       <label>
         Next Call Date From
       </label>
@@ -1436,9 +1413,12 @@ const handleCardClick = (status) => {
           setNextCallFrom(e.target.value)
         }
       />
+
     </div>
 
+
     <div className="date-group">
+
       <label>
         Next Call Date To
       </label>
@@ -1450,7 +1430,11 @@ const handleCardClick = (status) => {
           setNextCallTo(e.target.value)
         }
       />
+
     </div>
+
+
+    {/* DESCRIPTION */}
 
     <input
       type="text"
@@ -1461,34 +1445,40 @@ const handleCardClick = (status) => {
       }
     />
 
-   <button
-  className="clear-filter-btn"
-  onClick={() => {
 
-setSubSourceFilter("");
-setAssignedFilter("");
-setStatusFilter([]);
-setFromDateFilter("");
-setToDateFilter("");
-setNextCallFrom("");
-setNextCallTo("");
-setDescriptionFilter("");
-setSelectedProjects(null);
-setSelectedSources([]);
-setSelectedDepartments([]);
-setSelectedExecutives([]);
-setSelectedCities([]);
-  }}
->
+    {/* CLEAR FILTERS */}
 
-  Clear Filters
-</button>
+    <button
+      className="clear-filter-btn"
+
+      onClick={() => {
+
+        setSubSourceFilter("");
+
+        setStatusFilter([]);
+
+        setFromDateFilter("");
+
+        setToDateFilter("");
+
+        setNextCallFrom("");
+
+        setNextCallTo("");
+
+        setDescriptionFilter("");
+
+        setSelectedProjects(null);
+
+        setSelectedSources([]);
+
+      }}
+    >
+      Clear Filters
+    </button>
 
   </div>
 
 )}
-
-
         {/* ================= CONTENT ================= */}
 
         {loading ? (
