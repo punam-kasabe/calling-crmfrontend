@@ -14,6 +14,8 @@ const [searchMobile, setSearchMobile] = useState("");
 const [suggestions, setSuggestions] = useState([]);
 const [showEditModal, setShowEditModal] = useState(false);
 const [users, setUsers] = useState([]);
+const [currentPage, setCurrentPage] = useState(1);
+const entriesPerPage = 30;
 const [editVisit, setEditVisit] = useState({
   _id: "",
   clientName: "",
@@ -105,6 +107,7 @@ const handleChange = (e) => {
       );
 
       setVisits(res.data);
+       setCurrentPage(1);
 
     }
 
@@ -172,6 +175,7 @@ const handleChange = (e) => {
   }
 
 };
+
  const searchVisit = async (value = "") => {
 
   const search = (value || searchMobile).trim();
@@ -188,6 +192,7 @@ const handleChange = (e) => {
     );
 
     setVisits([res.data]);
+    setCurrentPage(1);
     setSuggestions([]);
 
   } catch (err) {
@@ -197,6 +202,23 @@ const handleChange = (e) => {
   }
 
    };
+
+   // =========================================================
+// PAGINATION CALCULATION
+// =========================================================
+
+const totalPages = Math.ceil(
+  visits.length / entriesPerPage
+);
+
+const startIndex =
+  (currentPage - 1) * entriesPerPage;
+
+const endIndex =
+  startIndex + entriesPerPage;
+
+const currentVisits =
+  visits.slice(startIndex, endIndex);
 
 
 // =========================================================
@@ -444,11 +466,11 @@ const exportToExcel = () => {
 
             <tbody>
 
-              {visits.length > 0 ? (
+             {currentVisits.length > 0 ? (
 
-                visits.map((v) => (
+  currentVisits.map((v) => (
 
-                  <tr key={v._id}>
+    <tr key={v._id}>
 
                     <td>
                       {v.clientName || v.name}
@@ -534,7 +556,7 @@ const exportToExcel = () => {
 
                 <tr>
                   <td
-                    colSpan="10"
+                    colSpan="11"
                     style={{
                       textAlign: "center"
                     }}
@@ -551,6 +573,41 @@ const exportToExcel = () => {
             </tbody>
 
           </table>
+
+          {/* =========================================================
+    PAGINATION BUTTONS
+========================================================= */}
+
+{totalPages > 1 && (
+  <div className="pagination">
+
+    <button
+      className="pagination-btn"
+      onClick={() =>
+        setCurrentPage((prev) => prev - 1)
+      }
+      disabled={currentPage === 1}
+    >
+      Previous
+    </button>
+
+    <span className="pagination-info">
+      Page {currentPage} of {totalPages}
+    </span>
+
+    <button
+      className="pagination-btn"
+      onClick={() =>
+        setCurrentPage((prev) => prev + 1)
+      }
+      disabled={currentPage === totalPages}
+    >
+      Next
+    </button>
+
+  </div>
+)}
+
 {showEditModal && (
   <div className="modal-overlay">
     <div className="edit-modal">
