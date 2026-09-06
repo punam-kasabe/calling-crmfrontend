@@ -16,6 +16,8 @@ const [showEditModal, setShowEditModal] = useState(false);
 const [users, setUsers] = useState([]);
 const [currentPage, setCurrentPage] = useState(1);
 const entriesPerPage = 30;
+const [startDate, setStartDate] = useState("");
+const [endDate, setEndDate] = useState("");
 const [editVisit, setEditVisit] = useState({
   _id: "",
   clientName: "",
@@ -203,12 +205,54 @@ const handleChange = (e) => {
 
    };
 
-   // =========================================================
-// PAGINATION CALCULATION
+  // =========================================================
+// DATE FILTER + PAGINATION
+// =========================================================
+
+const filteredVisits = visits.filter((v) => {
+
+  if (!startDate && !endDate) {
+    return true;
+  }
+
+  const visitDate = v.visitDate || v.createdAt || v.created_date;
+
+  if (!visitDate) {
+    return false;
+  }
+
+  const date = new Date(visitDate);
+
+  // Start Date
+  if (startDate) {
+    const start = new Date(startDate);
+    start.setHours(0, 0, 0, 0);
+
+    if (date < start) {
+      return false;
+    }
+  }
+
+  // End Date
+  if (endDate) {
+    const end = new Date(endDate);
+    end.setHours(23, 59, 59, 999);
+
+    if (date > end) {
+      return false;
+    }
+  }
+
+  return true;
+});
+
+
+// =========================================================
+// PAGINATION
 // =========================================================
 
 const totalPages = Math.ceil(
-  visits.length / entriesPerPage
+  filteredVisits.length / entriesPerPage
 );
 
 const startIndex =
@@ -218,8 +262,7 @@ const endIndex =
   startIndex + entriesPerPage;
 
 const currentVisits =
-  visits.slice(startIndex, endIndex);
-
+  filteredVisits.slice(startIndex, endIndex);
 
 // =========================================================
 // EXPORT VISITS TO EXCEL
@@ -232,7 +275,7 @@ const exportToExcel = () => {
     return;
   }
 
-  const excelData = visits.map((v, index) => ({
+ const excelData = filteredVisits.map((v, index) => ({
     "Sr No": index + 1,
 
     "Client Name":
@@ -371,6 +414,57 @@ const exportToExcel = () => {
 
   </div>
 
+{/* =========================================================
+    DATE FILTER
+========================================================= */}
+
+<div className="date-filter-area">
+
+  <div className="date-filter-group">
+
+    <label>Start Date</label>
+
+    <input
+      type="date"
+      value={startDate}
+      onChange={(e) => {
+        setStartDate(e.target.value);
+        setCurrentPage(1);
+      }}
+    />
+
+  </div>
+
+
+  <div className="date-filter-group">
+
+    <label>End Date</label>
+
+    <input
+      type="date"
+      value={endDate}
+      min={startDate || undefined}
+      onChange={(e) => {
+        setEndDate(e.target.value);
+        setCurrentPage(1);
+      }}
+    />
+
+  </div>
+
+
+  <button
+    className="date-reset-btn"
+    onClick={() => {
+      setStartDate("");
+      setEndDate("");
+      setCurrentPage(1);
+    }}
+  >
+    Clear Date
+  </button>
+
+</div>
   <div className="search-area">
 
 
@@ -429,16 +523,19 @@ const exportToExcel = () => {
     Search
   </button>
 
-  <button
-    className="reset-btn"
-    onClick={() => {
-      setSearchMobile("");
-      setSuggestions([]);
-      fetchVisits();
-    }}
-  >
-    Reset
-  </button>
+ <button
+  className="reset-btn"
+  onClick={() => {
+    setSearchMobile("");
+    setSuggestions([]);
+    setStartDate("");
+    setEndDate("");
+    setCurrentPage(1);
+    fetchVisits();
+  }}
+>
+  Reset
+</button>
 
 </div>
           <table className="visit-table">
