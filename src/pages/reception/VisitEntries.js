@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 //import { useNavigate } from "react-router-dom";
 import axios from "axios";
-
+import * as XLSX from "xlsx";
 import Sidebar from "../../components/Sidebar";
 
 import "../../styles/visitentries.css";
@@ -197,6 +197,131 @@ const handleChange = (e) => {
   }
 
    };
+
+
+// =========================================================
+// EXPORT VISITS TO EXCEL
+// =========================================================
+
+const exportToExcel = () => {
+
+  if (!visits || visits.length === 0) {
+    alert("No visit entries available to export.");
+    return;
+  }
+
+  const excelData = visits.map((v, index) => ({
+    "Sr No": index + 1,
+
+    "Client Name":
+      v.clientName ||
+      v.name ||
+      "-",
+
+    "Mobile":
+      v.mobile ||
+      v.phone ||
+      "-",
+
+    "Project":
+      v.project ||
+      "-",
+
+    "Client Type":
+      v.clientType ||
+      "New",
+
+    "Visit Status":
+      v.visitStatus ||
+      v.status ||
+      "-",
+
+    "Manager":
+      v.attendedManager?.name ||
+      v.assigned_manager ||
+      "-",
+
+    "Calling By":
+      Array.isArray(v.calling_by)
+        ? v.calling_by.join(", ")
+        : v.assignedTo ||
+          v.calling_by ||
+          "-",
+
+    "Department":
+      v.department ||
+      "-",
+
+    "Source":
+      v.source ||
+      "-",
+
+    "Lead Status":
+      v.status ||
+      "-",
+
+    "Booking Status":
+      v.bookingStatus ||
+      "-",
+
+    "Remark":
+      v.remark ||
+      "-",
+
+    "Visit Date":
+      v.visitDate
+        ? new Date(v.visitDate).toLocaleDateString("en-GB")
+        : "-",
+
+    "Created Date":
+      v.createdAt || v.created_date
+        ? new Date(
+            v.createdAt || v.created_date
+          ).toLocaleDateString("en-GB")
+        : "-"
+  }));
+
+  // Create worksheet
+  const worksheet = XLSX.utils.json_to_sheet(excelData);
+
+  // Create workbook
+  const workbook = XLSX.utils.book_new();
+
+  // Add worksheet
+  XLSX.utils.book_append_sheet(
+    workbook,
+    worksheet,
+    "Visit Entries"
+  );
+
+  // Set column widths
+  worksheet["!cols"] = [
+    { wch: 8 },   // Sr No
+    { wch: 28 },  // Client
+    { wch: 15 },  // Mobile
+    { wch: 18 },  // Project
+    { wch: 15 },  // Client Type
+    { wch: 22 },  // Visit Status
+    { wch: 22 },  // Manager
+    { wch: 25 },  // Calling By
+    { wch: 20 },  // Department
+    { wch: 18 },  // Source
+    { wch: 18 },  // Lead Status
+    { wch: 22 },  // Booking Status
+    { wch: 40 },  // Remark
+    { wch: 15 },  // Visit Date
+    { wch: 15 }   // Created Date
+  ];
+
+  // Download Excel file
+  XLSX.writeFile(
+    workbook,
+    `Visit_Entries_${new Date()
+      .toISOString()
+      .split("T")[0]}.xlsx`
+  );
+};
+
   return (
     <div className="layout">
 
@@ -209,10 +334,23 @@ const handleChange = (e) => {
 
       <div className={`main-content ${isOpen ? "shifted" : "full"}`}>
 
-        <div className="reception-page">
+      <div className="reception-page">
 
-          <h1>Visit Entries</h1>
-        <div className="search-area">
+  <div className="visit-header">
+
+    <h1>Visit Entries</h1>
+
+    <button
+      className="export-excel-btn"
+      onClick={exportToExcel}
+    >
+      📊 Export Excel
+    </button>
+
+  </div>
+
+  <div className="search-area">
+
 
   <div className="search-box">
 

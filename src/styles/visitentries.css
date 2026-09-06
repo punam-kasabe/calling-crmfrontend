@@ -550,3 +550,85 @@ border-radius:8px;
 border:1px solid #ddd;
 min-width:170px;
 }
+
+/* =========================================================
+   VISIT HEADER
+   ========================================================= */
+
+.visit-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.visit-header h1 {
+  margin: 0;
+}
+
+
+/* =========================================================
+   EXPORT EXCEL BUTTON
+   ========================================================= */
+
+.export-excel-btn {
+  height: 42px;
+
+  padding: 0 18px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid #b7dec9;
+  border-radius: 9px;
+
+  background: #ecfdf3;
+  color: #147a56;
+
+  font-size: 13px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.export-excel-btn:hover {
+  background: #dff8eb;
+  border-color: #8fcfb0;
+
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 5px 15px rgba(20, 122, 86, 0.12);
+}
+
+.export-excel-btn:active {
+  transform: translateY(0);
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+  .visit-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .export-excel-btn {
+    width: 100%;
+  }
+
+}
