@@ -251,7 +251,6 @@ fetchProjects();
 
 };
 
-
 /* ================= DELETE REMARK ================= */
 const handleDeleteRemark = async (id) => {
   const result = await Swal.fire({
@@ -311,6 +310,8 @@ const handleDeleteRemark = async (id) => {
     );
   }
 };
+
+
 /* ================= SELECT LEAD ================= */
 
 const handleSelectLead = (id) => {
