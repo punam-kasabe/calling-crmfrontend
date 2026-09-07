@@ -443,97 +443,7 @@ const handleUpdateLead = async () => {
       bookingDate:
         selectedLead.bookingDate || ""
     };
-/* =========================================
-   DELETE REMARK - ADMIN ONLY
-========================================= */
 
-const handleDeleteRemark = async (leadId, remarkId) => {
-  try {
-
-    if (!leadId || !remarkId) {
-      alert("Lead ID or Remark ID missing ❌");
-      return;
-    }
-
-    const currentUser =
-      JSON.parse(localStorage.getItem("user")) || {};
-
-    /* ADMIN CHECK - FRONTEND */
-    if (
-      String(currentUser.role || "").toLowerCase() !== "admin"
-    ) {
-      alert("Only Admin can delete remarks ❌");
-      return;
-    }
-
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this remark?"
-    );
-
-    if (!confirmDelete) {
-      return;
-    }
-
-    const res = await axios.delete(
-      `${API}/delete-lead-remark/${leadId}/${remarkId}`,
-      {
-        headers: {
-          "x-user-email": currentUser.email
-        }
-      }
-    );
-
-    console.log(
-      "Delete Remark Response:",
-      res.data
-    );
-
-    /* =========================================
-       UPDATE SELECTED LEAD
-    ========================================= */
-
-    if (res.data?.lead) {
-
-      setSelectedLead(res.data.lead);
-
-      setLeads((prev) =>
-        prev.map((lead) =>
-          lead._id === leadId
-            ? {
-                ...lead,
-                remarks: res.data.lead.remarks
-              }
-            : lead
-        )
-      );
-
-    }
-
-    alert(
-      res.data?.message ||
-      "Remark deleted successfully ✅"
-    );
-
-  } catch (err) {
-
-    console.error(
-      "Delete Remark Failed:",
-      err
-    );
-
-    console.error(
-      "Backend Response:",
-      err.response?.data
-    );
-
-    alert(
-      err.response?.data?.message ||
-      err.response?.data?.error ||
-      "Failed to delete remark ❌"
-    );
-
-  }
-};
     console.log(
       "Updating Lead:",
       updatedData
@@ -601,6 +511,90 @@ const handleDeleteRemark = async (leadId, remarkId) => {
 
   const startCall = async (lead) => {
 
+
+     /* =========================================
+   DELETE REMARK - ADMIN ONLY
+========================================= */
+
+const handleDeleteRemark = async (leadId, remarkId) => {
+  try {
+    if (!leadId || !remarkId) {
+      alert("Lead ID or Remark ID missing ❌");
+      return;
+    }
+
+    const currentUser =
+      JSON.parse(localStorage.getItem("user")) || {};
+
+    if (
+      String(currentUser.role || "").toLowerCase() !== "admin"
+    ) {
+      alert("Only Admin can delete remarks ❌");
+      return;
+    }
+
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this remark?"
+    );
+
+    if (!confirmDelete) {
+      return;
+    }
+
+    const res = await axios.delete(
+      `${API}/delete-lead-remark/${leadId}/${remarkId}`,
+      {
+        headers: {
+          "x-user-email": currentUser.email
+        }
+      }
+    );
+
+    console.log(
+      "Delete Remark Response:",
+      res.data
+    );
+
+    if (res.data?.lead) {
+
+      setSelectedLead(res.data.lead);
+
+      setLeads((prev) =>
+        prev.map((lead) =>
+          lead._id === leadId
+            ? {
+                ...lead,
+                remarks: res.data.lead.remarks
+              }
+            : lead
+        )
+      );
+    }
+
+    alert(
+      res.data?.message ||
+      "Remark deleted successfully ✅"
+    );
+
+  } catch (err) {
+
+    console.error(
+      "Delete Remark Failed:",
+      err
+    );
+
+    console.error(
+      "Backend Response:",
+      err.response?.data
+    );
+
+    alert(
+      err.response?.data?.message ||
+      err.response?.data?.error ||
+      "Failed to delete remark ❌"
+    );
+  }
+};
   setActiveCall(lead);
 
   setCallStartTime(new Date());
