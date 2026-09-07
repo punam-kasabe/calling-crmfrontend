@@ -521,13 +521,13 @@ const PendingLeadReport = () => {
       }
     });
 
-    return Array.from(
-      map.values()
-    ).sort((a, b) =>
-      a.name.localeCompare(
-        b.name
-      )
-    );
+   return Array.from(map.values()).sort((a, b) =>
+  String(a.name ?? "").localeCompare(
+    String(b.name ?? ""),
+    "en",
+    { sensitivity: "base" }
+  )
+);
   }, [processedLeads]);
 
   /* =======================================================
@@ -545,11 +545,13 @@ const PendingLeadReport = () => {
       }
     });
 
-    return Array.from(
-      statusSet
-    ).sort((a, b) =>
-      a.localeCompare(b)
-    );
+   return Array.from(statusSet).sort((a, b) =>
+  String(a ?? "").localeCompare(
+    String(b ?? ""),
+    "en",
+    { sensitivity: "base" }
+  )
+);
   }, [processedLeads]);
 
   /* =======================================================
