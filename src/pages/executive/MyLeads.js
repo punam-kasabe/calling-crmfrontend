@@ -509,10 +509,7 @@ const handleUpdateLead = async () => {
   }
 };
 
-  const startCall = async (lead) => {
-
-
-     /* =========================================
+/* =========================================
    DELETE REMARK - ADMIN ONLY
 ========================================= */
 
@@ -556,7 +553,6 @@ const handleDeleteRemark = async (leadId, remarkId) => {
     );
 
     if (res.data?.lead) {
-
       setSelectedLead(res.data.lead);
 
       setLeads((prev) =>
@@ -577,7 +573,6 @@ const handleDeleteRemark = async (leadId, remarkId) => {
     );
 
   } catch (err) {
-
     console.error(
       "Delete Remark Failed:",
       err
@@ -595,6 +590,11 @@ const handleDeleteRemark = async (leadId, remarkId) => {
     );
   }
 };
+
+  const startCall = async (lead) => {
+
+
+     
   setActiveCall(lead);
 
   setCallStartTime(new Date());
