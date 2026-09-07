@@ -459,6 +459,87 @@ const handleUpdateLead = async () => {
       res.data
     );
 
+/* =========================================
+   DELETE REMARK - ADMIN ONLY
+========================================= */
+
+const handleDeleteRemark = async (leadId, remarkId) => {
+
+  try {
+
+    const currentUser =
+      JSON.parse(localStorage.getItem("user")) || {};
+
+    if (
+      String(currentUser.role || "").toLowerCase() !==
+      "admin"
+    ) {
+      alert("Only Admin can delete remarks ❌");
+      return;
+    }
+
+    if (!leadId || !remarkId) {
+      alert("Lead ID or Remark ID missing ❌");
+      return;
+    }
+
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this remark?"
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    const res = await axios.delete(
+      `${API}/delete-lead-remark/${leadId}/${remarkId}`,
+      {
+        headers: {
+          "x-user-email": currentUser.email
+        }
+      }
+    );
+
+    if (res.data?.lead) {
+
+      setSelectedLead(res.data.lead);
+
+      setLeads((prev) =>
+        prev.map((lead) =>
+          lead._id === leadId
+            ? res.data.lead
+            : lead
+        )
+      );
+
+    }
+
+    alert(
+      res.data?.message ||
+      "Remark deleted successfully ✅"
+    );
+
+  } catch (err) {
+
+    console.error(
+      "Remark delete failed:",
+      err
+    );
+
+    console.error(
+      "Backend response:",
+      err.response?.data
+    );
+
+    alert(
+      err.response?.data?.message ||
+      err.response?.data?.error ||
+      "Remark delete failed ❌"
+    );
+  }
+
+};
+
     /* ===============================
        UPDATE UI
     =============================== */
@@ -2439,6 +2520,21 @@ Booking
                   Added by: {remark.addedBy}
                 </small>
               )}
+
+              {String(user?.role || "").toLowerCase() === "admin" && (
+  <button
+    type="button"
+    className="delete-remark-btn"
+    onClick={() =>
+      handleDeleteRemark(
+        selectedLead._id,
+        remark._id
+      )
+    }
+  >
+    Delete Remark
+  </button>
+)}
 
             </div>
 
