@@ -374,227 +374,111 @@ const updateStatus = async (leadId, status) => {
     );
   }
 };
-
-
    /* ================= UPDATE LEAD ================= */
 
-const handleUpdateLead = async () => {
-  try {
-    if (!selectedLead?._id) {
-      alert("Lead ID missing ❌");
-      return;
-    }
+  const handleUpdateLead =
+    async () => {
 
-    const currentUser =
-      JSON.parse(localStorage.getItem("user")) || {};
+      try {
 
-    const updatedData = {
-      executive_email:
-        selectedLead.executive_email ||
-        currentUser.email ||
-        user.email,
+  const updatedData = {
+  executive_email:
+  selectedLead.executive_email ||
+  user.email,
+  name: selectedLead.name,
+  phone: selectedLead.phone,
+  email: selectedLead.email,
 
-      name: selectedLead.name || "",
-      phone: selectedLead.phone || "",
-      email: selectedLead.email || "",
+  assignedTo:
+  selectedLead.assignedTo,
 
-      assignedTo:
-        selectedLead.assignedTo || "",
+   assigned_to_email:
+   selectedLead.assigned_to_email,
 
-      assigned_to_email:
-        selectedLead.assigned_to_email || "",
+   assigned_to:
+   selectedLead.assigned_to_email,
 
-      assigned_to:
-        selectedLead.assigned_to_email || "",
+   closingExecutive:
+   selectedLead.closingExecutive,
 
-      closingExecutive:
-        selectedLead.closingExecutive || "",
+   status:
+    selectedLead.status,
 
-      status:
-        selectedLead.status || "New",
+  source:
+    selectedLead.source,
 
-      source:
-        selectedLead.source || "",
+  subSource:
+    selectedLead.subSource,
 
-      subSource:
-        selectedLead.subSource || "",
+  city:
+    selectedLead.city,
 
-      city:
-        selectedLead.city || "",
+  project:
+    selectedLead.project,
 
-      project:
-        selectedLead.project || "",
+  next_call_date:
+    selectedLead.next_call_date,
 
-      next_call_date:
-        selectedLead.next_call_date || "",
+  description:
+    selectedLead.description,
 
-      description:
-        selectedLead.description || "",
+  department:
+    selectedLead.department,
 
-      department:
-        selectedLead.department || "",
+  deadReason:
+    selectedLead.deadReason,
 
-      deadReason:
-        selectedLead.deadReason || "",
+  deadSubReason:
+    selectedLead.deadSubReason,
 
-      deadSubReason:
-        selectedLead.deadSubReason || "",
+  bookingDate:
+    selectedLead.bookingDate
+};
 
-      bookingDate:
-        selectedLead.bookingDate || ""
-    };
-
-    console.log(
-      "Updating Lead:",
-      updatedData
-    );
-
-    const res = await axios.put(
+      await axios.put(
       `${API}/update-lead/${selectedLead._id}`,
       updatedData
-    );
-
-    console.log(
-      "Update Lead Response:",
-      res.data
-    );
-
-
-    /* ===============================
-       UPDATE UI
-    =============================== */
-
-    setLeads((prev) =>
-      prev.map((lead) =>
-        lead._id === selectedLead._id
-          ? {
-              ...lead,
-              ...res.data.lead
-            }
-          : lead
-      )
-    );
-
-    /* ===============================
-       CLOSE MODAL
-    =============================== */
-
-    setShowModal(false);
-    setEditStatus("");
-
-    /* ===============================
-       REFRESH FROM MONGODB
-    =============================== */
-
-    await fetchMyLeads();
-
-    alert("Lead Updated Successfully ✅");
-
-  } catch (err) {
-    console.error(
-      "Lead update failed:",
-      err
-    );
-
-    console.error(
-      "Backend response:",
-      err.response?.data
-    );
-
-    alert(
-      err.response?.data?.message ||
-      err.response?.data?.error ||
-      "Update Failed ❌"
-    );
-  }
-};
-
-/* =========================================
-   DELETE REMARK - ADMIN ONLY
-========================================= */
-
-const handleDeleteRemark = async (leadId, remarkId) => {
-  try {
-    if (!leadId || !remarkId) {
-      alert("Lead ID or Remark ID missing ❌");
-      return;
-    }
-
-    const currentUser =
-      JSON.parse(localStorage.getItem("user")) || {};
-
-    if (
-      String(currentUser.role || "").toLowerCase() !== "admin"
-    ) {
-      alert("Only Admin can delete remarks ❌");
-      return;
-    }
-
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this remark?"
-    );
-
-    if (!confirmDelete) {
-      return;
-    }
-
-    const res = await axios.delete(
-      `${API}/delete-lead-remark/${leadId}/${remarkId}`,
-      {
-        headers: {
-          "x-user-email": currentUser.email
-        }
-      }
-    );
-
-    console.log(
-      "Delete Remark Response:",
-      res.data
-    );
-
-    if (res.data?.lead) {
-      setSelectedLead(res.data.lead);
-
-      setLeads((prev) =>
-        prev.map((lead) =>
-          lead._id === leadId
-            ? {
-                ...lead,
-                remarks: res.data.lead.remarks
-              }
-            : lead
-        )
       );
-    }
 
-    alert(
-      res.data?.message ||
-      "Remark deleted successfully ✅"
-    );
+        setLeads((prev) =>
 
-  } catch (err) {
-    console.error(
-      "Delete Remark Failed:",
-      err
-    );
+          prev.map((lead) =>
 
-    console.error(
-      "Backend Response:",
-      err.response?.data
-    );
+            lead._id ===
+            selectedLead._id
 
-    alert(
-      err.response?.data?.message ||
-      err.response?.data?.error ||
-      "Failed to delete remark ❌"
-    );
-  }
-};
+              ? selectedLead
+
+              : lead
+
+          )
+
+        );
+
+       setShowModal(false);
+setEditStatus("");
+
+fetchMyLeads();
+
+alert(
+  "Lead Updated ✅"
+);
+      }
+
+      catch (err) {
+
+        console.error(err);
+
+        alert(
+          "Update Failed ❌"
+        );
+
+      }
+
+    };
 
   const startCall = async (lead) => {
 
-
-     
   setActiveCall(lead);
 
   setCallStartTime(new Date());
@@ -1090,8 +974,9 @@ const handleCardClick = (status) => {
         <div className="page-header">
 
           <h2>
-  My Leads
-</h2>
+            My Leads
+          </h2>
+
           <p>
 
             Total Leads :
@@ -1827,46 +1712,32 @@ setSelectedCities([]);
 
     title="Edit"
 
-  onClick={() => {
+   onClick={() => {
 
   setSelectedLead({
+
     ...lead,
 
     executive_email:
-      lead.executive_email ||
-      user.email ||
-      "",
+    lead.executive_email ||
+    user.email,
 
-    assignedTo:
-      lead.assignedTo ||
-      "",
-
-    assigned_to:
-      lead.assigned_to ||
-      lead.assigned_to_email ||
-      "",
-
+    assignedTo: lead.assignedTo,
     assigned_to_email:
       lead.assigned_to_email ||
+      user.email ||
       "",
 
     next_call_date:
       lead.next_call_date
         ? lead.next_call_date.split("T")[0]
-        : "",
+        : ""
 
-    status:
-      lead.status ||
-      "New"
   });
 
-  setEditStatus(
-    lead.status || "New"
-  );
-
   setShowModal(true);
-}}
 
+}}
   >
     <FaEdit />
   </button>
@@ -2482,102 +2353,28 @@ Booking
 
       {/* COMMENT */}
 
- {/* ================= REMARK HISTORY ================= */}
+      <textarea
+        placeholder="Comment"
+        rows="4"
 
-<div className="remark-history">
+        value={
+          selectedLead.description || ""
+        }
 
-  <label>Previous Remarks</label>
+        onChange={(e) =>
 
-  {Array.isArray(selectedLead.remarks) &&
-  selectedLead.remarks.length > 0 ? (
+          setSelectedLead({
 
-    <div className="remarks-list">
+            ...selectedLead,
 
-      {selectedLead.remarks.map(
-        (remark, index) => (
+            description:
+              e.target.value
 
-          <div
-            className="remark-item"
-            key={remark._id || index}
-          >
+          })
 
-            <div className="remark-number">
-              #{index + 1}
-            </div>
+        }
+      />
 
-            <div className="remark-content">
-
-              <p>
-                {remark.text || "-"}
-              </p>
-
-              <small>
-                {remark.createdAt
-                  ? new Date(
-                      remark.createdAt
-                    ).toLocaleString("en-IN")
-                  : ""}
-              </small>
-
-              {remark.addedBy && (
-                <small>
-                  Added by: {remark.addedBy}
-                </small>
-              )}
-
-              {String(user?.role || "").toLowerCase() === "admin" && (
-  <button
-    type="button"
-    className="delete-remark-btn"
-    onClick={() =>
-      handleDeleteRemark(
-        selectedLead._id,
-        remark._id
-      )
-    }
-  >
-    Delete Remark
-  </button>
-)}
-
-            </div>
-
-          </div>
-
-        )
-      )}
-
-    </div>
-
-  ) : (
-
-    <div className="no-remarks">
-      No previous remarks.
-    </div>
-
-  )}
-
-</div>
-
-{/* ================= NEW REMARK ================= */}
-
-<div className="new-remark-box">
-
-  <label>Add New Remark</label>
-
-  <textarea
-    placeholder="Type new comment..."
-    rows="4"
-    value={selectedLead.description || ""}
-    onChange={(e) =>
-      setSelectedLead({
-        ...selectedLead,
-        description: e.target.value
-      })
-    }
-  />
-
-</div>
 
       {/* BUTTONS */}
 
