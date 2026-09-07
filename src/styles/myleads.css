@@ -953,3 +953,107 @@ textarea {
 .active-card p {
   color: #2563eb;
 }
+
+/* =========================================
+   REMARK HISTORY
+========================================= */
+
+.remark-history {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.remark-history > label,
+.new-remark-box > label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #1f2937;
+}
+
+.remarks-list {
+  max-height: 230px;
+  overflow-y: auto;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 10px;
+  background: #f8fafc;
+}
+
+.remark-item {
+  display: flex;
+  gap: 12px;
+  padding: 12px;
+  margin-bottom: 8px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+}
+
+.remark-item:last-child {
+  margin-bottom: 0;
+}
+
+.remark-number {
+  min-width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #e0f2fe;
+  color: #0369a1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.remark-content {
+  flex: 1;
+}
+
+.remark-content p {
+  margin: 0 0 6px;
+  color: #374151;
+  font-size: 14px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.remark-content small {
+  display: block;
+  color: #6b7280;
+  font-size: 11px;
+  margin-top: 2px;
+}
+
+.no-remarks {
+  padding: 18px;
+  text-align: center;
+  border: 1px dashed #d1d5db;
+  border-radius: 10px;
+  color: #9ca3af;
+  background: #f9fafb;
+}
+
+.new-remark-box {
+  margin-top: 15px;
+}
+
+.new-remark-box textarea {
+  width: 100%;
+  box-sizing: border-box;
+  resize: vertical;
+  min-height: 90px;
+  padding: 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  outline: none;
+  font-family: inherit;
+  font-size: 14px;
+}
+
+.new-remark-box textarea:focus {
+  border-color: #38bdf8;
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.12);
+}
