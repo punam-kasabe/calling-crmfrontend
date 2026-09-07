@@ -242,3 +242,22 @@
   }
 
 }
+
+.remark-delete-btn {
+  border: none;
+  background: transparent;
+  color: #dc3545;
+  padding: 3px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: 0.2s ease;
+}
+
+.remark-delete-btn:hover {
+  background: #ffe5e5;
+  color: #b02a37;
+  transform: scale(1.08);
+}

@@ -24,7 +24,7 @@ export default function Pipeline() {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
- const [totalLeadsCount, setTotalLeadsCount] = useState(0);
+  const [totalLeadsCount, setTotalLeadsCount] = useState(0);
   const [showModal, setShowModal] = useState(false);
   const [selectedLead, setSelectedLead] = useState(null);
   const [selectedLeads, setSelectedLeads] = useState([]);
@@ -251,6 +251,66 @@ fetchProjects();
 
 };
 
+
+/* ================= DELETE REMARK ================= */
+const handleDeleteRemark = async (id) => {
+  const result = await Swal.fire({
+    title: "Delete Remark?",
+    text: "This will delete only the remark. The lead will not be deleted.",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "Yes, Delete",
+    cancelButtonText: "Cancel",
+    confirmButtonColor: "#dc3545",
+  });
+
+  if (!result.isConfirmed) return;
+
+  try {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      toast.error("Login token not found ❌");
+      return;
+    }
+
+    await axios.put(
+      `${API}/delete-lead-remark/${id}`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    toast.success("Remark deleted successfully ✅");
+
+    // Update current table without deleting lead
+    setLeads((prev) =>
+      prev.map((lead) =>
+        lead._id === id
+          ? {
+              ...lead,
+              remark: "",
+            }
+          : lead
+      )
+    );
+
+    // Refresh data
+    fetchLeads();
+
+  } catch (err) {
+    console.error("DELETE REMARK ERROR =", err);
+    console.error("RESPONSE =", err.response?.data);
+
+    toast.error(
+      err.response?.data?.message ||
+        "Failed to delete remark ❌"
+    );
+  }
+};
 /* ================= SELECT LEAD ================= */
 
 const handleSelectLead = (id) => {
@@ -954,11 +1014,29 @@ onChange={(e) => {
 
 
 <td>
-  {l.remark ||
-   l.description ||
-   (l.followups?.length > 0
-     ? l.followups[l.followups.length - 1].note
-     : "-")}
+  <div
+    style={{
+      display: "flex",
+      alignItems: "center",
+      gap: "8px",
+      minWidth: "180px",
+    }}
+  >
+    <span>
+      {l.remark || "-"}
+    </span>
+
+    {l.remark && (
+      <button
+        type="button"
+        className="remark-delete-btn"
+        title="Delete Remark"
+        onClick={() => handleDeleteRemark(l._id)}
+      >
+        <Trash2 size={15} />
+      </button>
+    )}
+  </div>
 </td>
 
 <td>
@@ -1025,18 +1103,14 @@ onChange={(e) => {
 
     <button
       className="action-icon delete-icon"
-
       title="Delete"
-
       onClick={() =>
         handleDelete(l._id)
       }
     >
       <Trash2 size={18} />
     </button>
-
   </div>
-
 </td>
                   </tr>
                 ))
