@@ -477,20 +477,17 @@ alert(
 
     };
 
-  const startCall = async (lead) => {
-
+ const startCall = async (lead) => {
   setActiveCall(lead);
-
   setCallStartTime(new Date());
+  setCallDuration("0 sec");
 
-  window.open(`tel:${lead.phone}`);
+  window.location.href = `tel:${lead.phone}`;
 
   setTimeout(() => {
     setCallModal(true);
   }, 3000);
-
 };
-
 
 useEffect(() => {
 
@@ -513,7 +510,6 @@ useEffect(() => {
   return () => clearInterval(interval);
 
 }, [callModal, callStartTime]);
-
 
   const handleCreateBooking =
 async()=>{
@@ -2492,47 +2488,73 @@ Save Booking
 
 )}
 
-{/* ================= CALL MODAL ================= */}
+{/* ================= CALL POPUP ================= */}
 
 {callModal && activeCall && (
 
   <div className="modal-overlay">
 
-    <div className="modal-box">
+    <div className="modal-box call-popup">
 
-      <h3>Call In Progress</h3>
+      <div className="call-popup-header">
+        <div className="call-icon-circle">
+          <FaPhoneAlt />
+        </div>
 
-      <p>
-        <strong>Name:</strong> {activeCall.name}
-      </p>
+        <div>
+          <h3>Call In Progress</h3>
+          <p>Customer call is active</p>
+        </div>
+      </div>
 
-      <p>
-        <strong>Phone:</strong> {activeCall.phone}
-      </p>
+      <div className="call-details">
 
-      <p>
-        <strong>Duration:</strong> {callDuration}
-      </p>
+        <div className="call-detail-row">
+          <span>Name</span>
+          <strong>
+            {activeCall.name || "-"}
+          </strong>
+        </div>
 
-      <button
-        className="save-btn"
-        onClick={() => {
-  setCallModal(false);
-  setCallDuration("");
-  setCallStartTime(null);
-  setActiveCall(null);
-}}
-      >
+        <div className="call-detail-row">
+          <span>Phone</span>
+          <strong>
+            {activeCall.phone || "-"}
+          </strong>
+        </div>
 
-        Close
-      </button>
+        <div className="call-detail-row">
+          <span>Duration</span>
+          <strong>
+            {callDuration || "0 sec"}
+          </strong>
+        </div>
+
+      </div>
+
+      <div className="modal-actions">
+
+        <button
+          className="cancel-btn"
+          onClick={() => {
+
+            setCallModal(false);
+            setCallDuration("");
+            setCallStartTime(null);
+            setActiveCall(null);
+
+          }}
+        >
+          Close
+        </button>
+
+      </div>
 
     </div>
 
   </div>
 
 )}
-
     </div>
 
   );
