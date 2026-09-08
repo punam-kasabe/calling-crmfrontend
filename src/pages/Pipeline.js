@@ -193,6 +193,8 @@ fetchProjects();
 
     const res = await axios.delete(
       `${API}/delete-lead/${id}`,
+
+
       {
         headers: {
           Authorization: `Bearer ${token}`
@@ -251,7 +253,204 @@ fetchProjects();
 
 };
 
+/* ================= SELECT LEAD ================= */
 
+const handleSelectLead = (id) => {
+  setSelectedLeads((prev) => {
+    if (prev.includes(id)) {
+      return prev.filter((leadId) => leadId !== id);
+    }
+
+    return [...prev, id];
+  });
+};
+
+
+/* ================= MULTIPLE DELETE ================= */
+
+const handleMultipleDelete = async () => {
+  if (selectedLeads.length === 0) {
+    toast.warning("Please select at least one lead ❗");
+    return;
+  }
+
+  const result = await Swal.fire({
+    title: "Are you sure?",
+    text: `Delete ${selectedLeads.length} selected leads permanently?`,
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "Yes, Delete",
+    cancelButtonText: "Cancel",
+    confirmButtonColor: "#dc3545"
+  });
+
+  if (!result.isConfirmed) return;
+
+  try {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      toast.error("Login token not found ❌");
+      return;
+    }
+
+    await Promise.all(
+      selectedLeads.map((id) =>
+        axios.delete(
+          `${API}/delete-lead/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
+        )
+      )
+    );
+
+    setLeads((prev) =>
+      prev.filter(
+        (lead) => !selectedLeads.includes(lead._id)
+      )
+    );
+
+    setSelectedLeads([]);
+
+    await fetchLeads();
+
+    toast.success(
+      "Selected Leads Deleted Successfully ✅"
+    );
+
+  } catch (err) {
+    console.error(
+      "MULTIPLE DELETE ERROR =",
+      err.response?.data || err
+    );
+
+    if (err.response?.status === 401) {
+      toast.error(
+        "Unauthorized ❌ Please login again"
+      );
+    } else if (err.response?.status === 403) {
+      toast.error(
+        "You don't have permission to delete leads ❌"
+      );
+    } else {
+      toast.error(
+        err.response?.data?.message ||
+        "Multiple Delete Failed ❌"
+      );
+    }
+  }
+};
+
+
+/* ================= DELETE REMARK ONLY ================= */
+
+const handleDeleteRemark = async (lead) => {
+
+  if (!lead?._id) {
+    toast.error("Lead ID not found ❌");
+    return;
+  }
+
+  const currentRemark =
+    lead.remark ||
+    lead.description ||
+    (
+      lead.followups?.length > 0
+        ? lead.followups[lead.followups.length - 1]?.note
+        : ""
+    );
+
+  if (!currentRemark) {
+    toast.info("No remark available to delete");
+    return;
+  }
+
+  const result = await Swal.fire({
+    title: "Delete Remark?",
+    text: "Only the remark will be deleted. The lead will NOT be deleted.",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "Yes, Delete Remark",
+    cancelButtonText: "Cancel",
+    confirmButtonColor: "#dc3545"
+  });
+
+  if (!result.isConfirmed) return;
+
+  try {
+
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      toast.error("Login token not found ❌");
+      return;
+    }
+
+    await axios.put(
+      `${API}/update-lead/${lead._id}`,
+      {
+        remark: ""
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    );
+
+    // Update UI immediately
+    setLeads((prev) =>
+      prev.map((item) =>
+        item._id === lead._id
+          ? {
+              ...item,
+              remark: ""
+            }
+          : item
+      )
+    );
+
+    // If edit modal is open for same lead
+    if (selectedLead?._id === lead._id) {
+      setSelectedLead((prev) => ({
+        ...prev,
+        remark: ""
+      }));
+    }
+
+    toast.success(
+      "Remark deleted successfully ✅"
+    );
+
+    // Refresh from database
+    await fetchLeads();
+
+  } catch (err) {
+
+    console.error(
+      "DELETE REMARK ERROR =",
+      err.response?.data || err
+    );
+
+    if (err.response?.status === 401) {
+      toast.error(
+        "Unauthorized ❌ Please login again"
+      );
+    } else if (err.response?.status === 403) {
+      toast.error(
+        "You don't have permission ❌"
+      );
+    } else {
+      toast.error(
+        err.response?.data?.message ||
+        "Remark delete failed ❌"
+      );
+    }
+  }
+};
   /* ================= UPDATE ================= */
  const handleUpdate = async () => {
 
@@ -772,11 +971,32 @@ onChange={(e) => {
 
 
 <td>
-  {l.remark ||
-   l.description ||
-   (l.followups?.length > 0
-     ? l.followups[l.followups.length - 1].note
-     : "-")}
+  <div
+    style={{
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "space-between",
+      gap: "8px",
+      minWidth: "180px"
+    }}
+  >
+
+    <span>
+      {l.remark || "-"}
+    </span>
+
+    {l.remark && (
+      <button
+        type="button"
+        className="remark-delete-btn"
+        title="Delete Remark"
+        onClick={() => handleDeleteRemark(l)}
+      >
+        <Trash2 size={15} />
+      </button>
+    )}
+
+  </div>
 </td>
 
 <td>
@@ -792,6 +1012,8 @@ onChange={(e) => {
       })
     : "-"}
 </td>
+
+
 
 <td>
   {l.next_call_date
