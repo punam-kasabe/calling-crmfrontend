@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { io } from "socket.io-client";
 /* 🔐 AUTH */
 import Login from "./pages/auth/Login";
 
@@ -82,6 +83,112 @@ const PublicRoute = ({ children }) => {
 ========================================= */
 export default function App() {
   const [isMobile, setIsMobile] = useState(false);
+
+    /* =========================================
+     🔔 REAL TIME LEAD NOTIFICATION
+  ========================================= */
+
+  useEffect(() => {
+
+    const userData = localStorage.getItem("user");
+
+    if (!userData) {
+      return;
+    }
+
+    let user;
+
+    try {
+      user = JSON.parse(userData);
+    } catch (error) {
+      console.log("User data parse error:", error);
+      return;
+    }
+
+    /* फक्त Executive साठी Socket.IO */
+    if (
+      !user ||
+      user.role?.toLowerCase() !== "executive" ||
+      !user.email
+    ) {
+      return;
+    }
+
+    console.log(
+      "Connecting Executive Socket:",
+      user.email
+    );
+
+    const socket = io(
+      "https://calling-crm-backend-7w52.onrender.com",
+      {
+        transports: ["websocket", "polling"]
+      }
+    );
+
+    /* Connection successful */
+    socket.on("connect", () => {
+
+      console.log(
+        "Socket connected:",
+        socket.id
+      );
+
+      /* Backend ला executive email पाठव */
+      socket.emit(
+        "register-executive",
+        user.email
+      );
+
+      console.log(
+        "Executive registered:",
+        user.email
+      );
+
+    });
+
+    /* नवीन leads notification */
+    socket.on(
+      "new-leads-assigned",
+      (data) => {
+
+        console.log(
+          "🔔 New leads notification:",
+          data
+        );
+
+        alert(
+          `🔔 ${data.count} new lead${
+            data.count > 1 ? "s" : ""
+          } assigned to you`
+        );
+
+      }
+    );
+
+    /* Socket error */
+    socket.on("connect_error", (error) => {
+
+      console.log(
+        "Socket connection error:",
+        error.message
+      );
+
+    });
+
+    /* Cleanup */
+    return () => {
+
+      console.log(
+        "Disconnecting Executive Socket"
+      );
+
+      socket.disconnect();
+
+    };
+
+  }, []);
+  
   useEffect(() => {
   const checkDevice = () => {
     const mobile =
