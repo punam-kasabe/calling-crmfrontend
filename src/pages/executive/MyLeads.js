@@ -29,7 +29,6 @@ export default function MyLeads() {
     useState([]);
 
   const [assignmentPopup, setAssignmentPopup] = useState(null);
-  const [previousLeadIds, setPreviousLeadIds] = useState([]);
   const [loading, setLoading] =
     useState(true);
 
