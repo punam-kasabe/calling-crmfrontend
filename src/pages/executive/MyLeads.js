@@ -28,7 +28,8 @@ export default function MyLeads() {
   const [leads, setLeads] =
     useState([]);
 
-  
+  const [assignmentPopup, setAssignmentPopup] = useState(null);
+  const [previousLeadIds, setPreviousLeadIds] = useState([]);
   const [loading, setLoading] =
     useState(true);
 
@@ -306,6 +307,131 @@ useEffect(() => {
 
 }, [fetchMyLeads]);
 
+
+/* ================= FETCH EXECUTIVES ================= */
+
+useEffect(() => {
+
+  fetchMyLeads();
+
+}, [fetchMyLeads]);
+
+
+
+/* ========================================= 
+   NEW LEAD ASSIGNMENT POPUP 
+========================================= */ 
+ 
+useEffect(() => { 
+ 
+  if (!user?.email) return; 
+ 
+  let firstLoad = true; 
+  let previousAssignments = {}; 
+ 
+  const checkNewAssignments = async () => { 
+ 
+    try { 
+ 
+      const res = await axios.get( 
+        `${API}/my-leads`, 
+        { 
+          params: { 
+            email: user.email 
+          } 
+        } 
+      ); 
+ 
+      const fetchedLeads = res.data || []; 
+ 
+      if (firstLoad) { 
+ 
+        fetchedLeads.forEach((lead) => { 
+ 
+          previousAssignments[lead._id] = 
+            lead.assignedDate || null; 
+ 
+        }); 
+ 
+        firstLoad = false; 
+ 
+        return; 
+      } 
+ 
+      const newlyAssignedLeads = 
+        fetchedLeads.filter((lead) => { 
+ 
+          const currentAssignedDate = 
+            lead.assignedDate 
+              ? new Date(lead.assignedDate).getTime() 
+              : null; 
+ 
+          const previousAssignedDate = 
+            previousAssignments[lead._id] 
+              ? new Date( 
+                  previousAssignments[lead._id] 
+                ).getTime() 
+              : null; 
+ 
+          return ( 
+            currentAssignedDate && 
+            ( 
+              !previousAssignedDate || 
+              currentAssignedDate > 
+                previousAssignedDate 
+            ) 
+          ); 
+ 
+        }); 
+ 
+      if (newlyAssignedLeads.length > 0) { 
+ 
+        const newLead = 
+          newlyAssignedLeads[0]; 
+ 
+        console.log( 
+          "🔔 NEW LEAD ASSIGNED:", 
+          newLead 
+        ); 
+ 
+        setAssignmentPopup(newLead); 
+ 
+        setLeads(fetchedLeads); 
+ 
+      } 
+ 
+      fetchedLeads.forEach((lead) => { 
+ 
+        previousAssignments[lead._id] = 
+          lead.assignedDate || null; 
+ 
+      }); 
+ 
+    } catch (err) { 
+ 
+      console.error( 
+        "Assignment notification error:", 
+        err 
+      ); 
+ 
+    } 
+ 
+  }; 
+ 
+  checkNewAssignments(); 
+ 
+  const interval = setInterval( 
+    checkNewAssignments, 
+    5000 
+  ); 
+ 
+  return () => { 
+    clearInterval(interval); 
+  }; 
+ 
+}, [user]);
+
+
  /* ================= UPDATE STATUS ================= */
 
 const updateStatus = async (leadId, status) => {
@@ -374,6 +500,8 @@ const updateStatus = async (leadId, status) => {
     );
   }
 };
+
+
    /* ================= UPDATE LEAD ================= */
 
   const handleUpdateLead =
@@ -2487,7 +2615,63 @@ Save Booking
 </div>
 
 )}
+{/* ================= NEW ASSIGNMENT POPUP ================= */}
 
+{assignmentPopup && (
+
+  <div className="modal-overlay">
+
+    <div className="modal-box">
+
+      <h2>🔔 New Lead Assigned</h2>
+
+      <p>
+        A new lead has been assigned to you.
+      </p>
+
+      <div className="call-details">
+
+        <div className="call-detail-row">
+          <span>Name</span>
+          <strong>
+            {assignmentPopup.name || "-"}
+          </strong>
+        </div>
+
+        <div className="call-detail-row">
+          <span>Phone</span>
+          <strong>
+            {assignmentPopup.phone || "-"}
+          </strong>
+        </div>
+
+        <div className="call-detail-row">
+          <span>Project</span>
+          <strong>
+            {assignmentPopup.project || "-"}
+          </strong>
+        </div>
+
+      </div>
+
+      <div className="modal-actions">
+
+        <button
+          className="save-btn"
+          onClick={() => {
+            setAssignmentPopup(null);
+          }}
+        >
+          OK
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+)}
 {/* ================= CALL POPUP ================= */}
 
 {callModal && activeCall && (
