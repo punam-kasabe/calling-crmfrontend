@@ -307,6 +307,13 @@ useEffect(() => {
 }, [fetchMyLeads]);
 
 
+/* ================= FETCH EXECUTIVES ================= */
+
+useEffect(() => {
+
+  fetchMyLeads();
+
+}, [fetchMyLeads]);
 
 
 
