@@ -411,10 +411,10 @@ useEffect(() => {
  
   checkNewAssignments(); 
  
-  const interval = setInterval( 
-    checkNewAssignments, 
-    5000 
-  ); 
+  const interval = setInterval(
+  checkNewAssignments,
+  30000
+);
  
   return () => { 
     clearInterval(interval); 
