@@ -8,6 +8,10 @@ import "../../styles/login.css";
 
 const API = "https://calling-crm-backend-7w52.onrender.com/api";
 
+// Login API timeout
+// Render cold start मुळे पहिली request थोडी slow होऊ शकते.
+const LOGIN_TIMEOUT = 60000;
+
 export default function Login() {
 
   const navigate = useNavigate();
@@ -24,76 +28,197 @@ export default function Login() {
 
     e.preventDefault();
 
+    // Prevent double click / multiple requests
+    if (loading) {
+      return;
+    }
+
+    const email = data.email
+      .toLowerCase()
+      .trim();
+
+    const password = data.password;
+
+    if (!email || !password) {
+
+      setError("Email & Password required ❌");
+
+      return;
+    }
+
     try {
 
       setLoading(true);
       setError("");
 
-      const res = await axios.post(`${API}/login`, {
-        email: data.email,
-        password: data.password,
-      });
+      console.log("LOGIN START:", new Date().toISOString());
 
-      if (res.data.token) {
+      const res = await axios.post(
+        `${API}/login`,
+        {
+          email,
+          password,
+        },
+        {
+          timeout: LOGIN_TIMEOUT,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-  localStorage.setItem(
-    "token",
-    res.data.token
-  );
+      console.log(
+        "LOGIN SUCCESS:",
+        new Date().toISOString()
+      );
 
-}
+      /* =========================================
+         CHECK RESPONSE
+      ========================================= */
 
-localStorage.setItem(
-  "user",
-  JSON.stringify(res.data.user)
-);
+      if (!res.data?.token || !res.data?.user) {
 
-const role = res.data.user?.role?.toLowerCase();
+        throw new Error(
+          "Invalid login response from server"
+        );
 
-if (role === "admin") {
-  navigate("/dashboard");
-}
+      }
 
-else if (role === "executive") {
-  navigate("/executive-dashboard");
-}
+      /* =========================================
+         SAVE TOKEN
+      ========================================= */
 
-else if (role === "manager") {
-  navigate("/manager-dashboard");
-}
+      localStorage.setItem(
+        "token",
+        res.data.token
+      );
 
-else if (role === "reception") {
-  navigate("/reception-dashboard");
-}
+      /* =========================================
+         SAVE USER
+      ========================================= */
 
-else {
-  navigate("/dashboard");
-}
+      localStorage.setItem(
+        "user",
+        JSON.stringify(res.data.user)
+      );
 
-    } catch (err) {
+      /* =========================================
+         ROLE
+      ========================================= */
 
-  console.log(err);
+      const role =
+        res.data.user?.role?.toLowerCase();
 
-  setError(
+      /* =========================================
+         REDIRECT
+      ========================================= */
 
-    err.response?.data?.message ||
+      if (role === "admin") {
 
-    "Login failed ❌"
+        navigate("/dashboard", {
+          replace: true,
+        });
 
-  );
+      }
 
-} finally {
+      else if (role === "executive") {
+
+        navigate("/executive-dashboard", {
+          replace: true,
+        });
+
+      }
+
+      else if (role === "manager") {
+
+        navigate("/manager-dashboard", {
+          replace: true,
+        });
+
+      }
+
+      else if (role === "reception") {
+
+        navigate("/reception-dashboard", {
+          replace: true,
+        });
+
+      }
+
+      else {
+
+        navigate("/dashboard", {
+          replace: true,
+        });
+
+      }
+
+    }
+
+    catch (err) {
+
+      console.error(
+        "LOGIN ERROR:",
+        err
+      );
+
+      /* =========================================
+         TIMEOUT
+      ========================================= */
+
+      if (err.code === "ECONNABORTED") {
+
+        setError(
+          "Server response is taking too long. Please try again ❌"
+        );
+
+      }
+
+      /* =========================================
+         NETWORK ERROR
+      ========================================= */
+
+      else if (
+        err.code === "ERR_NETWORK" ||
+        !err.response
+      ) {
+
+        setError(
+          "Unable to connect to CRM server. Please try again ❌"
+        );
+
+      }
+
+      /* =========================================
+         BACKEND ERROR
+      ========================================= */
+
+      else {
+
+        setError(
+          err.response?.data?.message ||
+          "Login failed ❌"
+        );
+
+      }
+
+    }
+
+    finally {
 
       setLoading(false);
 
     }
+
   };
 
   return (
 
     <div className="login-page">
 
-      {/* LEFT SIDE */}
+      {/* =========================================
+          LEFT SIDE
+      ========================================= */}
 
       <div className="login-left">
 
@@ -129,7 +254,10 @@ else {
 
       </div>
 
-      {/* RIGHT SIDE */}
+
+      {/* =========================================
+          RIGHT SIDE
+      ========================================= */}
 
       <div className="login-right">
 
@@ -146,22 +274,40 @@ else {
             Login to continue
           </p>
 
+
+          {/* =====================================
+              ERROR
+          ===================================== */}
+
           {error && (
+
             <div className="error-box">
+
               {error}
+
             </div>
+
           )}
 
-          {/* EMAIL */}
+
+          {/* =====================================
+              EMAIL
+          ===================================== */}
 
           <div className="input-group">
 
-            <label>Email</label>
+            <label htmlFor="login-email">
+              Email
+            </label>
 
             <input
+              id="login-email"
+              name="email"
               type="email"
               placeholder="Enter your email"
               value={data.email}
+              autoComplete="username"
+              disabled={loading}
               onChange={(e) =>
                 setData({
                   ...data,
@@ -173,16 +319,25 @@ else {
 
           </div>
 
-          {/* PASSWORD */}
+
+          {/* =====================================
+              PASSWORD
+          ===================================== */}
 
           <div className="input-group">
 
-            <label>Password</label>
+            <label htmlFor="login-password">
+              Password
+            </label>
 
             <input
+              id="login-password"
+              name="password"
               type="password"
               placeholder="Enter your password"
               value={data.password}
+              autoComplete="current-password"
+              disabled={loading}
               onChange={(e) =>
                 setData({
                   ...data,
@@ -194,15 +349,21 @@ else {
 
           </div>
 
-          {/* BUTTON */}
+
+          {/* =====================================
+              LOGIN BUTTON
+          ===================================== */}
 
           <button
             type="submit"
             disabled={loading}
           >
+
             {loading
               ? "Logging in..."
-              : "Log In"}
+              : "Log In"
+            }
+
           </button>
 
         </form>
@@ -210,5 +371,7 @@ else {
       </div>
 
     </div>
+
   );
+
 }
