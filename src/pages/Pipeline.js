@@ -418,12 +418,12 @@ const handleMultipleDelete = async () => {
     XLSX.utils.book_append_sheet(
       workbook,
       worksheet,
-      "Pipeline"
+      "CRM Leads"
     );
 
     XLSX.writeFile(
       workbook,
-      "Pipeline_Leads.xlsx"
+      "CRM Leads.xlsx"
     );
 
     toast.success("Excel Exported ✅");
