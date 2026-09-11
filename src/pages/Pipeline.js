@@ -392,22 +392,21 @@ const handleMultipleDelete = async () => {
     }
 
     const exportData = res.data.map((l) => ({
-      Name: l.name,
-      Mobile: l.phone,
-      Source: l.source || "-",
-      Source: l.source || "-",
-      Status: l.status,
-      Project: l.project,
-      Assigned: l.assigned_to,
-      "Closing Officer": l.assigned_manager || "-",
-      Remark: l.remark || "-",
-      "Created Date": l.createdAt
-        ? new Date(l.createdAt).toLocaleString("en-IN")
-        : "-",
-      "Next Call": l.next_call_date
-        ? new Date(l.next_call_date).toLocaleDateString("en-GB")
-        : "-",
-    }));
+  Name: l.name,
+  Mobile: l.phone,
+  Source: l.source || "-",
+  Status: l.status,
+  Project: l.project,
+  Assigned: l.assigned_to,
+  "Closing Officer": l.assigned_manager || "-",
+  Remark: l.remark || "-",
+  "Created Date": l.createdAt
+    ? new Date(l.createdAt).toLocaleString("en-IN")
+    : "-",
+  "Next Call": l.next_call_date
+    ? new Date(l.next_call_date).toLocaleDateString("en-GB")
+    : "-",
+}));
 
     const worksheet = XLSX.utils.json_to_sheet(exportData);
 
