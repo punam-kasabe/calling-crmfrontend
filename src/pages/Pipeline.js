@@ -394,6 +394,8 @@ const handleMultipleDelete = async () => {
     const exportData = res.data.map((l) => ({
       Name: l.name,
       Mobile: l.phone,
+      Source: l.source || "-",
+      Source: l.source || "-",
       Status: l.status,
       Project: l.project,
       Assigned: l.assigned_to,
