@@ -403,6 +403,9 @@ const handleMultipleDelete = async () => {
   "Created Date": l.createdAt
     ? new Date(l.createdAt).toLocaleString("en-IN")
     : "-",
+    "Last Updated Date": l.updatedAt
+    ? new Date(l.updatedAt).toLocaleString("en-IN")
+    : "-",
   "Next Call": l.next_call_date
     ? new Date(l.next_call_date).toLocaleDateString("en-GB")
     : "-",
