@@ -97,7 +97,7 @@ const statusOptions = [
       setTotalPages(res.data.totalPages || 1);
 
       setStatsData({
-  totalLeads: res.data.totalLeads || 0,
+  totalLeads: res.data.totalAllLeads || 0,
   hotLeads: res.data.hotLeads || 0,
   newLeads: res.data.newLeads || 0,
   bookedLeads: res.data.bookedLeads || 0,
@@ -108,7 +108,7 @@ const statusOptions = [
 
 
 setTotalLeadsCount(
-  res.data.totalLeads || 0
+  res.data.totalAllLeads || 0
 );
 
 
