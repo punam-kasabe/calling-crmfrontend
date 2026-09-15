@@ -48,6 +48,8 @@ import MonthlyReport from "./pages/reports/MonthlyReport";
 import PendingLeadReport from "./pages/reports/PendingLeadReport";
 
 /* 📄 NORMAL PAGES */
+
+import PrivacyPolicy from "./pages/PrivacyPolicy";
 import BulkUpdate from "./pages/BulkUpdate";
 import ChannelPartner from "./pages/ChannelPartner";
 import Leads from "./pages/Leads";
@@ -528,6 +530,11 @@ export default function App() {
         <Route path="/upload" element={<ProtectedRoute><Upload /></ProtectedRoute>} />
         <Route path="/users" element={<ProtectedRoute><Users /></ProtectedRoute>} />
 
+{/* 🔓 PRIVACY POLICY - PUBLIC */}
+<Route
+  path="/privacy-policy"
+  element={<PrivacyPolicy />}
+/>
         {/* FALLBACK */}
         <Route
           path="*"
