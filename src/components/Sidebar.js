@@ -25,7 +25,9 @@ import {
   UserCheck,
   ClipboardList,
   CalendarDays,
+   ShieldCheck,
 } from "lucide-react";
+
 
 export default function Sidebar({ isOpen, toggleSidebar }) {
   const location = useLocation();
@@ -759,6 +761,24 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
               </li>
             </>
           )}
+
+          {/* 🔐 PRIVACY POLICY */}
+          <li>
+            <Link
+              to="/privacy-policy"
+              className={
+                location.pathname === "/privacy-policy"
+                  ? "active"
+                  : ""
+              }
+            >
+              <ShieldCheck size={18} />
+
+              <span className="text">
+                Privacy Policy
+              </span>
+            </Link>
+          </li>
 
           {/* LOGOUT */}
           <li
