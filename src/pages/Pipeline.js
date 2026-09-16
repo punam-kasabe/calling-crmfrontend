@@ -33,8 +33,10 @@ export default function Pipeline() {
   useEffect(() => {
   console.log("PROJECTS STATE =", projects);
   }, [projects]);
-  const [statsData, setStatsData] = useState({
+
+const [statsData, setStatsData] = useState({
   totalLeads: 0,
+  filteredAssignedLeads: 0,
   hotLeads: 0,
   newLeads: 0,
   bookedLeads: 0,
@@ -42,6 +44,7 @@ export default function Pipeline() {
   todayFollowups: 0,
   backlog: 0
 });
+
 
   // 🔥 FILTER STATE
   const [filters, setFilters] = useState({
@@ -96,8 +99,13 @@ const statusOptions = [
       console.log(res.data.data);
       setTotalPages(res.data.totalPages || 1);
 
-      setStatsData({
+  setStatsData({
   totalLeads: res.data.totalAllLeads || 0,
+
+  // ⭐ DATE RANGE ASSIGNED LEADS
+  filteredAssignedLeads:
+    res.data.filteredAssignedLeads || 0,
+
   hotLeads: res.data.hotLeads || 0,
   newLeads: res.data.newLeads || 0,
   bookedLeads: res.data.bookedLeads || 0,
@@ -105,7 +113,6 @@ const statusOptions = [
   todayFollowups: res.data.todayFollowups || 0,
   backlog: res.data.backlog || 0
 });
-
 
 setTotalLeadsCount(
   res.data.totalAllLeads || 0
@@ -487,6 +494,12 @@ const stats = {
 >
           {[
   { title: "Total Leads", value: stats.totalLeads, color: "#007bff" },
+  
+  { 
+  title: "Filtered Leads", 
+  value: stats.filteredLeads, 
+  color: "#6f42c1" 
+},
 
   { title: "Today's Follow-ups", value: stats.todayFollowups, color: "#007bff" },
 
@@ -499,11 +512,7 @@ const stats = {
   { title: "Booked Leads", value: stats.booked, color: "#28a745" },
 
   { title: "Inactive Leads", value: stats.inactive, color: "#ffc107" },
-  { 
-  title: "Filtered Leads", 
-  value: stats.filteredLeads, 
-  color: "#6f42c1" 
-},
+ 
 
 ].map((card, i) => (
 
