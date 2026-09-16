@@ -448,8 +448,10 @@ const stats = {
   hot: statsData.hotLeads,
   newLeads: statsData.newLeads,
   booked: statsData.bookedLeads,
-  inactive: statsData.inactiveLeads
+  inactive: statsData.inactiveLeads,
+  filteredLeads: totalLeadsCount
 };
+
 
   return (
     <div className="d-flex">
@@ -497,6 +499,12 @@ const stats = {
   { title: "Booked Leads", value: stats.booked, color: "#28a745" },
 
   { title: "Inactive Leads", value: stats.inactive, color: "#ffc107" },
+  { 
+  title: "Filtered Leads", 
+  value: stats.filteredLeads, 
+  color: "#6f42c1" 
+},
+
 ].map((card, i) => (
 
 <div
