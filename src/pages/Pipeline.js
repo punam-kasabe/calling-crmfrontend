@@ -36,7 +36,7 @@ export default function Pipeline() {
 
 const [statsData, setStatsData] = useState({
   totalLeads: 0,
-  filteredAssignedLeads: 0,
+  createdLeadsCount: 0,
   hotLeads: 0,
   newLeads: 0,
   bookedLeads: 0,
@@ -102,9 +102,9 @@ const statusOptions = [
   setStatsData({
   totalLeads: res.data.totalAllLeads || 0,
 
-  // ⭐ DATE RANGE ASSIGNED LEADS
-  filteredAssignedLeads:
-    res.data.filteredAssignedLeads || 0,
+  // ⭐ Selected Created From -> Created To count
+  createdLeadsCount:
+    res.data.createdLeadsCount || 0,
 
   hotLeads: res.data.hotLeads || 0,
   newLeads: res.data.newLeads || 0,
@@ -450,13 +450,16 @@ const handleMultipleDelete = async () => {
 
 const stats = {
   totalLeads: statsData.totalLeads,
+   // ⭐ CRM Created Leads
+  createdLeadsCount:
+    statsData.createdLeadsCount,
   todayFollowups: statsData.todayFollowups,
   backlog: statsData.backlog,
   hot: statsData.hotLeads,
   newLeads: statsData.newLeads,
   booked: statsData.bookedLeads,
   inactive: statsData.inactiveLeads,
-  filteredLeads: totalLeadsCount
+ 
 };
 
 
@@ -495,10 +498,10 @@ const stats = {
           {[
   { title: "Total Leads", value: stats.totalLeads, color: "#007bff" },
   
-  { 
-  title: "Filtered Leads", 
-  value: stats.filteredLeads, 
-  color: "#6f42c1" 
+  {
+  title: "Filtered Leads",
+  value: stats.createdLeadsCount,
+  color: "#6f42c1"
 },
 
   { title: "Today's Follow-ups", value: stats.todayFollowups, color: "#007bff" },
