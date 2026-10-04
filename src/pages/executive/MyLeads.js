@@ -132,40 +132,74 @@ const projectOptions = [
   "Thane"
 ];
 
-
 const statusOptions = [
+
   "New",
+
   "Ringing",
+
   "Connected",
+
   "Interested",
+
   "Old Booking From Old Data",
+
   "Old Site Visit",
+
   "Very Interested",
+
   "Out of Service",
+
   "Not Interested",
+
   "Call Cut",
+
   "Busy",
+
   "Call Back",
+
   "Switched Off",
+
   "Number Not Reachable",
+
   "Wrong Number",
+
   "Invalid Number",
+
   "Duplicate Lead",
+
   "Follow Up",
+
   "Follow Up Done",
+
   "Meeting Scheduled",
+
   "Site Visit Planned",
+
   "Site Visit Done",
+
+  "Office Visit",
+
   "Negotiation",
+
   "Payment Pending",
+
   "Booked",
+
   "Already Booked But 7/12 Pending",
+
   "Documents Pending",
+
   "Other Property Booked",
+
   "Token Received",
+
   "Cancelled",
+
   "Future Prospect",
+
   "No Response"
+
 ];
 
 const deadReasonOptions = [
@@ -296,7 +330,6 @@ const cityDropdownOptions = [
     }, [user]);
 
 
-
   /* ================= FETCH EXECUTIVES ================= */
 
 useEffect(() => {
@@ -304,10 +337,6 @@ useEffect(() => {
   fetchMyLeads();
 
 }, [fetchMyLeads]);
-
-
-
-
 
 
  /* ================= UPDATE STATUS ================= */
