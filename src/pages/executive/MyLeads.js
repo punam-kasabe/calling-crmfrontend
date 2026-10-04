@@ -28,7 +28,6 @@ export default function MyLeads() {
   const [leads, setLeads] =
     useState([]);
 
-  const [assignmentPopup, setAssignmentPopup] = useState(null);
   const [loading, setLoading] =
     useState(true);
 
@@ -1834,10 +1833,12 @@ setSelectedCities([]);
     ...lead,
 
     executive_email:
-    lead.executive_email ||
-    user.email,
+      lead.executive_email ||
+      user.email,
 
-    assignedTo: lead.assignedTo,
+    assignedTo:
+      lead.assignedTo || "",
+
     assigned_to_email:
       lead.assigned_to_email ||
       user.email ||
@@ -1849,6 +1850,10 @@ setSelectedCities([]);
         : ""
 
   });
+
+  setEditStatus(
+    lead.status || "New"
+  );
 
   setShowModal(true);
 
@@ -2606,63 +2611,7 @@ Save Booking
 </div>
 
 )}
-{/* ================= NEW ASSIGNMENT POPUP ================= */}
 
-{assignmentPopup && (
-
-  <div className="modal-overlay">
-
-    <div className="modal-box">
-
-      <h2>🔔 New Lead Assigned</h2>
-
-      <p>
-        A new lead has been assigned to you.
-      </p>
-
-      <div className="call-details">
-
-        <div className="call-detail-row">
-          <span>Name</span>
-          <strong>
-            {assignmentPopup.name || "-"}
-          </strong>
-        </div>
-
-        <div className="call-detail-row">
-          <span>Phone</span>
-          <strong>
-            {assignmentPopup.phone || "-"}
-          </strong>
-        </div>
-
-        <div className="call-detail-row">
-          <span>Project</span>
-          <strong>
-            {assignmentPopup.project || "-"}
-          </strong>
-        </div>
-
-      </div>
-
-      <div className="modal-actions">
-
-        <button
-          className="save-btn"
-          onClick={() => {
-            setAssignmentPopup(null);
-          }}
-        >
-          OK
-        </button>
-
-      </div>
-
-    </div>
-
-  </div>
-
-)}
 {/* ================= CALL POPUP ================= */}
 
 {callModal && activeCall && (
