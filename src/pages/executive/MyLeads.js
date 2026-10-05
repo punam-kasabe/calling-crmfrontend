@@ -67,6 +67,8 @@ const [subSourceFilter, setSubSourceFilter] = useState("");
 const [assignedFilter, setAssignedFilter] = useState("");
 const [fromDateFilter, setFromDateFilter] = useState("");
 const [toDateFilter, setToDateFilter] = useState("");
+const [lastActivityFrom, setLastActivityFrom] = useState("");
+const [lastActivityTo, setLastActivityTo] = useState("");
 const [nextCallFrom, setNextCallFrom] = useState("");
 const [nextCallTo, setNextCallTo] = useState("");
 const [descriptionFilter, setDescriptionFilter] = useState("");
@@ -196,7 +198,7 @@ const statusOptions = [
 
   "Cancelled",
 
-  
+
   "Future Prospect",
 
   "No Response"
@@ -704,6 +706,8 @@ useEffect(() => {
   assignedFilter,
   fromDateFilter,
   toDateFilter,
+  lastActivityFrom,
+  lastActivityTo,
   nextCallFrom,
   nextCallTo,
   descriptionFilter
@@ -812,6 +816,22 @@ const matchesToDate =
     ? createdDate <= toDateFilter
     : true;
 
+const lastActivityDate =
+  lead.last_activity_date
+    ? new Date(lead.last_activity_date)
+        .toISOString()
+        .split("T")[0]
+    : "";
+
+const matchesLastActivityFrom =
+  lastActivityFrom
+    ? lastActivityDate >= lastActivityFrom
+    : true;
+
+const matchesLastActivityTo =
+  lastActivityTo
+    ? lastActivityDate <= lastActivityTo
+    : true;
 
 const matchesSubSource =
   subSourceFilter
@@ -851,6 +871,8 @@ return (
   matchesDescription &&
   matchesFromDate &&
   matchesToDate &&
+  matchesLastActivityFrom &&
+  matchesLastActivityTo &&
   matchesNextCallFrom &&
   matchesNextCallTo
 );
@@ -869,6 +891,8 @@ return (
   toDateFilter,
   nextCallFrom,
   nextCallTo,
+  lastActivityFrom,
+  lastActivityTo,
   descriptionFilter,
   selectedProjects,
   selectedSources,
@@ -1455,6 +1479,36 @@ const handleCardClick = (status) => {
       />
     </div>
 
+    {/* LAST ACTIVITY DATE */}
+
+<div className="date-group">
+  <label>
+    Last Activity Date From
+  </label>
+
+  <input
+    type="date"
+    value={lastActivityFrom}
+    onChange={(e) =>
+      setLastActivityFrom(e.target.value)
+    }
+  />
+</div>
+
+<div className="date-group">
+  <label>
+    Last Activity Date To
+  </label>
+
+  <input
+    type="date"
+    value={lastActivityTo}
+    onChange={(e) =>
+      setLastActivityTo(e.target.value)
+    }
+  />
+</div>
+
     {/* NEXT CALL DATE */}
 
     <div className="date-group">
@@ -1503,6 +1557,8 @@ setAssignedFilter("");
 setStatusFilter([]);
 setFromDateFilter("");
 setToDateFilter("");
+setLastActivityFrom("");
+setLastActivityTo("");
 setNextCallFrom("");
 setNextCallTo("");
 setDescriptionFilter("");
