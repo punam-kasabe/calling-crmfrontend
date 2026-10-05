@@ -1561,6 +1561,7 @@ setLastActivityFrom("");
 setLastActivityTo("");
 setNextCallFrom("");
 setNextCallTo("");
+
 setDescriptionFilter("");
 setSelectedProjects(null);
 setSelectedSources([]);
