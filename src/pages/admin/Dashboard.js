@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState, useMemo, useCallback } from "react";
 import axios from "axios";
 import {
+  Pie,
   Doughnut
 } from "react-chartjs-2";
 import CountUp from "react-countup";
@@ -47,6 +48,7 @@ export default function Dashboard() {
     executives: [],
     assignments: [],
     leaderboard: [],
+    bookingPerformance: [],
     followups: [],
     missedFollowups: [],
     projects: [],
@@ -419,100 +421,100 @@ else if (item.title === "Reception Entries") {
 
             </div>
 
-            {/* =========================================
-               ROW 5
-            ========================================= */}
+       {/* =========================================
+   ROW 5 — EXECUTIVE BOOKING PERFORMANCE
+========================================= */}
 
-            <div className="dashboard-row mt-4">
+<div className="dashboard-row mt-4">
 
-              {/* FOLLOWUPS */}
+  <div className="chart-half">
 
-              <div className="chart-half">
+    <div className="chart-card">
 
-                <div className="chart-card">
+      <h5>
+        Executive Booking Performance
+      </h5>
 
-                  <h5>Today's Followups</h5>
+      <div
+        style={{
+          height: "350px",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center"
+        }}
+      >
 
-                  <div className="activity-list">
+        {dashboard.bookingPerformance?.length > 0 ? (
 
-                    {dashboard.followups?.length > 0 ? (
+          <Pie
+            data={{
+              labels:
+                dashboard.bookingPerformance.map(
+                  (item) =>
+                    item.name?.includes("@")
+                      ? item.name.split("@")[0]
+                      : item.name
+                ),
 
-                      dashboard.followups.map((f, i) => (
+              datasets: [
+                {
+                  data:
+                    dashboard.bookingPerformance.map(
+                      (item) =>
+                        item.count
+                    )
+                }
+              ]
+            }}
 
-                        <div
-                          className="activity-item"
-                          key={i}
-                        >
+            options={{
+              responsive: true,
 
-                          <strong>
-                            {f.name}
-                          </strong>
+              maintainAspectRatio: false,
 
-                          <span>
-                            {f.phone}
-                          </span>
+              plugins: {
 
-                        </div>
+                legend: {
+                  position: "right"
+                },
 
-                      ))
+                tooltip: {
 
-                    ) : (
+                  callbacks: {
 
-                      <p>No Followups</p>
+                    label: function (context) {
 
-                    )}
+                      const value =
+                        context.raw || 0;
 
-                  </div>
+                      return ` Bookings: ${value}`;
 
-                </div>
+                    }
 
-              </div>
+                  }
 
-              {/* MISSED */}
+                }
 
-              <div className="chart-half">
+              }
+            }}
 
-                <div className="chart-card">
+          />
 
-                  <h5>Missed Followups</h5>
+        ) : (
 
-                  <div className="activity-list">
+          <p>
+            No Booking Data
+          </p>
 
-                    {dashboard.missedFollowups?.length > 0 ? (
+        )}
 
-                      dashboard.missedFollowups.map((f, i) => (
+      </div>
 
-                        <div
-                          className="activity-item"
-                          key={i}
-                        >
+    </div>
 
-                          <strong>
-                            {f.name}
-                          </strong>
+  </div>
 
-                          <span>
-                            {f.phone}
-                          </span>
-
-                        </div>
-
-                      ))
-
-                    ) : (
-
-                      <p>No Missed Followups</p>
-
-                    )}
-
-                  </div>
-
-                </div>
-
-              </div>
-
-            </div>
-
+</div>
            
 {/* =========================================
    TODAY'S VISITS
