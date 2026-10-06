@@ -5,7 +5,6 @@ import Sidebar from "../components/Sidebar";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Swal from "sweetalert2";
-import * as XLSX from "xlsx";
 import "../styles/pipeline.css";
 import {
   Pencil,
@@ -377,11 +376,13 @@ const handleMultipleDelete = async () => {
   const filteredLeads = leads;
 
 
-    /* ================= EXPORT EXCEL ================= */
+/* ================= EXPORT EXCEL ================= */
 
- const handleExport = async () => {
+const handleExport = async () => {
 
   try {
+
+    toast.info("Preparing Excel Export...");
 
     const res = await axios.post(
       `${API}/export-leads`,
@@ -389,62 +390,128 @@ const handleMultipleDelete = async () => {
         email: user.email,
         role: user.role,
         filters,
-        search,
+        search
+      },
+      {
+        responseType: "blob"
       }
     );
 
-    if (!res.data || res.data.length === 0) {
-      toast.error("No Leads To Export ❌");
+
+    /* =========================================
+       CHECK RESPONSE
+    ========================================= */
+
+    if (
+      !res.data ||
+      res.data.size === 0
+    ) {
+
+      toast.error(
+        "No Leads To Export ❌"
+      );
+
       return;
+
     }
 
-    const exportData = res.data.map((l) => ({
-  Name: l.name,
-  Mobile: l.phone,
-  Source: l.source || "-",
-  Status: l.status,
-  Project: l.project,
-  Assigned: l.assigned_to,
-  "Closing Officer": l.assigned_manager || "-",
-  Remark: l.remark || "-",
-  "Created Date": l.createdAt
-    ? new Date(l.createdAt).toLocaleString("en-IN")
-    : "-",
-    "Last Updated Date": l.updatedAt
-    ? new Date(l.updatedAt).toLocaleString("en-IN")
-    : "-",
-  "Next Call": l.next_call_date
-    ? new Date(l.next_call_date).toLocaleDateString("en-GB")
-    : "-",
-}));
 
-    const worksheet = XLSX.utils.json_to_sheet(exportData);
+    /* =========================================
+       CREATE DOWNLOAD
+    ========================================= */
 
-    const workbook = XLSX.utils.book_new();
-
-    XLSX.utils.book_append_sheet(
-      workbook,
-      worksheet,
-      "CRM Leads"
+    const blob = new Blob(
+      [res.data],
+      {
+        type:
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+      }
     );
 
-    XLSX.writeFile(
-      workbook,
-      "CRM Leads.xlsx"
+
+    const url =
+      window.URL.createObjectURL(blob);
+
+
+    const link =
+      document.createElement("a");
+
+
+    link.href = url;
+
+    link.download =
+      "CRM Leads.xlsx";
+
+
+    document.body.appendChild(link);
+
+    link.click();
+
+    link.remove();
+
+
+    window.URL.revokeObjectURL(url);
+
+
+    toast.success(
+      "Excel Exported ✅"
     );
 
-    toast.success("Excel Exported ✅");
+  }
 
-  } catch (err) {
+  catch (err) {
 
-    console.log(err);
+    console.error(
+      "EXPORT ERROR =",
+      err
+    );
 
-    toast.error("Export Failed ❌");
+
+    /* =========================================
+       BACKEND ERROR
+    ========================================= */
+
+    if (
+      err.response &&
+      err.response.data instanceof Blob
+    ) {
+
+      try {
+
+        const text =
+          await err.response.data.text();
+
+        const data =
+          JSON.parse(text);
+
+        toast.error(
+          data.message ||
+          "Export Failed ❌"
+        );
+
+        return;
+
+      }
+
+      catch (parseError) {
+
+        console.log(
+          "ERROR PARSING RESPONSE =",
+          parseError
+        );
+
+      }
+
+    }
+
+
+    toast.error(
+      "Export Failed ❌"
+    );
 
   }
 
 };
-
    
   /* ================= CARDS ================= */
 
