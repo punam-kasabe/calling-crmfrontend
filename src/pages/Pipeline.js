@@ -375,16 +375,13 @@ const handleMultipleDelete = async () => {
   /* ================= SEARCH ================= */
   const filteredLeads = leads;
 
-
-/* ================= EXPORT EXCEL ================= */
-
 const handleExport = async () => {
 
   try {
 
     toast.info("Preparing Excel Export...");
 
-    const res = await axios.post(
+    const response = await axios.post(
       `${API}/export-leads`,
       {
         email: user.email,
@@ -397,51 +394,22 @@ const handleExport = async () => {
       }
     );
 
-
-    /* =========================================
-       CHECK RESPONSE
-    ========================================= */
-
-    if (
-      !res.data ||
-      res.data.size === 0
-    ) {
-
-      toast.error(
-        "No Leads To Export ❌"
-      );
-
-      return;
-
-    }
-
-
-    /* =========================================
-       CREATE DOWNLOAD
-    ========================================= */
-
     const blob = new Blob(
-      [res.data],
+      [response.data],
       {
         type:
           "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
       }
     );
 
-
     const url =
       window.URL.createObjectURL(blob);
-
 
     const link =
       document.createElement("a");
 
-
     link.href = url;
-
-    link.download =
-      "CRM Leads.xlsx";
-
+    link.download = "Pipeline_Leads.xlsx";
 
     document.body.appendChild(link);
 
@@ -449,70 +417,22 @@ const handleExport = async () => {
 
     link.remove();
 
-
     window.URL.revokeObjectURL(url);
 
+    toast.success("Excel Exported ✅");
 
-    toast.success(
-      "Excel Exported ✅"
-    );
-
-  }
-
-  catch (err) {
+  } catch (error) {
 
     console.error(
-      "EXPORT ERROR =",
-      err
+      "EXPORT ERROR:",
+      error
     );
-
-
-    /* =========================================
-       BACKEND ERROR
-    ========================================= */
-
-    if (
-      err.response &&
-      err.response.data instanceof Blob
-    ) {
-
-      try {
-
-        const text =
-          await err.response.data.text();
-
-        const data =
-          JSON.parse(text);
-
-        toast.error(
-          data.message ||
-          "Export Failed ❌"
-        );
-
-        return;
-
-      }
-
-      catch (parseError) {
-
-        console.log(
-          "ERROR PARSING RESPONSE =",
-          parseError
-        );
-
-      }
-
-    }
-
 
     toast.error(
-      "Export Failed ❌"
+      "Excel Export Failed ❌"
     );
-
   }
-
 };
-   
   /* ================= CARDS ================= */
 
 const stats = {
