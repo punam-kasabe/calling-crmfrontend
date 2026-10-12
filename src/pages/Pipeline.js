@@ -124,23 +124,32 @@ setTotalLeadsCount(
     }
 }, [user, page, filters, search]);
 
-  useEffect(() => {
+  // ================= FETCH LEADS =================
+
+useEffect(() => {
   fetchLeads();
- 
+}, [fetchLeads]);
+
+// ================= FETCH PROJECTS =================
+
+useEffect(() => {
   const fetchProjects = async () => {
-  try {
-    const res = await axios.get(
-      "https://calling-crm-backend-7w52.onrender.com/api/projects"
-    );
+    try {
+      const res = await axios.get(
+        `${API}/projects`
+      );
 
-    setProjects(res.data.data || []);
+      setProjects(res.data.data || []);
+    } catch (err) {
+      console.error(
+        "PROJECTS ERROR:",
+        err.response?.data || err.message
+      );
+    }
+  };
 
-  } catch (err) {
-
-    console.log("Projects Error", err);
-
-  }
-};
+  fetchProjects();
+}, []);
 
 
 fetchProjects();

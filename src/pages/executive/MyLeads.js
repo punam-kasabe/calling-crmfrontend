@@ -778,8 +778,6 @@ const matchesDepartment =
     : true;
 
 
-
-
 const matchesAssigned =
   assignedFilter
     ? lead.assignedTo
@@ -816,12 +814,19 @@ const matchesToDate =
     ? createdDate <= toDateFilter
     : true;
 
+const lastActivityValue =
+  lead.last_activity_date ||
+  lead.updatedAt ||
+  lead.createdAt ||
+  "";
+
 const lastActivityDate =
-  lead.last_activity_date
-    ? new Date(lead.last_activity_date)
+  lastActivityValue
+    ? new Date(lastActivityValue)
         .toISOString()
         .split("T")[0]
     : "";
+
 
 const matchesLastActivityFrom =
   lastActivityFrom
@@ -845,7 +850,8 @@ const matchesSubSource =
 
 const nextCallDate =
   lead.next_call_date
-    ? lead.next_call_date
+    ? new Date(lead.next_call_date)
+        .toISOString()
         .split("T")[0]
     : "";
 
