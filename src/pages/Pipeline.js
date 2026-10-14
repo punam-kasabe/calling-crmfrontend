@@ -444,8 +444,7 @@ const handleExport = async () => {
     );
   }
 };
-
-/* ================= CARDS ================= */
+  /* ================= CARDS ================= */
 
 const stats = {
   totalLeads: statsData.totalLeads,
@@ -801,24 +800,16 @@ onChange={(e) => {
           type="checkbox"
 
           checked={
-            filteredLeads.length > 0 &&
-            selectedLeads.length === filteredLeads.length
-          }
-
+  leads.length > 0 &&
+  leads.every((l) => selectedLeads.includes(l._id))
+}
           onChange={(e) => {
 
             if (e.target.checked) {
-
-              setSelectedLeads(
-                filteredLeads.map((l) => l._id)
-              );
-
-            } else {
-
-              setSelectedLeads([]);
-
-            }
-
+  setSelectedLeads(leads.map((l) => l._id));
+} else {
+  setSelectedLeads([]);
+}
           }}
         />
 
@@ -841,8 +832,8 @@ onChange={(e) => {
             </thead>
 
             <tbody>
-              {filteredLeads.length > 0 ? (
-                filteredLeads.map((l) => (
+             {leads.length > 0 ? (
+  leads.map((l) => (
 <tr key={l._id}>
 
   {user.role === "admin" && (
