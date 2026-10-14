@@ -124,34 +124,23 @@ setTotalLeadsCount(
     }
 }, [user, page, filters, search]);
 
-  // ================= FETCH LEADS =================
-
-useEffect(() => {
+  useEffect(() => {
   fetchLeads();
-}, [fetchLeads]);
-
-// ================= FETCH PROJECTS =================
-
-useEffect(() => {
+ 
   const fetchProjects = async () => {
-    try {
-      const res = await axios.get(
-        `${API}/projects`
-      );
+  try {
+    const res = await axios.get(
+      "https://calling-crm-backend-7w52.onrender.com/api/projects"
+    );
 
-      setProjects(res.data.data || []);
-    } catch (err) {
-      console.error(
-        "PROJECTS ERROR:",
-        err.response?.data || err.message
-      );
-    }
-  };
+    setProjects(res.data.data || []);
 
-  fetchProjects();
-}, []);
+  } catch (err) {
 
+    console.log("Projects Error", err);
 
+  }
+};
 fetchProjects();
 
   const token = localStorage.getItem("token");
@@ -178,6 +167,8 @@ fetchProjects();
   });
 
 }, [fetchLeads]);
+
+
 
   /* ================= DELETE ================= */
   const handleDelete = async (id) => {
@@ -381,14 +372,13 @@ const handleMultipleDelete = async () => {
   }
 };
 
-  /* ================= SEARCH ================= */
-  const filteredLeads = leads;
+  /* ================= EXPORT EXCEL ================= */
 
 const handleExport = async () => {
-
   try {
-
     toast.info("Preparing Excel Export...");
+
+    const token = localStorage.getItem("token");
 
     const response = await axios.post(
       `${API}/export-leads`,
@@ -396,53 +386,66 @@ const handleExport = async () => {
         email: user.email,
         role: user.role,
         filters,
-        search
+        search,
       },
       {
-        responseType: "blob"
+        responseType: "blob",
+        headers: token
+          ? { Authorization: `Bearer ${token}` }
+          : {},
       }
     );
 
-    const blob = new Blob(
-      [response.data],
-      {
-        type:
-          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-      }
-    );
+    const blob = response.data;
 
-    const url =
-      window.URL.createObjectURL(blob);
+    // Backend ने Excel ऐवजी error response पाठवला आहे का?
+    if (
+      !blob ||
+      blob.size === 0 ||
+      blob.type.includes("application/json")
+    ) {
+      const errorText = blob
+        ? await blob.text()
+        : "";
 
-    const link =
-      document.createElement("a");
+      console.error("EXPORT ERROR RESPONSE:", errorText);
+
+      toast.error("Excel export failed. Check backend response.");
+      return;
+    }
+
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement("a");
 
     link.href = url;
     link.download = "Pipeline_Leads.xlsx";
 
     document.body.appendChild(link);
-
     link.click();
-
     link.remove();
 
     window.URL.revokeObjectURL(url);
 
-    toast.success("Excel Exported ✅");
-
+    toast.success("Excel Exported Successfully!");
   } catch (error) {
+    console.error("EXPORT ERROR:", error);
+    console.error("EXPORT STATUS:", error.response?.status);
 
-    console.error(
-      "EXPORT ERROR:",
-      error
-    );
+    if (error.response?.data instanceof Blob) {
+      console.error(
+        "EXPORT ERROR BODY:",
+        await error.response.data.text()
+      );
+    }
 
     toast.error(
-      "Excel Export Failed ❌"
+      error.response?.data?.message ||
+        "Excel Export Failed"
     );
   }
 };
-  /* ================= CARDS ================= */
+
+/* ================= CARDS ================= */
 
 const stats = {
   totalLeads: statsData.totalLeads,
