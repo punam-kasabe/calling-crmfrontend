@@ -398,7 +398,7 @@ const handleExport = async () => {
 
     const blob = response.data;
 
-    // Backend ने Excel ऐवजी error response पाठवला आहे का?
+   
     if (
       !blob ||
       blob.size === 0 ||
@@ -444,6 +444,7 @@ const handleExport = async () => {
     );
   }
 };
+
   /* ================= CARDS ================= */
 
 const stats = {
@@ -496,12 +497,7 @@ const stats = {
           {[
   { title: "Total Leads", value: stats.totalLeads, color: "#007bff" },
   
-  {
-  title: "Filtered Leads",
-  value: stats.createdLeadsCount,
-  color: "#6f42c1"
-},
-
+  
   { title: "Today's Follow-ups", value: stats.todayFollowups, color: "#007bff" },
 
   { title: "Backlogs", value: stats.backlog, color: "#007bff" },
@@ -850,7 +846,9 @@ onChange={(e) => {
       />
 
     </td>
-  )}                    <td>{l.name}</td>
+  )}          
+        
+            <td>{l.name}</td>
                     <td>{l.phone}</td>
                     
     <td>{l.source || "-"}</td>
@@ -861,6 +859,7 @@ onChange={(e) => {
     {l.assigned_manager || "-"}
   </span>
 </td>
+
 
 <td>
   <span className="badge bg-info">
