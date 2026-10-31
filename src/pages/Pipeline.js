@@ -496,8 +496,7 @@ const stats = {
 >
           {[
   { title: "Total Leads", value: stats.totalLeads, color: "#007bff" },
-  
-  
+    
   { title: "Today's Follow-ups", value: stats.todayFollowups, color: "#007bff" },
 
   { title: "Backlogs", value: stats.backlog, color: "#007bff" },
