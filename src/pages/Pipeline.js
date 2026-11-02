@@ -816,7 +816,6 @@ onChange={(e) => {
                 <th>Source</th> 
                 <th>Assigned</th>
                 <th>Closing Officer</th>
-
                 <th>Status</th>
                 <th>Project</th>
                  <th>Remark</th>
