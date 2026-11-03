@@ -819,7 +819,6 @@ onChange={(e) => {
                 <th>Status</th>
                 <th>Project</th>
                 <th>Facebook Page</th>
-<th>Campaign</th>
                  <th>Remark</th>
                 <th>Created Date</th>
                 <th>Next Call</th>
@@ -869,7 +868,6 @@ onChange={(e) => {
 
      <td>{l.project || "-"}</td>
      <td>{l.meta_page_name || "-"}</td>
-<td>{l.meta_campaign_name || "-"}</td>
 
 
 <td className="remark-cell">
