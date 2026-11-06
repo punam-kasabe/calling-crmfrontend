@@ -1624,7 +1624,7 @@ setSelectedCities([]);
                   <th>Source</th>
 
                   <th>Project</th>
-
+                  <th>Campaign Name</th>
                   <th>Description</th>
              
                   <th>Next Call Date</th>
@@ -1694,6 +1694,10 @@ setSelectedCities([]);
 
 <td>
   {lead.project || "-"}
+</td>
+
+<td>
+  {lead.meta_campaign_name || "-"}
 </td>
 
                      <td className="description-cell">

@@ -819,6 +819,7 @@ onChange={(e) => {
                 <th>Status</th>
                 <th>Project</th>
                 <th>Facebook Page</th>
+                <th>Campaign Name</th>
                  <th>Remark</th>
                 <th>Created Date</th>
                 <th>Next Call</th>
@@ -868,6 +869,9 @@ onChange={(e) => {
 
      <td>{l.project || "-"}</td>
      <td>{l.meta_page_name || "-"}</td>
+     <td>
+  {l.meta_campaign_name || "-"}
+</td>
 
 
 <td className="remark-cell">
@@ -967,7 +971,7 @@ onChange={(e) => {
                 ))
               ) : (
                 <tr>
-          <td colSpan="13" className="text-center">
+          <td colSpan="14" className="text-center">
                       ❌ No Leads Found
                   </td>
                 </tr>
