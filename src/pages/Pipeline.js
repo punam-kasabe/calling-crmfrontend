@@ -95,7 +95,15 @@ const statusOptions = [
       });
 
       setLeads(res.data.data || []);
-      console.log(res.data.data);
+     console.log("PIPELINE LEADS =", res.data.data);
+
+console.log(
+  "CAMPAIGN NAMES =",
+  (res.data.data || []).map((lead) => ({
+    name: lead.name,
+    campaign: lead.meta_campaign_name
+  }))
+);
       setTotalPages(res.data.totalPages || 1);
 
   setStatsData({
