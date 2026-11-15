@@ -19,13 +19,14 @@ const API =
 
 export default function MyLeads() {
 
-  
+
   const [isOpen, setIsOpen] =
     useState(true);
 
   const toggleSidebar = () =>
     setIsOpen(!isOpen);
 
+  
   const [leads, setLeads] =
     useState([]);
 
