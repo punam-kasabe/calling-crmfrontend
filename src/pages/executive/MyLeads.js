@@ -1625,7 +1625,9 @@ setSelectedCities([]);
 
                   <th>Project</th>
                   <th>Campaign Name</th>
-                  <th>Description</th>
+                <th style={{ minWidth: "260px", width: "260px" }}>
+  Description
+</th>
              
                   <th>Next Call Date</th>
 
@@ -1673,9 +1675,7 @@ setSelectedCities([]);
     ? lead.assigned_to_email
     : "-"}
 </td>
-
-                    
-
+                 
                      <td>
 
   <span
@@ -1746,7 +1746,6 @@ setSelectedCities([]);
           : l
       )
     );
-
     await updateStatus(
       lead._id,
       value
