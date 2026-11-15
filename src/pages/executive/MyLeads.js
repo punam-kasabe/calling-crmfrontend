@@ -19,14 +19,12 @@ const API =
 
 export default function MyLeads() {
 
-
   const [isOpen, setIsOpen] =
     useState(true);
 
   const toggleSidebar = () =>
     setIsOpen(!isOpen);
 
-  
   const [leads, setLeads] =
     useState([]);
 
@@ -1455,6 +1453,8 @@ const handleCardClick = (status) => {
 </div>
 
 
+
+
     {/* CREATED DATE */}
 
     <div className="date-group">
@@ -1470,7 +1470,6 @@ const handleCardClick = (status) => {
         }
       />
     </div>
-
 
     <div className="date-group">
       <label>
@@ -1607,29 +1606,9 @@ setSelectedCities([]);
         ) : (
 
       <div className="table-wrapper">
-  <table className="leads-table">
+         <table className="leads-table">
+              <thead>
 
-    <colgroup>
-      <col style={{ width: "55px" }} />
-      <col style={{ width: "150px" }} />
-      <col style={{ width: "130px" }} />
-      <col style={{ width: "140px" }} />
-      <col style={{ width: "130px" }} />
-      <col style={{ width: "110px" }} />
-      <col style={{ width: "150px" }} />
-      <col style={{ width: "180px" }} />
-
-      {/* Description */}
-      <col style={{ width: "300px" }} />
-
-      <col style={{ width: "130px" }} />
-      <col style={{ width: "160px" }} />
-      <col style={{ width: "160px" }} />
-      <col style={{ width: "160px" }} />
-      <col style={{ width: "180px" }} />
-    </colgroup>
-
-    <thead>
                 <tr>
 
                   <th>Sr No</th>
@@ -1646,7 +1625,9 @@ setSelectedCities([]);
 
                   <th>Project</th>
                   <th>Campaign Name</th>
-                <th>Description</th>
+                <th style={{ minWidth: "260px", width: "260px" }}>
+  Description
+</th>
              
                   <th>Next Call Date</th>
 
@@ -1694,7 +1675,9 @@ setSelectedCities([]);
     ? lead.assigned_to_email
     : "-"}
 </td>
-                 
+
+                    
+
                      <td>
 
   <span
@@ -1720,8 +1703,8 @@ setSelectedCities([]);
 </td>
 
                      <td className="description-cell">
-  {lead.description || "-"}
-</td>
+                     {lead.description || "-"}
+                     </td>
 
                          
                      <td>
@@ -1765,6 +1748,7 @@ setSelectedCities([]);
           : l
       )
     );
+
     await updateStatus(
       lead._id,
       value
@@ -2264,9 +2248,9 @@ Booking
         {/* STATUS */}
 
        <div className="multi-filter">
-      <label>Status</label>
+  <label>Status</label>
 
-    <Select
+  <Select
     options={statusOptions.map((status) => ({
       value: status,
       label: status
