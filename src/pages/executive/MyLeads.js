@@ -1452,6 +1452,7 @@ const handleCardClick = (status) => {
   />
 </div>
 
+
     {/* CREATED DATE */}
 
     <div className="date-group">
