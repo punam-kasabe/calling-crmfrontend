@@ -2263,9 +2263,9 @@ Booking
         {/* STATUS */}
 
        <div className="multi-filter">
-  <label>Status</label>
+      <label>Status</label>
 
-  <Select
+    <Select
     options={statusOptions.map((status) => ({
       value: status,
       label: status
