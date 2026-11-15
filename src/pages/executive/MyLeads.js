@@ -1606,9 +1606,29 @@ setSelectedCities([]);
         ) : (
 
       <div className="table-wrapper">
-         <table className="leads-table">
-              <thead>
+  <table className="leads-table">
 
+    <colgroup>
+      <col style={{ width: "55px" }} />
+      <col style={{ width: "150px" }} />
+      <col style={{ width: "130px" }} />
+      <col style={{ width: "140px" }} />
+      <col style={{ width: "130px" }} />
+      <col style={{ width: "110px" }} />
+      <col style={{ width: "150px" }} />
+      <col style={{ width: "180px" }} />
+
+      {/* Description */}
+      <col style={{ width: "300px" }} />
+
+      <col style={{ width: "130px" }} />
+      <col style={{ width: "160px" }} />
+      <col style={{ width: "160px" }} />
+      <col style={{ width: "160px" }} />
+      <col style={{ width: "180px" }} />
+    </colgroup>
+
+    <thead>
                 <tr>
 
                   <th>Sr No</th>
@@ -1625,9 +1645,7 @@ setSelectedCities([]);
 
                   <th>Project</th>
                   <th>Campaign Name</th>
-                <th style={{ minWidth: "260px", width: "260px" }}>
-  Description
-</th>
+                <th>Description</th>
              
                   <th>Next Call Date</th>
 
@@ -1701,8 +1719,8 @@ setSelectedCities([]);
 </td>
 
                      <td className="description-cell">
-                     {lead.description || "-"}
-                     </td>
+  {lead.description || "-"}
+</td>
 
                          
                      <td>
