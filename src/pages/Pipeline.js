@@ -45,12 +45,12 @@ const [statsData, setStatsData] = useState({
 });
 
 
-  // 🔥 FILTER STATE
-  const [filters, setFilters] = useState({
+ const [filters, setFilters] = useState({
   status: [],
   assigned: "",
   closingExecutive: "",
   project: "",
+  campaignName: "",
   createdFrom: "",
   createdTo: ""
 });
@@ -68,6 +68,15 @@ const closingExecutives = [
       .filter(Boolean)
   )
 ];
+
+const campaignNames = [
+  ...new Set(
+    leads
+      .map((l) => l.meta_campaign_name)
+      .filter(Boolean)
+      .map((name) => name.trim())
+  )
+].sort();
 
 const statusOptions = [
   { value: "New", label: "New" },
@@ -682,6 +691,40 @@ onChange={(e) => {
 
     </div>
 
+    {/* CAMPAIGN NAME */}
+
+<div className="col-md-2">
+
+  <select
+    className="form-select"
+    value={filters.campaignName}
+    onChange={(e) =>
+      setFilters({
+        ...filters,
+        campaignName: e.target.value
+      })
+    }
+  >
+
+    <option value="">
+      All Campaigns
+    </option>
+
+    {campaignNames.map((campaign, index) => (
+
+      <option
+        key={index}
+        value={campaign}
+      >
+        {campaign}
+      </option>
+
+    ))}
+
+  </select>
+
+</div>
+
     {/* CREATED DATE FROM */}
 
     <div className="col-md-2">
@@ -725,14 +768,15 @@ onChange={(e) => {
       <button
         className="btn btn-secondary w-100"
         onClick={() =>
-          setFilters({
-         status: [],
-            assigned: "",
-            closingExecutive: "",
-            project: "",
-            createdFrom: "",
-            createdTo: ""
-          })
+       setFilters({
+  status: [],
+  assigned: "",
+  closingExecutive: "",
+  project: "",
+  campaignName: "",
+  createdFrom: "",
+  createdTo: ""
+})
         }
       >
         Reset
@@ -919,8 +963,7 @@ onChange={(e) => {
     : "-"}
 </td>
 
-                  <td>
-
+  <td>
   <div
     style={{
       display: "flex",
