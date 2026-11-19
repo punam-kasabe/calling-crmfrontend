@@ -15,6 +15,7 @@ import CampaignReports from "./pages/admin/CampaignReports";
 import ApiKeys from "./pages/admin/ApiKeys";
 import BulkUpload from "./pages/admin/BulkUpload";
 import ProtectedRoute from "./components/ProtectedRoute";
+import Sidebar from "./components/Sidebar";
 
 /* 👨‍💼 EXECUTIVE */
 import CallLogs from "./pages/executive/CallLogs";
@@ -68,6 +69,42 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import MobileBlock from "./components/MobileBlock";
 import LeadListPage from "./pages/LeadListPage";
 
+
+/* =========================================
+   📊 CAMPAIGN REPORTS LAYOUT
+========================================= */
+
+const CampaignReportsLayout = () => {
+
+  const [isOpen, setIsOpen] = useState(true);
+
+  const toggleSidebar = () => {
+    setIsOpen((prev) => !prev);
+  };
+
+  return (
+    <>
+      <Sidebar
+        isOpen={isOpen}
+        toggleSidebar={toggleSidebar}
+      />
+
+      <div
+        style={{
+          marginLeft: isOpen ? "240px" : "70px",
+          paddingTop: "60px",
+          minHeight: "100vh",
+          width: isOpen
+            ? "calc(100% - 240px)"
+            : "calc(100% - 70px)",
+          transition: "all 0.3s ease"
+        }}
+      >
+        <CampaignReports />
+      </div>
+    </>
+  );
+};
 /* =========================================
    🔓 PUBLIC ROUTE
 ========================================= */
@@ -467,12 +504,19 @@ export default function App() {
 />
 
 <Route
+
   path="/campaign-reports"
+
   element={
+
     <ProtectedRoute>
-      <CampaignReports />
+
+      <CampaignReportsLayout />
+
     </ProtectedRoute>
+
   }
+
 />
 
 <Route
