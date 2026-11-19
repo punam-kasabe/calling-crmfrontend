@@ -12,8 +12,7 @@ import {
   RotateCcw,
   Download
 } from "lucide-react";
-import "./CampaignReports.css";
-
+import "../../styles/CampaignReports.css";
 const API_URL =
   "https://calling-crm-backend-7w52.onrender.com/api";
 
