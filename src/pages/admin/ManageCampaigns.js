@@ -7,8 +7,7 @@ export default function ManageCampaigns() {
   const [showForm, setShowForm] = useState(false);
 
   const [campaigns, setCampaigns] = useState([]);
-  const [loading, setLoading] = useState(false);
-
+ const [, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     campaignName: "",
     project: "",
