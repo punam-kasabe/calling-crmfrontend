@@ -47,9 +47,9 @@ const CampaignReports = () => {
   const [executives, setExecutives] = useState([]);
 
   useEffect(() => {
-    loadFilterOptions();
-    loadReport();
-  }, []);
+  loadOptions();
+  loadReport();
+}, [filters, loadReport]);
 
   // ==========================================
   // LOAD FILTER OPTIONS
@@ -76,7 +76,7 @@ const CampaignReports = () => {
   // LOAD REPORT
   // ==========================================
 
-  const loadReport = async () => {
+const loadReport = useCallback(async () => {
     try {
       setLoading(true);
 
@@ -101,7 +101,7 @@ const CampaignReports = () => {
     } finally {
       setLoading(false);
     }
-  };
+ }, [filters]);
 
   // ==========================================
   // FILTER CHANGE
