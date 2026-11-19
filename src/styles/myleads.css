@@ -639,18 +639,25 @@
   border-radius: 10px;
 }
 
-/* Description */
+/* ===============================
+   DESCRIPTION COLUMN
+================================= */
 
-.leads-table th:nth-child(8),
-.leads-table td:nth-child(8){
+.leads-table th:nth-child(9),
+.leads-table td:nth-child(9) {
+    width: 260px !important;
+    min-width: 260px !important;
+    max-width: 260px !important;
 
-    width:260px;
-    min-width:260px;
-    max-width:260px;
+    white-space: normal !important;
+    word-break: break-word !important;
+    overflow-wrap: anywhere !important;
 
-    white-space:normal;
-    word-break:break-word;
-    line-height:1.4;
+    overflow: hidden !important;
+    text-overflow: clip !important;
+
+    line-height: 1.4;
+    vertical-align: top;
 }
 /* ===============================
    STATUS BADGES
