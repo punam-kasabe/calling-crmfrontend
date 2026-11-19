@@ -1,5 +1,11 @@
-import React, { useEffect, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useState
+} from "react";
+
 import axios from "axios";
+
 import {
   BarChart3,
   Users,
@@ -12,73 +18,131 @@ import {
   RotateCcw,
   Download
 } from "lucide-react";
+
 import "../../styles/CampaignReports.css";
+
+
 const API_URL =
   "https://calling-crm-backend-7w52.onrender.com/api";
 
+
 const CampaignReports = () => {
+
   const [loading, setLoading] = useState(false);
 
+
+  // ==========================================
+  // FILTERS
+  // ==========================================
+
   const [filters, setFilters] = useState({
+
     fromDate: "",
+
     toDate: "",
+
     campaign: "",
+
     project: "",
+
     executive: "",
+
     status: ""
+
   });
+
+
+  // ==========================================
+  // REPORT DATA
+  // ==========================================
 
   const [report, setReport] = useState({
+
     summary: {
+
       totalLeads: 0,
+
       connected: 0,
+
       interested: 0,
+
       siteVisit: 0,
+
       negotiation: 0,
+
       booked: 0
+
     },
+
     campaigns: [],
+
     executives: [],
+
     daily: []
+
   });
 
+
+  // ==========================================
+  // FILTER OPTIONS
+  // ==========================================
+
   const [campaigns, setCampaigns] = useState([]);
+
   const [projects, setProjects] = useState([]);
+
   const [executives, setExecutives] = useState([]);
 
-  useEffect(() => {
-  loadOptions();
-  loadReport();
-}, [filters, loadReport]);
 
   // ==========================================
   // LOAD FILTER OPTIONS
   // ==========================================
 
-  const loadFilterOptions = async () => {
+  const loadFilterOptions = useCallback(async () => {
+
     try {
+
       const response = await axios.get(
         `${API_URL}/campaign-reports/options`
       );
 
-      setCampaigns(response.data?.campaigns || []);
-      setProjects(response.data?.projects || []);
-      setExecutives(response.data?.executives || []);
+
+      setCampaigns(
+        response.data?.campaigns || []
+      );
+
+
+      setProjects(
+        response.data?.projects || []
+      );
+
+
+      setExecutives(
+        response.data?.executives || []
+      );
+
     } catch (error) {
+
       console.error(
         "Campaign report options error:",
         error
       );
+
     }
-  };
+
+  }, []);
+
 
   // ==========================================
   // LOAD REPORT
   // ==========================================
 
-const loadReport = useCallback(async () => {
+  const loadReport = useCallback(async () => {
+
     try {
+
       setLoading(true);
+
 
       const response = await axios.get(
         `${API_URL}/campaign-reports`,
@@ -87,154 +151,312 @@ const loadReport = useCallback(async () => {
         }
       );
 
+
       setReport({
-        summary: response.data?.summary || {},
-        campaigns: response.data?.campaigns || [],
-        executives: response.data?.executives || [],
-        daily: response.data?.daily || []
+
+        summary:
+          response.data?.summary || {},
+
+        campaigns:
+          response.data?.campaigns || [],
+
+        executives:
+          response.data?.executives || [],
+
+        daily:
+          response.data?.daily || []
+
       });
+
     } catch (error) {
+
       console.error(
         "Campaign report loading error:",
         error
       );
+
+
+      setReport({
+
+        summary: {
+          totalLeads: 0,
+          connected: 0,
+          interested: 0,
+          siteVisit: 0,
+          negotiation: 0,
+          booked: 0
+        },
+
+        campaigns: [],
+
+        executives: [],
+
+        daily: []
+
+      });
+
     } finally {
+
       setLoading(false);
+
     }
- }, [filters]);
+
+  }, [filters]);
+
+
+  // ==========================================
+  // INITIAL LOAD + FILTER CHANGE
+  // ==========================================
+
+  useEffect(() => {
+
+    loadFilterOptions();
+
+    loadReport();
+
+  }, [
+    loadFilterOptions,
+    loadReport
+  ]);
+
 
   // ==========================================
   // FILTER CHANGE
   // ==========================================
 
   const handleFilterChange = (e) => {
-    const { name, value } = e.target;
+
+    const {
+      name,
+      value
+    } = e.target;
+
 
     setFilters((prev) => ({
+
       ...prev,
+
       [name]: value
+
     }));
+
   };
+
 
   // ==========================================
   // APPLY FILTER
   // ==========================================
 
   const handleApplyFilter = () => {
+
     loadReport();
+
   };
+
 
   // ==========================================
   // RESET FILTER
   // ==========================================
 
   const handleReset = () => {
-    const emptyFilters = {
+
+    setFilters({
+
       fromDate: "",
+
       toDate: "",
+
       campaign: "",
+
       project: "",
+
       executive: "",
+
       status: ""
-    };
 
-    setFilters(emptyFilters);
+    });
 
-    setTimeout(() => {
-      loadReport();
-    }, 0);
   };
+
 
   // ==========================================
   // EXPORT
   // ==========================================
 
   const handleExport = () => {
-    const params = new URLSearchParams();
+
+    const params =
+      new URLSearchParams();
+
 
     Object.entries(filters).forEach(
       ([key, value]) => {
+
         if (value) {
-          params.append(key, value);
+
+          params.append(
+            key,
+            value
+          );
+
         }
+
       }
     );
+
 
     window.open(
       `${API_URL}/campaign-reports/export?${params.toString()}`,
       "_blank"
     );
+
   };
 
-  const summary = report.summary || {};
 
   // ==========================================
-  // CARD DATA
+  // SUMMARY
+  // ==========================================
+
+  const summary =
+    report.summary || {};
+
+
+  // ==========================================
+  // SUMMARY CARD DATA
   // ==========================================
 
   const cards = [
+
     {
+
       title: "Total Leads",
-      value: summary.totalLeads || 0,
-      icon: <Users size={22} />,
+
+      value:
+        summary.totalLeads || 0,
+
+      icon:
+        <Users size={22} />,
+
       className: "total"
+
     },
+
     {
+
       title: "Connected",
-      value: summary.connected || 0,
-      icon: <PhoneCall size={22} />,
+
+      value:
+        summary.connected || 0,
+
+      icon:
+        <PhoneCall size={22} />,
+
       className: "connected"
+
     },
+
     {
+
       title: "Interested",
-      value: summary.interested || 0,
-      icon: <Heart size={22} />,
+
+      value:
+        summary.interested || 0,
+
+      icon:
+        <Heart size={22} />,
+
       className: "interested"
+
     },
+
     {
+
       title: "Site Visit",
-      value: summary.siteVisit || 0,
-      icon: <MapPin size={22} />,
+
+      value:
+        summary.siteVisit || 0,
+
+      icon:
+        <MapPin size={22} />,
+
       className: "sitevisit"
+
     },
+
     {
+
       title: "Negotiation",
-      value: summary.negotiation || 0,
-      icon: <Handshake size={22} />,
+
+      value:
+        summary.negotiation || 0,
+
+      icon:
+        <Handshake size={22} />,
+
       className: "negotiation"
+
     },
+
     {
+
       title: "Booked",
-      value: summary.booked || 0,
-      icon: <CheckCircle2 size={22} />,
+
+      value:
+        summary.booked || 0,
+
+      icon:
+        <CheckCircle2 size={22} />,
+
       className: "booked"
+
     }
+
   ];
 
+
+  // ==========================================
+  // RETURN
+  // ==========================================
+
   return (
+
     <div className="campaign-reports-page">
+
 
       {/* ======================================
           HEADER
       ====================================== */}
 
       <div className="campaign-reports-header">
+
         <div>
-          <h2>Campaign Reports</h2>
+
+          <h2>
+            Campaign Reports
+          </h2>
+
 
           <p>
             Campaign-wise lead performance and conversion report
           </p>
+
         </div>
+
 
         <button
           className="campaign-export-btn"
           onClick={handleExport}
         >
+
           <Download size={17} />
+
           Export Excel
+
         </button>
+
       </div>
+
+
 
       {/* ======================================
           FILTERS
@@ -242,9 +464,15 @@ const loadReport = useCallback(async () => {
 
       <div className="campaign-filter-box">
 
+
+        {/* FROM DATE */}
+
         <div className="campaign-filter">
 
-          <label>From Date</label>
+          <label>
+            From Date
+          </label>
+
 
           <input
             type="date"
@@ -255,9 +483,16 @@ const loadReport = useCallback(async () => {
 
         </div>
 
+
+
+        {/* TO DATE */}
+
         <div className="campaign-filter">
 
-          <label>To Date</label>
+          <label>
+            To Date
+          </label>
+
 
           <input
             type="date"
@@ -268,133 +503,238 @@ const loadReport = useCallback(async () => {
 
         </div>
 
+
+
+        {/* CAMPAIGN */}
+
         <div className="campaign-filter">
 
-          <label>Campaign</label>
+          <label>
+            Campaign
+          </label>
+
 
           <select
             name="campaign"
             value={filters.campaign}
             onChange={handleFilterChange}
           >
+
             <option value="">
               All Campaigns
             </option>
 
-            {campaigns.map((item, index) => (
-              <option
-                key={item._id || item.campaign_id || index}
-                value={
-                  item.campaign_id ||
-                  item.campaignName ||
-                  item.campaign_name ||
-                  ""
-                }
-              >
-                {item.campaignName ||
-                  item.campaign_name ||
-                  item.name}
-              </option>
-            ))}
+
+            {campaigns.map(
+              (item, index) => (
+
+                <option
+                  key={
+                    item._id ||
+                    item.campaign_id ||
+                    index
+                  }
+                  value={
+                    item.campaign_id ||
+                    item.campaignName ||
+                    item.campaign_name ||
+                    ""
+                  }
+                >
+
+                  {
+                    item.campaignName ||
+                    item.campaign_name ||
+                    item.name ||
+                    "—"
+                  }
+
+                </option>
+
+              )
+            )}
+
           </select>
 
         </div>
 
+
+
+        {/* PROJECT */}
+
         <div className="campaign-filter">
 
-          <label>Project</label>
+          <label>
+            Project
+          </label>
+
 
           <select
             name="project"
             value={filters.project}
             onChange={handleFilterChange}
           >
+
             <option value="">
               All Projects
             </option>
 
-            {projects.map((project, index) => (
-              <option
-                key={index}
-                value={project}
-              >
-                {project}
-              </option>
-            ))}
+
+            {projects.map(
+              (project, index) => (
+
+                <option
+                  key={index}
+                  value={project}
+                >
+
+                  {project}
+
+                </option>
+
+              )
+            )}
+
           </select>
 
         </div>
 
+
+
+        {/* EXECUTIVE */}
+
         <div className="campaign-filter">
 
-          <label>Executive</label>
+          <label>
+            Executive
+          </label>
+
 
           <select
             name="executive"
             value={filters.executive}
             onChange={handleFilterChange}
           >
+
             <option value="">
               All Executives
             </option>
 
-            {executives.map((item, index) => (
-              <option
-                key={item.email || index}
-                value={item.email || item}
-              >
-                {item.name ||
-                  item.userName ||
-                  item.username ||
-                  item.email ||
-                  item}
-              </option>
-            ))}
+
+            {executives.map(
+              (item, index) => (
+
+                <option
+                  key={
+                    item.email ||
+                    index
+                  }
+                  value={
+                    item.email ||
+                    item
+                  }
+                >
+
+                  {
+                    item.name ||
+                    item.userName ||
+                    item.username ||
+                    item.email ||
+                    item
+                  }
+
+                </option>
+
+              )
+            )}
+
           </select>
 
         </div>
 
+
+
+        {/* STATUS */}
+
         <div className="campaign-filter">
 
-          <label>Status</label>
+          <label>
+            Status
+          </label>
+
 
           <select
             name="status"
             value={filters.status}
             onChange={handleFilterChange}
           >
+
             <option value="">
               All Status
             </option>
 
-            <option value="New">New</option>
-            <option value="Ringing">Ringing</option>
-            <option value="Connected">Connected</option>
-            <option value="Interested">Interested</option>
+
+            <option value="New">
+              New
+            </option>
+
+
+            <option value="Ringing">
+              Ringing
+            </option>
+
+
+            <option value="Connected">
+              Connected
+            </option>
+
+
+            <option value="Interested">
+              Interested
+            </option>
+
+
             <option value="Very Interested">
               Very Interested
             </option>
+
+
             <option value="Follow Up">
               Follow Up
             </option>
+
+
             <option value="Site Visit Done">
               Site Visit Done
             </option>
+
+
             <option value="Office Visit">
               Office Visit
             </option>
+
+
             <option value="Negotiation">
               Negotiation
             </option>
+
+
             <option value="Booked">
               Booked
             </option>
+
+
             <option value="Not Interested">
               Not Interested
             </option>
+
           </select>
 
         </div>
+
+
+
+        {/* ACTION BUTTONS */}
 
         <div className="campaign-filter-actions">
 
@@ -402,21 +742,30 @@ const loadReport = useCallback(async () => {
             className="apply-report-btn"
             onClick={handleApplyFilter}
           >
+
             <Search size={16} />
+
             Apply Filter
+
           </button>
+
 
           <button
             className="reset-report-btn"
             onClick={handleReset}
           >
+
             <RotateCcw size={16} />
+
             Reset
+
           </button>
 
         </div>
 
       </div>
+
+
 
       {/* ======================================
           SUMMARY CARDS
@@ -424,28 +773,50 @@ const loadReport = useCallback(async () => {
 
       <div className="campaign-summary-grid">
 
-        {cards.map((card) => (
-          <div
-            className={`campaign-summary-card ${card.className}`}
-            key={card.title}
-          >
-            <div className="campaign-card-icon">
-              {card.icon}
+
+        {cards.map(
+          (card) => (
+
+            <div
+              className={`campaign-summary-card ${card.className}`}
+              key={card.title}
+            >
+
+              <div className="campaign-card-icon">
+
+                {card.icon}
+
+              </div>
+
+
+              <div>
+
+                <p>
+                  {card.title}
+                </p>
+
+
+                <h3>
+
+                  {loading
+                    ? "..."
+                    : Number(
+                        card.value || 0
+                      ).toLocaleString()
+                  }
+
+                </h3>
+
+              </div>
+
             </div>
 
-            <div>
-              <p>{card.title}</p>
-
-              <h3>
-                {loading
-                  ? "..."
-                  : Number(card.value || 0).toLocaleString()}
-              </h3>
-            </div>
-          </div>
-        ))}
+          )
+        )}
 
       </div>
+
+
 
       {/* ======================================
           CAMPAIGN PERFORMANCE
@@ -453,105 +824,176 @@ const loadReport = useCallback(async () => {
 
       <div className="campaign-report-section">
 
+
         <div className="section-header">
 
           <div>
-            <h3>Campaign Performance</h3>
+
+            <h3>
+              Campaign Performance
+            </h3>
+
 
             <p>
               Campaign-wise lead and conversion performance
             </p>
+
           </div>
+
 
           <BarChart3 size={22} />
 
         </div>
+
+
 
         <div className="report-table-wrapper">
 
           <table className="campaign-report-table">
 
             <thead>
+
               <tr>
-                <th>Campaign</th>
-                <th>Project</th>
-                <th>Leads</th>
-                <th>Connected</th>
-                <th>Interested</th>
-                <th>Follow Up</th>
-                <th>Site Visit</th>
-                <th>Booked</th>
-                <th>Conversion %</th>
+
+                <th>
+                  Campaign
+                </th>
+
+                <th>
+                  Project
+                </th>
+
+                <th>
+                  Leads
+                </th>
+
+                <th>
+                  Connected
+                </th>
+
+                <th>
+                  Interested
+                </th>
+
+                <th>
+                  Follow Up
+                </th>
+
+                <th>
+                  Site Visit
+                </th>
+
+                <th>
+                  Booked
+                </th>
+
+                <th>
+                  Conversion %
+                </th>
+
               </tr>
+
             </thead>
+
 
             <tbody>
 
               {report.campaigns.length === 0 ? (
 
                 <tr>
+
                   <td
                     colSpan="9"
                     className="report-empty"
                   >
+
                     {loading
                       ? "Loading campaign report..."
-                      : "No campaign data found."}
+                      : "No campaign data found."
+                    }
+
                   </td>
+
                 </tr>
 
               ) : (
 
                 report.campaigns.map(
                   (item, index) => (
-                    <tr key={item.campaign_id || index}>
+
+                    <tr
+                      key={
+                        item.campaign_id ||
+                        index
+                      }
+                    >
 
                       <td>
+
                         <strong>
-                          {item.campaign_name ||
+
+                          {
+                            item.campaign_name ||
                             item.campaignName ||
-                            "—"}
+                            "—"
+                          }
+
                         </strong>
+
                       </td>
+
 
                       <td>
                         {item.project || "—"}
                       </td>
 
+
                       <td>
                         {item.leads || 0}
                       </td>
+
 
                       <td>
                         {item.connected || 0}
                       </td>
 
+
                       <td>
                         {item.interested || 0}
                       </td>
+
 
                       <td>
                         {item.followUp || 0}
                       </td>
 
+
                       <td>
                         {item.siteVisit || 0}
                       </td>
+
 
                       <td>
                         {item.booked || 0}
                       </td>
 
+
                       <td>
+
                         <span className="conversion-badge">
+
                           {Number(
                             item.conversion || 0
                           ).toFixed(2)}
+
                           %
+
                         </span>
+
                       </td>
 
                     </tr>
+
                   )
                 )
 
@@ -564,6 +1006,8 @@ const loadReport = useCallback(async () => {
         </div>
 
       </div>
+
+
 
       {/* ======================================
           EXECUTIVE PERFORMANCE
@@ -571,107 +1015,178 @@ const loadReport = useCallback(async () => {
 
       <div className="campaign-report-section">
 
+
         <div className="section-header">
 
           <div>
-            <h3>Executive Performance</h3>
+
+            <h3>
+              Executive Performance
+            </h3>
+
 
             <p>
               Executive-wise campaign performance
             </p>
+
           </div>
+
 
           <Users size={22} />
 
         </div>
+
+
 
         <div className="report-table-wrapper">
 
           <table className="campaign-report-table">
 
             <thead>
+
               <tr>
-                <th>Executive</th>
-                <th>Leads</th>
-                <th>Connected</th>
-                <th>Interested</th>
-                <th>Follow Up</th>
-                <th>Site Visit</th>
-                <th>Negotiation</th>
-                <th>Booked</th>
-                <th>Conversion %</th>
+
+                <th>
+                  Executive
+                </th>
+
+                <th>
+                  Leads
+                </th>
+
+                <th>
+                  Connected
+                </th>
+
+                <th>
+                  Interested
+                </th>
+
+                <th>
+                  Follow Up
+                </th>
+
+                <th>
+                  Site Visit
+                </th>
+
+                <th>
+                  Negotiation
+                </th>
+
+                <th>
+                  Booked
+                </th>
+
+                <th>
+                  Conversion %
+                </th>
+
               </tr>
+
             </thead>
+
 
             <tbody>
 
               {report.executives.length === 0 ? (
 
                 <tr>
+
                   <td
                     colSpan="9"
                     className="report-empty"
                   >
+
                     {loading
                       ? "Loading executive report..."
-                      : "No executive data found."}
+                      : "No executive data found."
+                    }
+
                   </td>
+
                 </tr>
 
               ) : (
 
                 report.executives.map(
                   (item, index) => (
-                    <tr key={item.email || index}>
+
+                    <tr
+                      key={
+                        item.email ||
+                        index
+                      }
+                    >
 
                       <td>
+
                         <strong>
-                          {item.name ||
+
+                          {
+                            item.name ||
                             item.userName ||
                             item.username ||
                             item.email ||
-                            "—"}
+                            "—"
+                          }
+
                         </strong>
+
                       </td>
+
 
                       <td>
                         {item.leads || 0}
                       </td>
 
+
                       <td>
                         {item.connected || 0}
                       </td>
+
 
                       <td>
                         {item.interested || 0}
                       </td>
 
+
                       <td>
                         {item.followUp || 0}
                       </td>
+
 
                       <td>
                         {item.siteVisit || 0}
                       </td>
 
+
                       <td>
                         {item.negotiation || 0}
                       </td>
+
 
                       <td>
                         {item.booked || 0}
                       </td>
 
+
                       <td>
+
                         <span className="conversion-badge">
+
                           {Number(
                             item.conversion || 0
                           ).toFixed(2)}
+
                           %
+
                         </span>
+
                       </td>
 
                     </tr>
+
                   )
                 )
 
@@ -685,74 +1200,127 @@ const loadReport = useCallback(async () => {
 
       </div>
 
+
+
       {/* ======================================
-          FUNNEL
+          CAMPAIGN FUNNEL
       ====================================== */}
 
       <div className="campaign-report-section">
 
+
         <div className="section-header">
 
           <div>
-            <h3>Campaign Funnel</h3>
+
+            <h3>
+              Campaign Funnel
+            </h3>
+
 
             <p>
               Lead journey from enquiry to booking
             </p>
+
           </div>
+
 
           <BarChart3 size={22} />
 
         </div>
 
+
+
         <div className="campaign-funnel">
 
           {[
-            ["Leads", summary.totalLeads || 0],
-            ["Connected", summary.connected || 0],
-            ["Interested", summary.interested || 0],
-            ["Site Visit", summary.siteVisit || 0],
-            ["Negotiation", summary.negotiation || 0],
-            ["Booked", summary.booked || 0]
-          ].map(([label, value]) => (
 
-            <div
-              className="funnel-item"
-              key={label}
-            >
+            [
+              "Leads",
+              summary.totalLeads || 0
+            ],
 
-              <div className="funnel-label">
-                <span>{label}</span>
-                <strong>{value}</strong>
-              </div>
+            [
+              "Connected",
+              summary.connected || 0
+            ],
 
-              <div className="funnel-bar">
-                <div
-                  className="funnel-fill"
-                  style={{
-                    width: `${
-                      summary.totalLeads
-                        ? Math.min(
-                            100,
-                            (Number(value) /
-                              Number(
-                                summary.totalLeads
-                              )) *
+            [
+              "Interested",
+              summary.interested || 0
+            ],
+
+            [
+              "Site Visit",
+              summary.siteVisit || 0
+            ],
+
+            [
+              "Negotiation",
+              summary.negotiation || 0
+            ],
+
+            [
+              "Booked",
+              summary.booked || 0
+            ]
+
+          ].map(
+            ([label, value]) => (
+
+              <div
+                className="funnel-item"
+                key={label}
+              >
+
+                <div className="funnel-label">
+
+                  <span>
+                    {label}
+                  </span>
+
+
+                  <strong>
+                    {value}
+                  </strong>
+
+                </div>
+
+
+                <div className="funnel-bar">
+
+                  <div
+                    className="funnel-fill"
+                    style={{
+                      width: `${
+                        summary.totalLeads
+                          ? Math.min(
+                              100,
+                              (
+                                Number(value) /
+                                Number(
+                                  summary.totalLeads
+                                )
+                              ) *
                               100
-                          )
-                        : 0
-                    }%`
-                  }}
-                />
+                            )
+                          : 0
+                      }%`
+                    }}
+                  />
+
+                </div>
+
               </div>
 
-            </div>
-
-          ))}
+            )
+          )}
 
         </div>
 
       </div>
+
+
 
       {/* ======================================
           DAILY REPORT
@@ -760,86 +1328,133 @@ const loadReport = useCallback(async () => {
 
       <div className="campaign-report-section">
 
+
         <div className="section-header">
 
           <div>
-            <h3>Daily Campaign Performance</h3>
+
+            <h3>
+              Daily Campaign Performance
+            </h3>
+
 
             <p>
               Date-wise campaign lead performance
             </p>
+
           </div>
+
 
           <BarChart3 size={22} />
 
         </div>
+
+
 
         <div className="report-table-wrapper">
 
           <table className="campaign-report-table">
 
             <thead>
+
               <tr>
-                <th>Date</th>
-                <th>Leads</th>
-                <th>Connected</th>
-                <th>Interested</th>
-                <th>Site Visit</th>
-                <th>Negotiation</th>
-                <th>Booked</th>
+
+                <th>
+                  Date
+                </th>
+
+                <th>
+                  Leads
+                </th>
+
+                <th>
+                  Connected
+                </th>
+
+                <th>
+                  Interested
+                </th>
+
+                <th>
+                  Site Visit
+                </th>
+
+                <th>
+                  Negotiation
+                </th>
+
+                <th>
+                  Booked
+                </th>
+
               </tr>
+
             </thead>
+
 
             <tbody>
 
               {report.daily.length === 0 ? (
 
                 <tr>
+
                   <td
                     colSpan="7"
                     className="report-empty"
                   >
+
                     {loading
                       ? "Loading daily report..."
-                      : "No daily data found."}
+                      : "No daily data found."
+                    }
+
                   </td>
+
                 </tr>
 
               ) : (
 
                 report.daily.map(
                   (item, index) => (
+
                     <tr key={index}>
 
                       <td>
                         {item.date || "—"}
                       </td>
 
+
                       <td>
                         {item.leads || 0}
                       </td>
+
 
                       <td>
                         {item.connected || 0}
                       </td>
 
+
                       <td>
                         {item.interested || 0}
                       </td>
+
 
                       <td>
                         {item.siteVisit || 0}
                       </td>
 
+
                       <td>
                         {item.negotiation || 0}
                       </td>
+
 
                       <td>
                         {item.booked || 0}
                       </td>
 
                     </tr>
+
                   )
                 )
 
@@ -853,8 +1468,12 @@ const loadReport = useCallback(async () => {
 
       </div>
 
+
     </div>
+
   );
+
 };
+
 
 export default CampaignReports;
