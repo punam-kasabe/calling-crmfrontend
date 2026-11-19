@@ -11,6 +11,7 @@ import Reports from "./pages/admin/Reports";
 import ManageUsers from "./pages/admin/ManageUsers";
 import ManageProjects from "./pages/admin/ManageProjects";
 import ManageCampaigns from "./pages/admin/ManageCampaigns";
+import CampaignReports from "./pages/admin/CampaignReports";
 import ApiKeys from "./pages/admin/ApiKeys";
 import BulkUpload from "./pages/admin/BulkUpload";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -461,6 +462,15 @@ export default function App() {
   element={
     <ProtectedRoute>
       <MonthlyReport />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/campaign-reports"
+  element={
+    <ProtectedRoute>
+      <CampaignReports />
     </ProtectedRoute>
   }
 />

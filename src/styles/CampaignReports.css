@@ -1,0 +1,533 @@
+/* =========================================
+   CAMPAIGN REPORTS PAGE
+========================================= */
+
+.campaign-reports-page {
+  padding: 25px;
+  min-height: 100vh;
+  background: #f4f6f9;
+  box-sizing: border-box;
+}
+
+/* =========================================
+   HEADER
+========================================= */
+
+.campaign-reports-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 25px;
+}
+
+.campaign-reports-header h2 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 700;
+  color: #222;
+}
+
+.campaign-reports-header p {
+  margin: 7px 0 0;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.campaign-export-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: none;
+  background: #198754;
+  color: #fff;
+  padding: 11px 18px;
+  border-radius: 9px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.campaign-export-btn:hover {
+  background: #157347;
+  transform: translateY(-1px);
+}
+
+/* =========================================
+   FILTER BOX
+========================================= */
+
+.campaign-filter-box {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 20px;
+  margin-bottom: 22px;
+
+  display: grid;
+  grid-template-columns:
+    repeat(6, minmax(150px, 1fr));
+
+  gap: 15px;
+
+  box-shadow:
+    0 3px 12px rgba(15, 23, 42, 0.05);
+}
+
+.campaign-filter {
+  min-width: 0;
+}
+
+.campaign-filter label {
+  display: block;
+  margin-bottom: 7px;
+
+  color: #374151;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.campaign-filter input,
+.campaign-filter select {
+  width: 100%;
+  height: 43px;
+
+  box-sizing: border-box;
+
+  border: 1px solid #d7dce3;
+  border-radius: 9px;
+
+  padding: 0 11px;
+
+  background: #fff;
+  color: #1f2937;
+
+  font-size: 13px;
+  outline: none;
+
+  transition: 0.2s ease;
+}
+
+.campaign-filter input:focus,
+.campaign-filter select:focus {
+  border-color: #2563eb;
+
+  box-shadow:
+    0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.campaign-filter-actions {
+  display: flex;
+  align-items: end;
+  gap: 8px;
+}
+
+.apply-report-btn,
+.reset-report-btn {
+  height: 43px;
+  border: none;
+  border-radius: 9px;
+
+  padding: 0 15px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 7px;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.apply-report-btn {
+  background: #0d6efd;
+  color: #fff;
+}
+
+.apply-report-btn:hover {
+  background: #0b5ed7;
+}
+
+.reset-report-btn {
+  background: #6c757d;
+  color: #fff;
+}
+
+.reset-report-btn:hover {
+  background: #5c636a;
+}
+
+/* =========================================
+   SUMMARY CARDS
+========================================= */
+
+.campaign-summary-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(6, minmax(150px, 1fr));
+
+  gap: 15px;
+
+  margin-bottom: 22px;
+}
+
+.campaign-summary-card {
+  background: #fff;
+
+  border-radius: 14px;
+
+  padding: 18px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 14px;
+
+  border: 1px solid #e5e7eb;
+
+  box-shadow:
+    0 3px 12px rgba(15, 23, 42, 0.05);
+
+  transition: 0.25s ease;
+}
+
+.campaign-summary-card:hover {
+  transform: translateY(-3px);
+
+  box-shadow:
+    0 8px 20px rgba(15, 23, 42, 0.1);
+}
+
+.campaign-card-icon {
+  width: 43px;
+  height: 43px;
+
+  border-radius: 11px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #eff6ff;
+  color: #2563eb;
+
+  flex-shrink: 0;
+}
+
+.campaign-summary-card p {
+  margin: 0 0 5px;
+
+  color: #6b7280;
+
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.campaign-summary-card h3 {
+  margin: 0;
+
+  color: #111827;
+
+  font-size: 25px;
+  font-weight: 800;
+}
+
+/* Card variations */
+
+.campaign-summary-card.connected
+  .campaign-card-icon {
+  background: #ecfeff;
+  color: #0891b2;
+}
+
+.campaign-summary-card.interested
+  .campaign-card-icon {
+  background: #fef3c7;
+  color: #d97706;
+}
+
+.campaign-summary-card.sitevisit
+  .campaign-card-icon {
+  background: #f3e8ff;
+  color: #9333ea;
+}
+
+.campaign-summary-card.negotiation
+  .campaign-card-icon {
+  background: #fce7f3;
+  color: #db2777;
+}
+
+.campaign-summary-card.booked
+  .campaign-card-icon {
+  background: #dcfce7;
+  color: #16a34a;
+}
+
+/* =========================================
+   REPORT SECTION
+========================================= */
+
+.campaign-report-section {
+  background: #fff;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+
+  margin-bottom: 22px;
+
+  box-shadow:
+    0 3px 12px rgba(15, 23, 42, 0.05);
+
+  overflow: hidden;
+}
+
+.section-header {
+  min-height: 70px;
+
+  padding: 16px 20px;
+
+  box-sizing: border-box;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.section-header h3 {
+  margin: 0;
+
+  color: #1f2937;
+
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.section-header p {
+  margin: 5px 0 0;
+
+  color: #6b7280;
+
+  font-size: 12px;
+}
+
+.section-header > svg {
+  color: #2563eb;
+}
+
+/* =========================================
+   TABLE
+========================================= */
+
+.report-table-wrapper {
+  width: 100%;
+
+  overflow-x: auto;
+}
+
+.campaign-report-table {
+  width: 100%;
+
+  min-width: 900px;
+
+  border-collapse: collapse;
+}
+
+.campaign-report-table th {
+  background: #f8fafc;
+
+  color: #4b5563;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  text-align: left;
+
+  padding: 13px 15px;
+
+  border-bottom: 1px solid #e5e7eb;
+
+  white-space: nowrap;
+}
+
+.campaign-report-table td {
+  padding: 14px 15px;
+
+  color: #374151;
+
+  font-size: 13px;
+
+  border-bottom: 1px solid #f0f1f3;
+
+  white-space: nowrap;
+}
+
+.campaign-report-table tbody tr:hover {
+  background: #f8fafc;
+}
+
+.campaign-report-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.campaign-report-table td strong {
+  color: #111827;
+  font-weight: 600;
+}
+
+.report-empty {
+  text-align: center !important;
+
+  padding: 35px !important;
+
+  color: #9ca3af !important;
+}
+
+.conversion-badge {
+  display: inline-block;
+
+  padding: 5px 9px;
+
+  border-radius: 20px;
+
+  background: #ecfdf5;
+
+  color: #047857;
+
+  font-size: 11px;
+
+  font-weight: 700;
+}
+
+/* =========================================
+   FUNNEL
+========================================= */
+
+.campaign-funnel {
+  padding: 25px;
+}
+
+.funnel-item {
+  margin-bottom: 18px;
+}
+
+.funnel-item:last-child {
+  margin-bottom: 0;
+}
+
+.funnel-label {
+  display: flex;
+
+  justify-content: space-between;
+
+  margin-bottom: 7px;
+
+  font-size: 13px;
+}
+
+.funnel-label span {
+  color: #4b5563;
+  font-weight: 600;
+}
+
+.funnel-label strong {
+  color: #111827;
+}
+
+.funnel-bar {
+  width: 100%;
+
+  height: 13px;
+
+  background: #e5e7eb;
+
+  border-radius: 20px;
+
+  overflow: hidden;
+}
+
+.funnel-fill {
+  height: 100%;
+
+  background: #2563eb;
+
+  border-radius: 20px;
+
+  transition: width 0.4s ease;
+}
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 1400px) {
+
+  .campaign-filter-box {
+    grid-template-columns:
+      repeat(3, minmax(180px, 1fr));
+  }
+
+  .campaign-summary-grid {
+    grid-template-columns:
+      repeat(3, minmax(180px, 1fr));
+  }
+
+}
+
+@media (max-width: 900px) {
+
+  .campaign-filter-box {
+    grid-template-columns:
+      repeat(2, minmax(180px, 1fr));
+  }
+
+  .campaign-summary-grid {
+    grid-template-columns:
+      repeat(2, minmax(180px, 1fr));
+  }
+
+}
+
+@media (max-width: 600px) {
+
+  .campaign-reports-page {
+    padding: 15px;
+  }
+
+  .campaign-reports-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .campaign-export-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .campaign-filter-box {
+    grid-template-columns: 1fr;
+    padding: 15px;
+  }
+
+  .campaign-filter-actions {
+    flex-direction: column;
+  }
+
+  .apply-report-btn,
+  .reset-report-btn {
+    width: 100%;
+  }
+
+  .campaign-summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+}

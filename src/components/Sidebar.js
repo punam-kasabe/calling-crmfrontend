@@ -603,6 +603,18 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
 </li>
 
 <li>
+
+  <Link to="/campaign-reports">
+
+    <BarChart3 size={14} />
+
+    Campaign Reports
+
+  </Link>
+
+</li>
+
+<li>
   <NavLink
     to="/pending-leads"
     className={({ isActive }) =>
