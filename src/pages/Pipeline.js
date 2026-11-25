@@ -404,18 +404,22 @@ const handleExport = async () => {
         role: user.role,
         filters,
         search,
+
+        // Campaign Name export support
+        includeCampaignName: true
       },
       {
         responseType: "blob",
         headers: token
-          ? { Authorization: `Bearer ${token}` }
+          ? {
+              Authorization: `Bearer ${token}`
+            }
           : {},
       }
     );
 
     const blob = response.data;
 
-   
     if (
       !blob ||
       blob.size === 0 ||
@@ -425,30 +429,56 @@ const handleExport = async () => {
         ? await blob.text()
         : "";
 
-      console.error("EXPORT ERROR RESPONSE:", errorText);
+      console.error(
+        "EXPORT ERROR RESPONSE:",
+        errorText
+      );
 
-      toast.error("Excel export failed. Check backend response.");
+      toast.error(
+        "Excel export failed. Check backend response."
+      );
+
       return;
     }
 
-    const url = window.URL.createObjectURL(blob);
-    const link = document.createElement("a");
+    const url =
+      window.URL.createObjectURL(blob);
+
+    const link =
+      document.createElement("a");
 
     link.href = url;
-    link.download = "Pipeline_Leads.xlsx";
+
+    link.download =
+      "Pipeline_Leads.xlsx";
 
     document.body.appendChild(link);
+
     link.click();
+
     link.remove();
 
     window.URL.revokeObjectURL(url);
 
-    toast.success("Excel Exported Successfully!");
-  } catch (error) {
-    console.error("EXPORT ERROR:", error);
-    console.error("EXPORT STATUS:", error.response?.status);
+    toast.success(
+      "Excel Exported Successfully!"
+    );
 
-    if (error.response?.data instanceof Blob) {
+  } catch (error) {
+
+    console.error(
+      "EXPORT ERROR:",
+      error
+    );
+
+    console.error(
+      "EXPORT STATUS:",
+      error.response?.status
+    );
+
+    if (
+      error.response?.data instanceof Blob
+    ) {
       console.error(
         "EXPORT ERROR BODY:",
         await error.response.data.text()
@@ -457,11 +487,10 @@ const handleExport = async () => {
 
     toast.error(
       error.response?.data?.message ||
-        "Excel Export Failed"
+      "Excel Export Failed"
     );
   }
 };
-
   /* ================= CARDS ================= */
 
 const stats = {

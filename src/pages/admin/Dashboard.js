@@ -276,9 +276,9 @@ else if (item.title === "Reception Entries") {
                       <th>Total Leads</th>
 
                       <th>Interested</th>
-
+                      <th>Site Visits</th>
                       <th>Booked</th>
-
+                     
                       <th>Pending</th>
 
                     </tr>
@@ -310,7 +310,7 @@ else if (item.title === "Reception Entries") {
                           <td>{e.total}</td>
 
                           <td>{e.interested}</td>
-
+                          <td>{e.siteVisits || 0}</td>
                           <td>{e.booked}</td>
 
                           <td>{e.pending}</td>
@@ -322,7 +322,7 @@ else if (item.title === "Reception Entries") {
                     ) : (
 
                       <tr>
-                        <td colSpan="5" align="center">
+                        <td colSpan="7" align="center">
                           No Executive Data
                         </td>
                       </tr>
