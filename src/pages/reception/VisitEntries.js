@@ -435,7 +435,6 @@ const exportToExcel = () => {
 
   </div>
 
-
   <div className="date-filter-group">
 
     <label>End Date</label>
@@ -540,26 +539,22 @@ const exportToExcel = () => {
 </div>
           <table className="visit-table">
 
-            <thead>
-
-              <tr>
-
-                <th>Client</th>
-                <th>Mobile</th>
-                <th>Project</th>
-                <th>Client Type</th>
-                <th>Visit Status</th>
-              
-                <th>Manager</th>
-                <th>Calling By</th>
-                <th>Remark</th>
-                <th>Visit Date</th>
-                <th>Created Date</th>
-                <th>Action</th>
-
-              </tr>
-
-            </thead>
+          <thead>
+  <tr>
+    <th>Client</th>
+    <th>Mobile</th>
+    <th>Project</th>
+    <th>Client Type</th>
+    <th>Calling By</th>
+    <th>Attending</th>
+    <th>Site Visit By</th>
+    <th>Closing By</th>
+    <th>Remark</th>
+    <th>Visit Date</th>
+    <th>Created Date</th>
+    <th>Action</th>
+  </tr>
+</thead>
 
             <tbody>
 
@@ -569,75 +564,77 @@ const exportToExcel = () => {
 
     <tr key={v._id}>
 
-                    <td>
-                      {v.clientName || v.name}
-                    </td>
+                 <td>
+  {v.clientName || v.name || "-"}
+</td>
 
-                    <td>
-                      {v.mobile || v.phone}
-                    </td>
+<td>
+  {v.mobile || v.phone || "-"}
+</td>
 
-                    <td>
-                      {v.project}
-                    </td>
+<td>
+  {v.project || "-"}
+</td>
+
 <td>
   {(v.clientType || "") === "Old"
     ? "🟠 Old Client"
     : "🟢 New Client"}
 </td>
-                    <td>
-  <span
-    className={`status ${
-      v.visitStatus === "IN_OFFICE"
-        ? "inoffice"
-        : v.visitStatus === "VISIT_DONE"
-        ? "done"
-        : v.visitStatus === "FOLLOWUP"
-        ? "follow"
-        : "booked"
-    }`}
-  >
-    {v.visitStatus || v.status}
-  </span>
+
+{/* Calling By */}
+<td>
+  {Array.isArray(v.calling_by)
+    ? v.calling_by.join(", ")
+    : v.assignedTo || v.calling_by || "-"}
 </td>
 
-                 
+{/* Attending */}
+<td>
+  {v.attendedManager?.name ||
+    v.attendedManager?.email ||
+    v.assigned_manager ||
+    "-"}
+</td>
 
-                    <td>
+{/* Site Visit By */}
+<td>
+  {v.siteVisitBy?.name ||
+    v.siteVisitBy?.email ||
+    v.site_visit_by ||
+    "-"}
+</td>
 
-                  {v.attendedManager?.name || v.assigned_manager || "-"}
+{/* Closing By */}
+<td>
+  {v.closingExecutive ||
+    v.closing_by ||
+    "-"}
+</td>
 
-                    </td>
+{/* Remark */}
+<td className="remark-cell">
+  {v.remark || "-"}
+</td>
 
-                   <td>
-
-                {Array.isArray(v.calling_by)
-
-               ? v.calling_by.join(", ")
-
-           : v.assignedTo || v.calling_by || "-"}
-
-           </td>
-
-          <td className="remark-cell">
-           {v.remark || "-"}
-           </td>
-
-
-               <td>
+{/* Visit Date */}
+<td>
   {v.visitDate
     ? new Date(v.visitDate).toLocaleDateString("en-GB")
     : "-"}
 </td>
 
-
+{/* Created Date */}
 <td>
   {v.createdAt || v.created_date
-    ? new Date(v.createdAt || v.created_date).toLocaleDateString("en-GB")
+    ? new Date(
+        v.createdAt || v.created_date
+      ).toLocaleDateString("en-GB")
     : "-"}
 </td>
 
-     <td>
+{/* Action */}
+<td>
   <button
     className="edit-btn"
     onClick={() => handleEdit(v)}
