@@ -1087,47 +1087,26 @@ export default function CreateVisit() {
 
               </div>
 
-              {/* =================================================
-                  SITE VISIT BY
-              ================================================= */}
+        {/* SITE VISIT BY */}
+<div className="form-group">
+  <label>Site Visit By</label>
 
-              <div className="form-group">
+  <select
+    name="site_visit_by"
+    value={form.site_visit_by}
+    onChange={handleChange}
+  >
+    <option value="">
+      Select Site Visit Executive
+    </option>
 
-                <label>
-                  Site Visit By
-                </label>
-
-                <select
-                  name="site_visit_by"
-                  value={form.site_visit_by}
-                  onChange={handleChange}
-                >
-
-                  <option value="">
-                    Select Site Visit Executive
-                  </option>
-
-                  {users
-                    .filter(
-                      (u) =>
-                        u.role ===
-                        "executive"
-                    )
-                    .map((u) => (
-
-                      <option
-                        key={u._id}
-                        value={u.email}
-                      >
-                        {u.name}
-                      </option>
-
-                    ))}
-
-                </select>
-
-              </div>
-
+    {siteVisitExecutives.map((user) => (
+      <option key={user.email} value={user.email}>
+        {user.name}
+      </option>
+    ))}
+  </select>
+</div>
               {/* =================================================
                   CLOSING BY
               ================================================= */}
