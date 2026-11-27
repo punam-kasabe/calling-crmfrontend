@@ -38,7 +38,32 @@ export default function CreateVisit() {
     "Chaitanya",
     "Avdhut"
   ];
-
+const siteVisitExecutives = [
+  {
+    name: "Harsh",
+    email: "harsh@zaminwale.com"
+  },
+  {
+    name: "Siddhesh",
+    email: "siddhesh@zaminwale.com"
+  },
+  {
+    name: "Chaitanya",
+    email: "chaitanya@zaminwale.com"
+  },
+  {
+    name: "Yash",
+    email: "yash@zaminwale.com"
+  },
+  {
+    name: "Sushant",
+    email: "sushant@zaminwale.com"
+  },
+  {
+    name: "Omi",
+    email: "omi@zaminwale.com"
+  }
+];
   // =========================================================
   // FORM
   // =========================================================
@@ -1087,7 +1112,8 @@ export default function CreateVisit() {
 
               </div>
 
-        {/* SITE VISIT BY */}
+
+{/* SITE VISIT BY */}
 <div className="form-group">
   <label>Site Visit By</label>
 
@@ -1107,6 +1133,8 @@ export default function CreateVisit() {
     ))}
   </select>
 </div>
+
+
               {/* =================================================
                   CLOSING BY
               ================================================= */}
