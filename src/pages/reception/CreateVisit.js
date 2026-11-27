@@ -10,13 +10,20 @@ export default function CreateVisit() {
 
   const [isOpen, setIsOpen] = useState(true);
   const [loading, setLoading] = useState(false);
+
   const [managers, setManagers] = useState([]);
   const [users, setUsers] = useState([]);
-  const [showDropdown, setShowDropdown] = useState(false); // 🔥 NEW
+
+  const [showDropdown, setShowDropdown] = useState(false);
   const [showAttendDropdown, setShowAttendDropdown] = useState(false);
+
   const callingRef = useRef(null);
   const attendRef = useRef(null);
-  // 🔥 STATIC EXECUTIVE LIST
+
+  // =========================================================
+  // STATIC CALLING EXECUTIVE LIST
+  // =========================================================
+
   const executivesList = [
     "Vrushali",
     "Manisha",
@@ -27,654 +34,1226 @@ export default function CreateVisit() {
     "Harsh",
     "Patham",
     "Siddhesh",
-    "Harsh",
     "Yash",
     "Chaitanya",
     "Avdhut"
   ];
 
+  // =========================================================
+  // FORM
+  // =========================================================
+
   const [form, setForm] = useState({
+
     clientName: "",
     mobile: "",
     project: "",
     visitDate: "",
+
     attendedManager: "",
+
     visitStatus: "IN_OFFICE",
     bookingStatus: "PENDING",
+
     calling_by: [],
     attended_by: [],
+
+    // NEW
+    site_visit_by: "",
+    closing_by: "",
+
     remark: "",
+
     status: "New",
     clientType: "New",
     department: "",
     source: "",
     assigned_to: ""
+
   });
 
+  // =========================================================
+  // INITIAL FETCH
+  // =========================================================
+
   useEffect(() => {
-  fetchManagers();
-  fetchUsers();
-}, []);
 
-useEffect(() => {
+    fetchManagers();
+    fetchUsers();
 
-  const handleClickOutside = (event) => {
+  }, []);
 
-    if (
-      callingRef.current &&
-      !callingRef.current.contains(event.target)
-    ) {
-      setShowDropdown(false);
-    }
+  // =========================================================
+  // CLOSE DROPDOWNS WHEN CLICK OUTSIDE
+  // =========================================================
 
-    if (
-      attendRef.current &&
-      !attendRef.current.contains(event.target)
-    ) {
-      setShowAttendDropdown(false);
-    }
+  useEffect(() => {
 
-  };
+    const handleClickOutside = (event) => {
 
-  document.addEventListener(
-    "mousedown",
-    handleClickOutside
-  );
+      if (
+        callingRef.current &&
+        !callingRef.current.contains(event.target)
+      ) {
 
-  return () => {
-    document.removeEventListener(
+        setShowDropdown(false);
+
+      }
+
+      if (
+        attendRef.current &&
+        !attendRef.current.contains(event.target)
+      ) {
+
+        setShowAttendDropdown(false);
+
+      }
+
+    };
+
+    document.addEventListener(
       "mousedown",
       handleClickOutside
     );
-  };
 
-}, []);
+    return () => {
 
+      document.removeEventListener(
+        "mousedown",
+        handleClickOutside
+      );
+
+    };
+
+  }, []);
+
+  // =========================================================
+  // FETCH USERS
+  // =========================================================
 
   const fetchUsers = async () => {
-  try {
 
-    const res = await axios.get(
-      "https://calling-crm-backend-7w52.onrender.com/api/all-users",
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`
-        }
-      }
-    );
-
-    setUsers(res.data || []);
-
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-  // ================= FETCH MANAGERS =================
-  const fetchManagers = async () => {
     try {
+
+      const res = await axios.get(
+        "https://calling-crm-backend-7w52.onrender.com/api/all-users",
+        {
+          headers: {
+            Authorization:
+              `Bearer ${localStorage.getItem("token")}`
+          }
+        }
+      );
+
+      setUsers(res.data || []);
+
+    } catch (err) {
+
+      console.log(err);
+
+    }
+
+  };
+
+  // =========================================================
+  // FETCH MANAGERS
+  // =========================================================
+
+  const fetchManagers = async () => {
+
+    try {
+
       const res = await axios.get(
         "https://calling-crm-backend-7w52.onrender.com/api/managers"
       );
-      setManagers(res.data);
+
+      setManagers(res.data || []);
+
     } catch (err) {
+
       console.log(err);
+
     }
+
   };
 
-  // ================= INPUT CHANGE =================
+  // =========================================================
+  // NORMAL INPUT CHANGE
+  // =========================================================
+
   const handleChange = (e) => {
-    setForm({
-      ...form,
+
+    setForm((prev) => ({
+      ...prev,
       [e.target.name]: e.target.value
-    });
+    }));
+
   };
 
-  // ================= MULTI SELECT =================
+  // =========================================================
+  // CALLING BY MULTI SELECT
+  // =========================================================
+
   const handleCheckboxChange = (name) => {
+
     setForm((prev) => {
-      const exists = prev.calling_by.includes(name);
+
+      const exists =
+        prev.calling_by.includes(name);
 
       if (exists) {
+
         return {
           ...prev,
-          calling_by: prev.calling_by.filter((x) => x !== name)
+
+          calling_by:
+            prev.calling_by.filter(
+              (x) => x !== name
+            )
+
         };
-      } else {
-        return {
-          ...prev,
-          calling_by: [...prev.calling_by, name]
-        };
+
       }
+
+      return {
+        ...prev,
+
+        calling_by: [
+          ...prev.calling_by,
+          name
+        ]
+
+      };
+
     });
+
   };
 
-  // ================= SUBMIT =================
+  // =========================================================
+  // ATTENDED BY MULTI SELECT
+  // =========================================================
+
+  const handleAttendedChange = (user) => {
+
+    setForm((prev) => {
+
+      const email = user.email;
+
+      const exists =
+        prev.attended_by.includes(email);
+
+      if (exists) {
+
+        return {
+
+          ...prev,
+
+          attended_by:
+            prev.attended_by.filter(
+              (x) => x !== email
+            )
+
+        };
+
+      }
+
+      return {
+
+        ...prev,
+
+        attended_by: [
+          ...prev.attended_by,
+          email
+        ]
+
+      };
+
+    });
+
+  };
+
+  // =========================================================
+  // SUBMIT
+  // =========================================================
+
   const handleSubmit = async (e) => {
+
     e.preventDefault();
+
     setLoading(true);
 
     try {
-      const selectedManager = managers.find(
-        (m) => m._id === form.attendedManager
-      );
+
+      // -----------------------------------------------------
+      // FIND SELECTED MANAGER
+      // -----------------------------------------------------
+
+      const selectedManager =
+        managers.find(
+          (m) =>
+            m._id === form.attendedManager
+        );
+
+      // -----------------------------------------------------
+      // CREATE VISIT
+      // -----------------------------------------------------
 
       await axios.post(
+
         "https://calling-crm-backend-7w52.onrender.com/api/create-visit",
+
         {
+
           ...form,
-          assigned_manager: selectedManager?.email || ""
+
+          assigned_manager:
+            selectedManager?.email || ""
+
         }
+
       );
 
-      alert("Visit Created Successfully ✅");
+      alert(
+        "Visit Created Successfully ✅"
+      );
 
-     setForm({
+      // -----------------------------------------------------
+      // RESET FORM
+      // -----------------------------------------------------
 
-clientName:"",
-mobile:"",
-project:"",
-visitDate:"",
-attendedManager:"",
-visitStatus:"IN_OFFICE",
-bookingStatus:"PENDING",
-calling_by:[],
-attended_by:[],
-remark:"",
-status:"New",
-clientType:"New",
-department:"",
-source:"",
-assigned_to:""
+      setForm({
 
-});
+        clientName: "",
+        mobile: "",
+        project: "",
+        visitDate: "",
+
+        attendedManager: "",
+
+        visitStatus: "IN_OFFICE",
+        bookingStatus: "PENDING",
+
+        calling_by: [],
+        attended_by: [],
+
+        site_visit_by: "",
+        closing_by: "",
+
+        remark: "",
+
+        status: "New",
+        clientType: "New",
+        department: "",
+        source: "",
+        assigned_to: ""
+
+      });
+
+      setShowDropdown(false);
+      setShowAttendDropdown(false);
 
     } catch (err) {
+
       console.log(err);
-      alert("Error creating visit ❌");
+
+      alert(
+        "Error creating visit ❌"
+      );
+
     } finally {
+
       setLoading(false);
+
     }
+
   };
 
+  // =========================================================
+  // RENDER
+  // =========================================================
+
   return (
+
     <div className="layout">
+
+      {/* =====================================================
+          SIDEBAR
+      ===================================================== */}
 
       <Sidebar
         isOpen={isOpen}
-        toggleSidebar={() => setIsOpen(!isOpen)}
+        toggleSidebar={() =>
+          setIsOpen(!isOpen)
+        }
       />
 
-<div className={`main-content ${isOpen ? "expanded" : "collapsed"}`}>
-  
+      <div
+        className={`main-content ${
+          isOpen
+            ? "expanded"
+            : "collapsed"
+        }`}
+      >
+
         <div className="create-visit-page">
+
           <div className="create-visit-card">
 
+            {/* =================================================
+                HEADER
+            ================================================= */}
+
             <div className="visit-header">
-              <h1>Create Visit</h1>
-              <p>Add new client visit details</p>
+
+              <h1>
+                Create Visit
+              </h1>
+
+              <p>
+                Add new client visit details
+              </p>
+
             </div>
+
+            {/* =================================================
+                FORM
+            ================================================= */}
 
             <form
               className="create-visit-form"
               onSubmit={handleSubmit}
             >
 
+              {/* =================================================
+                  CLIENT INFORMATION
+              ================================================= */}
+
               <div className="form-section-title">
-         Client Information
-               </div>
+                Client Information
+              </div>
 
-              {/* CLIENT */}
+              {/* CLIENT NAME */}
+
               <div className="form-group">
-                <label>Client Name</label>
-                <input
 
-      type="text"
-  name="clientName"
-  value={form.clientName}
-  onChange={handleChange}
-/>
+                <label>
+                  Client Name
+                </label>
+
+                <input
+                  type="text"
+                  name="clientName"
+                  value={form.clientName}
+                  onChange={handleChange}
+                />
+
               </div>
 
               {/* MOBILE */}
+
               <div className="form-group">
-  <label>Mobile Number</label>
-  <input
-    type="text"
-    name="mobile"
-    value={form.mobile}
-    onChange={handleChange}
-  />
-</div>
 
-               {/* CLIENT TYPE */}
+                <label>
+                  Mobile Number
+                </label>
 
-<div className="form-group">
+                <input
+                  type="text"
+                  name="mobile"
+                  value={form.mobile}
+                  onChange={handleChange}
+                />
 
-  <label>Client Type</label>
+              </div>
 
-  <select
-    name="clientType"
-    value={form.clientType}
-    onChange={handleChange}
-  >
-    <option value="New">New Client</option>
-    <option value="Old">Old Client</option>
-  </select>
+              {/* CLIENT TYPE */}
 
-</div>
+              <div className="form-group">
+
+                <label>
+                  Client Type
+                </label>
+
+                <select
+                  name="clientType"
+                  value={form.clientType}
+                  onChange={handleChange}
+                >
+
+                  <option value="New">
+                    New Client
+                  </option>
+
+                  <option value="Old">
+                    Old Client
+                  </option>
+
+                </select>
+
+              </div>
 
               {/* PROJECT */}
+
               <div className="form-group">
-                <label>Project Name</label>
+
+                <label>
+                  Project Name
+                </label>
+
                 <select
                   name="project"
                   value={form.project}
                   onChange={handleChange}
-                  
                 >
-                  <option value="">Select Project</option>
-                  <option value="99villa">99villa</option>
-                  <option value="Karjat">Karjat</option>
-                  <option value="Alibaug Plot">Alibaug</option>
-                  <option value="Pen">Pen</option>
-                  <option value="MahaMumbai">MahaMumbai</option>
+
+                  <option value="">
+                    Select Project
+                  </option>
+
+                  <option value="99villa">
+                    99villa
+                  </option>
+
+                  <option value="Karjat">
+                    Karjat
+                  </option>
+
+                  <option value="Alibaug Plot">
+                    Alibaug
+                  </option>
+
+                  <option value="Pen">
+                    Pen
+                  </option>
+
+                  <option value="MahaMumbai">
+                    MahaMumbai
+                  </option>
+
                 </select>
+
               </div>
 
+              {/* VISIT DATE */}
 
               <div className="form-group">
-                <div className="form-group">
 
-  <label>Visit Date</label>
+                <label>
+                  Visit Date
+                </label>
 
-  <input
-    type="date"
-    name="visitDate"
-    value={form.visitDate}
-    onChange={handleChange}
-  />
+                <input
+                  type="date"
+                  name="visitDate"
+                  value={form.visitDate}
+                  onChange={handleChange}
+                />
 
- </div>
-  <label>Department</label>
+              </div>
 
-  
-  <select
-    name="department"
-    value={form.department}
-    onChange={handleChange}
-  >
-    <option value="">Select Department</option>
+              {/* DEPARTMENT */}
 
-    <option value="Sales & Marketing">
-      Sales & Marketing
-    </option>
+              <div className="form-group">
 
-    <option value="HR/Admin">
-      HR/Admin
-    </option>
+                <label>
+                  Department
+                </label>
 
-    <option value="TeleCaller">
-      TeleCaller
-    </option>
+                <select
+                  name="department"
+                  value={form.department}
+                  onChange={handleChange}
+                >
 
-    <option value="Aasma Ma'am">
-      Aasma Ma'am
-    </option>
+                  <option value="">
+                    Select Department
+                  </option>
 
-    <option value="Nilesh Sir">
-      Nilesh Sir
-    </option>
+                  <option value="Sales & Marketing">
+                    Sales & Marketing
+                  </option>
 
-  </select>
-</div>
+                  <option value="HR/Admin">
+                    HR/Admin
+                  </option>
 
-<div className="form-group">
-  <label>Source</label>
+                  <option value="TeleCaller">
+                    TeleCaller
+                  </option>
 
-  <select
-    name="source"
-    value={form.source}
-    onChange={handleChange}
-  >
+                  <option value="Aasma Ma'am">
+                    Aasma Ma'am
+                  </option>
 
-    <option value="">Select Source</option>
+                  <option value="Nilesh Sir">
+                    Nilesh Sir
+                  </option>
 
-    <option value="Facebook">Facebook</option>
-    <option value="Instagram">Instagram</option>
-    <option value="Google Ads">Google Ads</option>
-    <option value="99acres">99acres</option>
-    <option value="MagicBricks">MagicBricks</option>
-    <option value="Housing">Housing</option>
-    <option value="Website">Website</option>
-    <option value="WhatsApp">WhatsApp</option>
-    <option value="JustDial">JustDial</option>
-    <option value="Reference">Reference</option>
-    <option value="Hoarding">Hoarding</option>
-    <option value="Newspaper">Newspaper</option>
-    <option value="Walk-In">Walk-In</option>
-    <option value="Call Center">Call Center</option>
-    <option value="Property Expo">Property Expo</option>
-    <option value="YouTube">YouTube</option>
+                </select>
 
-  </select>
-</div>
+              </div>
 
-<div className="form-section-title">
-  Visit Information
-</div>
+              {/* SOURCE */}
+
+              <div className="form-group">
+
+                <label>
+                  Source
+                </label>
+
+                <select
+                  name="source"
+                  value={form.source}
+                  onChange={handleChange}
+                >
+
+                  <option value="">
+                    Select Source
+                  </option>
+
+                  <option value="Facebook">
+                    Facebook
+                  </option>
+
+                  <option value="Instagram">
+                    Instagram
+                  </option>
+
+                  <option value="Google Ads">
+                    Google Ads
+                  </option>
+
+                  <option value="99acres">
+                    99acres
+                  </option>
+
+                  <option value="MagicBricks">
+                    MagicBricks
+                  </option>
+
+                  <option value="Housing">
+                    Housing
+                  </option>
+
+                  <option value="Website">
+                    Website
+                  </option>
+
+                  <option value="WhatsApp">
+                    WhatsApp
+                  </option>
+
+                  <option value="JustDial">
+                    JustDial
+                  </option>
+
+                  <option value="Reference">
+                    Reference
+                  </option>
+
+                  <option value="Hoarding">
+                    Hoarding
+                  </option>
+
+                  <option value="Newspaper">
+                    Newspaper
+                  </option>
+
+                  <option value="Walk-In">
+                    Walk-In
+                  </option>
+
+                  <option value="Call Center">
+                    Call Center
+                  </option>
+
+                  <option value="Property Expo">
+                    Property Expo
+                  </option>
+
+                  <option value="YouTube">
+                    YouTube
+                  </option>
+
+                </select>
+
+              </div>
+
+              {/* =================================================
+                  VISIT INFORMATION
+              ================================================= */}
+
+              <div className="form-section-title">
+                Visit Information
+              </div>
+
               {/* VISIT STATUS */}
-<div className="form-group">
-  <label>Visit Status</label>
 
-  <select
-    name="visitStatus"
-    value={form.visitStatus}
-    onChange={handleChange}
-  >
-    <option value="IN_OFFICE">In Office</option>
+              <div className="form-group">
 
-    <option value="VISIT_PENDING">Site Visit Pending</option>
+                <label>
+                  Visit Status
+                </label>
 
-    <option value="VISIT_DONE">Site Visit Done</option>
+                <select
+                  name="visitStatus"
+                  value={form.visitStatus}
+                  onChange={handleChange}
+                >
 
-    <option value="FOLLOWUP">Follow Up</option>
+                  <option value="IN_OFFICE">
+                    In Office
+                  </option>
 
-    <option value="DECISION_PENDING">Decision Pending</option>
+                  <option value="VISIT_PENDING">
+                    Site Visit Pending
+                  </option>
 
-    <option value="NEGOTIATION">Negotiation</option>
+                  <option value="VISIT_DONE">
+                    Site Visit Done
+                  </option>
 
-    <option value="BOOKED">Booked</option>
+                  <option value="FOLLOWUP">
+                    Follow Up
+                  </option>
 
-    <option value="TOKEN_RECEIVED">Token Received</option>
+                  <option value="DECISION_PENDING">
+                    Decision Pending
+                  </option>
 
-    <option value="LOAN_PROCESS">Loan Process</option>
+                  <option value="NEGOTIATION">
+                    Negotiation
+                  </option>
 
-    <option value="REGISTRATION_PENDING">Registration Pending</option>
+                  <option value="BOOKED">
+                    Booked
+                  </option>
 
-    <option value="REGISTERED">Registered</option>
+                  <option value="TOKEN_RECEIVED">
+                    Token Received
+                  </option>
 
-    <option value="NOT_BOOKED">Not Booked</option>
+                  <option value="LOAN_PROCESS">
+                    Loan Process
+                  </option>
 
-    <option value="CANCELLED">Cancelled</option>
-  </select>
-</div>
+                  <option value="REGISTRATION_PENDING">
+                    Registration Pending
+                  </option>
 
+                  <option value="REGISTERED">
+                    Registered
+                  </option>
+
+                  <option value="NOT_BOOKED">
+                    Not Booked
+                  </option>
+
+                  <option value="CANCELLED">
+                    Cancelled
+                  </option>
+
+                </select>
+
+              </div>
 
               {/* BOOKING STATUS */}
-<div className="form-group">
-  <label>Booking Status</label>
 
-  <select
-    name="bookingStatus"
-    value={form.bookingStatus}
-    onChange={handleChange}
-  >
-    <option value="PENDING">Pending</option>
-
-    <option value="DECISION_PENDING">Decision Pending</option>
-
-    <option value="NEGOTIATION">Negotiation</option>
-
-    <option value="BOOKED">Booked</option>
-
-    <option value="TOKEN_RECEIVED">Token Received</option>
-
-    <option value="LOAN_PROCESS">Loan Process</option>
-
-    <option value="REGISTRATION_PENDING">Registration Pending</option>
-
-    <option value="REGISTERED">Registered</option>
-
-    <option value="NOT_BOOKED">Not Booked</option>
-
-    <option value="CANCELLED">Cancelled</option>
-  </select>
-</div>
-
-
-               {/* 🔥 CALLING BY DROPDOWN */}
               <div className="form-group">
-                <label>Calling By</label>
 
-               <div
-  className="multi-select"
-  ref={callingRef}
->
+                <label>
+                  Booking Status
+                </label>
+
+                <select
+                  name="bookingStatus"
+                  value={form.bookingStatus}
+                  onChange={handleChange}
+                >
+
+                  <option value="PENDING">
+                    Pending
+                  </option>
+
+                  <option value="DECISION_PENDING">
+                    Decision Pending
+                  </option>
+
+                  <option value="NEGOTIATION">
+                    Negotiation
+                  </option>
+
+                  <option value="BOOKED">
+                    Booked
+                  </option>
+
+                  <option value="TOKEN_RECEIVED">
+                    Token Received
+                  </option>
+
+                  <option value="LOAN_PROCESS">
+                    Loan Process
+                  </option>
+
+                  <option value="REGISTRATION_PENDING">
+                    Registration Pending
+                  </option>
+
+                  <option value="REGISTERED">
+                    Registered
+                  </option>
+
+                  <option value="NOT_BOOKED">
+                    Not Booked
+                  </option>
+
+                  <option value="CANCELLED">
+                    Cancelled
+                  </option>
+
+                </select>
+
+              </div>
+
+              {/* =================================================
+                  CALLING BY
+              ================================================= */}
+
+              <div className="form-group">
+
+                <label>
+                  Calling By
+                </label>
+
+                <div
+                  className="multi-select"
+                  ref={callingRef}
+                >
 
                   <div
                     className="select-box"
-                 onClick={() => {
-  setShowDropdown(!showDropdown);
-  setShowAttendDropdown(false);
-}}
+                    onClick={() => {
 
+                      setShowDropdown(
+                        !showDropdown
+                      );
 
+                      setShowAttendDropdown(
+                        false
+                      );
+
+                    }}
                   >
+
                     {form.calling_by.length > 0
                       ? form.calling_by.join(", ")
                       : "Select Executives"}
+
                   </div>
 
                   {showDropdown && (
+
                     <div className="dropdown-list">
-                      {executivesList.map((name) => (
-                        <label key={name} className="dropdown-item">
-                          <input
-                            type="checkbox"
-                            checked={form.calling_by.includes(name)}
-                            onChange={() => handleCheckboxChange(name)}
-                          />
-                          {name}
-                        </label>
-                      ))}
+
+                      {executivesList.map(
+                        (name) => (
+
+                          <label
+                            key={name}
+                            className="dropdown-item"
+                          >
+
+                            <input
+                              type="checkbox"
+                              checked={form.calling_by.includes(
+                                name
+                              )}
+                              onChange={() =>
+                                handleCheckboxChange(
+                                  name
+                                )
+                              }
+                            />
+
+                            {name}
+
+                          </label>
+
+                        )
+                      )}
+
                     </div>
+
                   )}
+
                 </div>
 
               </div>
 
+              {/* =================================================
+                  ASSIGN TO
+              ================================================= */}
 
-<div className="form-group">
-
-  <label>Assign To</label>
-
-  <select
-    name="assigned_to"
-    value={form.assigned_to}
-    onChange={handleChange}
-  >
-
-    <option value="">
-      Select Executive
-    </option>
-
-    {users
-      .filter(
-        (u) =>
-          u.role === "executive"
-      )
-      .map((u) => (
-        <option
-          key={u._id}
-          value={u.email}
-        >
-          {u.name}
-        </option>
-      ))}
-
-  </select>
-
-</div>
-{/* LEAD STATUS */}
-<div className="form-group">
-  <label>Lead Status</label>
-
-  <select
-    name="status"
-    value={form.status}
-    onChange={handleChange}
-  >
-    <option value="New">New</option>
-    <option value="Fresh">Fresh</option>
-    <option value="Interested">Interested</option>
-    <option value="Followup">Followup</option>
-    <option value="Not Interested">Not Interested</option>
-    <option value="Visit Done">Visit Done</option>
-    <option value="Booked">Booked</option>
-  </select>
-</div>
-             
-             <div className="form-group">
-
-<label>Attended By</label>
-
-<div
-  className="multi-select"
-  ref={attendRef}
->
-
-
-<div
-className="select-box"
-onClick={() => {
-  setShowAttendDropdown(!showAttendDropdown);
-  setShowDropdown(false);
-}}
->
-
-{form.attended_by.length > 0
-? form.attended_by.join(", ")
-: "Select Attended Users"}
-
-</div>
-
-{showAttendDropdown && (
-
-<div className="dropdown-list">
-
-{users.map((u) => (
-
-<label
-key={u._id}
-className="dropdown-item"
->
-
-<input
-type="checkbox"
-
-checked={form.attended_by.includes(u.name)}
-
-onChange={() => {
-
-const exists =
-form.attended_by.includes(u.name);
-
-if (exists) {
-
-setForm({
-
-...form,
-
-attended_by:
-form.attended_by.filter(
-x => x !== u.name
-)
-
-});
-
-}
-
-else {
-
-setForm({
-
-...form,
-
-attended_by:[
-...form.attended_by,
-u.name
-]
-
-});
-
-}
-
-}}
-
- />
-
-{u.name}
-
-<span
-style={{
-marginLeft:6,
-fontSize:12,
-color:"#888"
-}}
->
-
-({u.role})
-
-</span>
-
-</label>
-
-))}
-
-</div>
-
-)}
-
-</div>
-
-</div>
- <div className="form-section-title">
-  Assignment Details
-</div>
-              {/* REMARK */}
               <div className="form-group">
-                <label>Remark</label>
+
+                <label>
+                  Assign To
+                </label>
+
+                <select
+                  name="assigned_to"
+                  value={form.assigned_to}
+                  onChange={handleChange}
+                >
+
+                  <option value="">
+                    Select Executive
+                  </option>
+
+                  {users
+                    .filter(
+                      (u) =>
+                        u.role ===
+                        "executive"
+                    )
+                    .map((u) => (
+
+                      <option
+                        key={u._id}
+                        value={u.email}
+                      >
+                        {u.name}
+                      </option>
+
+                    ))}
+
+                </select>
+
+              </div>
+
+              {/* =================================================
+                  LEAD STATUS
+              ================================================= */}
+
+              <div className="form-group">
+
+                <label>
+                  Lead Status
+                </label>
+
+                <select
+                  name="status"
+                  value={form.status}
+                  onChange={handleChange}
+                >
+
+                  <option value="New">
+                    New
+                  </option>
+
+                  <option value="Fresh">
+                    Fresh
+                  </option>
+
+                  <option value="Interested">
+                    Interested
+                  </option>
+
+                  <option value="Followup">
+                    Followup
+                  </option>
+
+                  <option value="Not Interested">
+                    Not Interested
+                  </option>
+
+                  <option value="Visit Done">
+                    Visit Done
+                  </option>
+
+                  <option value="Booked">
+                    Booked
+                  </option>
+
+                </select>
+
+              </div>
+
+              {/* =================================================
+                  ATTENDED BY
+              ================================================= */}
+
+              <div className="form-group">
+
+                <label>
+                  Attended By
+                </label>
+
+                <div
+                  className="multi-select"
+                  ref={attendRef}
+                >
+
+                  <div
+                    className="select-box"
+                    onClick={() => {
+
+                      setShowAttendDropdown(
+                        !showAttendDropdown
+                      );
+
+                      setShowDropdown(
+                        false
+                      );
+
+                    }}
+                  >
+
+                    {form.attended_by.length > 0
+
+                      ? form.attended_by
+                          .map(
+                            (email) => {
+
+                              const user =
+                                users.find(
+                                  (u) =>
+                                    u.email ===
+                                    email
+                                );
+
+                              return (
+                                user?.name ||
+                                email
+                              );
+
+                            }
+                          )
+                          .join(", ")
+
+                      : "Select Attended Users"}
+
+                  </div>
+
+                  {showAttendDropdown && (
+
+                    <div className="dropdown-list">
+
+                      {users.map((u) => (
+
+                        <label
+                          key={u._id}
+                          className="dropdown-item"
+                        >
+
+                          <input
+                            type="checkbox"
+
+                            checked={
+                              form.attended_by.includes(
+                                u.email
+                              )
+                            }
+
+                            onChange={() =>
+                              handleAttendedChange(
+                                u
+                              )
+                            }
+
+                          />
+
+                          {u.name}
+
+                          <span
+                            style={{
+                              marginLeft: 6,
+                              fontSize: 12,
+                              color: "#888"
+                            }}
+                          >
+                            ({u.role})
+                          </span>
+
+                        </label>
+
+                      ))}
+
+                    </div>
+
+                  )}
+
+                </div>
+
+              </div>
+
+              {/* =================================================
+                  SITE VISIT BY
+              ================================================= */}
+
+              <div className="form-group">
+
+                <label>
+                  Site Visit By
+                </label>
+
+                <select
+                  name="site_visit_by"
+                  value={form.site_visit_by}
+                  onChange={handleChange}
+                >
+
+                  <option value="">
+                    Select Site Visit Executive
+                  </option>
+
+                  {users
+                    .filter(
+                      (u) =>
+                        u.role ===
+                        "executive"
+                    )
+                    .map((u) => (
+
+                      <option
+                        key={u._id}
+                        value={u.email}
+                      >
+                        {u.name}
+                      </option>
+
+                    ))}
+
+                </select>
+
+              </div>
+
+              {/* =================================================
+                  CLOSING BY
+              ================================================= */}
+
+              <div className="form-group">
+
+                <label>
+                  Closing By
+                </label>
+
+                <select
+                  name="closing_by"
+                  value={form.closing_by}
+                  onChange={handleChange}
+                >
+
+                  <option value="">
+                    Select Closing Executive
+                  </option>
+
+                  {users
+                    .filter(
+                      (u) =>
+                        u.role ===
+                        "executive"
+                    )
+                    .map((u) => (
+
+                      <option
+                        key={u._id}
+                        value={u.email}
+                      >
+                        {u.name}
+                      </option>
+
+                    ))}
+
+                </select>
+
+              </div>
+
+              {/* =================================================
+                  ASSIGNMENT DETAILS
+              ================================================= */}
+
+              <div className="form-section-title">
+                Assignment Details
+              </div>
+
+              {/* REMARK */}
+
+              <div className="form-group">
+
+                <label>
+                  Remark
+                </label>
+
                 <textarea
                   name="remark"
                   value={form.remark}
                   onChange={handleChange}
                 />
+
               </div>
 
-              {/* MANAGER */}
+              {/* =================================================
+                  ASSIGN MANAGER
+              ================================================= */}
+
               <div className="form-group">
-                <label>Assign Manager</label>
+
+                <label>
+                  Assign Manager
+                </label>
+
                 <select
                   name="attendedManager"
                   value={form.attendedManager}
                   onChange={handleChange}
-                  
                 >
-                  <option value="">Select Manager</option>
+
+                  <option value="">
+                    Select Manager
+                  </option>
+
                   {managers.map((m) => (
-                    <option key={m._id} value={m._id}>
+
+                    <option
+                      key={m._id}
+                      value={m._id}
+                    >
                       {m.name}
                     </option>
+
                   ))}
+
                 </select>
+
               </div>
+
+              {/* =================================================
+                  SAVE
+              ================================================= */}
 
               <button
                 type="submit"
                 className="save-btn"
                 disabled={loading}
               >
-                {loading ? "Saving..." : "Save Visit"}
+
+                {loading
+                  ? "Saving..."
+                  : "Save Visit"}
+
               </button>
 
             </form>
 
           </div>
+
         </div>
 
       </div>
 
     </div>
+
   );
+
 }
