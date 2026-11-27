@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-//import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import * as XLSX from "xlsx";
 import Sidebar from "../../components/Sidebar";
@@ -8,97 +7,132 @@ import "../../styles/visitentries.css";
 
 export default function VisitEntries() {
 
-const [isOpen, setIsOpen] = useState(true);
-const [visits, setVisits] = useState([]);
-const [searchMobile, setSearchMobile] = useState("");
-const [suggestions, setSuggestions] = useState([]);
-const [showEditModal, setShowEditModal] = useState(false);
-const [users, setUsers] = useState([]);
-const [currentPage, setCurrentPage] = useState(1);
-const entriesPerPage = 30;
-const [startDate, setStartDate] = useState("");
-const [endDate, setEndDate] = useState("");
-const [editVisit, setEditVisit] = useState({
-  _id: "",
-  clientName: "",
-  mobile: "",
-  project: "",
-  visitDate: "",   
-  clientType: "New",
-  department: "",
-  source: "",
-  status: "New",
-  assigned_to: "",
-  attendedManager: null,
-  visitStatus: "",
-  bookingStatus: "",
-  remark: ""
-});
+  const [isOpen, setIsOpen] = useState(true);
+  const [visits, setVisits] = useState([]);
+  const [searchMobile, setSearchMobile] = useState("");
+  const [suggestions, setSuggestions] = useState([]);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [users, setUsers] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
 
-//const navigate = useNavigate();
-const handleEdit = (visit) => {
-  setEditVisit({
-    ...visit,
+  const entriesPerPage = 30;
 
-    visitDate: visit.visitDate
-      ? new Date(visit.visitDate)
-          .toISOString()
-          .split("T")[0]
-      : ""
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+
+  /* =========================================================
+     SITE VISIT EXECUTIVES
+  ========================================================= */
+
+  const siteVisitExecutiveNames = [
+    "Harsh",
+    "Siddhesh",
+    "Chaitanya",
+    "Yash",
+    "Sushant",
+    "Omi"
+  ];
+
+  /* =========================================================
+     EDIT VISIT STATE
+  ========================================================= */
+
+  const [editVisit, setEditVisit] = useState({
+    _id: "",
+    clientName: "",
+    mobile: "",
+    project: "",
+    visitDate: "",
+    clientType: "New",
+    department: "",
+    source: "",
+    status: "New",
+    assigned_to: "",
+
+    attendedManager: null,
+
+    calling_by: [],
+    attended_by: [],
+
+    site_visit_by: "",
+    closing_by: "",
+
+    visitStatus: "IN_OFFICE",
+    bookingStatus: "PENDING",
+
+    remark: ""
   });
 
-  setShowEditModal(true);
-};
+  /* =========================================================
+     EDIT VISIT
+  ========================================================= */
 
-useEffect(() => {
-  fetchVisits();
-  fetchUsers();
-}, []);
+  const handleEdit = (visit) => {
 
+    setEditVisit({
 
- const updateVisit = async () => {
-  try {
-    await axios.put(
-`https://calling-crm-backend-7w52.onrender.com/api/update-visit/${editVisit._id}`,
+      ...visit,
 
-{
-  clientName: editVisit.clientName,
-  mobile: editVisit.mobile,
-  project: editVisit.project,
-  visitDate: editVisit.visitDate,
-  clientType: editVisit.clientType,
-  department: editVisit.department,
-  source: editVisit.source,
-  status: editVisit.status,
-  assigned_to: editVisit.assigned_to,
-  visitStatus: editVisit.visitStatus,
-  bookingStatus: editVisit.bookingStatus,
-  remark: editVisit.remark,
-  attendedManager:
-    editVisit.attendedManager?._id ||
-    editVisit.attendedManager
-}
-);
-    alert("Visit Updated Successfully");
-    setShowEditModal(false);
+      calling_by: Array.isArray(visit.calling_by)
+        ? visit.calling_by
+        : [],
+
+      attended_by: Array.isArray(visit.attended_by)
+        ? visit.attended_by
+        : [],
+
+      site_visit_by:
+        visit.site_visit_by ||
+        visit.siteVisitBy?.email ||
+        visit.siteVisitBy?.name ||
+        "",
+
+      closing_by:
+        visit.closing_by ||
+        visit.closingExecutive ||
+        "",
+
+      visitDate: visit.visitDate
+        ? new Date(visit.visitDate)
+            .toISOString()
+            .split("T")[0]
+        : "",
+
+      visitStatus:
+        visit.visitStatus ||
+        "IN_OFFICE",
+
+      bookingStatus:
+        visit.bookingStatus ||
+        "PENDING",
+
+      clientType:
+        visit.clientType ||
+        "New",
+
+      status:
+        visit.status ||
+        "New"
+
+    });
+
+    setShowEditModal(true);
+  };
+
+  /* =========================================================
+     FETCH DATA
+  ========================================================= */
+
+  useEffect(() => {
+
     fetchVisits();
-  }
-  catch (err) {
-    console.log(err);
-  }
-};
+    fetchUsers();
 
-const handleChange = (e) => {
+  }, []);
 
-  setEditVisit({
-
-    ...editVisit,
-
-    [e.target.name]: e.target.value
-
-  });
-
-};
+  /* =========================================================
+     FETCH VISITS
+  ========================================================= */
 
   const fetchVisits = async () => {
 
@@ -108,12 +142,10 @@ const handleChange = (e) => {
         "https://calling-crm-backend-7w52.onrender.com/api/visits"
       );
 
-      setVisits(res.data);
-       setCurrentPage(1);
+      setVisits(res.data || []);
+      setCurrentPage(1);
 
-    }
-
-    catch (err) {
+    } catch (err) {
 
       console.log(err);
 
@@ -121,273 +153,497 @@ const handleChange = (e) => {
 
   };
 
+  /* =========================================================
+     FETCH USERS
+  ========================================================= */
+
   const fetchUsers = async () => {
 
-  try {
+    try {
 
-    const res = await axios.get(
-      "https://calling-crm-backend-7w52.onrender.com/api/all-users",
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`
+      const res = await axios.get(
+        "https://calling-crm-backend-7w52.onrender.com/api/all-users",
+        {
+          headers: {
+            Authorization:
+              `Bearer ${localStorage.getItem("token")}`
+          }
         }
-      }
+      );
+
+      setUsers(res.data || []);
+
+    } catch (err) {
+
+      console.log(err);
+
+    }
+
+  };
+
+  /* =========================================================
+     HANDLE CHANGE
+  ========================================================= */
+
+  const handleChange = (e) => {
+
+    setEditVisit({
+
+      ...editVisit,
+
+      [e.target.name]: e.target.value
+
+    });
+
+  };
+
+  /* =========================================================
+     CALLING BY CHANGE
+  ========================================================= */
+
+  const handleCallingByChange = (e) => {
+
+    const values = Array.from(
+      e.target.selectedOptions,
+      option => option.value
     );
 
-    setUsers(res.data || []);
+    setEditVisit(prev => ({
+      ...prev,
+      calling_by: values
+    }));
 
-  } catch (err) {
+  };
 
-    console.log(err);
+  /* =========================================================
+     ATTENDED BY CHANGE
+  ========================================================= */
 
-  }
+  const handleAttendedByChange = (e) => {
 
-};
+    const values = Array.from(
+      e.target.selectedOptions,
+      option => option.value
+    );
+
+    setEditVisit(prev => ({
+      ...prev,
+      attended_by: values
+    }));
+
+  };
+
+  /* =========================================================
+     UPDATE VISIT
+  ========================================================= */
+
+  const updateVisit = async () => {
+
+    try {
+
+      await axios.put(
+        `https://calling-crm-backend-7w52.onrender.com/api/update-visit/${editVisit._id}`,
+
+        {
+
+          clientName:
+            editVisit.clientName,
+
+          mobile:
+            editVisit.mobile,
+
+          project:
+            editVisit.project,
+
+          visitDate:
+            editVisit.visitDate,
+
+          clientType:
+            editVisit.clientType,
+
+          department:
+            editVisit.department,
+
+          source:
+            editVisit.source,
+
+          status:
+            editVisit.status,
+
+          assigned_to:
+            editVisit.assigned_to,
+
+          calling_by:
+            editVisit.calling_by || [],
+
+          attended_by:
+            editVisit.attended_by || [],
+
+          site_visit_by:
+            editVisit.site_visit_by || "",
+
+          closing_by:
+            editVisit.closing_by || "",
+
+          visitStatus:
+            editVisit.visitStatus,
+
+          bookingStatus:
+            editVisit.bookingStatus,
+
+          remark:
+            editVisit.remark,
+
+          attendedManager:
+            editVisit.attendedManager?._id ||
+            editVisit.attendedManager ||
+            ""
+
+        }
+      );
+
+      alert("Visit Updated Successfully");
+
+      setShowEditModal(false);
+
+      fetchVisits();
+
+    } catch (err) {
+
+      console.log(err);
+
+      alert(
+        err.response?.data?.message ||
+        "Visit Update Failed"
+      );
+
+    }
+
+  };
+
+  /* =========================================================
+     SEARCH
+  ========================================================= */
 
   const handleSearchChange = async (e) => {
 
-  const value = e.target.value;
+    const value = e.target.value;
 
-  setSearchMobile(value);
+    setSearchMobile(value);
 
-  if (value.trim().length < 2) {
+    if (value.trim().length < 2) {
 
-    setSuggestions([]);
+      setSuggestions([]);
 
-    return;
+      return;
 
-  }
+    }
 
-  try {
+    try {
 
-    const res = await axios.get(
+      const res = await axios.get(
+        `https://calling-crm-backend-7w52.onrender.com/api/search-suggestions/${value}`
+      );
 
-`https://calling-crm-backend-7w52.onrender.com/api/search-suggestions/${value}`
+      setSuggestions(res.data || []);
 
-    );
+    } catch (err) {
 
-    setSuggestions(res.data);
+      console.log(err);
 
-  }
+    }
 
-  catch (err) {
+  };
 
-    console.log(err);
+  /* =========================================================
+     SEARCH VISIT
+  ========================================================= */
 
-  }
+  const searchVisit = async (value = "") => {
 
-};
+    const search =
+      (value || searchMobile).trim();
 
- const searchVisit = async (value = "") => {
+    if (!search) {
 
-  const search = (value || searchMobile).trim();
+      fetchVisits();
 
-  if (!search) {
-    fetchVisits();
-    return;
-  }
+      return;
 
-  try {
+    }
 
-    const res = await axios.get(
-      `https://calling-crm-backend-7w52.onrender.com/api/search-client-details/${encodeURIComponent(search)}`
-    );
+    try {
 
-    setVisits([res.data]);
-    setCurrentPage(1);
-    setSuggestions([]);
+      const res = await axios.get(
+        `https://calling-crm-backend-7w52.onrender.com/api/search-client-details/${encodeURIComponent(search)}`
+      );
 
-  } catch (err) {
+      setVisits([res.data]);
 
-    alert("Client Not Found");
+      setCurrentPage(1);
 
-  }
+      setSuggestions([]);
 
-   };
+    } catch (err) {
 
-  // =========================================================
-// DATE FILTER + PAGINATION
-// =========================================================
+      alert("Client Not Found");
 
-const filteredVisits = visits.filter((v) => {
+    }
 
-  if (!startDate && !endDate) {
+  };
+
+  /* =========================================================
+     DATE FILTER
+  ========================================================= */
+
+  const filteredVisits = visits.filter((v) => {
+
+    if (!startDate && !endDate) {
+
+      return true;
+
+    }
+
+    const visitDate =
+      v.visitDate ||
+      v.createdAt ||
+      v.created_date;
+
+    if (!visitDate) {
+
+      return false;
+
+    }
+
+    const date =
+      new Date(visitDate);
+
+    if (startDate) {
+
+      const start =
+        new Date(startDate);
+
+      start.setHours(
+        0,
+        0,
+        0,
+        0
+      );
+
+      if (date < start) {
+
+        return false;
+
+      }
+
+    }
+
+    if (endDate) {
+
+      const end =
+        new Date(endDate);
+
+      end.setHours(
+        23,
+        59,
+        59,
+        999
+      );
+
+      if (date > end) {
+
+        return false;
+
+      }
+
+    }
+
     return true;
-  }
 
-  const visitDate = v.visitDate || v.createdAt || v.created_date;
+  });
 
-  if (!visitDate) {
-    return false;
-  }
+  /* =========================================================
+     PAGINATION
+  ========================================================= */
 
-  const date = new Date(visitDate);
+  const totalPages =
+    Math.ceil(
+      filteredVisits.length /
+      entriesPerPage
+    );
 
-  // Start Date
-  if (startDate) {
-    const start = new Date(startDate);
-    start.setHours(0, 0, 0, 0);
+  const startIndex =
+    (currentPage - 1) *
+    entriesPerPage;
 
-    if (date < start) {
-      return false;
+  const endIndex =
+    startIndex +
+    entriesPerPage;
+
+  const currentVisits =
+    filteredVisits.slice(
+      startIndex,
+      endIndex
+    );
+
+  /* =========================================================
+     EXPORT EXCEL
+  ========================================================= */
+
+  const exportToExcel = () => {
+
+    if (!visits || visits.length === 0) {
+
+      alert(
+        "No visit entries available to export."
+      );
+
+      return;
+
     }
-  }
 
-  // End Date
-  if (endDate) {
-    const end = new Date(endDate);
-    end.setHours(23, 59, 59, 999);
+    const excelData =
+      filteredVisits.map(
+        (v, index) => ({
 
-    if (date > end) {
-      return false;
-    }
-  }
+          "Sr No":
+            index + 1,
 
-  return true;
-});
+          "Client Name":
+            v.clientName ||
+            v.name ||
+            "-",
 
+          "Mobile":
+            v.mobile ||
+            v.phone ||
+            "-",
 
-// =========================================================
-// PAGINATION
-// =========================================================
+          "Project":
+            v.project ||
+            "-",
 
-const totalPages = Math.ceil(
-  filteredVisits.length / entriesPerPage
-);
+          "Client Type":
+            v.clientType ||
+            "New",
 
-const startIndex =
-  (currentPage - 1) * entriesPerPage;
+          "Calling By":
+            Array.isArray(
+              v.calling_by
+            )
+              ? v.calling_by.join(", ")
+              : v.assignedTo ||
+                v.calling_by ||
+                "-",
 
-const endIndex =
-  startIndex + entriesPerPage;
+          "Attending":
+            v.attended_by
+              ? Array.isArray(v.attended_by)
+                ? v.attended_by
+                    .map(email => {
 
-const currentVisits =
-  filteredVisits.slice(startIndex, endIndex);
+                      const user =
+                        users.find(
+                          u =>
+                            u.email ===
+                            email
+                        );
 
-// =========================================================
-// EXPORT VISITS TO EXCEL
-// =========================================================
+                      return (
+                        user?.name ||
+                        email
+                      );
 
-const exportToExcel = () => {
+                    })
+                    .join(", ")
+                : v.attended_by
+              : "-",
 
-  if (!visits || visits.length === 0) {
-    alert("No visit entries available to export.");
-    return;
-  }
+          "Site Visit By":
+            v.site_visit_by ||
+            v.siteVisitBy?.name ||
+            v.siteVisitBy?.email ||
+            "-",
 
- const excelData = filteredVisits.map((v, index) => ({
-    "Sr No": index + 1,
+          "Closing By":
+            v.closing_by ||
+            v.closingExecutive ||
+            "-",
 
-    "Client Name":
-      v.clientName ||
-      v.name ||
-      "-",
+          "Remark":
+            v.remark ||
+            "-",
 
-    "Mobile":
-      v.mobile ||
-      v.phone ||
-      "-",
+          "Visit Date":
+            v.visitDate
+              ? new Date(
+                  v.visitDate
+                ).toLocaleDateString(
+                  "en-GB"
+                )
+              : "-",
 
-    "Project":
-      v.project ||
-      "-",
+          "Created Date":
+            v.createdAt ||
+            v.created_date
+              ? new Date(
+                  v.createdAt ||
+                  v.created_date
+                ).toLocaleDateString(
+                  "en-GB"
+                )
+              : "-"
 
-    "Client Type":
-      v.clientType ||
-      "New",
+        })
+      );
 
-    "Visit Status":
-      v.visitStatus ||
-      v.status ||
-      "-",
+    const worksheet =
+      XLSX.utils.json_to_sheet(
+        excelData
+      );
 
-    "Manager":
-      v.attendedManager?.name ||
-      v.assigned_manager ||
-      "-",
+    const workbook =
+      XLSX.utils.book_new();
 
-    "Calling By":
-      Array.isArray(v.calling_by)
-        ? v.calling_by.join(", ")
-        : v.assignedTo ||
-          v.calling_by ||
-          "-",
+    XLSX.utils.book_append_sheet(
+      workbook,
+      worksheet,
+      "Visit Entries"
+    );
 
-    "Department":
-      v.department ||
-      "-",
+    worksheet["!cols"] = [
 
-    "Source":
-      v.source ||
-      "-",
+      { wch: 8 },
+      { wch: 28 },
+      { wch: 15 },
+      { wch: 18 },
+      { wch: 15 },
+      { wch: 25 },
+      { wch: 25 },
+      { wch: 25 },
+      { wch: 25 },
+      { wch: 40 },
+      { wch: 15 },
+      { wch: 15 }
 
-    "Lead Status":
-      v.status ||
-      "-",
+    ];
 
-    "Booking Status":
-      v.bookingStatus ||
-      "-",
+    XLSX.writeFile(
+      workbook,
+      `Visit_Entries_${new Date()
+        .toISOString()
+        .split("T")[0]
+      }.xlsx`
+    );
 
-    "Remark":
-      v.remark ||
-      "-",
+  };
 
-    "Visit Date":
-      v.visitDate
-        ? new Date(v.visitDate).toLocaleDateString("en-GB")
-        : "-",
-
-    "Created Date":
-      v.createdAt || v.created_date
-        ? new Date(
-            v.createdAt || v.created_date
-          ).toLocaleDateString("en-GB")
-        : "-"
-  }));
-
-  // Create worksheet
-  const worksheet = XLSX.utils.json_to_sheet(excelData);
-
-  // Create workbook
-  const workbook = XLSX.utils.book_new();
-
-  // Add worksheet
-  XLSX.utils.book_append_sheet(
-    workbook,
-    worksheet,
-    "Visit Entries"
-  );
-
-  // Set column widths
-  worksheet["!cols"] = [
-    { wch: 8 },   // Sr No
-    { wch: 28 },  // Client
-    { wch: 15 },  // Mobile
-    { wch: 18 },  // Project
-    { wch: 15 },  // Client Type
-    { wch: 22 },  // Visit Status
-    { wch: 22 },  // Manager
-    { wch: 25 },  // Calling By
-    { wch: 20 },  // Department
-    { wch: 18 },  // Source
-    { wch: 18 },  // Lead Status
-    { wch: 22 },  // Booking Status
-    { wch: 40 },  // Remark
-    { wch: 15 },  // Visit Date
-    { wch: 15 }   // Created Date
-  ];
-
-  // Download Excel file
-  XLSX.writeFile(
-    workbook,
-    `Visit_Entries_${new Date()
-      .toISOString()
-      .split("T")[0]}.xlsx`
-  );
-};
+  /* =========================================================
+     RETURN
+  ========================================================= */
 
   return (
+
     <div className="layout">
 
       <Sidebar
@@ -397,267 +653,547 @@ const exportToExcel = () => {
         }
       />
 
-      <div className={`main-content ${isOpen ? "shifted" : "full"}`}>
+      <div
+        className={`main-content ${
+          isOpen
+            ? "shifted"
+            : "full"
+        }`}
+      >
 
-      <div className="reception-page">
+        <div className="reception-page">
 
-  <div className="visit-header">
+          {/* =================================================
+              HEADER
+          ================================================= */}
 
-    <h1>Visit Entries</h1>
+          <div className="visit-header">
 
-    <button
-      className="export-excel-btn"
-      onClick={exportToExcel}
-    >
-      📊 Export Excel
-    </button>
+            <h1>
+              Visit Entries
+            </h1>
 
-  </div>
-
-{/* =========================================================
-    DATE FILTER
-========================================================= */}
-
-<div className="date-filter-area">
-
-  <div className="date-filter-group">
-
-    <label>Start Date</label>
-
-    <input
-      type="date"
-      value={startDate}
-      onChange={(e) => {
-        setStartDate(e.target.value);
-        setCurrentPage(1);
-      }}
-    />
-
-  </div>
-
-  <div className="date-filter-group">
-
-    <label>End Date</label>
-
-    <input
-      type="date"
-      value={endDate}
-      min={startDate || undefined}
-      onChange={(e) => {
-        setEndDate(e.target.value);
-        setCurrentPage(1);
-      }}
-    />
-
-  </div>
-
-
-  <button
-    className="date-reset-btn"
-    onClick={() => {
-      setStartDate("");
-      setEndDate("");
-      setCurrentPage(1);
-    }}
-  >
-    Clear Date
-  </button>
-
-</div>
-  <div className="search-area">
-
-
-  <div className="search-box">
-
-    <input
-      type="text"
-      placeholder="Search by Mobile or Client Name"
-      value={searchMobile}
-      onChange={handleSearchChange}
-      onKeyDown={(e) => {
-        if (e.key === "Enter") {
-          searchVisit();
-        }
-      }}
-    />
-
-    {suggestions.length > 0 && (
-
-      <div className="search-suggestions">
-
-        {suggestions.map((item) => (
-
-          <div
-            key={item._id}
-            className="suggestion-item"
-            onClick={() => {
-  setSearchMobile(item.name);
-  setSuggestions([]);
-  searchVisit(item.phone || item.name);
-}}
-          >
-
-            <div className="s-name">
-              {item.name}
-            </div>
-
-            <div className="s-phone">
-              {item.phone}
-            </div>
+            <button
+              className="export-excel-btn"
+              onClick={
+                exportToExcel
+              }
+            >
+              📊 Export Excel
+            </button>
 
           </div>
 
-        ))}
+          {/* =================================================
+              DATE FILTER
+          ================================================= */}
 
-      </div>
+          <div className="date-filter-area">
 
-    )}
+            <div className="date-filter-group">
 
-  </div>
+              <label>
+                Start Date
+              </label>
 
-  <button
-    className="search-btn"
-    onClick={searchVisit}
-  >
-    Search
-  </button>
+              <input
+                type="date"
+                value={
+                  startDate
+                }
+                onChange={(e) => {
 
- <button
-  className="reset-btn"
-  onClick={() => {
-    setSearchMobile("");
-    setSuggestions([]);
-    setStartDate("");
-    setEndDate("");
-    setCurrentPage(1);
-    fetchVisits();
-  }}
->
-  Reset
-</button>
+                  setStartDate(
+                    e.target.value
+                  );
 
-</div>
+                  setCurrentPage(
+                    1
+                  );
+
+                }}
+              />
+
+            </div>
+
+            <div className="date-filter-group">
+
+              <label>
+                End Date
+              </label>
+
+              <input
+                type="date"
+                value={
+                  endDate
+                }
+                min={
+                  startDate ||
+                  undefined
+                }
+                onChange={(e) => {
+
+                  setEndDate(
+                    e.target.value
+                  );
+
+                  setCurrentPage(
+                    1
+                  );
+
+                }}
+              />
+
+            </div>
+
+            <button
+              className="date-reset-btn"
+              onClick={() => {
+
+                setStartDate("");
+                setEndDate("");
+                setCurrentPage(1);
+
+              }}
+            >
+              Clear Date
+            </button>
+
+          </div>
+
+          {/* =================================================
+              SEARCH
+          ================================================= */}
+
+          <div className="search-area">
+
+            <div className="search-box">
+
+              <input
+                type="text"
+                placeholder="Search by Mobile or Client Name"
+                value={
+                  searchMobile
+                }
+                onChange={
+                  handleSearchChange
+                }
+                onKeyDown={(e) => {
+
+                  if (
+                    e.key ===
+                    "Enter"
+                  ) {
+
+                    searchVisit();
+
+                  }
+
+                }}
+              />
+
+              {suggestions.length >
+                0 && (
+
+                <div className="search-suggestions">
+
+                  {suggestions.map(
+                    (item) => (
+
+                      <div
+                        key={
+                          item._id
+                        }
+                        className="suggestion-item"
+                        onClick={() => {
+
+                          setSearchMobile(
+                            item.name
+                          );
+
+                          setSuggestions(
+                            []
+                          );
+
+                          searchVisit(
+                            item.phone ||
+                            item.name
+                          );
+
+                        }}
+                      >
+
+                        <div className="s-name">
+
+                          {
+                            item.name
+                          }
+
+                        </div>
+
+                        <div className="s-phone">
+
+                          {
+                            item.phone
+                          }
+
+                        </div>
+
+                      </div>
+
+                    )
+                  )}
+
+                </div>
+
+              )}
+
+            </div>
+
+            <button
+              className="search-btn"
+              onClick={
+                searchVisit
+              }
+            >
+              Search
+            </button>
+
+            <button
+              className="reset-btn"
+              onClick={() => {
+
+                setSearchMobile("");
+                setSuggestions([]);
+                setStartDate("");
+                setEndDate("");
+                setCurrentPage(1);
+
+                fetchVisits();
+
+              }}
+            >
+              Reset
+            </button>
+
+          </div>
+
+          {/* =================================================
+              TABLE
+          ================================================= */}
+
           <table className="visit-table">
 
-          <thead>
-  <tr>
-    <th>Client</th>
-    <th>Mobile</th>
-    <th>Project</th>
-    <th>Client Type</th>
-    <th>Calling By</th>
-    <th>Attending</th>
-    <th>Site Visit By</th>
-    <th>Closing By</th>
-    <th>Remark</th>
-    <th>Visit Date</th>
-    <th>Created Date</th>
-    <th>Action</th>
-  </tr>
-</thead>
+            <thead>
+
+              <tr>
+
+                <th>
+                  Client
+                </th>
+
+                <th>
+                  Mobile
+                </th>
+
+                <th>
+                  Project
+                </th>
+
+                <th>
+                  Client Type
+                </th>
+
+                <th>
+                  Calling By
+                </th>
+
+                <th>
+                  Attending
+                </th>
+
+                <th>
+                  Site Visit By
+                </th>
+
+                <th>
+                  Closing By
+                </th>
+
+                <th>
+                  Remark
+                </th>
+
+                <th>
+                  Visit Date
+                </th>
+
+                <th>
+                  Created Date
+                </th>
+
+                <th>
+                  Action
+                </th>
+
+              </tr>
+
+            </thead>
 
             <tbody>
 
-             {currentVisits.length > 0 ? (
+              {currentVisits.length >
+              0 ? (
 
-  currentVisits.map((v) => (
+                currentVisits.map(
+                  (v) => (
 
-    <tr key={v._id}>
+                    <tr
+                      key={
+                        v._id
+                      }
+                    >
 
-                 <td>
-  {v.clientName || v.name || "-"}
-</td>
+                      {/* CLIENT */}
 
-<td>
-  {v.mobile || v.phone || "-"}
-</td>
+                      <td>
+                        {
+                          v.clientName ||
+                          v.name ||
+                          "-"
+                        }
+                      </td>
 
-<td>
-  {v.project || "-"}
-</td>
+                      {/* MOBILE */}
 
-<td>
-  {(v.clientType || "") === "Old"
-    ? "🟠 Old Client"
-    : "🟢 New Client"}
-</td>
+                      <td>
+                        {
+                          v.mobile ||
+                          v.phone ||
+                          "-"
+                        }
+                      </td>
 
-{/* Calling By */}
-<td>
-  {Array.isArray(v.calling_by)
-    ? v.calling_by.join(", ")
-    : v.assignedTo || v.calling_by || "-"}
-</td>
+                      {/* PROJECT */}
 
-{/* Attending */}
-<td>
-  {v.attendedManager?.name ||
-    v.attendedManager?.email ||
-    v.assigned_manager ||
-    "-"}
-</td>
+                      <td>
+                        {
+                          v.project ||
+                          "-"
+                        }
+                      </td>
 
-{/* Site Visit By */}
-<td>
-  {v.siteVisitBy?.name ||
-    v.siteVisitBy?.email ||
-    v.site_visit_by ||
-    "-"}
-</td>
+                      {/* CLIENT TYPE */}
 
-{/* Closing By */}
-<td>
-  {v.closingExecutive ||
-    v.closing_by ||
-    "-"}
-</td>
+                      <td>
 
-{/* Remark */}
-<td className="remark-cell">
-  {v.remark || "-"}
-</td>
+                        {
+                          (
+                            v.clientType ||
+                            ""
+                          ) ===
+                          "Old"
 
-{/* Visit Date */}
-<td>
-  {v.visitDate
-    ? new Date(v.visitDate).toLocaleDateString("en-GB")
-    : "-"}
-</td>
+                            ? "🟠 Old Client"
 
-{/* Created Date */}
-<td>
-  {v.createdAt || v.created_date
-    ? new Date(
-        v.createdAt || v.created_date
-      ).toLocaleDateString("en-GB")
-    : "-"}
-</td>
+                            : "🟢 New Client"
 
-{/* Action */}
-<td>
-  <button
-    className="edit-btn"
-    onClick={() => handleEdit(v)}
-  >
-    Edit
-  </button>
-</td>
-                  </tr>
+                        }
 
-                ))
+                      </td>
+
+                      {/* CALLING BY */}
+
+                      <td>
+
+                        {Array.isArray(
+                          v.calling_by
+                        )
+                          ? v.calling_by.join(
+                              ", "
+                            )
+                          : v.assignedTo ||
+                            v.calling_by ||
+                            "-"}
+
+                      </td>
+
+                      {/* ATTENDING */}
+
+                      <td>
+
+                        {Array.isArray(
+                          v.attended_by
+                        )
+
+                          ? v.attended_by
+                              .map(
+                                email => {
+
+                                  const user =
+                                    users.find(
+                                      u =>
+                                        u.email ===
+                                        email
+                                    );
+
+                                  return (
+                                    user?.name ||
+                                    email
+                                  );
+
+                                }
+                              )
+                              .join(
+                                ", "
+                              )
+
+                          : (
+                              v.attendedManager?.name ||
+                              v.attendedManager?.email ||
+                              v.assigned_manager ||
+                              v.attended_by ||
+                              "-"
+                            )}
+
+                      </td>
+
+                      {/* SITE VISIT BY */}
+
+                      <td>
+
+                        {(() => {
+
+                          const siteVisitValue =
+                            v.site_visit_by ||
+                            v.siteVisitBy?.email ||
+                            v.siteVisitBy?.name ||
+                            "";
+
+                          const user =
+                            users.find(
+                              u =>
+                                u.email ===
+                                siteVisitValue
+                            );
+
+                          return (
+                            user?.name ||
+                            siteVisitValue ||
+                            "-"
+                          );
+
+                        })()}
+
+                      </td>
+
+                      {/* CLOSING BY */}
+
+                      <td>
+
+                        {(() => {
+
+                          const closingValue =
+                            v.closing_by ||
+                            v.closingExecutive ||
+                            "";
+
+                          const user =
+                            users.find(
+                              u =>
+                                u.email ===
+                                closingValue
+                            );
+
+                          return (
+                            user?.name ||
+                            closingValue ||
+                            "-"
+                          );
+
+                        })()}
+
+                      </td>
+
+                      {/* REMARK */}
+
+                      <td
+                        className="remark-cell"
+                      >
+                        {
+                          v.remark ||
+                          "-"
+                        }
+                      </td>
+
+                      {/* VISIT DATE */}
+
+                      <td>
+
+                        {v.visitDate
+
+                          ? new Date(
+                              v.visitDate
+                            ).toLocaleDateString(
+                              "en-GB"
+                            )
+
+                          : "-"}
+
+                      </td>
+
+                      {/* CREATED DATE */}
+
+                      <td>
+
+                        {v.createdAt ||
+                        v.created_date
+
+                          ? new Date(
+                              v.createdAt ||
+                              v.created_date
+                            ).toLocaleDateString(
+                              "en-GB"
+                            )
+
+                          : "-"}
+
+                      </td>
+
+                      {/* ACTION */}
+
+                      <td>
+
+                        <button
+                          className="edit-btn"
+                          onClick={() =>
+                            handleEdit(
+                              v
+                            )
+                          }
+                        >
+                          Edit
+                        </button>
+
+                      </td>
+
+                    </tr>
+
+                  )
+                )
 
               ) : (
 
                 <tr>
+
                   <td
-                    colSpan="11"
+                    colSpan="12"
                     style={{
-                      textAlign: "center"
+                      textAlign:
+                        "center"
                     }}
                   >
-
                     No Entries Found
-
                   </td>
 
                 </tr>
@@ -668,289 +1204,907 @@ const exportToExcel = () => {
 
           </table>
 
-          {/* =========================================================
-    PAGINATION BUTTONS
-========================================================= */}
+          {/* =================================================
+              PAGINATION
+          ================================================= */}
 
-{totalPages > 1 && (
-  <div className="pagination">
+          {totalPages >
+            1 && (
 
-    <button
-      className="pagination-btn"
-      onClick={() =>
-        setCurrentPage((prev) => prev - 1)
-      }
-      disabled={currentPage === 1}
-    >
-      Previous
-    </button>
+            <div className="pagination">
 
-    <span className="pagination-info">
-      Page {currentPage} of {totalPages}
-    </span>
+              <button
+                className="pagination-btn"
+                onClick={() =>
+                  setCurrentPage(
+                    prev =>
+                      prev - 1
+                  )
+                }
+                disabled={
+                  currentPage ===
+                  1
+                }
+              >
+                Previous
+              </button>
 
-    <button
-      className="pagination-btn"
-      onClick={() =>
-        setCurrentPage((prev) => prev + 1)
-      }
-      disabled={currentPage === totalPages}
-    >
-      Next
-    </button>
+              <span className="pagination-info">
 
-  </div>
-)}
+                Page{" "}
+                {
+                  currentPage
+                }{" "}
+                of{" "}
+                {
+                  totalPages
+                }
 
-{showEditModal && (
-  <div className="modal-overlay">
-    <div className="edit-modal">
+              </span>
 
-      <h2>Edit Visit</h2>
+              <button
+                className="pagination-btn"
+                onClick={() =>
+                  setCurrentPage(
+                    prev =>
+                      prev + 1
+                  )
+                }
+                disabled={
+                  currentPage ===
+                  totalPages
+                }
+              >
+                Next
+              </button>
 
-      <div className="modal-form">
+            </div>
 
-        <div className="form-group">
-          <label>Client Name</label>
-          <input
-            value={editVisit.clientName}
-            readOnly
-          />
-        </div>
+          )}
 
-        <div className="form-group">
-          <label>Mobile</label>
-          <input
-            value={editVisit.mobile}
-            readOnly
-          />
-        </div>
+          {/* =================================================
+              EDIT MODAL
+          ================================================= */}
 
-        <div className="form-group">
-          <label>Project</label>
-          <select
-            name="project"
-            value={editVisit.project}
-            onChange={handleChange}
-          >
-            <option value="99villa">99villa</option>
-            <option value="Karjat">Karjat</option>
-            <option value="Alibaug Plot">Alibaug</option>
-            <option value="Pen">Pen</option>
-            <option value="MahaMumbai">MahaMumbai</option>
-          </select>
-        </div>
+          {showEditModal && (
 
-        <div className="form-group">
-          <label>Client Type</label>
-          <select
-            name="clientType"
-            value={editVisit.clientType}
-            onChange={handleChange}
-          >
-            <option value="New">New Client</option>
-            <option value="Old">Old Client</option>
-          </select>
-        </div>
+            <div className="modal-overlay">
 
-        <div className="form-group">
-          <label>Visit Date</label>
-          <input
-            type="date"
-            name="visitDate"
-            value={editVisit.visitDate}
-            onChange={handleChange}
-          />
-        </div>
+              <div className="edit-modal">
 
-        <div className="form-group">
-          <label>Assigned Manager</label>
+                <h2>
+                  Edit Visit
+                </h2>
 
-          <select
-            name="attendedManager"
-            value={
-              editVisit.attendedManager?._id ||
-              editVisit.attendedManager ||
-              ""
-            }
-            onChange={handleChange}
-          >
-            <option value="">Select Manager</option>
+                <div className="modal-form">
 
-            {users
-              .filter(
-                u =>
-                  u.role === "manager" ||
-                  u.role === "executive"
-              )
-              .map(u => (
-                <option
-                  key={u._id}
-                  value={u._id}
-                >
-                  {u.name}
-                </option>
-              ))}
-          </select>
-        </div>
+                  {/* CLIENT NAME */}
 
-        <div className="form-group">
-          <label>Department</label>
+                  <div className="form-group">
 
-          <select
-            name="department"
-          value={editVisit.department || ""}
-            onChange={handleChange}
-          >
-            <option value="">Select Department</option>
-            <option value="Sales & Marketing">Sales & Marketing</option>
-            <option value="HR/Admin">HR/Admin</option>
-            <option value="TeleCaller">TeleCaller</option>
-            <option value="Aasma Ma'am">Aasma Ma'am</option>
-            <option value="Nilesh Sir">Nilesh Sir</option>
-          </select>
-        </div>
+                    <label>
+                      Client Name
+                    </label>
 
-        <div className="form-group">
-          <label>Source</label>
+                    <input
+                      name="clientName"
+                      value={
+                        editVisit.clientName ||
+                        ""
+                      }
+                      readOnly
+                    />
 
-          <select
-            name="source"
-            value={editVisit.source || ""}
-            onChange={handleChange}
-          >
-            <option value="">Select Source</option>
-            <option value="Facebook">Facebook</option>
-            <option value="Instagram">Instagram</option>
-            <option value="Google Ads">Google Ads</option>
-            <option value="99acres">99acres</option>
-            <option value="MagicBricks">MagicBricks</option>
-            <option value="Housing">Housing</option>
-            <option value="Website">Website</option>
-            <option value="WhatsApp">WhatsApp</option>
-            <option value="JustDial">JustDial</option>
-            <option value="Reference">Reference</option>
-            <option value="Hoarding">Hoarding</option>
-            <option value="Newspaper">Newspaper</option>
-            <option value="Walk-In">Walk-In</option>
-            <option value="Call Center">Call Center</option>
-            <option value="Property Expo">Property Expo</option>
-            <option value="YouTube">YouTube</option>
-          </select>
-        </div>
+                  </div>
 
-        <div className="form-group">
-          <label>Assign To</label>
+                  {/* MOBILE */}
 
-          <select
-            name="assigned_to"
-            value={editVisit.assigned_to || ""}
-            onChange={handleChange}
-          >
-            <option value="">Select Executive</option>
+                  <div className="form-group">
 
-            {users
-              .filter(u => u.role === "executive")
-              .map(u => (
-                <option
-                  key={u._id}
-                  value={u.email}
-                >
-                  {u.name}
-                </option>
-              ))}
-          </select>
-        </div>
+                    <label>
+                      Mobile
+                    </label>
 
-        <div className="form-group">
-          <label>Lead Status</label>
+                    <input
+                      name="mobile"
+                      value={
+                        editVisit.mobile ||
+                        ""
+                      }
+                      readOnly
+                    />
 
-          <select
-            name="status"
-           value={editVisit.status || "New"}
-            onChange={handleChange}
-          >
-            <option value="New">New</option>
-            <option value="Fresh">Fresh</option>
-            <option value="Interested">Interested</option>
-            <option value="Followup">Followup</option>
-            <option value="Not Interested">Not Interested</option>
-            <option value="Visit Done">Visit Done</option>
-            <option value="Booked">Booked</option>
-          </select>
-        </div>
+                  </div>
 
-        <div className="form-group full-width">
-          <label>Visit Status</label>
+                  {/* PROJECT */}
 
-          <select
-            name="visitStatus"
-           value={editVisit.visitStatus || "IN_OFFICE"}
-            onChange={handleChange}
-          >
-            <option value="IN_OFFICE">In Office</option>
-            <option value="VISIT_PENDING">Site Visit Pending</option>
-            <option value="VISIT_DONE">Site Visit Done</option>
-            <option value="DECISION_PENDING">Decision Pending</option>
-            <option value="FOLLOWUP">Follow Up</option>
-            <option value="BOOKED">Booked</option>
-            <option value="NOT_BOOKED">Not Booked</option>
-            <option value="CANCELLED">Cancelled</option>
-          </select>
-        </div>
+                  <div className="form-group">
 
-        <div className="form-group full-width">
-          <label>Booking Status</label>
+                    <label>
+                      Project
+                    </label>
 
-          <select
-            name="bookingStatus"
-          value={editVisit.bookingStatus || "PENDING"}
-            onChange={handleChange}
-          >
-            <option value="PENDING">Pending</option>
-            <option value="DECISION_PENDING">Decision Pending</option>
-            <option value="NEGOTIATION">Negotiation</option>
-            <option value="BOOKED">Booked</option>
-            <option value="TOKEN_RECEIVED">Token Received</option>
-            <option value="LOAN_PROCESS">Loan Process</option>
-            <option value="REGISTRATION_PENDING">Registration Pending</option>
-            <option value="REGISTERED">Registered</option>
-            <option value="NOT_BOOKED">Not Booked</option>
-            <option value="CANCELLED">Cancelled</option>
-          </select>
-        </div>
+                    <select
+                      name="project"
+                      value={
+                        editVisit.project ||
+                        ""
+                      }
+                      onChange={
+                        handleChange
+                      }
+                    >
 
-        <div className="form-group full-width">
-          <label>Remark</label>
+                      <option value="">
+                        Select Project
+                      </option>
 
-          <textarea
-            name="remark"
-            value={editVisit.remark}
-            onChange={handleChange}
-          />
-        </div>
+                      <option value="99villa">
+                        99villa
+                      </option>
 
-      </div>
+                      <option value="Karjat">
+                        Karjat
+                      </option>
 
-      <div className="modal-buttons">
-        <button
-          className="save-btn"
-          onClick={updateVisit}
-        >
-          Save
-        </button>
+                      <option value="Alibaug Plot">
+                        Alibaug
+                      </option>
 
-        <button
-          className="cancel-btn"
-          onClick={() => setShowEditModal(false)}
-        >
-          Cancel
-        </button>
-      </div>
+                      <option value="Pen">
+                        Pen
+                      </option>
 
-    </div>
-  </div>
-)}
+                      <option value="MahaMumbai">
+                        MahaMumbai
+                      </option>
+
+                    </select>
+
+                  </div>
+
+                  {/* CLIENT TYPE */}
+
+                  <div className="form-group">
+
+                    <label>
+                      Client Type
+                    </label>
+
+                    <select
+                      name="clientType"
+                      value={
+                        editVisit.clientType ||
+                        "New"
+                      }
+                      onChange={
+                        handleChange
+                      }
+                    >
+
+                      <option value="New">
+                        New Client
+                      </option>
+
+                      <option value="Old">
+                        Old Client
+                      </option>
+
+                    </select>
+
+                  </div>
+
+                  {/* VISIT DATE */}
+
+                  <div className="form-group">
+
+                    <label>
+                      Visit Date
+                    </label>
+
+                    <input
+                      type="date"
+                      name="visitDate"
+                      value={
+                        editVisit.visitDate ||
+                        ""
+                      }
+                      onChange={
+                        handleChange
+                      }
+                    />
+
+                  </div>
+
+                  {/* DEPARTMENT */}
+
+                  <div className="form-group">
+
+                    <label>
+                      Department
+                    </label>
+
+                    <select
+                      name="department"
+                      value={
+                        editVisit.department ||
+                        ""
+                      }
+                      onChange={
+                        handleChange
+                      }
+                    >
+
+                      <option value="">
+                        Select Department
+                      </option>
+
+                      <option value="Sales & Marketing">
+                        Sales & Marketing
+                      </option>
+
+                      <option value="HR/Admin">
+                        HR/Admin
+                      </option>
+
+                      <option value="TeleCaller">
+                        TeleCaller
+                      </option>
+
+                      <option value="Aasma Ma'am">
+                        Aasma Ma'am
+                      </option>
+
+                      <option value="Nilesh Sir">
+                        Nilesh Sir
+                      </option>
+
+                    </select>
+
+                  </div>
+
+                  {/* SOURCE */}
+
+                  <div className="form-group">
+
+                    <label>
+                      Source
+                    </label>
+
+                    <select
+                      name="source"
+                      value={
+                        editVisit.source ||
+                        ""
+                      }
+                      onChange={
+                        handleChange
+                      }
+                    >
+
+                      <option value="">
+                        Select Source
+                      </option>
+
+                      <option value="Facebook">
+                        Facebook
+                      </option>
+
+                      <option value="Instagram">
+                        Instagram
+                      </option>
+
+                      <option value="Google Ads">
+                        Google Ads
+                      </option>
+
+                      <option value="99acres">
+                        99acres
+                      </option>
+
+                      <option value="MagicBricks">
+                        MagicBricks
+                      </option>
+
+                      <option value="Housing">
+                        Housing
+                      </option>
+
+                      <option value="Website">
+                        Website
+                      </option>
+
+                      <option value="WhatsApp">
+                        WhatsApp
+                      </option>
+
+                      <option value="JustDial">
+                        JustDial
+                      </option>
+
+                      <option value="Reference">
+                        Reference
+                      </option>
+
+                      <option value="Hoarding">
+                        Hoarding
+                      </option>
+
+                      <option value="Newspaper">
+                        Newspaper
+                      </option>
+
+                      <option value="Walk-In">
+                        Walk-In
+                      </option>
+
+                      <option value="Call Center">
+                        Call Center
+                      </option>
+
+                      <option value="Property Expo">
+                        Property Expo
+                      </option>
+
+                      <option value="YouTube">
+                        YouTube
+                      </option>
+
+                    </select>
+
+                  </div>
+
+                  {/* ASSIGN TO */}
+
+                  <div className="form-group">
+
+                    <label>
+                      Assign To
+                    </label>
+
+                    <select
+                      name="assigned_to"
+                      value={
+                        editVisit.assigned_to ||
+                        ""
+                      }
+                      onChange={
+                        handleChange
+                      }
+                    >
+
+                      <option value="">
+                        Select Executive
+                      </option>
+
+                      {users
+                        .filter(
+                          u =>
+                            u.role ===
+                            "executive"
+                        )
+                        .map(
+                          u => (
+
+                            <option
+                              key={
+                                u._id
+                              }
+                              value={
+                                u.email
+                              }
+                            >
+                              {
+                                u.name
+                              }
+                            </option>
+
+                          )
+                        )}
+
+                    </select>
+
+                  </div>
+
+                  {/* CALLING BY */}
+
+                  <div className="form-group">
+
+                    <label>
+                      Calling By
+                    </label>
+
+                    <select
+                      multiple
+                      value={
+                        Array.isArray(
+                          editVisit.calling_by
+                        )
+                          ? editVisit.calling_by
+                          : []
+                      }
+                      onChange={
+                        handleCallingByChange
+                      }
+                      style={{
+                        minHeight:
+                          "100px"
+                      }}
+                    >
+
+                      {users
+                        .filter(
+                          u =>
+                            u.role ===
+                            "executive"
+                        )
+                        .map(
+                          u => (
+
+                            <option
+                              key={
+                                u._id
+                              }
+                              value={
+                                u.name
+                              }
+                            >
+                              {
+                                u.name
+                              }
+                            </option>
+
+                          )
+                        )}
+
+                    </select>
+
+                  </div>
+
+                  {/* ATTENDING BY */}
+
+                  <div className="form-group">
+
+                    <label>
+                      Attended By
+                    </label>
+
+                    <select
+                      multiple
+                      value={
+                        Array.isArray(
+                          editVisit.attended_by
+                        )
+                          ? editVisit.attended_by
+                          : []
+                      }
+                      onChange={
+                        handleAttendedByChange
+                      }
+                      style={{
+                        minHeight:
+                          "100px"
+                      }}
+                    >
+
+                      {users
+                        .filter(
+                          u =>
+                            u.role ===
+                              "executive" ||
+                            u.role ===
+                              "manager"
+                        )
+                        .map(
+                          u => (
+
+                            <option
+                              key={
+                                u._id
+                              }
+                              value={
+                                u.email
+                              }
+                            >
+                              {
+                                u.name
+                              }
+                            </option>
+
+                          )
+                        )}
+
+                    </select>
+
+                  </div>
+
+                  {/* SITE VISIT BY */}
+
+                  <div className="form-group">
+
+                    <label>
+                      Site Visit By
+                    </label>
+
+                    <select
+                      name="site_visit_by"
+                      value={
+                        editVisit.site_visit_by ||
+                        ""
+                      }
+                      onChange={
+                        handleChange
+                      }
+                    >
+
+                      <option value="">
+                        Select Site Visit Executive
+                      </option>
+
+                      {users
+                        .filter(
+                          u =>
+                            u.role ===
+                              "executive" &&
+                            siteVisitExecutiveNames.includes(
+                              u.name
+                            )
+                        )
+                        .map(
+                          u => (
+
+                            <option
+                              key={
+                                u._id
+                              }
+                              value={
+                                u.email
+                              }
+                            >
+                              {
+                                u.name
+                              }
+                            </option>
+
+                          )
+                        )}
+
+                    </select>
+
+                  </div>
+
+                  {/* CLOSING BY */}
+
+                  <div className="form-group">
+
+                    <label>
+                      Closing By
+                    </label>
+
+                    <select
+                      name="closing_by"
+                      value={
+                        editVisit.closing_by ||
+                        ""
+                      }
+                      onChange={
+                        handleChange
+                      }
+                    >
+
+                      <option value="">
+                        Select Closing Executive
+                      </option>
+
+                      {users
+                        .filter(
+                          u =>
+                            u.role ===
+                            "executive"
+                        )
+                        .map(
+                          u => (
+
+                            <option
+                              key={
+                                u._id
+                              }
+                              value={
+                                u.email
+                              }
+                            >
+                              {
+                                u.name
+                              }
+                            </option>
+
+                          )
+                        )}
+
+                    </select>
+
+                  </div>
+
+                  {/* ASSIGNED MANAGER */}
+
+                  <div className="form-group">
+
+                    <label>
+                      Assigned Manager
+                    </label>
+
+                    <select
+                      name="attendedManager"
+                      value={
+                        editVisit
+                          .attendedManager?._id ||
+                        editVisit
+                          .attendedManager ||
+                        ""
+                      }
+                      onChange={
+                        handleChange
+                      }
+                    >
+
+                      <option value="">
+                        Select Manager
+                      </option>
+
+                      {users
+                        .filter(
+                          u =>
+                            u.role ===
+                              "manager" ||
+                            u.role ===
+                              "executive"
+                        )
+                        .map(
+                          u => (
+
+                            <option
+                              key={
+                                u._id
+                              }
+                              value={
+                                u._id
+                              }
+                            >
+                              {
+                                u.name
+                              }
+                            </option>
+
+                          )
+                        )}
+
+                    </select>
+
+                  </div>
+
+                  {/* LEAD STATUS */}
+
+                  <div className="form-group">
+
+                    <label>
+                      Lead Status
+                    </label>
+
+                    <select
+                      name="status"
+                      value={
+                        editVisit.status ||
+                        "New"
+                      }
+                      onChange={
+                        handleChange
+                      }
+                    >
+
+                      <option value="New">
+                        New
+                      </option>
+
+                      <option value="Fresh">
+                        Fresh
+                      </option>
+
+                      <option value="Interested">
+                        Interested
+                      </option>
+
+                      <option value="Followup">
+                        Followup
+                      </option>
+
+                      <option value="Not Interested">
+                        Not Interested
+                      </option>
+
+                      <option value="Visit Done">
+                        Visit Done
+                      </option>
+
+                      <option value="Booked">
+                        Booked
+                      </option>
+
+                    </select>
+
+                  </div>
+
+                  {/* VISIT STATUS */}
+
+                  <div className="form-group full-width">
+
+                    <label>
+                      Visit Status
+                    </label>
+
+                    <select
+                      name="visitStatus"
+                      value={
+                        editVisit.visitStatus ||
+                        "IN_OFFICE"
+                      }
+                      onChange={
+                        handleChange
+                      }
+                    >
+
+                      <option value="IN_OFFICE">
+                        In Office
+                      </option>
+
+                      <option value="VISIT_PENDING">
+                        Site Visit Pending
+                      </option>
+
+                      <option value="VISIT_DONE">
+                        Site Visit Done
+                      </option>
+
+                      <option value="DECISION_PENDING">
+                        Decision Pending
+                      </option>
+
+                      <option value="FOLLOWUP">
+                        Follow Up
+                      </option>
+
+                      <option value="BOOKED">
+                        Booked
+                      </option>
+
+                      <option value="NOT_BOOKED">
+                        Not Booked
+                      </option>
+
+                      <option value="CANCELLED">
+                        Cancelled
+                      </option>
+
+                    </select>
+
+                  </div>
+
+                  {/* BOOKING STATUS */}
+
+                  <div className="form-group full-width">
+
+                    <label>
+                      Booking Status
+                    </label>
+
+                    <select
+                      name="bookingStatus"
+                      value={
+                        editVisit.bookingStatus ||
+                        "PENDING"
+                      }
+                      onChange={
+                        handleChange
+                      }
+                    >
+
+                      <option value="PENDING">
+                        Pending
+                      </option>
+
+                      <option value="DECISION_PENDING">
+                        Decision Pending
+                      </option>
+
+                      <option value="NEGOTIATION">
+                        Negotiation
+                      </option>
+
+                      <option value="BOOKED">
+                        Booked
+                      </option>
+
+                      <option value="TOKEN_RECEIVED">
+                        Token Received
+                      </option>
+
+                      <option value="LOAN_PROCESS">
+                        Loan Process
+                      </option>
+
+                      <option value="REGISTRATION_PENDING">
+                        Registration Pending
+                      </option>
+
+                      <option value="REGISTERED">
+                        Registered
+                      </option>
+
+                      <option value="NOT_BOOKED">
+                        Not Booked
+                      </option>
+
+                      <option value="CANCELLED">
+                        Cancelled
+                      </option>
+
+                    </select>
+
+                  </div>
+
+                  {/* REMARK */}
+
+                  <div className="form-group full-width">
+
+                    <label>
+                      Remark
+                    </label>
+
+                    <textarea
+                      name="remark"
+                      value={
+                        editVisit.remark ||
+                        ""
+                      }
+                      onChange={
+                        handleChange
+                      }
+                    />
+
+                  </div>
+
+                </div>
+
+                {/* MODAL BUTTONS */}
+
+                <div className="modal-buttons">
+
+                  <button
+                    className="save-btn"
+                    onClick={
+                      updateVisit
+                    }
+                  >
+                    Save
+                  </button>
+
+                  <button
+                    className="cancel-btn"
+                    onClick={() =>
+                      setShowEditModal(
+                        false
+                      )
+                    }
+                  >
+                    Cancel
+                  </button>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          )}
 
         </div>
 
