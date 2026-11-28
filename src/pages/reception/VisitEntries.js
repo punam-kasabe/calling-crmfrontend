@@ -63,61 +63,101 @@ export default function VisitEntries() {
     remark: ""
   });
 
-  /* =========================================================
-     EDIT VISIT
-  ========================================================= */
+ /* =========================================================
+   EDIT VISIT
+========================================================= */
 
-  const handleEdit = (visit) => {
+const handleEdit = (visit) => {
 
-    setEditVisit({
+  setEditVisit({
 
-      ...visit,
+    _id: visit._id || "",
 
-      calling_by: Array.isArray(visit.calling_by)
-        ? visit.calling_by
-        : [],
+    clientName:
+      visit.clientName ||
+      visit.name ||
+      "",
 
-      attended_by: Array.isArray(visit.attended_by)
-        ? visit.attended_by
-        : [],
+    mobile:
+      visit.mobile ||
+      visit.phone ||
+      "",
 
-      site_visit_by:
-        visit.site_visit_by ||
-        visit.siteVisitBy?.email ||
-        visit.siteVisitBy?.name ||
-        "",
+    project:
+      visit.project ||
+      "",
 
-      closing_by:
-        visit.closing_by ||
-        visit.closingExecutive ||
-        "",
-
-      visitDate: visit.visitDate
+    visitDate:
+      visit.visitDate
         ? new Date(visit.visitDate)
             .toISOString()
             .split("T")[0]
         : "",
 
-      visitStatus:
-        visit.visitStatus ||
-        "IN_OFFICE",
+    clientType:
+      visit.clientType ||
+      "New",
 
-      bookingStatus:
-        visit.bookingStatus ||
-        "PENDING",
+    department:
+      visit.department ||
+      "",
 
-      clientType:
-        visit.clientType ||
-        "New",
+    source:
+      visit.source ||
+      "",
 
-      status:
-        visit.status ||
-        "New"
+    status:
+      visit.status ||
+      "New",
 
-    });
+    assigned_to:
+      visit.assigned_to ||
+      visit.assigned_to_email ||
+      "",
 
-    setShowEditModal(true);
-  };
+    attendedManager:
+      visit.attendedManager?._id ||
+      visit.attendedManager ||
+      "",
+
+    calling_by:
+      Array.isArray(visit.calling_by)
+        ? visit.calling_by
+        : [],
+
+    attended_by:
+      Array.isArray(visit.attended_by)
+        ? visit.attended_by
+        : [],
+
+    site_visit_by:
+      visit.site_visit_by ||
+      visit.siteVisitBy?.email ||
+      visit.siteVisitBy?.name ||
+      "",
+
+    closing_by:
+      visit.closing_by ||
+      visit.closingExecutive ||
+      "",
+
+    visitStatus:
+      visit.visitStatus ||
+      "IN_OFFICE",
+
+    bookingStatus:
+      visit.bookingStatus ||
+      "PENDING",
+
+    remark:
+      visit.remark ||
+      ""
+
+  });
+
+  setShowEditModal(true);
+};
+
 
   /* =========================================================
      FETCH DATA
@@ -182,146 +222,191 @@ export default function VisitEntries() {
   };
 
   /* =========================================================
-     HANDLE CHANGE
-  ========================================================= */
+   HANDLE CHANGE
+========================================================= */
 
-  const handleChange = (e) => {
+const handleChange = (e) => {
 
-    setEditVisit({
+  setEditVisit(prev => ({
+    ...prev,
+    [e.target.name]: e.target.value
+  }));
 
-      ...editVisit,
+};
 
-      [e.target.name]: e.target.value
+/* =========================================================
+   CALLING BY CHANGE
+========================================================= */
 
-    });
+const handleCallingByChange = (e) => {
 
-  };
+  const values = Array.from(
+    e.target.selectedOptions,
+    option => option.value
+  );
 
-  /* =========================================================
-     CALLING BY CHANGE
-  ========================================================= */
+  setEditVisit(prev => ({
+    ...prev,
+    calling_by: values
+  }));
 
-  const handleCallingByChange = (e) => {
+};
 
-    const values = Array.from(
-      e.target.selectedOptions,
-      option => option.value
+
+/* =========================================================
+   ATTENDED BY CHANGE
+========================================================= */
+
+const handleAttendedByChange = (e) => {
+
+  const values = Array.from(
+    e.target.selectedOptions,
+    option => option.value
+  );
+
+  setEditVisit(prev => ({
+    ...prev,
+    attended_by: values
+  }));
+
+};
+
+/* =========================================================
+   UPDATE VISIT
+========================================================= */
+
+const updateVisit = async () => {
+
+  try {
+
+    const payload = {
+
+      clientName:
+        editVisit.clientName,
+
+      mobile:
+        editVisit.mobile,
+
+      project:
+        editVisit.project,
+
+      visitDate:
+        editVisit.visitDate,
+
+      clientType:
+        editVisit.clientType,
+
+      department:
+        editVisit.department,
+
+      source:
+        editVisit.source,
+
+      status:
+        editVisit.status,
+
+      assigned_to:
+        editVisit.assigned_to,
+
+      /* =========================
+         CALLING BY
+      ========================= */
+
+      calling_by:
+        Array.isArray(editVisit.calling_by)
+          ? editVisit.calling_by
+          : [],
+
+      /* =========================
+         ATTENDED BY
+      ========================= */
+
+      attended_by:
+        Array.isArray(editVisit.attended_by)
+          ? editVisit.attended_by
+          : [],
+
+      /* =========================
+         SITE VISIT BY
+      ========================= */
+
+      site_visit_by:
+        editVisit.site_visit_by || "",
+
+      /* =========================
+         CLOSING BY
+      ========================= */
+
+      closing_by:
+        editVisit.closing_by || "",
+
+      /* =========================
+         VISIT STATUS
+      ========================= */
+
+      visitStatus:
+        editVisit.visitStatus,
+
+      /* =========================
+         BOOKING STATUS
+      ========================= */
+
+      bookingStatus:
+        editVisit.bookingStatus,
+
+      /* =========================
+         REMARK
+      ========================= */
+
+      remark:
+        editVisit.remark,
+
+      /* =========================
+         ASSIGNED MANAGER
+      ========================= */
+
+      attendedManager:
+        editVisit.attendedManager?._id ||
+        editVisit.attendedManager ||
+        ""
+
+    };
+
+    console.log(
+      "UPDATE VISIT PAYLOAD:",
+      payload
     );
 
-    setEditVisit(prev => ({
-      ...prev,
-      calling_by: values
-    }));
-
-  };
-
-  /* =========================================================
-     ATTENDED BY CHANGE
-  ========================================================= */
-
-  const handleAttendedByChange = (e) => {
-
-    const values = Array.from(
-      e.target.selectedOptions,
-      option => option.value
+    await axios.put(
+      `https://calling-crm-backend-7w52.onrender.com/api/update-visit/${editVisit._id}`,
+      payload
     );
 
-    setEditVisit(prev => ({
-      ...prev,
-      attended_by: values
-    }));
+    alert("Visit Updated Successfully");
 
-  };
+    setShowEditModal(false);
 
-  /* =========================================================
-     UPDATE VISIT
-  ========================================================= */
+    fetchVisits();
 
-  const updateVisit = async () => {
+  }
 
-    try {
+  catch (err) {
 
-      await axios.put(
-        `https://calling-crm-backend-7w52.onrender.com/api/update-visit/${editVisit._id}`,
+    console.log(
+      "UPDATE VISIT ERROR:",
+      err
+    );
 
-        {
+    alert(
+      err.response?.data?.message ||
+      "Visit Update Failed"
+    );
 
-          clientName:
-            editVisit.clientName,
+  }
 
-          mobile:
-            editVisit.mobile,
+};
 
-          project:
-            editVisit.project,
-
-          visitDate:
-            editVisit.visitDate,
-
-          clientType:
-            editVisit.clientType,
-
-          department:
-            editVisit.department,
-
-          source:
-            editVisit.source,
-
-          status:
-            editVisit.status,
-
-          assigned_to:
-            editVisit.assigned_to,
-
-          calling_by:
-            editVisit.calling_by || [],
-
-          attended_by:
-            editVisit.attended_by || [],
-
-          site_visit_by:
-            editVisit.site_visit_by || "",
-
-          closing_by:
-            editVisit.closing_by || "",
-
-          visitStatus:
-            editVisit.visitStatus,
-
-          bookingStatus:
-            editVisit.bookingStatus,
-
-          remark:
-            editVisit.remark,
-
-          attendedManager:
-            editVisit.attendedManager?._id ||
-            editVisit.attendedManager ||
-            ""
-
-        }
-      );
-
-      alert("Visit Updated Successfully");
-
-      setShowEditModal(false);
-
-      fetchVisits();
-
-    } catch (err) {
-
-      console.log(err);
-
-      alert(
-        err.response?.data?.message ||
-        "Visit Update Failed"
-      );
-
-    }
-
-  };
-
-  /* =========================================================
+/* =========================================================
      SEARCH
   ========================================================= */
 
